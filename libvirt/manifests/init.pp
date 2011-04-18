@@ -11,11 +11,11 @@ class libvirt {
 
 	kfile {
 		"/etc/libvirt/libvirtd.conf":
-			source  => "libvirt/libvirtd.conf",
+			source  => "libvirt/libvirt/libvirtd.conf",
 			require => Package["libvirt-bin"],
 			notify  => Service["libvirt-bin"];
 		"/usr/local/sbin/create-vm.sh":
-			source  => "create-vm.sh",
+			source  => "libvirt/create-vm.sh",
 			mode    => 755,
 			require => Package["libvirt-bin"];
 	}
