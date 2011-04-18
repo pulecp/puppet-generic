@@ -101,8 +101,9 @@ class munin::server {
 			owner => "munin",
 			mode => 771;
 		"/var/log/munin/munin-graph.log":
+                        owner => "munin",
 			group => "www-data",
-			mode => 660;
+			mode  => 660;
 		"/etc/logrotate.d/munin":
 			source => "munin/server/logrotate.d/munin";
 	}
