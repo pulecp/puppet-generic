@@ -12,11 +12,8 @@ class rsyslog::common {
 class rsyslog::client {
 	include rsyslog::common
 
-	file { "/etc/rsyslog.d/remote-logging-client.conf":
+	kfile { "/etc/rsyslog.d/remote-logging-client.conf":
 		content => template("rsyslog/client/remote-logging-client.conf"),
-		owner => "root",
-		group => "root",
-		mode => 644,
 		require => Package["rsyslog"],
 		notify => Service["rsyslog"],
 	}
@@ -25,11 +22,8 @@ class rsyslog::client {
 class rsyslog::server {
 	include rsyslog::common
 
-	file { "/etc/rsyslog.d/remote-logging-server.conf":
-		source => "puppet://puppet/rsyslog/server/remote-logging-server.conf",
-		owner => "root",
-		group => "root",
-		mode => 644,
+	kfile { "/etc/rsyslog.d/remote-logging-server.conf":
+		source => "rsyslog/server/remote-logging-server.conf",
 		require => Package["rsyslog"],
 		notify => Service["rsyslog"],
 	}

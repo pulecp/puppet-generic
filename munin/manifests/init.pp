@@ -6,7 +6,7 @@ class munin::client {
 			$plugin_path = "$script_path/$name"
 		}
 
-		file { "/etc/munin/plugins/$name":
+		kfile { "/etc/munin/plugins/$name":
 			ensure => $ensure ? {
 				'present' => $plugin_path,
 				'absent' => 'absent',
@@ -17,11 +17,8 @@ class munin::client {
 	}
 
 	define plugin::config($content, $section=false, $ensure='present') {
-		file { "/etc/munin/plugin-conf.d/$name":
+		kfile { "/etc/munin/plugin-conf.d/$name":
 			ensure => $ensure,
-			owner => "root",
-			group => "root",
-			mode => 644,
 			content => $section ? {
 				false => "[${name}]\n${content}\n",
 				default => "[${section}]\n${content}\n",
@@ -40,17 +37,16 @@ class munin::client {
 	}
 	
 	# Extra plugins
-	file {
+	kfile {
 		"/usr/local/share/munin/plugins":
 			recurse => true,
-			source => "puppet://puppet/munin/client/plugins",
-			owner => "root",
+			source => "munin/client/plugins",
 			group => "staff",
 			mode => 755;
 }
 
 	# Munin node configuration
-	file { "/etc/munin/munin-node.conf":
+	kfile { "/etc/munin/munin-node.conf":
 		content => template("munin/client/munin-node.conf"),
 		require => Package["munin-node"],
 	}
@@ -62,26 +58,23 @@ class munin::client {
 		ensure => running,
 	}
 
-	file {
+	kfile {
 		"/usr/local/share/munin":
 			ensure => directory,
-			owner => "root",
 			group => "staff";
 	}
 
-	file { "/usr/local/etc/munin":
+	kfile { "/usr/local/etc/munin":
 		ensure => directory,
-		owner => "root",
 		group => "staff",
 	}
 
 
 	# Configs needed for JMX monitoring. Not needed everywhere, but roll out
 	# nontheless.
-	file { "/usr/local/etc/munin/plugins":
+	kfile { "/usr/local/etc/munin/plugins":
 		recurse => true,
-		source  => "puppet:///modules/munin/client/configs",
-		owner   => "root",
+		source  => "munin/client/configs",
 		group   => "staff",
 		mode    => 755;
 	}
@@ -92,10 +85,8 @@ class munin::server {
 		ensure => installed,
 	}
 
-	file { "/etc/munin/munin.conf":
-		source => "puppet://puppet/munin/server/munin.conf",
-		owner => "root",
-		group => "root",
+	kfile { "/etc/munin/munin.conf":
+		source => "munin/server/munin.conf",
 		require => Package["munin"],
 	}
 
@@ -104,18 +95,16 @@ class munin::server {
 		ensure => installed,
 	}
 
-	file {
+	kfile {
 		"/var/log/munin":
+                        ensure => directory,
 			owner => "munin",
-			group => "adm",
-			mode => 751;
+			mode => 771;
 		"/var/log/munin/munin-graph.log":
+                        owner => "munin",
 			group => "www-data",
-			mode => 660;
+			mode  => 660;
 		"/etc/logrotate.d/munin":
-			owner => "root",
-			group => "root",
-			mode => 644,
-			source => "puppet://puppet/munin/server/logrotate.d/munin";
+			source => "munin/server/logrotate.d/munin";
 	}
 }
