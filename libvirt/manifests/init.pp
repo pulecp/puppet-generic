@@ -16,7 +16,8 @@ class libvirt {
 			notify  => Service["libvirt-bin"];
 		"/usr/local/sbin/create-vm.sh":
 			source  => "libvirt/create-vm.sh",
-			mode    => 755,
+			group   => "staff",
+			mode    => 750,
 			require => Package["libvirt-bin"];
 	}
 }
