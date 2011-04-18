@@ -99,7 +99,6 @@ class munin::server {
 		"/var/log/munin":
                         ensure => directory,
 			owner => "munin",
-			group => "munin",
 			mode => 771;
 		"/var/log/munin/munin-graph.log":
 			group => "www-data",
