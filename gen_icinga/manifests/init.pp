@@ -1,5 +1,5 @@
 class gen_icinga::server {
-	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin"]:; }
+	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin","nagios-plugins-standard"]:; }
 
 	service { "icinga":
 		ensure     => running,
