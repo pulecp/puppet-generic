@@ -97,9 +97,10 @@ class munin::server {
 
 	kfile {
 		"/var/log/munin":
+                        ensure => directory,
 			owner => "munin",
-			group => "adm",
-			mode => 751;
+			group => "munin",
+			mode => 771;
 		"/var/log/munin/munin-graph.log":
 			group => "www-data",
 			mode => 660;
