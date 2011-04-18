@@ -4,10 +4,8 @@
 # See LICENSE for the full legal text.
 
 class hosthenker {
-	file { "/usr/bin/hosthenker":
-		source => "puppet://puppet/hosthenker/hosthenker.sh",
-		owner  => "root",
-		group  => "root",
+	kfile { "/usr/bin/hosthenker":
+		source => "hosthenker/hosthenker.sh",
 		mode   => 755;
 	}
 }
