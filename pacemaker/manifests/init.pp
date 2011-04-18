@@ -4,28 +4,20 @@
 # See LICENSE for the full legal text.
 
 class pacemaker {
-	file { "/usr/lib/ocf/resource.d/kumina":
+	kfile { "/usr/lib/ocf/resource.d/kumina":
 		ensure => directory,
-		owner => "root",
-		group => "root",
-		mode => 755,
 		require => Package["pacemaker"];
 	}
 
-	file { "/usr/lib/ocf/resource.d/kumina/update-dns":
-		source => "puppet:///pacemaker/update-dns",
-		owner => "root",
-		group => "root",
+	kfile { "/usr/lib/ocf/resource.d/kumina/update-dns":
+		source => "pacemaker/update-dns",
 		mode => 755,
 		require => File["/usr/lib/ocf/resource.d/kumina"];
 	}
 
 	define updatednsconfig($ipme, $ipother) {
-		file { "${name}":
-			content => template("pacemaker/update-dns"),
-			owner => "root",
-			group => "root",
-			mode => 644;
+		kfile { "${name}":
+			content => template("pacemaker/update-dns");
 		}
 	}
 }
