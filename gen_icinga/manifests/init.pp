@@ -12,4 +12,9 @@ class gen_icinga::server {
 		command     => "/etc/init.d/icinga reload",
 		refreshonly => true;
 	}
+
+	kfile { "/var/lib/icinga/rw/icinga.cmd":
+		owner   => "www-data",
+		require => Package["icinga-common"];
+	}
 }
