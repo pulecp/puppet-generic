@@ -1,7 +1,5 @@
 class approx {
-	package { "approx":
-		ensure => installed,
-	}
+	kpackage { "approx":; }
 
 	service  { "approx":
 		ensure => running,
@@ -9,11 +7,8 @@ class approx {
 		subscribe => File["/etc/approx/approx.conf"],
 	}
 
-	file { "/etc/approx/approx.conf":
-		source => "puppet://puppet/approx/approx.conf",
-		mode => 644,
-		owner => root,
-		group => root,
-		require => Package["approx"],
+	kfile { "/etc/approx/approx.conf":
+		source => "approx/approx.conf",
+		require => Package["approx"];
 	}
 }
