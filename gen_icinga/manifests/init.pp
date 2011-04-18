@@ -15,6 +15,8 @@ class gen_icinga::server {
 
 	kfile { "/var/lib/icinga/rw/icinga.cmd":
 		owner   => "www-data",
+		group   => "nagios",
+		mode    => 660
 		require => Package["icinga"];
 	}
 }
