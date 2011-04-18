@@ -1,27 +1,22 @@
 class libvirt {
-	package {
-		"libvirt-bin":
-			ensure => installed;
-		"libvirt-doc":
-			ensure => installed;
-		"netcat-openbsd":
-			ensure => installed;
+	kpackage { ["libvirt-bin","libvirt-doc","netcat-openbsd"]:
+		ensure => latest;
 	}
 
-	service {
-		"libvirt-bin":
-			hasrestart => true,
-			hasstatus => true,
-			require => Package["libvirt-bin"];
+	service { "libvirt-bin":
+		hasrestart => true,
+		hasstatus  => true,
+		require    => Package["libvirt-bin"];
 	}
 
-	file {
+	kfile {
 		"/etc/libvirt/libvirtd.conf":
-			source => "puppet://puppet/libvirt/libvirt/libvirtd.conf",
-			owner => "root",
-			group => "root",
-			mode => 644,
+			source  => "libvirt/libvirtd.conf",
 			require => Package["libvirt-bin"],
-			notify => Service["libvirt-bin"];
+			notify  => Service["libvirt-bin"];
+		"/usr/local/sbin/create-vm.sh":
+			source  => "create-vm.sh",
+			mode    => 755,
+			require => Package["libvirt-bin"];
 	}
 }
