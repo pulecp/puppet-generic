@@ -21,3 +21,17 @@ class gen_rabbitmq::plugin::amqp {
 		notify  => Exec["reload-rabbitmq"],
 	}
 }
+
+class gen_rabbitmq::plugin::stomp {
+	# Stomp plugin requires amqp
+	include gen_rabbitmq::plugin::amqp
+
+	# This probably should be a package as well, but let's solve it with a sourced
+	# file for now.
+	kfile { "/usr/lib/rabbitmq/lib/rabbitmq_server-2.4.1/plugins/stomp_client-2.4.1.ez":
+		source  => "gen_rabbitmq/plugins/stomp_client-2.4.1.ez",
+		require => Kpackage["rabbitmq-server"],
+		notify  => Exec["reload-rabbitmq"],
+	}
+}
+
