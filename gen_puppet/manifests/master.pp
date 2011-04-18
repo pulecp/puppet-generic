@@ -3,8 +3,12 @@ class gen_puppet::master {
 	kpackage {
 		"puppetmaster":
 			ensure  => present,
-			require => Kfile["/etc/default/puppetmaster","/etc/apt/preferences.d/puppetmaster"];
+			require => Kfile["/etc/default/puppetmaster"];
 		"puppetmaster-common":
 			ensure  => latest;
+	}
+
+	kfile { "/etc/default/puppetmaster":
+		source => "gen_puppet/default/puppetmaster",
 	}
 }

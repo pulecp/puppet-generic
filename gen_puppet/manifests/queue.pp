@@ -12,4 +12,8 @@ class gen_puppet::queue {
 		ensure    => running,
 		require   => Kpackage["puppetmaster"];
 	}
+
+	kfile { "/etc/default/puppetqd":
+		source => "gen_puppet/default/puppetqd",
+	}
 }
