@@ -14,7 +14,7 @@ class gen_icinga::server {
 	}
 
 	kfile {
-		"/var/lib/icinga/rw/icinga.cmd":
+		"/var/lib/icinga/rw":
 			ensure  => directory,
 			mode    => 750,
 			require => Package["icinga"];
