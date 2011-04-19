@@ -37,13 +37,12 @@ class munin::client {
 	}
 	
 	# Extra plugins
-	kfile {
-		"/usr/local/share/munin/plugins":
-			recurse => true,
-			source => "munin/client/plugins",
-			group => "staff",
-			mode => 755;
-}
+	kfile { "/usr/local/share/munin/plugins":
+		recurse => true,
+		source => "munin/client/plugins",
+		group => "staff",
+		mode => 755;
+	}
 
 	# Munin node configuration
 	kfile { "/etc/munin/munin-node.conf":
@@ -58,10 +57,9 @@ class munin::client {
 		ensure => running,
 	}
 
-	kfile {
-		"/usr/local/share/munin":
-			ensure => directory,
-			group => "staff";
+	kfile {	"/usr/local/share/munin":
+		ensure => directory,
+		group => "staff";
 	}
 
 	kfile { "/usr/local/etc/munin":
@@ -71,7 +69,7 @@ class munin::client {
 
 
 	# Configs needed for JMX monitoring. Not needed everywhere, but roll out
-	# nontheless.
+	# nonetheless.
 	kfile { "/usr/local/etc/munin/plugins":
 		recurse => true,
 		source  => "munin/client/configs",
