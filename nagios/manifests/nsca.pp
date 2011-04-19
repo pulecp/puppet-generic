@@ -1,7 +1,5 @@
 class nagios::nsca {
-	package { "nsca":
-		ensure => installed,
-	}
+	kpackage { "nsca":: }
 
 	service { "nsca":
 		enable => true,
@@ -10,10 +8,9 @@ class nagios::nsca {
 		subscribe => File["/etc/nsca.cfg"],
 	}
 
-	file { "/etc/nsca.cfg":
-		source => "puppet://puppet/nagios/nsca/nsca.cfg",
+	kfile { "/etc/nsca.cfg":
+		source => "nagios/nsca/nsca.cfg",
 		mode => 640,
-		owner => "root",
 		group => "nagios",
 		require => Package["nsca"];
 	}
