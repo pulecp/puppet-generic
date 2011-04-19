@@ -59,7 +59,7 @@ class ferm::new {
 #			"${tables}['ipv6'][${name}]9999":
 #				content => "}";
 #		}
-	}
+#	}
 
 	define fermfile($content) {
 		kfile { "/etc/ferm/ferm.d/${name}":
