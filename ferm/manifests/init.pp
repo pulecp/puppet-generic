@@ -18,9 +18,9 @@ class ferm::new {
 	ipv6table { "filter":; }
 
 	$tables = { "ipv4" => { 
-			filter => 1,
+			"filter" => "1",
 		}, "ipv6" => {
-			filter => 2,
+			"filter" => "2",
 		}}
 
 #	kpackage { "ferm":; }
