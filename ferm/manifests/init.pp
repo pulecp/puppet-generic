@@ -43,15 +43,13 @@ class ferm::new {
 	}
 
 	define ipv4table() {
-		notify { "${tables}['ipv4'][${name}]9999":; }
-		notify { "$tables['ipv4']['${name}']9999":; }
-		notify { $tables['ipv4']["${name}"]:; }
-#		fermfile {
-#			"${tables}['ipv4'][${name}]":
-#				content => "table ${name} {";
-#			"${tables}['ipv4'][${name}]9999":
-#				content => "}";
-#		}
+		$number = $tables["ipv4"]["${name}"]
+		fermfile {
+			"$number":
+				content => "table ${name} {";
+			"${number}9999":
+				content => "}";
+		}
 	}
 
 #	define ipv6table() {
