@@ -17,10 +17,10 @@ class ferm::new {
 	ipv4table { "filter":; }
 #	ipv6table { "filter":; }
 
-	$tables = { "ipv4" => {
-			"filter" => "1",
-		}, "ipv6" => {
-			"filter" => "2",
+	$tables = { ipv4 => {
+			filter => "1",
+		}, ipv6 => {
+			filter => "2",
 		}}
 
 #	kpackage { "ferm":; }
@@ -44,6 +44,8 @@ class ferm::new {
 
 	define ipv4table() {
 		notify { "${tables}['ipv4'][${name}]9999":; }
+		notify { $tables['ipv4']["${name}"]9999:; }
+		notify { $tables['ipv4']["${name}"]:; }
 #		fermfile {
 #			"${tables}['ipv4'][${name}]":
 #				content => "table ${name} {";
