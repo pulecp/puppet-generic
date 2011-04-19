@@ -43,8 +43,9 @@ class ferm::new {
 	}
 
 	define ipv4table() {
+		$fermfile_name = $tables["ipv4"]["${name}"]
 		fermfile {
-			"$tables[ipv4][$name]":
+			$fermfile_name:
 				content => "table ${name} {";
 #			"$tables['ipv4'][${name}]9999":
 #				content => "}";
