@@ -13,10 +13,14 @@ class gen_icinga::server {
 		refreshonly => true;
 	}
 
-	kfile { "/var/lib/icinga/rw/icinga.cmd":
-		owner   => "www-data",
-		group   => "nagios",
-		mode    => 660,
-		require => Package["icinga"];
+	kfile {
+		"/var/lib/icinga/rw/icinga.cmd":
+			ensure  => directory,
+			mode    => 750,
+			require => Package["icinga"];
+		"/var/lib/icinga/rw/icinga.cmd":
+			owner   => "www-data",
+			group   => "nagios",
+			mode    => 660,
 	}
 }
