@@ -13,7 +13,8 @@ class bind {
 			source => "bind/named.conf.local",
 			require => Package["bind9"];
 		"/etc/bind/zones":
-			ensure => directory,
+			ensure  => directory,
+			group   => "bind",
 			require => Package["bind9"];
 		"/etc/bind/create_zones_conf":
 			source => "bind/create_zones_conf",
