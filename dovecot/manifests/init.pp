@@ -10,25 +10,18 @@ class dovecot::common {
 			require => Package["dovecot-common"],
 	}
 
-	file {
+	kfile {
 		"/etc/dovecot/dovecot.conf":
-			owner => "root",
-			group => "root",
-			source => "puppet://puppet/dovecot/dovecot/dovecot.conf",
-			mode => 644,
+			source => "dovecot/dovecot/dovecot.conf",
 			require => Package["dovecot-common"],
 			notify => Service["dovecot"];
 		"/etc/dovecot/dovecot-ldap.conf":
-			owner => "root",
-			group => "root",
-			source => "puppet://puppet/dovecot/dovecot/dovecot-ldap.conf",
+			source => "dovecot/dovecot/dovecot-ldap.conf",
 			mode => 600,
 			require => Package["dovecot-common"],
 			notify => Service["dovecot"];
 		"/etc/dovecot/dovecot-sql.conf":
-			owner => "root",
-			group => "root",
-			source => "puppet://puppet/dovecot/dovecot/dovecot-sql.conf",
+			source => "dovecot/dovecot/dovecot-sql.conf",
 			mode => 600,
 			require => Package["dovecot-common"],
 			notify => Service["dovecot"];

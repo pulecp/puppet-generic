@@ -2,19 +2,14 @@ class nagios::nrpe {
 	include nagios::nrpe::plugins
 
 	define check($command) {
-		file { "/etc/nagios/nrpe.d/$name.cfg":
-			owner => "root",
-			group => "root",
-			mode => 644,
+		kfile { "/etc/nagios/nrpe.d/$name.cfg":
 			content => "command[check_$name]=$command\n",
 			require => File["/etc/nagios/nrpe.d"],
 			notify => Service["nagios-nrpe-server"],
 		}
 	}
 
-	kpackage { "nagios-nrpe-server":
-		ensure => installed,
-	}
+	kpackage { "nagios-nrpe-server":; }
 
 	# We're starting NRPE from inetd, to allow it to use tcpwrappers for
 	# access control.
@@ -25,9 +20,7 @@ class nagios::nrpe {
 		require    => Package["nagios-nrpe-server"],
 	}
 
-	package { "openbsd-inetd":
-		ensure => installed,
-	}
+	kpackage { "openbsd-inetd":; }
 
 	service { "openbsd-inetd":
 		ensure => running,
@@ -74,19 +67,12 @@ class nagios::nrpe {
 		require => Exec["update-inetd-enable-nrpe"],
 	}
 
-	file {
+	kfile {
 		"/etc/nagios/nrpe.cfg":
-			source => ["puppet://puppet/nagios/nrpe/${lsbdistcodename}/nrpe.cfg",
-			           "puppet://puppet/nagios/nrpe/nrpe.cfg"],
-			owner => "root",
-			group => "root",
-			mode => 644,
+			source => "nagios/nrpe/${lsbdistcodename}/nrpe.cfg",
 			require => Package["nagios-nrpe-server"];
 		"/etc/nagios/nrpe.d":
 			ensure => directory,
-			owner => "root",
-			group => "root",
-			mode => 775,
 			require => Package["nagios-nrpe-server"];
 	}
 }
@@ -113,7 +99,7 @@ class nagios::nrpe::plugins {
 			command => '/usr/bin/sudo /usr/sbin/crm_mon -s';
 	}
 
-	# This should be done by kbp_monitoring::client::pacemaker
+	# TODO This should be done by kbp_monitoring::client::pacemaker
 	include gen_sudo
 	gen_sudo::rule { "pacemaker sudo rules":
 		entity => "nagios",
@@ -193,19 +179,16 @@ class nagios::nrpe::plugins {
 			require => File["/usr/local/lib/nagios/plugins/check_pacemaker_config","/etc/nagios/nrpe.d"];
 	}
 
-	file {
+	kfile {
 		"/usr/local/lib/nagios/plugins/check_pacemaker_config":
-			ensure => present,
-			source => "puppet:///modules/nagios/plugins/check_pacemaker_config",
-			owner => "root",
+			source => "nagios/plugins/check_pacemaker_config",
 			group => "staff",
 			mode => 775,
 			require => File["/usr/local/lib/nagios/plugins"];
 	}
 
-	file { "/usr/local/lib/nagios/plugins/check_drbd":
-		source => "puppet://puppet/nagios/plugins/check_drbd",
-		owner => "root",
+	kfile { "/usr/local/lib/nagios/plugins/check_drbd":
+		source => "nagios/plugins/check_drbd",
 		group => "staff",
 		mode => 755,
 		require => File["/usr/local/lib/nagios/plugins"];
@@ -236,17 +219,15 @@ class nagios::nrpe::plugins {
 			command => "/usr/local/lib/nagios/plugins/check_stp_bridges.sh",
 	}
 
-	file { "/usr/local/lib/nagios/plugins/check_mdraid":
-		source => "puppet://puppet/nagios/plugins/check_mdraid",
-		owner => "root",
+	kfile { "/usr/local/lib/nagios/plugins/check_mdraid":
+		source => "nagios/plugins/check_mdraid",
 		group => "staff",
 		mode => 755,
 		require => File["/usr/local/lib/nagios/plugins"];
 	}
 
-	file { "/usr/local/lib/nagios/plugins/check_stp_bridges.sh":
-		source => "puppet://puppet/nagios/plugins/check_stp_bridges.sh",
-		owner => "root",
+	kfile { "/usr/local/lib/nagios/plugins/check_stp_bridges.sh":
+		source => "nagios/plugins/check_stp_bridges.sh",
 		group => "staff",
 		mode => 755,
 		require => File["/usr/local/lib/nagios/plugins"];
@@ -258,9 +239,8 @@ class nagios::nrpe::plugins {
 			command => "sudo /usr/local/lib/nagios/plugins/check_3ware",
 	}
 
-	file { "/usr/local/lib/nagios/plugins/check_3ware":
-		source => "puppet://puppet/nagios/plugins/check_3ware",
-		owner => "root",
+	kfile { "/usr/local/lib/nagios/plugins/check_3ware":
+		source => "nagios/plugins/check_3ware",
 		group => "staff",
 		mode => 755,
 		require => File["/usr/local/lib/nagios/plugins"];
@@ -272,9 +252,8 @@ class nagios::nrpe::plugins {
 			command => "sudo /usr/local/lib/nagios/plugins/check_adaptec",
 	}
 
-	file { "/usr/local/lib/nagios/plugins/check_adaptec":
-		source => "puppet://puppet/nagios/plugins/check_adaptec",
-		owner => "root",
+	kfile { "/usr/local/lib/nagios/plugins/check_adaptec":
+		source => "nagios/plugins/check_adaptec",
 		group => "staff",
 		mode => 755,
 		require => File["/usr/local/lib/nagios/plugins"];
@@ -287,9 +266,8 @@ class nagios::nrpe::plugins {
 		require => File["/usr/local/lib/nagios/plugins/check_running_kernel"],
 	}
 
-	file { "/usr/local/lib/nagios/plugins/check_running_kernel":
-		source => "puppet://puppet/nagios/plugins/check_running_kernel",
-		owner => "root",
+	kfile { "/usr/local/lib/nagios/plugins/check_running_kernel":
+		source => "nagios/plugins/check_running_kernel",
 		group => "staff",
 		mode => 755,
 		require => File["/usr/local/lib/nagios/plugins"];
@@ -315,17 +293,15 @@ class nagios::nrpe::plugins {
 		command => "/usr/lib/nagios/plugins/check_procs -C rdiff-backup -w 0",
 	}
 
-	file { "/usr/local/lib/nagios/plugins/check_bonding":
-		source => "puppet://puppet/nagios/plugins/check_bonding",
-		owner => "root",
+	kfile { "/usr/local/lib/nagios/plugins/check_bonding":
+		source => "nagios/plugins/check_bonding",
 		group => "staff",
 		mode => 755,
 		require => File["/usr/local/lib/nagios/plugins"];
 	}
 
-	file { "/usr/local/lib/nagios/plugins/check_proc_status.sh":
-		source => "puppet://puppet/nagios/plugins/check_proc_status.sh",
-		owner => "root",
+	kfile { "/usr/local/lib/nagios/plugins/check_proc_status.sh":
+		source => "nagios/plugins/check_proc_status.sh",
 		group => "staff",
 		mode => 755,
 		require => File["/usr/local/lib/nagios/plugins"];
