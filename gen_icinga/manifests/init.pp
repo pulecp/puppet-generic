@@ -1,8 +1,8 @@
 class gen_icinga::server {
-	kpackage { ["icinga","icinga-doc"]:; }
+	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin","nagios-plugins-standard"]:; }
 
 	service { "icinga":
-#		ensure     => running,
+		ensure     => running,
 		hasrestart => true,
 		hasstatus  => true,
 		require    => Package["icinga"];
@@ -11,5 +11,12 @@ class gen_icinga::server {
 	exec { "reload-icinga":
 		command     => "/etc/init.d/icinga reload",
 		refreshonly => true;
+	}
+
+	kfile { "/var/lib/icinga/rw/icinga.cmd":
+		owner   => "www-data",
+		group   => "nagios",
+		mode    => 660,
+		require => Package["icinga"];
 	}
 }

@@ -8,11 +8,8 @@ class grub {
 		ensure => installed,
 	}
 
-	file { "/etc/default/grub":
-		source  => "puppet:///grub/grub-default",
-		owner   => "root",
-		group   => "root",
-		mode    => 644,
+	kfile { "/etc/default/grub":
+		source  => "grub/grub-default",
 		notify  => Exec["/usr/sbin/update-grub"],
 		require => Package["grub-pc"];
 	}

@@ -1,29 +1,22 @@
 class openvpn::common {
-	package { "openvpn":
-		ensure => installed,
-	}
+	kpackage { "openvpn":; }
 }
 
 class openvpn::server {
 	include openvpn::common
 
-	file {
+	kfile {
 		"/etc/openvpn/server.conf":
-			source => "puppet://puppet/openvpn/server.conf",
-			mode => 644,
-			owner => "root",
-			group => "root",
+			source => "openvpn/server.conf",
 			require => [Package["openvpn"], File["/var/lib/openvpn"]];
 		"/var/lib/openvpn":
 			ensure => "directory",
-			owner => "root",
-			group => "root",
 			mode => 750;
 	}
 
 	service { "openvpn":
 		subscribe => File["/etc/openvpn/server.conf"],
-		ensure => running,
+		ensure    => running;
 	}
 
 }
@@ -31,11 +24,8 @@ class openvpn::server {
 class openvpn::client {
 	include openvpn::common
 
-	file { "/etc/openvpn/client.conf":
-		source => "puppet://puppet/openvpn/client.conf",
-		mode => 644,
-		owner => "root",
-		group => "root",
+	kfile { "/etc/openvpn/client.conf":
+		source => "openvpn/client.conf",
 		require => Package["openvpn"],
 	}
 }

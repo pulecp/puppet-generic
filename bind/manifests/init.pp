@@ -3,35 +3,25 @@ class bind {
 		ensure => installed,
 	}
 
-	file {
+	kfile {
 		"/etc/bind/named.conf":
-			owner => root,
-			group => root,
-			mode => 644,
 			require => Package["bind9"];
 		"/etc/bind/named.conf.options":
-			source => "puppet://puppet/bind/named.conf.options",
-			owner => root,
-			group => root,
+			source => "bind/named.conf.options",
 			require => Package["bind9"];
 		"/etc/bind/named.conf.local":
-			source => "puppet://puppet/bind/named.conf.local",
-			owner => root,
-			group => root,
+			source => "bind/named.conf.local",
 			require => Package["bind9"];
 		"/etc/bind/zones":
-			ensure => directory,
+			ensure  => directory,
+			group   => "bind",
 			require => Package["bind9"];
 		"/etc/bind/create_zones_conf":
-			source => "puppet://puppet/bind/create_zones_conf",
-			owner => root,
-			group => root,
+			source => "bind/create_zones_conf",
 			mode => 755,
 			require => Package["bind9"];
 		"/etc/bind/Makefile":
-			source => "puppet://puppet/bind/Makefile",
-			owner => root,
-			group => root,
+			source => "bind/Makefile",
 			require => Package["bind9"];
 	}
 
@@ -54,7 +44,7 @@ class bind {
 	}
 
 	define zone_alias ($target) {
-		file { "/etc/bind/zones/$name":
+		kfile { "/etc/bind/zones/$name":
 			ensure => link,
 			target => "/etc/bind/zones/$target",
 			notify => Exec["update-zone-conf"],
@@ -63,7 +53,7 @@ class bind {
 	}
 
 	define zone ($source, $aliases=false) {
-		file { "/etc/bind/zones/$name":
+		kfile { "/etc/bind/zones/$name":
 			owner => root,
 			group => root,
 			source => $source,
