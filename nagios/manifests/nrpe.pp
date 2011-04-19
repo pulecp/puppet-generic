@@ -69,8 +69,8 @@ class nagios::nrpe {
 
 	kfile {
 		"/etc/nagios/nrpe.cfg":
-			source => ["puppet://puppet/nagios/nrpe/${lsbdistcodename}/nrpe.cfg",
-			           "puppet://puppet/nagios/nrpe/nrpe.cfg"],
+			source => ["nagios/nrpe/${lsbdistcodename}/nrpe.cfg",
+			           "nagios/nrpe/nrpe.cfg"],
 			require => Package["nagios-nrpe-server"];
 		"/etc/nagios/nrpe.d":
 			ensure => directory,
