@@ -15,7 +15,7 @@ class ferm {
 
 class ferm::new {
 	ipv4table { "filter":; }
-#	ipv6table { "filter":; }
+	ipv6table { "filter":; }
 
 	$tables = { ipv4 => {
 			filter => "1",
