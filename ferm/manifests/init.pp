@@ -44,7 +44,7 @@ class ferm::new {
 
 	define ipv4table() {
 		notify { "${tables}['ipv4'][${name}]9999":; }
-		notify { $tables['ipv4']["${name}"]9999:; }
+		notify { "$tables['ipv4']['${name}']9999":; }
 		notify { $tables['ipv4']["${name}"]:; }
 #		fermfile {
 #			"${tables}['ipv4'][${name}]":
