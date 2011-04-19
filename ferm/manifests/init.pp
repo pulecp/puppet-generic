@@ -54,7 +54,7 @@ class ferm::new {
 
 	define ipv6table() {
 		fermfile {
-			${tables}["ipv6"]["${name}"]:
+			$tables["ipv6"]["${name}"]:
 				content => "domain ipv6 table ${name}";
 			${tables}[ipv6][${name}]9999:
 				content => "}";
