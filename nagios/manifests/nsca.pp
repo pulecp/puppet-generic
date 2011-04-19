@@ -1,5 +1,5 @@
 class nagios::nsca {
-	kpackage { "nsca":: }
+	kpackage { "nsca":; }
 
 	service { "nsca":
 		enable => true,
