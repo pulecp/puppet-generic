@@ -1,32 +1,26 @@
 class postfix {
-	package { "postfix":
-		ensure => installed,
-	}
+	kpackage { "postfix":; }
 
 	service { "postfix":
-		enable => true,
+		enable     => true,
 		hasrestart => true,
-		pattern => "/usr/lib/postfix/master",
-		require => Package["postfix"],
+		pattern    => "/usr/lib/postfix/master",
+		require    => Package["postfix"];
 	}
 
-	file {
+	kfile {
 		"/etc/postfix/main.cf":
-			owner => "root",
-			group => "root",
-			mode => 644,
 			content => template("postfix/main.cf"),
-			notify => Service["postfix"];
+			notify  => Service["postfix"];
 		"/var/spool/postfix/dovecot":
-			ensure => directory,
-			owner => "postfix",
-			group => "mail",
-			mode => 755,
+			ensure  => directory,
+			owner   => "postfix",
+			group   => "mail",
 			require => Package["postfix"];
 	}
 
 	exec { "newaliases":
 		refreshonly => true,
-		path => "/usr/bin",
+		path        => "/usr/bin";
 	}
 }
