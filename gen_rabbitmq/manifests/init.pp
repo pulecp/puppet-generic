@@ -8,6 +8,13 @@ class gen_rabbitmq {
 		command     => "/etc/init.d/rabbitmq-server reload",
 		refreshonly => true,
 	}
+
+	kfile { "/etc/rabbitmq/rabbitmq-env.conf":
+		ensure   => file,
+		require  => Kpackage["rabbitmq-server"],
+		notify   => Exec["reload-rabbitmq"],
+		checksum => 'md5',
+	}
 }
 
 class gen_rabbitmq::plugin::amqp {
@@ -32,6 +39,12 @@ class gen_rabbitmq::plugin::stomp {
 		source  => "gen_rabbitmq/plugins/stomp_client-2.4.1.ez",
 		require => Kpackage["rabbitmq-server"],
 		notify  => Exec["reload-rabbitmq"],
+	}
+
+	line { "rabbitmq config for stomp plugin":
+		file    => "/etc/rabbitmq/rabbitmq-env.conf",
+		content => 'SERVER_START_ARGS="-rabbit_stomp listeners [{\"0.0.0.0\",6163}]"',
+		require => Kfile["/etc/rabbitmq/rabbitmq-env.conf"],
 	}
 }
 
