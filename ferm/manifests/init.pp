@@ -34,7 +34,7 @@ class ferm::new {
 	kfile {
 		"/etc/ferm/ferm.d":
 			ensure  => directory,
-			group   => "adm"
+			group   => "adm",
 			require => Package["ferm"];
 		"/etc/ferm/ferm.conf_new":
 			content => "@include 'ferm.d/';",
