@@ -46,7 +46,7 @@ class ferm::new {
 		fermfile {
 			$tables["ipv4"]["${name}"]:
 				content => "table ${name} {";
-			$tables["ipv4"]["${name}"]"9999":
+			"${tables}['ipv4'][${name}]9999":
 				content => "}";
 		}
 	}
