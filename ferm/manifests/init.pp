@@ -97,7 +97,7 @@ class ferm::new {
 					"v6" => "domain ipv6 table ${real_name} {\n",
 				};
 			"${ip_proto}_${real_name}_zzzz":
-				content => "}";
+				content => "}\n";
 		}
 	}
 
