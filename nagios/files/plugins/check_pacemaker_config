@@ -24,7 +24,10 @@ function check_ok {
 
 function check_not_ok {
 	MSG="${MSG} CRITICAL:"
-	NUM_ERROR=`echo $OUTPUT | fgrep -c "ERR"`
+	if [[ $OUTPUT == "sudo: /usr/sbin/crm_verify: command not found" ]]; then
+            MSG="${MSG} pacemaker is not installed"
+        fi
+        NUM_ERROR=`echo $OUTPUT | fgrep -c "ERR"`
 	NUM_WARN=`echo "$OUTPUT" | fgrep -c "WARN"`
 	if [ $NUM_ERROR -ne 0 ]; then
 		MSG="${MSG} running configuration errors: ${NUM_ERROR}"
