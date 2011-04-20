@@ -54,7 +54,7 @@ class ferm::new {
 				content => "\tchain ${real_name} {",
 				require => Table["${table}_${ip_proto}"];
 			"${table}_${ip_proto}_${real_name}_zzzz":
-				content => "}",
+				content => "\t}",
 				require => Table["${table}_${ip_proto}"];
 		}
 	}
