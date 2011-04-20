@@ -24,8 +24,8 @@ class ferm::new {
 			dport  => "22",
 			action => "ACCEPT";
 		"Drop UDP packets_v4":
-			prio   => "a0",
-			proto  => "udp";
+			prio  => "a0",
+			proto => "udp";
 		"Nicely reject tcp packets_v4":
 			prio       => "a1",
 			proto      => "tcp",
@@ -34,6 +34,20 @@ class ferm::new {
 		"Reject everything else_v4":
 			prio   => "a2",
 			action => "REJECT";
+		"Drop UDP packets_v4":
+			prio  => "a0",
+			proto => "udp",
+			chain => "FORWARD";
+		"Nicely reject tcp packets_v4":
+			prio       => "a1",
+			proto      => "tcp",
+			action     => "REJECT",
+			rejectwith => "tcp-reset",
+			chain      => "FORWARD";
+		"Reject everything else_v4":
+			prio   => "a2",
+			action => "REJECT",
+			chain  => "FORWARD";
 		"Respond to ICMP packets (NDP)_v6":
 			proto    => "icmpv6",
 			icmptype => "(neighbour-solicitation neighbour-advertisement)",
@@ -47,8 +61,8 @@ class ferm::new {
 			dport  => "22",
 			action => "ACCEPT";
 		"Drop UDP packets_v6":
-			prio   => "a0",
-			proto  => "udp";
+			prio  => "a0",
+			proto => "udp";
 		"Nicely reject tcp packets_v6":
 			prio       => "a1",
 			proto      => "tcp",
@@ -57,6 +71,20 @@ class ferm::new {
 		"Reject everything else_v6":
 			prio   => "a2",
 			action => "REJECT";
+		"Drop UDP packets_v6":
+			prio  => "a0",
+			proto => "udp",
+			chain => "FORWARD";
+		"Nicely reject tcp packets_v6":
+			prio       => "a1",
+			proto      => "tcp",
+			action     => "REJECT",
+			rejectwith => "tcp-reset",
+			chain      => "FORWARD";
+		"Reject everything else_v6":
+			prio   => "a2",
+			action => "REJECT",
+			chain  => "FORWARD";
 	}
 
 	interface { ["lo_v4","lo_v6"]:
