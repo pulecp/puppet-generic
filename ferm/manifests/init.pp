@@ -63,7 +63,7 @@ class ferm::new {
 			notify  => Exec["reload-ferm"];
 	}
 
-	define (e$comment, $table=filter, $chain=input) {
+	define rule($comment, $table=filter, $chain=input) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
