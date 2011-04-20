@@ -53,16 +53,15 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		fermfile {
-			"${ip_proto}_${table}_${chain}_${real_name}_0001":
-				content => $comment ? {
-					false   => undef,
-					default => "\t\t# ${comment}",
-				},
-				require => Chain["${chain}_${ip_proto}"];
-			"${ip_proto}_${table}_${chain}_${real_name}_00011":
-				content => "\t\tmod state state ${real_name} ${action}",
-				require => Chain["${chain}_${ip_proto}"];
+		if $comment {
+			fermfile { "${ip_proto}_${table}_${chain}_${real_name}_0001":
+					content => "\t\t# ${comment}",
+					require => Chain["${chain}_${ip_proto}"];
+			}
+		}
+		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_00011":
+			content => "\t\tmod state state ${real_name} ${action}",
+			require => Chain["${chain}_${ip_proto}"];
 		}
 	}
 
