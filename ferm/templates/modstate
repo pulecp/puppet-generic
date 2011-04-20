@@ -1,0 +1,3 @@
+<% if comment %>		# <%= comment %>
+<% end -%>
+		mod state state <%= real_name %> <%= action %>;
