@@ -58,7 +58,7 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
 
 		if $ip_proto == "v46" {
-			table { "${real_name}_v4","${real_name}_v6":
+			rule { ["${real_name}_v4","${real_name}_v6"]:
 				prio       => $prio,
 				saddr      => $saddr,
 				daddr      => $daddr,
@@ -84,7 +84,7 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		if $ip_proto == "v46" {
-			table { "${real_name}_v4","${real_name}_v6":
+			interface { ["${real_name}_v4","${real_name}_v6"]:
 				comment => $comment,
 				action  => $action,
 				table   => $table,
@@ -103,7 +103,7 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		if $ip_proto == "v46" {
-			table { "${real_name}_v4","${real_name}_v6":
+			modstate { ["${real_name}_v4","${real_name}_v6"]:
 				comment => $comment,
 				action  => $action,
 				table   => $table,
@@ -122,7 +122,7 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		if $ip_proto == "v46" {
-			table { "${real_name}_v4","${real_name}_v6":
+			chain { ["${real_name}_v4","${real_name}_v6"]:
 				policy => $policy,
 				table  => $table;
 			}
