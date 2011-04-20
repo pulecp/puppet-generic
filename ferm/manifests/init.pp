@@ -14,8 +14,10 @@ class ferm {
 }
 
 class ferm::new {
-	ipv4table { "filter":; }
-	ipv6table { "filter":; }
+	table { 
+		"filter_v4":;
+		"filter_v6":
+	}
 
 #	kpackage { "ferm":; }
 
@@ -36,19 +38,17 @@ class ferm::new {
 			notify  => Exec["reload-ferm"];
 	}
 
-	define table($ipv4=true) {
-		$new_name = $ipv4 ? {
-			true  => $name,
-			false => "${name}_ipv6",
-		}
+	define table() {
+		$new_name = regsubst($name,'^(.*)_.*$','\1')
+		$ip_proto = regsubst($name,'^(.*)_.*$','\2')
 
 		fermfile {
-			"${name}":
-				content => $ipv4 ? {
-					true  => "table ${name} {",
-					false => "domain ipv6 table ${name} {",
+			"${new_name}":
+				content => $ip_prot ? {
+					v4 => "table ${name} {",
+					v6 => "domain ipv6 table ${name} {",
 				};
-			"${name}_zzzz":
+			"${new_name}_zzzz":
 				content => "}";
 		}
 	}
