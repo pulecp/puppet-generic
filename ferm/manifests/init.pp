@@ -57,7 +57,7 @@ class ferm::new {
 			"${ip_proto}_${table}_${chain}_${real_name}_0001":
 				content => "\t\t# ${comment}",
 				require => Table["${chain}_${ip_proto}"];
-			"${ip_proto}_${table}_${chain}_${real_name}_0001":
+			"${ip_proto}_${table}_${chain}_${real_name}_00011":
 				content => "\t\tmod state state ${real_name} ${action}",
 				require => Table["${chain}_${ip_proto}"];
 		}
