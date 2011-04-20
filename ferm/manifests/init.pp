@@ -57,7 +57,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
 
-		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_${prio}":
+		fermfile { "${ip_proto}_${table}_${chain}_${prio}_${real_name}":
 			content => template("ferm/rule"),
 			require => Chain["${chain}_${ip_proto}"];
 		}
@@ -67,7 +67,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_0002":
+		fermfile { "${ip_proto}_${table}_${chain}_0002_${real_name}":
 			content => template("ferm/interface"),
 			require => Chain["${chain}_${ip_proto}"];
 		}
@@ -77,7 +77,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_0001":
+		fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
 			content => template("ferm/modstate"),
 			require => Chain["${chain}_${ip_proto}"];
 		}
