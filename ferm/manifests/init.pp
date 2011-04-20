@@ -49,18 +49,22 @@ class ferm::new {
 			notify  => Exec["reload-ferm"];
 	}
 
+	define rule($comment, $prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $table=filter, $chain=INPUT) {
+		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
+		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
+
+		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_${prio}":
+			content => template("ferm/rule"),
+			require => Chain["${chain}_${ip_proto}"];
+		}
+	}
+
 	define modstate($comment=false, $action=DROP, $table=filter, $chain=INPUT) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $comment {
-			fermfile { "${ip_proto}_${table}_${chain}_${real_name}_0001":
-					content => "\t\t# ${comment}",
-					require => Chain["${chain}_${ip_proto}"];
-			}
-		}
 		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_00011":
-			content => "\t\tmod state state ${real_name} ${action}",
+			content => template("ferm/modstate"),
 			require => Chain["${chain}_${ip_proto}"];
 		}
 	}

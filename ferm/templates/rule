@@ -1,0 +1,8 @@
+		# <%= comment =>
+<% if saddr %>		saddr <%= saddr %> <% end -%>
+<% if daddr %>		daddr <%= daddr %> <% end -%>
+<% if proto %>		proto <%= proto %> <% end -%>
+<% if icmptype %>		icmp-type <%= icmptype %> <% end -%>
+<% if sport %>		sport <%= sport %> <% end -%>
+<% if dport %>		dport <%= dport %> <% end -%>
+		<%= action %>;
