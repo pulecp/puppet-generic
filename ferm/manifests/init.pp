@@ -146,7 +146,7 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		if $ip_proto == "v46" {
-			table { ["${real_name}_v4","${real_name}_v6":; }
+			table { ["${real_name}_v4","${real_name}_v6"]:; }
 		} else {
 			fermfile {
 				"${ip_proto}_${real_name}":
