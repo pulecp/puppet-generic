@@ -14,6 +14,10 @@ class ferm {
 }
 
 class ferm::new {
+	interface { ["lo_v4","lo_v6"]:
+		action => "ACCEPT";
+	}
+
 	modstate {
 		["INVALID_v4","INVALID_v6"]:;
 		["ESTABLISHED_v4","RELATED_v4","ESTABLISHED_v6","RELATED_v6"]:
@@ -55,6 +59,16 @@ class ferm::new {
 
 		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_${prio}":
 			content => template("ferm/rule"),
+			require => Chain["${chain}_${ip_proto}"];
+		}
+	}
+
+	define interface($comment=false, $action=DROP, $table=filter, $chain=INPUT) {
+		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
+		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
+
+		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_0002":
+			content => template("ferm/interface"),
 			require => Chain["${chain}_${ip_proto}"];
 		}
 	}
