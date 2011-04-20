@@ -71,17 +71,17 @@ class ferm::new {
 		"Reject everything else_v6":
 			prio   => "a2",
 			action => "REJECT";
-		"Drop UDP packets_v6 (forward)":
+		"Drop UDP packets (forward)_v6":
 			prio  => "a0",
 			proto => "udp",
 			chain => "FORWARD";
-		"Nicely reject tcp packets_v6 (forward)":
+		"Nicely reject tcp packets (forward)_v6":
 			prio       => "a1",
 			proto      => "tcp",
 			action     => "REJECT",
 			rejectwith => "tcp-reset",
 			chain      => "FORWARD";
-		"Reject everything else_v6 (forward)":
+		"Reject everything else (forward)_v6":
 			prio   => "a2",
 			action => "REJECT",
 			chain  => "FORWARD";
