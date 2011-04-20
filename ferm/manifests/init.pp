@@ -39,16 +39,16 @@ class ferm::new {
 	}
 
 	define table() {
-		$new_name = regsubst($name,'^(.*)_(.*)$','\1')
+		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		fermfile {
-			"${new_name}":
+			"${name}":
 				content => $ip_proto ? {
-					"v4" => "table ${name} {",
-					"v6" => "domain ipv6 table ${name} {",
+					"v4" => "table ${real_name} {",
+					"v6" => "domain ipv6 table ${real_name} {",
 				};
-			"${new_name}_zzzz":
+			"${name}_zzzz":
 				content => "}";
 		}
 	}
