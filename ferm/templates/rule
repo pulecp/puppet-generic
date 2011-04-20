@@ -5,4 +5,5 @@
 <% if icmptype %>icmp-type <%= icmptype %> <% end -%>
 <% if sport %>sport <%= sport %> <% end -%>
 <% if dport %>dport <%= dport %> <% end -%>
-<%= action %>;
+<%= action -%>
+<% if rejectwith %> reject-with <%= reject-with %><% end %>;
