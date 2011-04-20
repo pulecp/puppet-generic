@@ -36,19 +36,18 @@ class ferm::new {
 			notify  => Exec["reload-ferm"];
 	}
 
-	define ipv4table() {
-		fermfile {
-			"${name}":
-				content => "table ${name} {";
-			"${name}_zzzz":
-				content => "}";
+	define table($ipv4=true) {
+		$new_name = $ipv4 ? {
+			true  => $name,
+			false => "${name}_ipv6",
 		}
-	}
 
-	define ipv6table() {
 		fermfile {
 			"${name}":
-				content => "domain ipv6 table ${name}";
+				content => $ipv4 ? {
+					true  => "table ${name} {",
+					false => "domain ipv6 table ${name} {",
+				}
 			"${name}_zzzz":
 				content => "}";
 		}
