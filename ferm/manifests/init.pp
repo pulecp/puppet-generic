@@ -14,6 +14,13 @@ class ferm {
 }
 
 class ferm::new {
+	chain {
+		"INPUT_v4":
+			table => "filter";
+		"INPUT_v6":
+			table => "filter";
+	}
+
 	table {
 		"filter_v4":;
 		"filter_v6":;
@@ -38,6 +45,20 @@ class ferm::new {
 			notify  => Exec["reload-ferm"];
 	}
 
+	define chain($table=filter) {
+		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
+		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
+
+		fermfile {
+			"${table}_${ip_proto}_${real_name}":
+				content => "\tchain ${real_name} {",
+				require => Table["${table}_${ip_proto}"];
+			"${table}_${ip_proto}_${real_name}_zzzz":
+				content => "}",
+				require => Table["${table}_${ip_proto}"];
+		}
+	}
+
 	define table() {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
@@ -45,8 +66,8 @@ class ferm::new {
 		fermfile {
 			"${name}":
 				content => $ip_proto ? {
-					"v4"    => "table ${real_name} {",
-					"v6"    => "domain ipv6 table ${real_name} {",
+					"v4" => "table ${real_name} {",
+					"v6" => "domain ipv6 table ${real_name} {",
 				};
 			"${name}_zzzz":
 				content => "}";
