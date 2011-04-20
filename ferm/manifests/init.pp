@@ -38,6 +38,8 @@ class ferm::new {
 	table {
 		"filter_v4":;
 		"filter_v6":;
+	}
+	@table {
 		"mangle_v4":;
 		"mangle_v6":;
 		"nat_v4":;
