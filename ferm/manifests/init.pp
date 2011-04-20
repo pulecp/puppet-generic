@@ -39,8 +39,8 @@ class ferm::new {
 	}
 
 	define table() {
-		$new_name = regsubst($name,'^(.*)_.(*$)','\1')
-		$ip_proto = regsubst($name,'^(.*)_.(*$)','\2')
+		$new_name = regsubst($name,'^(.*)_(.*)$','\1')
+		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		fermfile {
 			"${new_name}":
