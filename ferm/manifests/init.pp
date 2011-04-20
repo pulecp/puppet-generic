@@ -15,6 +15,26 @@ class ferm {
 
 class ferm::new {
 	rule {
+		"Respond to ICMP packets_v4":
+			proto    => "icmp",
+			icmptype => "echo-request",
+			action   => "ACCEPT";
+		"Respond to ICMP packets (NDP)_v6":
+			proto    => "icmpv6",
+			icmptype => "(neighbour-solicitation neighbour-advertisement)",
+			action   => "ACCEPT";
+		"Respond to ICMP packets (diagnostic)_v6":
+			proto    => "icmpv6",
+			icmptype => "echo-request",
+			action   => "ACCEPT";
+		"SSH_v4":
+			proto  => "tcp",
+			dport  => "22",
+			action => "ACCEPT";
+		"SSH_v6":
+			proto  => "tcp",
+			dport  => "22",
+			action => "ACCEPT";
 	}
 
 	interface { ["lo_v4","lo_v6"]:
