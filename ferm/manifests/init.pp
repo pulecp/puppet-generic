@@ -68,10 +68,10 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		fermfile {
-			"${table}_${ip_proto}_${real_name}":
+			"${ip_proto}_${table}_${real_name}":
 				content => "\tchain ${real_name} {",
 				require => Table["${table}_${ip_proto}"];
-			"${table}_${ip_proto}_${real_name}_zzzz":
+			"${ip_proto}_${table}_${real_name}_zzzz":
 				content => "\t}",
 				require => Table["${table}_${ip_proto}"];
 		}
@@ -82,13 +82,13 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		fermfile {
-			"${table}_${ip_proto}_${real_name}":
+			"${ip_proto}_${table}_${real_name}":
 				content => "\tchain ${real_name} {",
 				require => Table["${table}_${ip_proto}"];
-			"${table}_${ip_proto}_${real_name}_0000":
+			"${ip_proto}_${table}_${real_name}_0000":
 				content => "\t\tpolicy ${policy} {",
 				require => Table["${table}_${ip_proto}"];
-			"${table}_${ip_proto}_${real_name}_zzzz":
+			"${ip_proto}_${table}_${real_name}_zzzz":
 				content => "\t}",
 				require => Table["${table}_${ip_proto}"];
 		}
@@ -99,12 +99,12 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		fermfile {
-			"${name}":
+			"${ip_proto}_${real_name}":
 				content => $ip_proto ? {
 					"v4" => "table ${real_name} {",
 					"v6" => "domain ipv6 table ${real_name} {",
 				};
-			"${name}_zzzz":
+			"${ip_proto}_${real_name}_zzzz":
 				content => "}";
 		}
 	}
