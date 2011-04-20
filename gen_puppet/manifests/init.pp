@@ -1,4 +1,6 @@
 class gen_puppet {
+	include gen_puppet::puppet_conf
+
 	kpackage { ["puppet","puppet-common"]:; }
 }
 
@@ -7,9 +9,10 @@ class gen_puppet::puppet_conf {
 
 	# Setup the default config file
 	concat { '/etc/puppet/puppet.conf':
-		owner => 'root',
-		group => 'root',
-		mode  => '0640',
+		owner   => 'root',
+		group   => 'root',
+		mode    => '0640',
+		require => Kpackage["puppet-common"],
 	}
 
 	# Already define all the sections
@@ -33,7 +36,14 @@ class gen_puppet::puppet_conf {
 	}
 }
 
-define kbp_puppet::set_config ($var, $value, $configfile = '/etc/puppet/puppet.conf', $section = 'main', $order = false) {
+define kbp_puppet::set_config ($value, $configfile = '/etc/puppet/puppet.conf', $section = 'main', $order = false, $var = false) {
+	# If no variable name is set, use the name
+	if $var {
+		$real_var = $var
+	} else {
+		$real_var = $name
+	}
+
 	# If order is set, don't use section
 	if $order {
 		$real_order = $order
@@ -50,7 +60,7 @@ define kbp_puppet::set_config ($var, $value, $configfile = '/etc/puppet/puppet.c
 
 	gen_puppet::concat::add_content { $name:
 		target  => $configfile,
-		content => "${var} = ${value}\n",
+		content => "${real_var} = ${value}\n",
 		order   => $real_order,
 	}
 }
