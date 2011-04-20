@@ -126,7 +126,7 @@ class ferm::new {
 			notify  => Exec["reload-ferm"];
 	}
 
-	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith, $table=filter, $chain=INPUT) {
+	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT) {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
 
