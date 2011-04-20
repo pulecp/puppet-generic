@@ -11,6 +11,26 @@ class gen_puppet::puppet_conf {
 		group => 'root',
 		mode  => '0640',
 	}
+
+	# Already define all the sections
+	gen_puppet::concat::add_content {
+		"main section":
+			target  => '/etc/puppet/puppet.conf',
+			content => "[main]\n",
+			order   => '10';
+		"agent section":
+			target  => '/etc/puppet/puppet.conf',
+			content => "\n[agent]\n",
+			order   => '20';
+		"master section":
+			target  => '/etc/puppet/puppet.conf',
+			content => "\n[master]\n",
+			order   => '30';
+		"queue section":
+			target  => '/etc/puppet/puppet.conf',
+			content => "\n[queue]\n",
+			order   => '40';
+	}
 }
 
 define kbp_puppet::set_config ($var, $value, $configfile = '/etc/puppet/puppet.conf', $section = 'main', $order = false) {
@@ -30,7 +50,7 @@ define kbp_puppet::set_config ($var, $value, $configfile = '/etc/puppet/puppet.c
 
 	gen_puppet::concat::add_content { $name:
 		target  => $configfile,
-		content => "${var} = ${value}",
+		content => "${var} = ${value}\n",
 		order   => $real_order,
 	}
 }
