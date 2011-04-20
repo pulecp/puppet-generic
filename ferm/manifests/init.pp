@@ -19,6 +19,14 @@ class ferm::new {
 			table => "filter";
 		"INPUT_v6":
 			table => "filter";
+		"OUTPUT_v4":
+			table => "filter";
+		"OUTPUT_v6":
+			table => "filter";
+		"FORWARD_v4":
+			table => "filter";
+		"FORWARD_v6":
+			table => "filter";
 	}
 
 	table {
