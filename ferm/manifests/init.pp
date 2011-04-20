@@ -63,7 +63,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_00011":
+		fermfile { "${ip_proto}_${table}_${chain}_${real_name}_0001":
 			content => template("ferm/modstate"),
 			require => Chain["${chain}_${ip_proto}"];
 		}
@@ -75,13 +75,13 @@ class ferm::new {
 
 		fermfile {
 			"${ip_proto}_${table}_${real_name}":
-				content => "\tchain ${real_name} {",
+				content => "\tchain ${real_name} {\n",
 				require => Table["${table}_${ip_proto}"];
 			"${ip_proto}_${table}_${real_name}_0000":
-				content => "\t\tpolicy ${policy};",
+				content => "\t\tpolicy ${policy};\n",
 				require => Table["${table}_${ip_proto}"];
 			"${ip_proto}_${table}_${real_name}_zzzz":
-				content => "\t}",
+				content => "\t}\n",
 				require => Table["${table}_${ip_proto}"];
 		}
 	}
@@ -93,8 +93,8 @@ class ferm::new {
 		fermfile {
 			"${ip_proto}_${real_name}":
 				content => $ip_proto ? {
-					"v4" => "table ${real_name} {",
-					"v6" => "domain ipv6 table ${real_name} {",
+					"v4" => "table ${real_name} {\n",
+					"v6" => "domain ipv6 table ${real_name} {\n",
 				};
 			"${ip_proto}_${real_name}_zzzz":
 				content => "}";
@@ -102,9 +102,8 @@ class ferm::new {
 	}
 
 	define fermfile($content) {
-		$new_content = "${content}\n"
 		kfile { "/etc/ferm/ferm.d/${name}":
-			content => $new_content;
+			content => $content;
 		}
 	}
 }
