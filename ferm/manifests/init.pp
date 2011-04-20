@@ -44,9 +44,9 @@ class ferm::new {
 
 		fermfile {
 			"${new_name}":
-				content => $ip_prot ? {
-					v4 => "table ${name} {",
-					v6 => "domain ipv6 table ${name} {",
+				content => $ip_proto ? {
+					"v4" => "table ${name} {",
+					"v6" => "domain ipv6 table ${name} {",
 				};
 			"${new_name}_zzzz":
 				content => "}";
