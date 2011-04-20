@@ -57,7 +57,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
 
-		if $ip_proto=="v46" {
+		if $ip_proto == "v46" {
 			table { "${real_name}_v4","${real_name}_v6":
 				prio       => $prio,
 				saddr      => $saddr,
@@ -83,7 +83,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto=="v46" {
+		if $ip_proto == "v46" {
 			table { "${real_name}_v4","${real_name}_v6":
 				comment => $comment,
 				action  => $action,
@@ -102,7 +102,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto=="v46" {
+		if $ip_proto == "v46" {
 			table { "${real_name}_v4","${real_name}_v6":
 				comment => $comment,
 				action  => $action,
@@ -121,7 +121,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto=="v46" {
+		if $ip_proto == "v46" {
 			table { "${real_name}_v4","${real_name}_v6":
 				policy => $policy,
 				table  => $table;
@@ -145,7 +145,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto=="v46" {
+		if $ip_proto == "v46" {
 			table { ["${real_name}_v4","${real_name}_v6":; }
 		} else {
 			fermfile {
