@@ -19,6 +19,21 @@ class ferm::new {
 			proto    => "icmp",
 			icmptype => "echo-request",
 			action   => "ACCEPT";
+		"SSH_v4":
+			proto  => "tcp",
+			dport  => "22",
+			action => "ACCEPT";
+		"Drop UDP packets_v4":
+			prio   => "a0",
+			proto  => "udp";
+		"Nicely reject tcp packets_v4":
+			prio       => "a1",
+			proto      => "tcp",
+			action     => "REJECT",
+			rejectwith => "tcp-reset";
+		"Reject everything else_v4":
+			prio   => "a2",
+			action => "REJECT";
 		"Respond to ICMP packets (NDP)_v6":
 			proto    => "icmpv6",
 			icmptype => "(neighbour-solicitation neighbour-advertisement)",
@@ -27,14 +42,21 @@ class ferm::new {
 			proto    => "icmpv6",
 			icmptype => "echo-request",
 			action   => "ACCEPT";
-		"SSH_v4":
-			proto  => "tcp",
-			dport  => "22",
-			action => "ACCEPT";
 		"SSH_v6":
 			proto  => "tcp",
 			dport  => "22",
 			action => "ACCEPT";
+		"Drop UDP packets_v6":
+			prio   => "a0",
+			proto  => "udp";
+		"Nicely reject tcp packets_v6":
+			prio       => "a1",
+			proto      => "tcp",
+			action     => "REJECT",
+			rejectwith => "tcp-reset";
+		"Reject everything else_v6":
+			prio   => "a2",
+			action => "REJECT";
 	}
 
 	interface { ["lo_v4","lo_v6"]:
