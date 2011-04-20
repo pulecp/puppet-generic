@@ -6,4 +6,4 @@
 <% if sport %>sport <%= sport %> <% end -%>
 <% if dport %>dport <%= dport %> <% end -%>
 <%= action -%>
-<% if rejectwith %> reject-with <%= reject-with %><% end %>;
+<% if rejectwith %> reject-with <%= rejectwith %><% end %>;
