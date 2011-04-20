@@ -47,7 +47,7 @@ class ferm::new {
 				content => $ipv4 ? {
 					true  => "table ${name} {",
 					false => "domain ipv6 table ${name} {",
-				}
+				};
 			"${name}_zzzz":
 				content => "}";
 		}
