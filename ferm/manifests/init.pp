@@ -14,37 +14,21 @@ class ferm {
 }
 
 class ferm::new {
-	chain {
-		"INPUT_v4":
-			table => "filter",
-			policy => "DROP";
-		"INPUT_v6":
-			table => "filter",
-			policy => "DROP";
-		"OUTPUT_v4":
-			table => "filter",
-			policy => "ACCEPT";
-		"OUTPUT_v6":
-			table => "filter",
-			policy => "ACCEPT";
-		"FORWARD_v4":
-			table => "filter",
-			policy => "DROP";
-		"FORWARD_v6":
-			table => "filter",
-			policy => "DROP";
+	modstate {
+		["INVALID_v4","INVALID_v6"]:;
+		["ESTABLISHED_v4","RELATED_v4","ESTABLISHED_v6","RELATED_v6"]:
+			action => "ACCEPT";
 	}
 
-	table {
-		"filter_v4":;
-		"filter_v6":;
+	chain {
+		["INPUT_v4","INPUT_v6","FORWARD_v4","FORWARD_v6"]:;
+		["OUTPUT_v4","OUTPUT_v6"]:
+			policy => "ACCEPT";
 	}
-	@table {
-		"mangle_v4":;
-		"mangle_v6":;
-		"nat_v4":;
-		"nat_v6":;
-	}
+
+	table { ["filter_v4","filter_v6"]:; }
+
+	@table { ["mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
 
 #	kpackage { "ferm":; }
 
@@ -65,21 +49,21 @@ class ferm::new {
 			notify  => Exec["reload-ferm"];
 	}
 
-	define rule($comment, $table=filter, $chain=input) {
+	define modstate($comment="", $action=DROP, $table=filter, $chain=input) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		fermfile {
-			"${ip_proto}_${table}_${real_name}":
-				content => "\tchain ${real_name} {",
-				require => Table["${table}_${ip_proto}"];
-			"${ip_proto}_${table}_${real_name}_zzzz":
-				content => "\t}",
-				require => Table["${table}_${ip_proto}"];
+			"${ip_proto}_${table}_${chain}_${real_name}_0001":
+				content => "\t\t# ${comment}",
+				require => Table["${chain}_${ip_proto}"];
+			"${ip_proto}_${table}_${chain}_${real_name}_0001":
+				content => "\t\tmod state state ${real_name} ${action}",
+				require => Table["${chain}_${ip_proto}"];
 		}
 	}
 
-	define chain($policy, $table=filter) {
+	define chain($policy=DROP, $table=filter) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
