@@ -14,8 +14,8 @@ class ferm {
 }
 
 class ferm::new {
-	table { 
-		"filter":;
+	table {
+		"filter_v4":;
 		"filter_v6":;
 	}
 
@@ -45,8 +45,8 @@ class ferm::new {
 		fermfile {
 			"${name}":
 				content => $ip_proto ? {
+					"v4"    => "table ${real_name} {",
 					"v6"    => "domain ipv6 table ${real_name} {",
-					default => "table ${real_name} {",
 				};
 			"${name}_zzzz":
 				content => "}";
