@@ -16,7 +16,7 @@ class ferm {
 class ferm::new {
 	table { 
 		"filter_v4":;
-		"filter_v6":
+		"filter_v6":;
 	}
 
 #	kpackage { "ferm":; }
