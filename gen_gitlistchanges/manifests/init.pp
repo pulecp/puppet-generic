@@ -16,7 +16,7 @@ class gen_gitlistchanges {
             "/etc/gitlistchanges.conf.d":
                 ensure => directory;
             "/etc/gitlistchanges.conf.d/${the_repo_safe}-${to}":
-                content => template("gen_listchanges/repoconfig.erb");
+                content => template("gen_gitlistchanges/repoconfig.erb");
         }
     }
 }
