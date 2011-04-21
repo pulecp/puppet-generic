@@ -7,7 +7,10 @@ class gen_gitlistchanges {
         "/etc/gitlistchanges.conf":
             content => "includedir:/etc/gitlistchanges.conf.d\n";
         "/etc/gitlistchanges.conf.d":
-            ensure => directory;
+            ensure => directory,
+            source => "gen_gitlistchanges/gitlistchanges.conf.d",
+            purge  => true,
+            recurse => true;
     }
 
     define repoconfig ($to, $repo=false, $from=false, $branch=false, $since=false, $forcustomer=false) {
