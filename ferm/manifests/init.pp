@@ -44,17 +44,6 @@ class ferm::new {
 #		refreshonly => true;
 #	}
 
-	kfile {
-		"/etc/ferm/ferm.d":
-			ensure  => directory,
-			group   => "adm",
-			require => Package["ferm"];
-		"/etc/ferm/ferm.conf_new":
-			content => "@include 'ferm.d/';",
-			group   => "adm",
-			notify  => Exec["reload-ferm"];
-	}
-
 	concat { "/etc/ferm/ferm.conf_new":
 		owner => "root",
 		group => "adm",
@@ -83,7 +72,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
 				content => template("ferm/rule"),
-				require => Chain["${chain}_${ip_proto}"];
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload ferm"]];
 			}
 		}
 	}
@@ -103,7 +92,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0002_${real_name}":
 				content => template("ferm/interface"),
-				require => Chain["${chain}_${ip_proto}"];
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload ferm"]];
 			}
 		}
 	}
@@ -122,7 +111,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
 				content => template("ferm/modstate"),
-				require => Chain["${chain}_${ip_proto}"];
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload ferm"]];
 			}
 		}
 	}
