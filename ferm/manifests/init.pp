@@ -14,6 +14,8 @@ class ferm {
 }
 
 class ferm::new {
+	include gen_puppet::concat
+
 	interface { ["lo_v46"]:
 		action => "ACCEPT";
 	}
@@ -51,6 +53,12 @@ class ferm::new {
 			content => "@include 'ferm.d/';",
 			group   => "adm",
 			notify  => Exec["reload-ferm"];
+	}
+
+	concat { "/etc/ferm/ferm.conf_new":
+		owner => "root",
+		group => "adm",
+		mode  => "644";
 	}
 
 	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT) {
@@ -163,8 +171,9 @@ class ferm::new {
 	}
 
 	define fermfile($content) {
-		kfile { "/etc/ferm/ferm.d/${name}":
+		add_content { $name:
 			content => $content;
+			target  => "/etc/ferm/ferm.conf_new";
 		}
 	}
 }
