@@ -160,7 +160,7 @@ class ferm::new {
 	}
 
 	define fermfile($content) {
-		add_content { $name:
+		kbp_concat::add_content { $name:
 			content => $content,
 			target  => "/etc/ferm/ferm.conf_new";
 		}
