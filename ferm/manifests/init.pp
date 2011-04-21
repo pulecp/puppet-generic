@@ -54,7 +54,8 @@ class ferm::new {
 	}
 
 	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT) {
-		$real_name = regsubst(regsubst($name,'^(.*)_(.*?)$','\1'), '[^a-zA-Z0-9\-_]', '_', 'G')
+		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
+		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
 
 		if $ip_proto == "v46" {
@@ -72,7 +73,7 @@ class ferm::new {
 				chain      => $chain;
 			}
 		} else {
-			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${real_name}":
+			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
 				content => template("ferm/rule"),
 				require => Chain["${chain}_${ip_proto}"];
 			}
@@ -81,6 +82,7 @@ class ferm::new {
 
 	define interface($comment=false, $action=DROP, $table=filter, $chain=INPUT) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
+		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		if $ip_proto == "v46" {
