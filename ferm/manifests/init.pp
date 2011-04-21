@@ -72,7 +72,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
 				content => template("ferm/rule"),
-				require => [Chain["${chain}_${ip_proto}"],Exec["reload ferm"]];
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
 	}
@@ -92,7 +92,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0002_${real_name}":
 				content => template("ferm/interface"),
-				require => [Chain["${chain}_${ip_proto}"],Exec["reload ferm"]];
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
 	}
@@ -111,7 +111,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
 				content => template("ferm/modstate"),
-				require => [Chain["${chain}_${ip_proto}"],Exec["reload ferm"]];
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
 	}
