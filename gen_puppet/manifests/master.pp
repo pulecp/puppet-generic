@@ -55,6 +55,33 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $deb
 		ensure => 'directory',
 	}
 
+	# Create the config file for the rack environment
+	concat { "${rackdir}/config.ru":
+		owner => "puppet",
+		group => "puppet",
+		mode  => 0640,
+	}
+
+	gen_puppet::concat::add_content { "Add header for config.ru":
+		target   => "${rackdir}/config.ru",
+		content  => '$0 = "master"',
+		order    => 10,
+	}
+
+	gen_puppet::concat::add_content { "Add footer for config.ru":
+		target   => "${rackdir}/config.ru",
+		content  => "ARGV << \"--rack\"\nrequire 'puppet/application/master'\nrun Puppet::Application[:master].run\n",
+		order    => 20,
+	}
+
+	# We can easily enable debugging in puppetmaster
+	if $debug {
+		gen_puppet::concat::add_content { "Enable debug mode in config.ru":
+			target  => "${rackdir}/config.ru",
+			content => "ARGV << \"--debug\"\n",
+		}
+	}
+
 	# Next come a whole lot of settings that are quite a bit different if we're
 	# setting up a default puppetmaster, since that would share config with
 	# the puppet client. We need to take that into account.
