@@ -8,7 +8,7 @@ class gen_gitlistchanges {
 		false => $repo,
 		default => $name,
 	}
-	$the_repo_safe = regsubst($the_repo, '/', '_')
+	$the_repo_safe = regsubst($the_repo, '/', '_', "G")
 
         kfile {
             "/etc/gitlistchanges.conf":
