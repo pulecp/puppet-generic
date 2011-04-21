@@ -12,7 +12,7 @@ class gen_gitlistchanges {
 
         kfile {
             "/etc/gitlistchanges.conf":
-                content => "include: /etc/gitlistchanges.conf.d\n";
+                content => "includedir:/etc/gitlistchanges.conf.d\n";
             "/etc/gitlistchanges.conf.d":
                 ensure => directory;
             "/etc/gitlistchanges.conf.d/${the_repo_safe}-${to}":
