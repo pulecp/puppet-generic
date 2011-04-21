@@ -61,5 +61,69 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $deb
 	if $name == 'default' {
 		include gen_puppet::puppet_conf
 	} else {
+		include gen_puppet::concat
+
+		# Setup the default config file
+		concat { $configfile:
+			owner   => 'root',
+			group   => 'root',
+			mode    => '0640',
+			require => Kpackage["puppet-common"],
+		}
+
+		# Already define all the sections
+		gen_puppet::concat::add_content {
+			"main section":
+				target  => $configfile,
+				content => "[main]\n",
+				order   => '10';
+			"agent section":
+				target  => $configfile,
+				content => "\n[agent]\n",
+				order   => '20';
+			"master section":
+				target  => $configfile,
+				content => "\n[master]\n",
+				order   => '30';
+			"queue section":
+				target  => $configfile,
+				content => "\n[queue]\n",
+				order   => '40';
+		}
+
+		gen_puppet::set_config {
+			"logdir in $configfile":
+				var        => 'logdir',
+				value      => $logdir,
+				configfile => $configfile;
+			"vardir in $configfile":
+				var        => 'vardir',
+				value      => $vardir,
+				configfile => $configfile;
+			"ssldir in $configfile":
+				var        => 'ssldir',
+				value      => $ssldir,
+				configfile => $configfile;
+			"rundir in $configfile":
+				var        => 'rundir',
+				value      => $rundir,
+				configfile => $configfile;
+			"factpath in $configfile":
+				var        => 'factpath',
+				value      => $factpath,
+				configfile => $configfile;
+			"templatedir in $configfile":
+				var        => 'templatedir',
+				value      => $templatedir,
+				configfile => $configfile;
+			"pluginsync in $configfile":
+				var        => 'pluginsync',
+				value      => $pluginsync,
+				configfile => $configfile;
+			"environment in $configfile":
+				var        => 'environment',
+				value      => $environment,
+				configfile => $configfile;
+		}
 	}
 }
