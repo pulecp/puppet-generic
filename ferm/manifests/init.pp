@@ -128,13 +128,13 @@ class ferm::new {
 		} else {
 			fermfile {
 				"${ip_proto}_${table}_${real_name}":
-					content => "\tchain ${real_name} {\n",
+					content => "\tchain ${real_name} {",
 					require => Table["${table}_${ip_proto}"];
 				"${ip_proto}_${table}_${real_name}_0000":
-					content => "\t\tpolicy ${policy};\n",
+					content => "\t\tpolicy ${policy};",
 					require => Table["${table}_${ip_proto}"];
 				"${ip_proto}_${table}_${real_name}_zzzz":
-					content => "\t}\n",
+					content => "\t}",
 					require => Table["${table}_${ip_proto}"];
 			}
 		}
@@ -150,11 +150,11 @@ class ferm::new {
 			fermfile {
 				"${ip_proto}_${real_name}":
 					content => $ip_proto ? {
-						"v4" => "table ${real_name} {\n",
-						"v6" => "domain ipv6 table ${real_name} {\n",
+						"v4" => "table ${real_name} {",
+						"v6" => "domain ipv6 table ${real_name} {",
 					};
 				"${ip_proto}_${real_name}_zzzz":
-					content => "}\n";
+					content => "}";
 			}
 		}
 	}
