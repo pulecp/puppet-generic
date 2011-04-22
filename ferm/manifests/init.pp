@@ -74,7 +74,7 @@ class ferm::new {
 				content => $ip_proto ? {
 					"v4" => template("ferm/rule_v4"),
 					"v6" => template("ferm/rule_v6"),
-				}
+				},
 				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
