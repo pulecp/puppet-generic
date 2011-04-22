@@ -52,11 +52,13 @@ class nagios::server {
 	# Allow external commands to be submitted through the web interface
 	kfile {
 		"/var/lib/nagios3":
-			mode => 710,
+			mode  => 710,
+			owner => 'nagios',
 			group => "www-data";
 		"/var/lib/nagios3/rw":
 			group => "www-data",
-			mode => 2710;
+			owner => 'nagios',
+			mode  => 2710;
 	}
 }
 
