@@ -39,7 +39,7 @@ class ferm::new {
 	@table { ["mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
 
 #	kpackage { "ferm":; }
-	kpackage { "libnet-dns-perl:; }
+	kpackage { "libnet-dns-perl":; }
 
 #	exec { "reload-ferm":
 #		command     => "/etc/init.d/ferm reload",
