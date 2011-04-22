@@ -1,5 +1,7 @@
 class ferm {
-	kpackage { "ferm":; }
+	kpackage { "ferm":
+		ensure => latest;
+	}
 
 	exec { "reload-ferm":
 		command     => "/etc/init.d/ferm reload",
