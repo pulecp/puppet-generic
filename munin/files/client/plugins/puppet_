@@ -161,7 +161,6 @@ else # scriptname makes no sense
   end
 end
 # Munin expects a single dot on the last line to signify the termination of the script
-puts "."
 
 # vim: shiftwidth=2:
 # vim: smarttab:
