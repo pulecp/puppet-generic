@@ -71,7 +71,10 @@ class ferm::new {
 			}
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
-				content => template("ferm/rule"),
+				content => $ip_proto ? {
+					"v4" => template("ferm/rule_v4"),
+					"v6" => template("ferm/rule_v6"),
+				}
 				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
