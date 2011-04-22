@@ -151,7 +151,6 @@ class ferm::new {
 				"${ip_proto}_${real_name}":
 					content => $ip_proto ? {
 						"v4" => "table ${real_name} {",
-						"v6" => "domain ipv6 table ${real_name} {",
 					};
 				"${ip_proto}_${real_name}_zzzz":
 					content => "}";
