@@ -16,4 +16,7 @@ define ekfile ($ensure="present", $source=false, $path=false, $target=false, $co
 			ignore  => $ignore,
 		}
 	}
+	else {
+		notify {"Already defined kfile ${name} bla":; }
+	}
 }
