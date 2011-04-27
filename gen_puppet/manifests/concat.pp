@@ -230,7 +230,7 @@ class gen_puppet::concat::setup {
 class gen_puppet::concat {
         include gen_puppet::concat::setup
 
-        define add_content($target, $content, $order=15) {
+        define add_content($target, $content, $order=15, $ensure=present) {
                 $body = $content ? {
                         false   => $name,
                         default => $content,
@@ -239,7 +239,8 @@ class gen_puppet::concat {
                 concat::fragment{ "${target}_fragment_${name}":
                         content => "${body}\n",
                         target  => $target,
-                        order   => $order;
+                        order   => $order,
+			ensure  => $ensure;
                         }
                 }
 }

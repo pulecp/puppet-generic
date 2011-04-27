@@ -54,7 +54,7 @@ class ferm::new {
 		remove_fragments => false;
 	}
 
-	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT) {
+	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT, $ensure=present) {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
@@ -71,7 +71,8 @@ class ferm::new {
 				action     => $action,
 				rejectwith => $rejectwith,
 				table      => $table,
-				chain      => $chain;
+				chain      => $chain,
+				ensure     => $ensure;
 			}
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
@@ -79,6 +80,7 @@ class ferm::new {
 					"v4" => template("ferm/rule_v4"),
 					"v6" => template("ferm/rule_v6"),
 				},
+				ensure  => $ensure,
 				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
@@ -166,10 +168,11 @@ class ferm::new {
 		}
 	}
 
-	define fermfile($content) {
+	define fermfile($content, $ensure=present) {
 		kbp_concat::add_content { $name:
 			content => $content,
-			target  => "/etc/ferm/ferm.conf_new";
+			target  => "/etc/ferm/ferm.conf_new",
+			ensure  => $ensure;
 		}
 	}
 }
