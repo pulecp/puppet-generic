@@ -80,7 +80,7 @@
 # ALIASES:
 #  - The exec can notified using Exec["concat_/path/to/file"] or Exec["concat_/path/to/directory"]
 #  - The final file can be referened as File["/path/to/file"] or File["concat_/path/to/file"]  
-define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $force = "false") {
+define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $force = "false", $remove_fragments = "true" ) {
     $safe_name = regsubst($name, '/', '_', 'G')
     $concatdir = $gen_puppet::concat::setup::concatdir
     $version   = $gen_puppet::concat::setup::majorversion
@@ -109,7 +109,7 @@ define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $
          "${fragdir}/fragments":
             ensure   => directory,
             recurse  => true,
-            purge    => true,
+            purge    => $remove_fragments,
             force    => true,
             ignore   => [".svn", ".git"],
             source   => $version ? {

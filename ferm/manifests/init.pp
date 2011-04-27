@@ -48,9 +48,10 @@ class ferm::new {
 #	}
 
 	concat { "/etc/ferm/ferm.conf_new":
-		owner => "root",
-		group => "adm",
-		mode  => "644";
+		owner            => "root",
+		group            => "adm",
+		mode             => "644",
+		remove_fragments => false;
 	}
 
 	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT) {
