@@ -1,15 +1,12 @@
 class samba::common {
-	package { "samba-common":
-		ensure => installed;
-	}
+	kpackage { "samba-common":; }
 }
 
 class samba::server {
 	include samba::common
 
-	package { "samba":
-		require => Package["samba-common"],
-		ensure => installed;
+	kpackage { "samba":
+		require => Package["samba-common"];
 	}
 
 	service { "samba":
@@ -17,11 +14,8 @@ class samba::server {
 		pattern => "smbd",
 	}
 
-	file { "/etc/samba/smb.conf":
-		source => "puppet://puppet/samba/samba/smb.conf",
-		mode => 644,
-		owner => "root",
-		group => "root",
+	kfile { "/etc/samba/smb.conf":
+		source => "samba/samba/smb.conf",
 		require => Package["samba"];
 	}
 }
