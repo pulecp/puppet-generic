@@ -54,7 +54,7 @@ class ferm::new {
 		remove_fragments => false;
 	}
 
-	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT, $ensure=present) {
+	define rule($prio=500, $interface=false, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT, $ensure=present) {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
@@ -62,6 +62,7 @@ class ferm::new {
 		if $ip_proto == "v46" {
 			rule { ["${real_name}_v4","${real_name}_v6"]:
 				prio       => $prio,
+				interface  => $interface,
 				saddr      => $saddr,
 				daddr      => $daddr,
 				proto      => $proto,
