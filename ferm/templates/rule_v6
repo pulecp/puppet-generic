@@ -1,5 +1,6 @@
 		# <%= real_name %>
 		<% if interface %>interface <%= interface %> <% end -%>
+<% if outerface %>outerface <%= outerface %> <% end -%>
 <% if saddr %>saddr @resolve(<%= saddr %>, AAAA) <% end -%>
 <% if daddr %>daddr @resolve(<%= daddr %>, AAAA) <% end -%>
 <% if proto %>proto <%= proto %> <% end -%>
