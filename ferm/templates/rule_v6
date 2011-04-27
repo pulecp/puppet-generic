@@ -1,6 +1,8 @@
 		# <%= real_name %>
-		<% if saddr %>saddr <%= saddr %> <% end -%>
-<% if daddr %>daddr <%= daddr %> <% end -%>
+		<% if interface %>interface <%= interface %> <% end -%>
+<% if outerface %>outerface <%= outerface %> <% end -%>
+<% if saddr %>saddr @resolve(<%= saddr %>, AAAA) <% end -%>
+<% if daddr %>daddr @resolve(<%= daddr %>, AAAA) <% end -%>
 <% if proto %>proto <%= proto %> <% end -%>
 <% if icmptype %>icmp-type <%= icmptype %> <% end -%>
 <% if sport %>sport <%= sport %> <% end -%>

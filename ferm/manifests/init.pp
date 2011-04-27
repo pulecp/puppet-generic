@@ -1,5 +1,7 @@
 class ferm {
-	kpackage { "ferm":; }
+	kpackage { "ferm":
+		ensure => latest;
+	}
 
 	exec { "reload-ferm":
 		command     => "/etc/init.d/ferm reload",
@@ -14,6 +16,8 @@ class ferm {
 }
 
 class ferm::new {
+	include gen_puppet::concat
+
 	interface { ["lo_v46"]:
 		action => "ACCEPT";
 	}
@@ -35,6 +39,7 @@ class ferm::new {
 	@table { ["mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
 
 #	kpackage { "ferm":; }
+	kpackage { "libnet-dns-perl":; }
 
 #	exec { "reload-ferm":
 #		command     => "/etc/init.d/ferm reload",
@@ -42,18 +47,14 @@ class ferm::new {
 #		refreshonly => true;
 #	}
 
-	kfile {
-		"/etc/ferm/ferm.d":
-			ensure  => directory,
-			group   => "adm",
-			require => Package["ferm"];
-		"/etc/ferm/ferm.conf_new":
-			content => "@include 'ferm.d/';",
-			group   => "adm",
-			notify  => Exec["reload-ferm"];
+	concat { "/etc/ferm/ferm.conf_new":
+		owner            => "root",
+		group            => "adm",
+		mode             => "644",
+		remove_fragments => false;
 	}
 
-	define rule($prio=500, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT) {
+	define rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT, $ensure=present) {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
@@ -61,6 +62,8 @@ class ferm::new {
 		if $ip_proto == "v46" {
 			rule { ["${real_name}_v4","${real_name}_v6"]:
 				prio       => $prio,
+				interface  => $interface,
+				outerface  => $outerface,
 				saddr      => $saddr,
 				daddr      => $daddr,
 				proto      => $proto,
@@ -70,12 +73,17 @@ class ferm::new {
 				action     => $action,
 				rejectwith => $rejectwith,
 				table      => $table,
-				chain      => $chain;
+				chain      => $chain,
+				ensure     => $ensure;
 			}
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
-				content => template("ferm/rule"),
-				require => Chain["${chain}_${ip_proto}"];
+				content => $ip_proto ? {
+					"v4" => template("ferm/rule_v4"),
+					"v6" => template("ferm/rule_v6"),
+				},
+				ensure  => $ensure,
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
 	}
@@ -95,7 +103,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0002_${real_name}":
 				content => template("ferm/interface"),
-				require => Chain["${chain}_${ip_proto}"];
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
 	}
@@ -114,7 +122,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
 				content => template("ferm/modstate"),
-				require => Chain["${chain}_${ip_proto}"];
+				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
 			}
 		}
 	}
@@ -131,13 +139,13 @@ class ferm::new {
 		} else {
 			fermfile {
 				"${ip_proto}_${table}_${real_name}":
-					content => "\tchain ${real_name} {\n",
+					content => "\tchain ${real_name} {",
 					require => Table["${table}_${ip_proto}"];
 				"${ip_proto}_${table}_${real_name}_0000":
-					content => "\t\tpolicy ${policy};\n",
+					content => "\t\tpolicy ${policy};",
 					require => Table["${table}_${ip_proto}"];
 				"${ip_proto}_${table}_${real_name}_zzzz":
-					content => "\t}\n",
+					content => "\t}",
 					require => Table["${table}_${ip_proto}"];
 			}
 		}
@@ -153,18 +161,20 @@ class ferm::new {
 			fermfile {
 				"${ip_proto}_${real_name}":
 					content => $ip_proto ? {
-						"v4" => "table ${real_name} {\n",
-						"v6" => "domain ipv6 table ${real_name} {\n",
+						"v4" => "table ${real_name} {",
+						"v6" => "domain ip6 table ${real_name} {",
 					};
 				"${ip_proto}_${real_name}_zzzz":
-					content => "}\n";
+					content => "}";
 			}
 		}
 	}
 
-	define fermfile($content) {
-		kfile { "/etc/ferm/ferm.d/${name}":
-			content => $content;
+	define fermfile($content, $ensure=present) {
+		kbp_concat::add_content { $name:
+			content => $content,
+			target  => "/etc/ferm/ferm.conf_new",
+			ensure  => $ensure;
 		}
 	}
 }

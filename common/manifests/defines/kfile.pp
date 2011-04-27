@@ -1,4 +1,4 @@
-define kfile ($ensure="present", $content=false, $source=false, $path=false, $target=false, $owner="root", $group="root", $mode="0644", $recurse=false, $force=false, $purge=false, $ignore=false, $tag=false) {
+define kfile ($ensure="present", $content=false, $source=false, $path=false, $target=false, $owner="root", $group="root", $mode="0644", $recurse=false, $force=false, $purge=false, $ignore=false) {
 	file { "${name}":
 		ensure  => $ensure,
 		content => $content ? {
@@ -41,10 +41,6 @@ define kfile ($ensure="present", $content=false, $source=false, $path=false, $ta
 		ignore  => $ignore ? {
 			false   => undef,
 			default => $ignore,
-		},
-		tag     => $tag ? {
-			false   => undef,
-			default => $tag,
 		};
 	}
 }

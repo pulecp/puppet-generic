@@ -162,8 +162,11 @@ class nagios::nrpe::plugins {
 	}
 
 
-	# SSL certificates
+	# Nagios-plugins-kumina checks
 	check {
+		"loadtrend":
+			command => '/usr/lib/nagios/plugins/check_loadtrend -m 1.5 -c 5 -w 2.5',
+			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];
 		"sslcert":
 			command => 'sudo /usr/lib/nagios/plugins/check_sslcert -c 7 -w 30 $ARG1$',
 			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];

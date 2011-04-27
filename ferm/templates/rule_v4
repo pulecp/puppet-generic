@@ -1,0 +1,11 @@
+		# <%= real_name %>
+		<% if interface %>interface <%= interface %> <% end -%>
+<% if outerface %>outerface <%= outerface %> <% end -%>
+<% if saddr %>saddr @resolve(<%= saddr %>, A) <% end -%>
+<% if daddr %>daddr @resolve(<%= daddr %>, A) <% end -%>
+<% if proto %>proto <%= proto %> <% end -%>
+<% if icmptype %>icmp-type <%= icmptype %> <% end -%>
+<% if sport %>sport <%= sport %> <% end -%>
+<% if dport %>dport <%= dport %> <% end -%>
+<%= action -%>
+<% if rejectwith %> reject-with <%= rejectwith %><% end %>;
