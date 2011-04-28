@@ -118,16 +118,17 @@ class ferm::new {
 		}
 	}
 
-	define modstate($comment=false, $action=DROP, $table=filter, $chain=INPUT) {
+	define modstate($comment=false, $table=filter, $chain=INPUT, $state=INVALID, $action=DROP) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		if $ip_proto == "v46" {
 			modstate { ["${real_name}_v4","${real_name}_v6"]:
 				comment => $comment,
-				action  => $action,
 				table   => $table,
-				chain   => $chain;
+				chain   => $chain,
+				state   => $state,
+				action  => $action;
 			}
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":

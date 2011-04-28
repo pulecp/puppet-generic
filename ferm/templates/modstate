@@ -1,3 +1,3 @@
 <% if comment %>		# <%= comment %>
 <% end -%>
-		mod state state <%= real_name %> <%= action %>;
+		mod state state <%= state %> <%= action %>;
