@@ -34,10 +34,12 @@ class gen_puppet::master ($servertype = 'passenger') {
 # the webserver, the database, puppet queue daemon or anything
 # else.
 #
-define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $debug = false,
-				$factpath = '$vardir/lib/facter', $logdir = "/var/log/puppet", $pluginsync = true,
-				$rackroot = "/usr/local/share/puppet/rack", $rundir = "/var/run/puppet",
-				$ssldir = "/var/lib/puppet/ssl", $vardir = "/var/lib/puppet") {
+define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
+		$debug = false, $factpath = '$vardir/lib/facter',
+		$fileserverconf = "/etc/puppet/fileserver.conf",
+		$logdir = "/var/log/puppet", $pluginsync = true,
+		$rackroot = "/usr/local/share/puppet/rack", $rundir = "/var/run/puppet",
+		$ssldir = "/var/lib/puppet/ssl", $vardir = "/var/lib/puppet") {
 	# If the name is 'default', we want to change the puppetmaster name (pname)
 	# we're using for this instance to something without crud.
 	if $name == 'default' {
@@ -82,12 +84,14 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $deb
 		}
 	}
 
-	# If we're not setting up a default puppetmaster, we need additional options
-	if $name != 'default' {
-		gen_puppet::concat::add_content { "Set location for configfile for puppetmaster ${pname}":
+	# Make sure we set the config files explicitely for the puppetmaster
+	gen_puppet::concat::add_content {
+		"Set location for configfile for puppetmaster ${pname}":
 			target  => "${rackdir}/config.ru",
-			content => "ARGV << \"--config $configfile\"\n",
-		}
+			content => "ARGV << \"--config $configfile\"\n";
+		"Set location for fileserver configfile for puppetmaster ${pname}":
+			target  => "${rackdir}/config.ru",
+			content => "ARGV << \"--fileserverconfig $fileserverconfig\"\n";
 	}
 
 	# Next come a whole lot of settings that are quite a bit different if we're
@@ -160,5 +164,13 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $deb
 				value      => $environment,
 				configfile => $configfile;
 		}
+	}
+}
+
+define gen_puppet::master::environment ($manifest, $manifestdir, $modulepath, $configfile = "/etc/puppet/puppet.conf") {
+	gen_puppet::concat::add_content { "Add environment ${name} in file ${configfile}":
+		target   => "${configfile}",
+		content  => "\n[${name}]\nmanifestdir = ${manifestdir}\nmodulepath = ${modulepath}\nmanifest = ${manifest}\n\n",
+		order    => 60,
 	}
 }
