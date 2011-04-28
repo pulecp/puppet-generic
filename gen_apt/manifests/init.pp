@@ -38,7 +38,7 @@ class gen_apt {
 	}
 }
 
-define gen_apt::preference($package=false, $repo=false, $prio="999") {
+define gen_apt::preference($package=false, $repo=false, $version=false, $prio="999") {
 	$use_repo = $repo ? {
 		false   => "${lsbdistcodename}-backports",
 		default => $repo,
