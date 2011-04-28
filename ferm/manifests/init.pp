@@ -141,12 +141,15 @@ class ferm::new {
 				"${ip_proto}_${table}_${real_name}":
 					content => "\tchain ${real_name} {",
 					require => Table["${table}_${ip_proto}"];
-				"${ip_proto}_${table}_${real_name}_0000":
-					content => "\t\tpolicy ${policy};",
-					require => Table["${table}_${ip_proto}"];
 				"${ip_proto}_${table}_${real_name}_zzzz":
 					content => "\t}",
 					require => Table["${table}_${ip_proto}"];
+			}
+			if $policy {
+				fermfile { "${ip_proto}_${table}_${real_name}_0000":
+					content => "\t\tpolicy ${policy};",
+					require => Table["${table}_${ip_proto}"];
+				}
 			}
 		}
 	}
