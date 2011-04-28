@@ -36,7 +36,7 @@ class gen_puppet::puppet_conf {
 	}
 }
 
-define kbp_puppet::set_config ($value, $configfile = '/etc/puppet/puppet.conf', $section = 'main', $order = false, $var = false) {
+define gen_puppet::set_config ($value, $configfile = '/etc/puppet/puppet.conf', $section = 'main', $order = false, $var = false) {
 	# If no variable name is set, use the name
 	if $var {
 		$real_var = $var
