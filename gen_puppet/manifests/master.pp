@@ -44,7 +44,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $deb
 		$pname = 'puppetmaster'
 	} else {
 		$sanitized_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
-		$pname - "puppetmaster-${sanitized_name}"
+		$pname = "puppetmaster-${sanitized_name}"
 	}
 
 	# This is the rack main directory for the app.
@@ -62,13 +62,13 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $deb
 		mode  => 0640,
 	}
 
-	gen_puppet::concat::add_content { "Add header for config.ru":
+	gen_puppet::concat::add_content { "Add header for config.ru for puppetmaster ${pname}":
 		target   => "${rackdir}/config.ru",
 		content  => '$0 = "master"',
 		order    => 10,
 	}
 
-	gen_puppet::concat::add_content { "Add footer for config.ru":
+	gen_puppet::concat::add_content { "Add footer for config.ru for puppetmaster ${pname}":
 		target   => "${rackdir}/config.ru",
 		content  => "ARGV << \"--rack\"\nrequire 'puppet/application/master'\nrun Puppet::Application[:master].run\n",
 		order    => 20,
@@ -76,9 +76,17 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $deb
 
 	# We can easily enable debugging in puppetmaster
 	if $debug {
-		gen_puppet::concat::add_content { "Enable debug mode in config.ru":
+		gen_puppet::concat::add_content { "Enable debug mode in config.ru for puppetmaster ${pname}":
 			target  => "${rackdir}/config.ru",
 			content => "ARGV << \"--debug\"\n",
+		}
+	}
+
+	# If we're not setting up a default puppetmaster, we need additional options
+	if $name != 'default' {
+		gen_puppet::concat::add_content { "Set location for configfile for puppetmaster ${pname}":
+			target  => "${rackdir}/config.ru",
+			content => "ARGV << \"--config $configfile\"\n",
 		}
 	}
 
@@ -100,54 +108,54 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf", $deb
 
 		# Already define all the sections
 		gen_puppet::concat::add_content {
-			"main section":
+			"main section in ${configfile}":
 				target  => $configfile,
 				content => "[main]\n",
 				order   => '10';
-			"agent section":
+			"agent section in ${configfile}":
 				target  => $configfile,
 				content => "\n[agent]\n",
 				order   => '20';
-			"master section":
+			"master section in ${configfile}":
 				target  => $configfile,
 				content => "\n[master]\n",
 				order   => '30';
-			"queue section":
+			"queue section in ${configfile}":
 				target  => $configfile,
 				content => "\n[queue]\n",
 				order   => '40';
 		}
 
 		gen_puppet::set_config {
-			"logdir in $configfile":
+			"logdir in ${configfile}":
 				var        => 'logdir',
 				value      => $logdir,
 				configfile => $configfile;
-			"vardir in $configfile":
+			"vardir in ${configfile}":
 				var        => 'vardir',
 				value      => $vardir,
 				configfile => $configfile;
-			"ssldir in $configfile":
+			"ssldir in ${configfile}":
 				var        => 'ssldir',
 				value      => $ssldir,
 				configfile => $configfile;
-			"rundir in $configfile":
+			"rundir in ${configfile}":
 				var        => 'rundir',
 				value      => $rundir,
 				configfile => $configfile;
-			"factpath in $configfile":
+			"factpath in ${configfile}":
 				var        => 'factpath',
 				value      => $factpath,
 				configfile => $configfile;
-			"templatedir in $configfile":
+			"templatedir in ${configfile}":
 				var        => 'templatedir',
 				value      => $templatedir,
 				configfile => $configfile;
-			"pluginsync in $configfile":
+			"pluginsync in ${configfile}":
 				var        => 'pluginsync',
 				value      => $pluginsync,
 				configfile => $configfile;
-			"environment in $configfile":
+			"environment in ${configfile}":
 				var        => 'environment',
 				value      => $environment,
 				configfile => $configfile;
