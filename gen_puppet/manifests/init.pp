@@ -20,19 +20,19 @@ class gen_puppet::puppet_conf {
 	gen_puppet::concat::add_content {
 		"main section":
 			target  => '/etc/puppet/puppet.conf',
-			content => "[main]\n",
+			content => "[main]",
 			order   => '10';
 		"agent section":
 			target  => '/etc/puppet/puppet.conf',
-			content => "\n[agent]\n",
+			content => "\n[agent]",
 			order   => '20';
 		"master section":
 			target  => '/etc/puppet/puppet.conf',
-			content => "\n[master]\n",
+			content => "\n[master]",
 			order   => '30';
 		"queue section":
 			target  => '/etc/puppet/puppet.conf',
-			content => "\n[queue]\n",
+			content => "\n[queue]",
 			order   => '40';
 	}
 }
