@@ -24,7 +24,11 @@ class ferm::new {
 
 	modstate {
 		"INVALID_v46":;
-		["ESTABLISHED_v46","RELATED_v46"]:
+		"ESTABLISHED_v46":
+			state  => "ESTABLISHED",
+			action => "ACCEPT";
+		"RELATED_v46":
+			state  => "RELATED",
 			action => "ACCEPT";
 	}
 
@@ -58,6 +62,16 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
+		$saddr_is_ip = $saddr ? {
+			/^\d+\.\d+\.\d+\.\d+$/       => "ipv4",
+			/:.*:/                       => "ipv6",
+			default                      => false,
+		}
+		$daddr_is_ip = $daddr ? {
+			/^\d+\.\d+\.\d+\.\d+$/       => "ipv4",
+			/:.*:/                       => "ipv6",
+			default                      => false,
+		}
 
 		if $ip_proto == "v46" {
 			rule { ["${real_name}_v4","${real_name}_v6"]:
@@ -108,16 +122,17 @@ class ferm::new {
 		}
 	}
 
-	define modstate($comment=false, $action=DROP, $table=filter, $chain=INPUT) {
+	define modstate($comment=false, $table=filter, $chain=INPUT, $state=INVALID, $action=DROP) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		if $ip_proto == "v46" {
 			modstate { ["${real_name}_v4","${real_name}_v6"]:
 				comment => $comment,
-				action  => $action,
 				table   => $table,
-				chain   => $chain;
+				chain   => $chain,
+				state   => $state,
+				action  => $action;
 			}
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
