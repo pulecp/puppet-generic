@@ -61,7 +61,7 @@ define gen_puppet::set_config ($value, $configfile = '/etc/puppet/puppet.conf', 
 
 	gen_puppet::concat::add_content { $name:
 		target  => $configfile,
-		content => "${real_var} = ${value}\n",
+		content => "${real_var} = ${value}",
 		order   => $real_order,
 	}
 }
