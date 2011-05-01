@@ -1,5 +1,6 @@
 class gen_puppet {
-	include gen_puppet::puppet_conf
+# TODO For now, let's make this step optional
+#	include gen_puppet::puppet_conf
 
 	kpackage { ["puppet","puppet-common"]:; }
 }
