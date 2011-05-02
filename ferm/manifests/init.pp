@@ -73,8 +73,12 @@ class ferm::new {
 			default                      => false,
 		}
 
-		if $ip_proto == "v46" {
-			rule { ["${real_name}_v4","${real_name}_v6"]:
+		if $ip_proto == "v46" or $ip_proto == undef {
+			$new_name = $real_name ? {
+				undef   => $name,
+				default => $real_name,
+			}
+			rule { ["${new_name}_v4","${new_name}_v6"]:
 				prio       => $prio,
 				interface  => $interface,
 				outerface  => $outerface,
@@ -107,8 +111,12 @@ class ferm::new {
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" {
-			interface { ["${real_name}_v4","${real_name}_v6"]:
+		if $ip_proto == "v46" or $ip_proto == undef {
+			$new_name = $real_name ? {
+				undef   => $name,
+				default => $real_name,
+			}
+			interface { ["${new_name}_v4","${new_name}_v6"]:
 				comment => $comment,
 				action  => $action,
 				table   => $table,
@@ -126,8 +134,12 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" {
-			modstate { ["${real_name}_v4","${real_name}_v6"]:
+		if $ip_proto == "v46" or $ip_proto == undef {
+			$new_name = $real_name ? {
+				undef   => $name,
+				default => $real_name,
+			}
+			modstate { ["${new_name}_v4","${new_name}_v6"]:
 				comment => $comment,
 				table   => $table,
 				chain   => $chain,
@@ -146,8 +158,12 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" {
-			chain { ["${real_name}_v4","${real_name}_v6"]:
+		if $ip_proto == "v46" or $ip_proto == undef {
+			$new_name = $real_name ? {
+				undef   => $name,
+				default => $real_name,
+			}
+			chain { ["${new_name}_v4","${new_name}_v6"]:
 				policy => $policy,
 				table  => $table;
 			}
@@ -173,8 +189,12 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" {
-			table { ["${real_name}_v4","${real_name}_v6"]:; }
+		if $ip_proto == "v46" or $ip_proto == undef {
+			$new_name = $real_name ? {
+				undef   => $name,
+				default => $real_name,
+			}
+			table { ["${new_name}_v4","${new_name}_v6"]:; }
 		} else {
 			fermfile {
 				"${ip_proto}_${real_name}":
