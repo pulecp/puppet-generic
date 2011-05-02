@@ -176,18 +176,8 @@ class nagios::nrpe::plugins {
 		ensure => latest;
 	}
 
-	check {
-		"pacemaker_config":
-			command => '/usr/local/lib/nagios/plugins/check_pacemaker_config',
-			require => File["/usr/local/lib/nagios/plugins/check_pacemaker_config","/etc/nagios/nrpe.d"];
-	}
-
-	kfile {
-		"/usr/local/lib/nagios/plugins/check_pacemaker_config":
-			source => "nagios/plugins/check_pacemaker_config",
-			group => "staff",
-			mode => 775,
-			require => File["/usr/local/lib/nagios/plugins"];
+	check { "pacemaker_config":
+		command => '/usr/lib/nagios/plugins/check_pacemaker_config';
 	}
 
 	kfile { "/usr/local/lib/nagios/plugins/check_drbd":
