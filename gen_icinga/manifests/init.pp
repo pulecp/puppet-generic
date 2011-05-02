@@ -7,7 +7,7 @@ class gen_icinga::server {
 		hasstatus  => true,
 		require    => Package["icinga"];
 	}
-	
+
 	exec { "reload-icinga":
 		command     => "/etc/init.d/icinga reload",
 		refreshonly => true;

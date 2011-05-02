@@ -152,7 +152,7 @@ class nagios::nrpe::plugins {
 				require => File["/etc/nagios/nrpe.d"];
 		}
 	}
-	
+
 	if versioncmp($lsbdistrelease, "6.0") <  0 { # before squeeze
 		check{
 			"dhcpd":
