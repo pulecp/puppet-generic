@@ -73,7 +73,7 @@ class ferm::new {
 			default                      => false,
 		}
 
-		if $ip_proto == "v46" or $ip_proto == undef {
+		if $ip_proto == "v46" or $ip_proto == $name {
 			$new_name = $real_name ? {
 				undef   => $name,
 				default => $real_name,
@@ -111,7 +111,7 @@ class ferm::new {
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" or $ip_proto == undef {
+		if $ip_proto == "v46" or $ip_proto == $name {
 			$new_name = $real_name ? {
 				undef   => $name,
 				default => $real_name,
@@ -134,7 +134,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" or $ip_proto == undef {
+		if $ip_proto == "v46" or $ip_proto == $name {
 			$new_name = $real_name ? {
 				undef   => $name,
 				default => $real_name,
@@ -158,7 +158,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" or $ip_proto == undef {
+		if $ip_proto == "v46" or $ip_proto == $name {
 			$new_name = $real_name ? {
 				undef   => $name,
 				default => $real_name,
@@ -189,7 +189,7 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" or $ip_proto == undef {
+		if $ip_proto == "v46" or $ip_proto == $name {
 			$new_name = $real_name ? {
 				undef   => $name,
 				default => $real_name,
