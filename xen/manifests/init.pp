@@ -39,7 +39,7 @@ class xen::dom0::etch {
 		i386  => ["xen-hypervisor-3.0.3-1-i386-pae", "linux-image-2.6-xen-686", "libc6-xen"],
 		amd64 => ["xen-hypervisor-3.0.3-1-amd64", "linux-image-2.6-xen-amd64"],
 	}
-	
+
 	# Architecture dependent packages
 	package {
 		$archdependent:
@@ -72,7 +72,7 @@ class xen::dom0::lenny {
 		i386  => ["xen-hypervisor-3.2-1-i386", "linux-image-2.6-xen-686", "libc6-xen"],
 		amd64 => ["xen-hypervisor-3.2-1-amd64", "linux-image-2.6-xen-amd64"],
 	}
-	
+
 	# Architecture dependent packages
 	package {
 		$archdependent:

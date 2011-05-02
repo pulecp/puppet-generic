@@ -17,7 +17,7 @@ class subversion {
 		} else {
 			$svndir = "/srv/svn/$name"
 		}
-		
+
 		# Set the correct group
 		if $svn_via_dav {
 			debug('Determined SVN will be used through DAV, change svnowner to www-data.')

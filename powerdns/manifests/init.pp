@@ -27,7 +27,7 @@ class powerdns::common {
 			mode => "750",
 			require => Package["pdns-server"];
 		}
-	
+
 	file {
 		"/etc/powerdns/pdns.conf":
 			content => template("powerdns/powerdns/pdns.conf.erb"),

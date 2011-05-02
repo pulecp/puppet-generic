@@ -35,7 +35,7 @@ class munin::client {
 			ensure => latest;
 		}
 	}
-	
+
 	# Extra plugins
 	kfile { "/usr/local/share/munin/plugins":
 		recurse => true,

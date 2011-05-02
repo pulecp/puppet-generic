@@ -1,0 +1,7 @@
+<% if servertype == "passenger" -%>
+START=no
+SERVERTYPE=passenger
+<% else -%>
+START=yes
+SERVERTYPE=<%= servertype %>
+<% end -%>
