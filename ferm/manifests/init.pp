@@ -64,12 +64,12 @@ class ferm::new {
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
 		$saddr_is_ip = $saddr ? {
 			/^(! )?\d+\.\d+\.\d+\.\d+\/?\d*$/ => "ipv4",
-			/:.*:/                            => "ipv6",
+			/^(! )?.*:.*:.*\/?d*$/            => "ipv6",
 			default                           => false,
 		}
 		$daddr_is_ip = $daddr ? {
 			/^(! )?\d+\.\d+\.\d+\.\d+\/?\d*$/ => "ipv4",
-			/:.*:/                            => "ipv6",
+			/^(! )?.*:.*:.*\/?d*$/            => "ipv6",
 			default                           => false,
 		}
 
