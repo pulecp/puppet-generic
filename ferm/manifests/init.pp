@@ -63,14 +63,14 @@ class ferm::new {
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
 		$saddr_is_ip = $saddr ? {
-			/^\d+\.\d+\.\d+\.\d+$/       => "ipv4",
-			/:.*:/                       => "ipv6",
-			default                      => false,
+			/^(! )?\d+\.\d+\.\d+\.\d+\/?\d*$/ => "ipv4",
+			/^(! )?.*:.*:.*\/?d*$/            => "ipv6",
+			default                           => false,
 		}
 		$daddr_is_ip = $daddr ? {
-			/^\d+\.\d+\.\d+\.\d+$/       => "ipv4",
-			/:.*:/                       => "ipv6",
-			default                      => false,
+			/^(! )?\d+\.\d+\.\d+\.\d+\/?\d*$/ => "ipv4",
+			/^(! )?.*:.*:.*\/?d*$/            => "ipv6",
+			default                           => false,
 		}
 
 		if $ip_proto == "v46" or $ip_proto == $name {
