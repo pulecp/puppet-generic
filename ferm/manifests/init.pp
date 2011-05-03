@@ -50,7 +50,7 @@ class ferm::new {
 		action => "ACCEPT";
 	}
 
-	modstate {
+	mod {
 		"INVALID_v46":;
 		"ESTABLISHED_v46":
 			state  => "(ESTABLISHED RELATED)",
@@ -140,21 +140,23 @@ class ferm::new {
 		}
 	}
 
-	define modstate($comment=false, $table=filter, $chain=INPUT, $state=INVALID, $action=DROP) {
+	define mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $param=state, $value=INVALID, $action=DROP) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
 		if $ip_proto == "v46" or $ip_proto == $name {
-			modstate { ["${real_name}_v4","${real_name}_v6"]:
+			mod { ["${real_name}_v4","${real_name}_v6"]:
 				comment => $comment,
 				table   => $table,
 				chain   => $chain,
-				state   => $state,
+				mod     => $mod,
+				param   => $param,
+				vakue   => $value,
 				action  => $action;
 			}
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
-				content => template("ferm/modstate"),
+				content => template("ferm/mod"),
 				require => Chain["${chain}_${ip_proto}"];
 			}
 		}
