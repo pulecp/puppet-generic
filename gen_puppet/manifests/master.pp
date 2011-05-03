@@ -11,7 +11,7 @@ class gen_puppet::master ($servertype = 'passenger') {
 	# Keep in mind this only counts for the default puppetmaster,
 	# not for any additional puppetmasters!
 	kfile { "/etc/default/puppetmaster":
-		content => template('gen_puppet/default/puppetmaster'),
+		content => template('gen_puppet/master/default/puppetmaster'),
 	}
 
 	# These are needed for customer puppetmaster config when run
