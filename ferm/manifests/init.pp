@@ -37,7 +37,8 @@ class ferm::release {
 		owner            => "root",
 		group            => "adm",
 		mode             => "644",
-		remove_fragments => false;
+		remove_fragments => false,
+		notify           => Exec["reload-ferm"];
 	}
 }
 
