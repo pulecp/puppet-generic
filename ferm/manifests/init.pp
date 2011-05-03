@@ -152,7 +152,7 @@ class ferm::new {
 				chain   => $chain,
 				mod     => $mod,
 				param   => $param,
-				vakue   => $value,
+				value   => $value,
 				action  => $action;
 			}
 		} else {
