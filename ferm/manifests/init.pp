@@ -116,7 +116,7 @@ class ferm::new {
 					"v6" => template("ferm/rule_v6"),
 				},
 				ensure  => $ensure,
-				require => Chain["${chain}_${ip_proto}";
+				require => Chain["${chain}_${ip_proto}"];
 			}
 		}
 	}
