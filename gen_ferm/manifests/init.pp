@@ -1,9 +1,12 @@
 class gen_ferm {
 	include gen_puppet::concat
 
-	kfile { "/var/lib/puppet/concat/_etc_ferm_ferm.conf":
-		ensure  => absent,
-		force   => true;
+	kfile {
+		"/var/lib/puppet/concat/_etc_ferm_ferm.conf_new":
+			ensure  => absent,
+			force   => true;
+		"/etc/ferm/ferm.conf_new":
+			ensure => absent;
 	}
 
 	interface { ["lo_v46"]:
