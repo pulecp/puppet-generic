@@ -51,9 +51,10 @@ class ferm::new {
 	}
 
 	mod {
-		"INVALID_v46":;
+		"INVALID_v46":
+			value => "INVALID";
 		"ESTABLISHED_v46":
-			state  => "(ESTABLISHED RELATED)",
+			value  => "(ESTABLISHED RELATED)",
 			action => "ACCEPT";
 	}
 
@@ -140,7 +141,7 @@ class ferm::new {
 		}
 	}
 
-	define mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $param=state, $value=INVALID, $action=DROP) {
+	define mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $param=state, $value=false, $action=DROP) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
