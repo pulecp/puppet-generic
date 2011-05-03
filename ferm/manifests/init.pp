@@ -29,7 +29,6 @@ class ferm::release {
 
 	exec { "reload-ferm":
 		command     => "/etc/init.d/ferm reload",
-#		subscribe   => File["/etc/ferm/ferm.conf"],
 		refreshonly => true;
 	}
 
@@ -37,7 +36,8 @@ class ferm::release {
 		owner            => "root",
 		group            => "adm",
 		mode             => "644",
-		remove_fragments => false;
+		remove_fragments => false,
+		notify           => Exec["reload-ferm"];
 	}
 }
 
@@ -68,14 +68,7 @@ class ferm::new {
 
 	@table { ["mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
 
-#	kpackage { "ferm":; }
 	kpackage { "libnet-dns-perl":; }
-
-#	exec { "reload-ferm":
-#		command     => "/etc/init.d/ferm reload",
-#		subscribe   => File["/etc/ferm/ferm.conf"],
-#		refreshonly => true;
-#	}
 
 	concat { "/etc/ferm/ferm.conf_new":
 		owner            => "root",
@@ -123,7 +116,7 @@ class ferm::new {
 					"v6" => template("ferm/rule_v6"),
 				},
 				ensure  => $ensure,
-				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
+				require => Chain["${chain}_${ip_proto}";
 			}
 		}
 	}
@@ -143,7 +136,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0002_${real_name}":
 				content => template("ferm/interface"),
-				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
+				require => Chain["${chain}_${ip_proto}"];
 			}
 		}
 	}
@@ -163,7 +156,7 @@ class ferm::new {
 		} else {
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
 				content => template("ferm/modstate"),
-				require => [Chain["${chain}_${ip_proto}"],Exec["reload-ferm"]];
+				require => Chain["${chain}_${ip_proto}"];
 			}
 		}
 	}
