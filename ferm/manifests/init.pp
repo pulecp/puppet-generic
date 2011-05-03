@@ -53,7 +53,7 @@ class ferm::new {
 	modstate {
 		"INVALID_v46":;
 		"ESTABLISHED_v46":
-			state  => "{ESTABLISHED,RELATED)",
+			state  => "(ESTABLISHED,RELATED)",
 			action => "ACCEPT";
 	}
 
