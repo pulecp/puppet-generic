@@ -18,13 +18,18 @@ class ferm {
 class ferm::release {
 	include gen_puppet::concat
 
+	Kfile <| "/var/lib/puppet/concat/_etc_ferm_ferm.conf_new" |> {
+		ensure => absent,
+		force  => true,
+	}
+
 	kpackage { "ferm":
 		ensure => latest;
 	}
 
 	exec { "reload-ferm":
 		command     => "/etc/init.d/ferm reload",
-		subscribe   => File["/etc/ferm/ferm.conf"],
+#		subscribe   => File["/etc/ferm/ferm.conf"],
 		refreshonly => true;
 	}
 
