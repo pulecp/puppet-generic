@@ -1,7 +1,7 @@
 class gen_ferm {
 	include gen_puppet::concat
 
-	kfile { "/var/lib/puppet/concat/_etc_ferm_ferm.conf_new":
+	kfile { "/var/lib/puppet/concat/_etc_ferm_ferm.conf":
 		ensure  => absent,
 		force   => true;
 	}
@@ -39,7 +39,7 @@ class gen_ferm {
 		refreshonly => true;
 	}
 
-	concat { "/etc/ferm/ferm.conf_new":
+	concat { "/etc/ferm/ferm.conf":
 		owner            => "root",
 		group            => "adm",
 		mode             => "644",
