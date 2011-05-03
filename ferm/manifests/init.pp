@@ -58,6 +58,13 @@ class ferm::new {
 		remove_fragments => false;
 	}
 
+	concat { "/etc/ferm/ferm.conf":
+		owner            => "root",
+		group            => "adm",
+		mode             => "644",
+		remove_fragments => false;
+	}
+
 	define rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT, $ensure=present) {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
