@@ -18,9 +18,11 @@ class ferm {
 class ferm::release {
 	include gen_puppet::concat
 
-	kfile { "/var/lib/puppet/concat/_etc_ferm_ferm.conf_new":
-		ensure => absent,
-		force  => true,
+	Kfile <| title == "/var/lib/puppet/concat/_etc_ferm_ferm.conf_new" |> {
+		ensure  => absent,
+		recurse => true,
+		purge   => true,
+		force   => true,
 	}
 
 	kpackage { "ferm":
