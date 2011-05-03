@@ -191,7 +191,7 @@ class ferm::new {
 	define fermfile($content, $ensure=present) {
 		kbp_concat::add_content { $name:
 			content => $content,
-			target  => "/etc/ferm/ferm.conf_new",
+			target  => $firewall_file,
 			ensure  => $ensure;
 		}
 	}
