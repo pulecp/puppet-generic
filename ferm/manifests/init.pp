@@ -15,6 +15,15 @@ class ferm {
 	}
 }
 
+class ferm::release {
+	concat { "/etc/ferm/ferm.conf":
+		owner            => "root",
+		group            => "adm",
+		mode             => "644",
+		remove_fragments => false;
+	}
+}
+
 class ferm::new {
 	include gen_puppet::concat
 
@@ -52,13 +61,6 @@ class ferm::new {
 #	}
 
 	concat { "/etc/ferm/ferm.conf_new":
-		owner            => "root",
-		group            => "adm",
-		mode             => "644",
-		remove_fragments => false;
-	}
-
-	concat { "/etc/ferm/ferm.conf":
 		owner            => "root",
 		group            => "adm",
 		mode             => "644",
