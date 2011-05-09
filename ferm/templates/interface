@@ -1,3 +1,0 @@
-<% if comment %>		# <%= comment %>
-<% end -%>
-		interface <%= real_name %> <%= action %>;

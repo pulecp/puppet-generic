@@ -46,8 +46,9 @@ class ferm::release {
 class ferm::new {
 	include gen_puppet::concat
 
-	interface { ["lo_v46"]:
-		action => "ACCEPT";
+	rule { "Accept local traffic":
+		interface => "lo":
+		action    => "ACCEPT";
 	}
 
 	mod {
@@ -77,7 +78,7 @@ class ferm::new {
 		remove_fragments => false;
 	}
 
-	define rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $rejectwith=false, $table=filter, $chain=INPUT, $ensure=present) {
+	define rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $action=DROP, $table=filter, $chain=INPUT, $ensure=present) {
 		$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
@@ -116,26 +117,6 @@ class ferm::new {
 					"v6" => template("ferm/rule_v6"),
 				},
 				ensure  => $ensure,
-				require => Chain["${chain}_${ip_proto}"];
-			}
-		}
-	}
-
-	define interface($comment=false, $action=DROP, $table=filter, $chain=INPUT) {
-		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
-		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
-		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
-
-		if $ip_proto == "v46" or $ip_proto == $name {
-			interface { ["${real_name}_v4","${real_name}_v6"]:
-				comment => $comment,
-				action  => $action,
-				table   => $table,
-				chain   => $chain;
-			}
-		} else {
-			fermfile { "${ip_proto}_${table}_${chain}_0002_${real_name}":
-				content => template("ferm/interface"),
 				require => Chain["${chain}_${ip_proto}"];
 			}
 		}
