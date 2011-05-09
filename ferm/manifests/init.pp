@@ -47,7 +47,7 @@ class ferm::new {
 	include gen_puppet::concat
 
 	rule { "Accept local traffic":
-		interface => "lo":
+		interface => "lo",
 		action    => "ACCEPT";
 	}
 
