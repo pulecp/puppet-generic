@@ -7,4 +7,4 @@
 <% if icmptype %>icmp-type <%= icmptype %> <% end -%>
 <% if sport %>sport <%= sport %> <% end -%>
 <% if dport %>dport <%= dport %> <% end -%>
-<%= action -%>
+<% if jump %>jump <%= jump %><% else %><%= action -%><% end -%>
