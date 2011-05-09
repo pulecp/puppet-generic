@@ -116,8 +116,8 @@ class ferm::new {
 				ensure     => $ensure;
 			}
 		} else {
-			realize Table[$table_${ip_proto}]
-			realize Chain[$chain_${ip_proto}]
+			realize Table["${table}_${ip_proto}"]
+			realize Chain["${chain}_${ip_proto}"]
 			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
 				content => $ip_proto ? {
 					"v4" => template("ferm/rule_v4"),
@@ -144,8 +144,8 @@ class ferm::new {
 				action  => $action;
 			}
 		} else {
-			realize Table[$table_${ip_proto}]
-			realize Chain[$chain_${ip_proto}]
+			realize Table["${table}_${ip_proto}"]
+			realize Chain["${chain}_${ip_proto}"]
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
 				content => template("ferm/mod"),
 				require => Chain["${chain}_${ip_proto}"];
