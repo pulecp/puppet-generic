@@ -106,7 +106,6 @@ class ferm::new {
 				dport      => $dport,
 				jump       => $jump,
 				action     => $action,
-				rejectwith => $rejectwith,
 				table      => $table,
 				chain      => $chain,
 				ensure     => $ensure;
