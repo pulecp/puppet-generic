@@ -59,17 +59,11 @@ class ferm::new {
 			action => "ACCEPT";
 	}
 
-	chain {
-		["INPUT_v46","FORWARD_v46"]:;
-		"OUTPUT_v46":
-			policy => "ACCEPT";
-	}
-
 	@chain {
 		["INPUT_v4","INPUT_v6","FORWARD_v4","FORWARD_v6"]:
-			policy => "ACCEPT";
-		["OUTPUT_v4","OUTPUT_v6"]:
 			policy => "DROP";
+		["OUTPUT_v4","OUTPUT_v6"]:
+			policy => "ACCEPT";
 	}
 
 	@table { ["filter_v4","filter_v6","mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
