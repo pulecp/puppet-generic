@@ -1,3 +1,2 @@
-<% if comment %>		# <%= comment %>
-<% end -%>
-		mod <%= mod %> <%= param %><% if value %> <%= value %><% end %> <%= action -%>;
+<% if comment %>		# <%= comment %><% end -%>
+		mod <%= mod %> <%= param %><% if value %> <%= value %><% end %> <%= action %>;
