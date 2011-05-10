@@ -51,8 +51,10 @@ define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_st
 
 	# The lock daemon is a kernel internal thingy, we need to actually set the
 	# kernel module options.
-	kfile { "/etc/modprobe.d/lock":
-		content => "options lockd nlm_udpport=${lock_port} nlm_tcpport=${lock_port}",
+	if $lock_port {
+		kfile { "/etc/modprobe.d/lock":
+			content => "options lockd nlm_udpport=${lock_port} nlm_tcpport=${lock_port}",
+		}
 	}
 
 	concat::fragment {
