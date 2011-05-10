@@ -59,6 +59,8 @@ class ferm::new {
 			action => "ACCEPT";
 	}
 
+	realize Chain["OUTPUT_v4","OUTPUT_v6"]
+
 	@chain {
 		["INPUT_v4","INPUT_v6","FORWARD_v4","FORWARD_v6"]:
 			policy => "DROP";
