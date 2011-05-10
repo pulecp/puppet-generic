@@ -59,15 +59,16 @@ class ferm::new {
 			action => "ACCEPT";
 	}
 
-	chain {
-		["INPUT_v46","FORWARD_v46"]:;
-		"OUTPUT_v46":
+	realize Chain["OUTPUT_v4","OUTPUT_v6"]
+
+	@chain {
+		["INPUT_v4","INPUT_v6","FORWARD_v4","FORWARD_v6"]:
+			policy => "DROP";
+		["OUTPUT_v4","OUTPUT_v6"]:
 			policy => "ACCEPT";
 	}
 
-	table { ["filter_v46"]:; }
-
-	@table { ["mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
+	@table { ["filter_v4","filter_v6","mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
 
 	kpackage { "libnet-dns-perl":; }
 
@@ -83,13 +84,13 @@ class ferm::new {
 		$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
 		$saddr_is_ip = $saddr ? {
-			/^(! )?\d+\.\d+\.\d+\.\d+\/?\d*$/ => "ipv4",
-			/^(! )?.*:.*:.*\/?d*$/            => "ipv6",
+			/(! )?\d+\.\d+\.\d+\.\d+\/?\d*/ => "ipv4",
+			/(! )?.*:.*:.*\/?d*/            => "ipv6",
 			default                           => false,
 		}
 		$daddr_is_ip = $daddr ? {
-			/^(! )?\d+\.\d+\.\d+\.\d+\/?\d*$/ => "ipv4",
-			/^(! )?.*:.*:.*\/?d*$/            => "ipv6",
+			/(! )?\d+\.\d+\.\d+\.\d+\/?\d*/ => "ipv4",
+			/(! )?.*:.*:.*\/?d*/            => "ipv6",
 			default                           => false,
 		}
 
@@ -111,6 +112,8 @@ class ferm::new {
 				ensure     => $ensure;
 			}
 		} else {
+			realize Table["${table}_${ip_proto}"]
+			realize Chain["${chain}_${ip_proto}"]
 			fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
 				content => $ip_proto ? {
 					"v4" => template("ferm/rule_v4"),
@@ -137,6 +140,8 @@ class ferm::new {
 				action  => $action;
 			}
 		} else {
+			realize Table["${table}_${ip_proto}"]
+			realize Chain["${chain}_${ip_proto}"]
 			fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
 				content => template("ferm/mod"),
 				require => Chain["${chain}_${ip_proto}"];
@@ -144,29 +149,22 @@ class ferm::new {
 		}
 	}
 
-	define chain($policy=DROP, $table=filter) {
+	define chain($policy=false, $table=filter) {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" or $ip_proto == $name {
-			chain { ["${real_name}_v4","${real_name}_v6"]:
-				policy => $policy,
-				table  => $table;
-			}
-		} else {
-			fermfile {
-				"${ip_proto}_${table}_${real_name}":
-					content => "\tchain ${real_name} {",
-					require => Table["${table}_${ip_proto}"];
-				"${ip_proto}_${table}_${real_name}_zzzz":
-					content => "\t}",
-					require => Table["${table}_${ip_proto}"];
-			}
-			if $policy {
-				fermfile { "${ip_proto}_${table}_${real_name}_0000":
-					content => "\t\tpolicy ${policy};",
-					require => Table["${table}_${ip_proto}"];
-				}
+		fermfile {
+			"${ip_proto}_${table}_${real_name}":
+				content => "\tchain ${real_name} {",
+				require => Table["${table}_${ip_proto}"];
+			"${ip_proto}_${table}_${real_name}_zzzz":
+				content => "\t}",
+				require => Table["${table}_${ip_proto}"];
+		}
+		if $policy {
+			fermfile { "${ip_proto}_${table}_${real_name}_0000":
+				content => "\t\tpolicy ${policy};",
+				require => Table["${table}_${ip_proto}"];
 			}
 		}
 	}
@@ -175,18 +173,14 @@ class ferm::new {
 		$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 		$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
-		if $ip_proto == "v46" or $ip_proto == $name {
-			table { ["${real_name}_v4","${real_name}_v6"]:; }
-		} else {
-			fermfile {
-				"${ip_proto}_${real_name}":
-					content => $ip_proto ? {
-						"v4" => "table ${real_name} {",
-						"v6" => "domain ip6 table ${real_name} {",
-					};
-				"${ip_proto}_${real_name}_zzzz":
-					content => "}";
-			}
+		fermfile {
+			"${ip_proto}_${real_name}":
+				content => $ip_proto ? {
+					"v4" => "table ${real_name} {",
+					"v6" => "domain ip6 table ${real_name} {",
+				};
+			"${ip_proto}_${real_name}_zzzz":
+				content => "}";
 		}
 	}
 
