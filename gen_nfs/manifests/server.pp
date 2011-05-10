@@ -50,7 +50,7 @@ define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_st
 
 	concat::fragment {
 		"nfsd need_gssd":
-			target  => "/etc/default/nfs-kernel-server",
+			target  => "/etc/default/nfs-common",
 			content => "NEED_GSSD=\"${need_gssd}\"\n";
 		"nfsd need_idmapd":
 			target  => "/etc/default/nfs-common",
