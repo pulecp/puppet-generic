@@ -19,8 +19,9 @@ class gen_nfs::server ($failover = false) {
 
 define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_statd = "yes",
 				$need_svcgssd = "no", $mountd_port = false, $incoming_port = false,
-				$outgoing_port = false, $rpcnfsdcount = "8", $rpcnfsdpriority = "0",
-				$rpcmountdopts = "", $rpcsvcgssdopts = "", $statdopts = "") {
+				$outgoing_port = false, $lock_port = false, $rpcnfsdcount = "8",
+				$rpcnfsdpriority = "0", $rpcmountdopts = "", $rpcsvcgssdopts = "",
+				$statdopts = "") {
 	concat {
 		"/etc/default/nfs-common":
 			notify => Service["nfs-common"];
@@ -46,6 +47,12 @@ define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_st
 		if $outgoing_port { fail("An outgoing port also needs an incoming port.") }
 		$real_statd_incoming = ""
 		$real_statd_outgoing = ""
+	}
+
+	# The lock daemon is a kernel internal thingy, we need to actually set the
+	# kernel module options.
+	kfile { "/etc/modprobe.d/lock":
+		content => "options lockd nlm_udpport=${lock_port} nlm_tcpport=${lock_port}",
 	}
 
 	concat::fragment {
