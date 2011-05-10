@@ -43,7 +43,7 @@ define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_st
 		$real_statd_incoming = " --port ${incoming_port}"
 	} else {
 		# If we give an outgoing port, we also need an incoming port
-		if $outgoing_port = { fail("An outgoing port also needs an incoming port.") }
+		if $outgoing_port { fail("An outgoing port also needs an incoming port.") }
 		$real_statd_incoming = ""
 		$real_statd_outgoing = ""
 	}
