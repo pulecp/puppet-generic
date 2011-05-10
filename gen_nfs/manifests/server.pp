@@ -1,4 +1,4 @@
-class gen_nfs::server ($failover = "false") {
+class gen_nfs::server ($failover = false) {
 	include gen_nfs
 
 	kpackage { "nfs-kernel-server":
