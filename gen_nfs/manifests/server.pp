@@ -53,7 +53,7 @@ define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_st
 	# kernel module options.
 	if $lock_port {
 		kfile { "/etc/modprobe.d/lock":
-			content => "options lockd nlm_udpport=${lock_port} nlm_tcpport=${lock_port}",
+			content => "options lockd nlm_udpport=${lock_port} nlm_tcpport=${lock_port}\n",
 		}
 	}
 
