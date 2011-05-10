@@ -51,30 +51,30 @@ define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_st
 	concat::fragment {
 		"nfsd need_gssd":
 			target  => "/etc/default/nfs-kernel-server",
-			content => "NEED_GSSD = \"${need_gssd}\"";
+			content => "NEED_GSSD = \"${need_gssd}\"\n";
 		"nfsd need_idmapd":
 			target  => "/etc/default/nfs-common",
-			content => "NEED_IDMAPD = \"${need_idmapd}\"";
+			content => "NEED_IDMAPD = \"${need_idmapd}\"\n";
 		"nfsd need_statd":
 			target  => "/etc/default/nfs-common",
-			content => "NEED_STATD = \"${need_statd}\"";
+			content => "NEED_STATD = \"${need_statd}\"\n";
 		"nfsd need_svcgssd":
 			target  => "/etc/default/nfs-kernel-server",
-			content => "NEED_SVCGSSD = \"${need_svcgssd}\"";
+			content => "NEED_SVCGSSD = \"${need_svcgssd}\"\n";
 		"nfsd rpcnfsdcount":
 			target  => "/etc/default/nfs-kernel-server",
-			content => "RPCNFSDCOUNT = ${rpcnfsdcount}";
+			content => "RPCNFSDCOUNT = ${rpcnfsdcount}\n";
 		"nfsd rpcnfsdpriority":
 			target  => "/etc/default/nfs-kernel-server",
-			content => "RPCNFSDPRIORITY = ${rpcnfsdpriority}";
+			content => "RPCNFSDPRIORITY = ${rpcnfsdpriority}\n";
 		"nfsd rpcmountdopts":
 			target  => "/etc/default/nfs-kernel-server",
-			content => "RPCMOUNTDOPTS = \"${rpcmountdopts}${real_mount_port}\"";
+			content => "RPCMOUNTDOPTS = \"${rpcmountdopts}${real_mount_port}\"\n";
 		"nfsd rpcsvcgssdopts":
 			target  => "/etc/default/nfs-kernel-server",
-			content => "RPCSVCGSSDOPTS = \"${rpcsvcgssdopts}\"";
+			content => "RPCSVCGSSDOPTS = \"${rpcsvcgssdopts}\"\n";
 		"nfsd statdopts":
 			target  => "/etc/default/nfs-common",
-			content => "STATDOPTS = \"${statdopts}${real_statd_outgoing}${real_statd_incoming}\"";
+			content => "STATDOPTS = \"${statdopts}${real_statd_outgoing}${real_statd_incoming}\"\n";
 	}
 }
