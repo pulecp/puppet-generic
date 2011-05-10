@@ -12,7 +12,7 @@ class hetzner::failover_ip {
 	}
 
 	kfile { "/usr/local/sbin/parse-hetzner-json.py":
-		source => "puppet:///modules/hetzner/parse-hetzner-json.py",
+		source => "hetzner/parse-hetzner-json.py",
 		owner  => "root",
 		group  => "root",
 		mode   => 755,
@@ -23,7 +23,7 @@ class hetzner::failover_ip {
 	}
 
 	kfile { "/usr/local/lib/hetzner/hetzner-failover-ip":
-		source => "puppet:///modules/hetzner/hetzner-failover-ip",
+		source => "hetzner/hetzner-failover-ip",
 		owner  => "root",
 		group  => "root",
 		mode   => 755,
