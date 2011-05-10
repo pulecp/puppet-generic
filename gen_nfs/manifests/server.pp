@@ -17,14 +17,35 @@ class gen_nfs::server ($failover = "false") {
 	}
 }
 
-define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_statd = "yes", $need_svcgssd = "no", 
-				$rpcnfsdcount = "8", $rpcnfsdpriority = "0", $rpcmountdopts = "", 
-				$rpcsvcgssdopts = "", $statdoptions = "") {
+define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_statd = "yes",
+				$need_svcgssd = "no", $mountd_port = false, $incoming_port = false,
+				$outgoing_port = false, $rpcnfsdcount = "8", $rpcnfsdpriority = "0",
+				$rpcmountdopts = "", $rpcsvcgssdopts = "", $statdopts = "") {
 	concat {
 		"/etc/default/nfs-common":
 			notify => Service["nfs-common"];
 		"/etc/default/nfs-kernel-server":
 			notify => Service["nfs-kernel-server"];
+	}
+
+	# Some helper functions. These can be done by setting the variable
+	# itself, but this makes often-used option a bit easier to set.
+	if $mountd_port {
+		$real_mount_port = " --port ${mountd_port}"
+	} else {
+		$real_mount_port = ""
+	}
+
+	if $incoming_port {
+		# If we give an incoming port, we also need an outgoing port
+		if ! $outgoing_port { fail("An incoming port also needs an outgoing port.") }
+		$real_statd_outgoing = " --outgoing-port ${outgoing_port}"
+		$real_statd_incoming = " --port ${incoming_port}"
+	} else {
+		# If we give an outgoing port, we also need an incoming port
+		if $outgoing_port = { fail("An outgoing port also needs an incoming port.") }
+		$real_statd_incoming = ""
+		$real_statd_outgoing = ""
 	}
 
 	concat::fragment {
@@ -48,12 +69,12 @@ define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_st
 			content => "RPCNFSDPRIORITY = ${rpcnfsdpriority}";
 		"nfsd rpcmountdopts":
 			target  => "/etc/default/nfs-kernel-server",
-			content => "RPCMOUNTDOPTS = \"${rpcmountdopts}\"";
+			content => "RPCMOUNTDOPTS = \"${rpcmountdopts}${real_mount_port}\"";
 		"nfsd rpcsvcgssdopts":
 			target  => "/etc/default/nfs-kernel-server",
 			content => "RPCSVCGSSDOPTS = \"${rpcsvcgssdopts}\"";
 		"nfsd statdopts":
 			target  => "/etc/default/nfs-common",
-			content => "STATD_OPTS = \"${statdopts}\"";
+			content => "STATDOPTS = \"${statdopts}${real_statd_outgoing}${real_statd_incoming}\"";
 	}
 }
