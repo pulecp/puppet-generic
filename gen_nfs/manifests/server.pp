@@ -15,6 +15,12 @@ class gen_nfs::server ($failover = false) {
 		hasrestart => true,
 		require    => [Kpackage["nfs-kernel-server"],Concat["/etc/default/nfs-common","/etc/default/nfs-kernel-server"]],
 	}
+
+	# The mountd service is controlled by nfs-kernel-server, but that status command
+	# doesn't check it.
+	exec { "/etc/init.d/nfs-kernel-server restart":
+		unless => "/bin/pidof rpc.mountd",
+	}
 }
 
 define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_statd = "yes",
