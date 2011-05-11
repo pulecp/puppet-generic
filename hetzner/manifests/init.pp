@@ -7,23 +7,23 @@ class hetzner {
 }
 
 class hetzner::failover_ip {
-	package { "python-simplejson":
+	kpackage { "python-simplejson":
 		ensure => latest,
 	}
 
-	file { "/usr/local/sbin/parse-hetzner-json.py":
-		source => "puppet:///modules/hetzner/parse-hetzner-json.py",
+	kfile { "/usr/local/sbin/parse-hetzner-json.py":
+		source => "hetzner/parse-hetzner-json.py",
 		owner  => "root",
 		group  => "root",
 		mode   => 755,
 	}
 
-	file { "/usr/local/lib/hetzner":
+	kfile { "/usr/local/lib/hetzner":
 		ensure => directory,
 	}
 
-	file { "/usr/local/lib/hetzner/hetzner-failover-ip":
-		source => "puppet:///modules/hetzner/hetzner-failover-ip",
+	kfile { "/usr/local/lib/hetzner/hetzner-failover-ip":
+		source => "hetzner/hetzner-failover-ip",
 		owner  => "root",
 		group  => "root",
 		mode   => 755,

@@ -4,7 +4,9 @@ class mysql::server {
 		"squeeze": { $mysqlserver = "mysql-server-5.1" }
 	}
 
-	kpackage { "$mysqlserver":; }
+	kpackage { $mysqlserver:
+		alias => "mysql-server",
+	}
 
 	service { "mysql":
 		hasrestart => true,
