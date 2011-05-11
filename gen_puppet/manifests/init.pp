@@ -2,7 +2,11 @@ class gen_puppet {
 # TODO For now, let's make this step optional
 #	include gen_puppet::puppet_conf
 
-	kpackage { ["puppet","puppet-common"]:; }
+	kpackage {
+		["puppet","puppet-common"]:;
+		"checkpuppet":
+			ensure => latest;
+	}
 }
 
 class gen_puppet::puppet_conf {
