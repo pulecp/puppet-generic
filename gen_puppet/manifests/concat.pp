@@ -214,11 +214,12 @@ class gen_puppet::concat::setup {
     file{"/usr/local/bin/concatfragments.sh": 
             owner  => root,
             group  => root,
-            mode   => 755,
-            source => $majorversion ? {
-                        24      => "puppet:///concat/concatfragments.sh",
-                        default => "puppet:///modules/gen_puppet/concat/concatfragments.sh"
-                      };
+            mode   => 755;
+# REMEMBER THE SEMICOLON
+#            source => $majorversion ? {
+#                        24      => "puppet:///concat/concatfragments.sh",
+#                        default => "puppet:///modules/gen_puppet/concat/concatfragments.sh"
+#                      };
 
          $concatdir: 
             ensure => directory,
