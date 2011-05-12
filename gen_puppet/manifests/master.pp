@@ -43,7 +43,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	# If the name is 'default', we want to change the puppetmaster name (pname)
 	# we're using for this instance to something without crud.
 	if $name == 'default' {
-		$pname = 'puppetmaster'
+		$pname = "puppetmaster"
 	} else {
 		$sanitized_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
 		$pname = "puppetmaster-${sanitized_name}"
