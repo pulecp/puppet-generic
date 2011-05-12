@@ -133,7 +133,7 @@ define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $
     }
 
     exec{"concat_${name}":
-        user      => $owner,
+        user      => 'root',
         group     => $group,
         notify    => File[$name],
         subscribe => File[$fragdir],
