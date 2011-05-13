@@ -7,6 +7,21 @@ class gen_puppet {
 		"checkpuppet":
 			ensure => latest;
 	}
+
+	exec { "reload-puppet":
+		command     => "/usr/bin/touch /etc/puppet/reloadpuppetd",
+		creates     => "/etc/puppet/reloadpuppetd",
+		refreshonly => true,
+		require     => Kpackage["puppet-common","checkpuppet"],
+	}
+
+	# Workaround for http://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/
+	cron { "Restart puppet every day.":
+		command => "/usr/bin/touch /etc/puppet/reloadpuppetd",
+		hour    => 0,
+		minute  => 0,
+		user    => "root",
+	}
 }
 
 class gen_puppet::puppet_conf {
@@ -18,6 +33,7 @@ class gen_puppet::puppet_conf {
 		group   => 'root',
 		mode    => '0640',
 		require => Kpackage["puppet-common"],
+		notify  => Exec["reload-puppet"],
 	}
 
 	# Already define all the sections
