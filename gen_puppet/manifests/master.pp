@@ -19,6 +19,15 @@ class gen_puppet::master ($servertype = 'passenger') {
 	kfile { ["/usr/local/share/puppet","/usr/local/share/puppet/rack"]:
 		ensure  => directory;
 	}
+
+	# Default config applicable for most puppetmasters. Assumes we
+	# have a separate caserver
+	kfile {
+		"/etc/puppet/fileserver.conf":
+			source => "gen_puppet/puppetmaster/fileserver.conf";
+		"/etc/puppet/auth.conf":
+			source => "gen_puppet/puppetmaster/auth.conf";
+	}
 }
 
 # gen_puppet::master::config
