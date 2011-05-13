@@ -24,9 +24,11 @@ class gen_puppet::master ($servertype = 'passenger') {
 	# have a separate caserver
 	kfile {
 		"/etc/puppet/fileserver.conf":
-			source => "gen_puppet/puppetmaster/fileserver.conf";
+			require => Kpackage["puppet-common"],
+			source  => "gen_puppet/puppetmaster/fileserver.conf";
 		"/etc/puppet/auth.conf":
-			source => "gen_puppet/puppetmaster/auth.conf";
+			require => Kpackage["puppet-common"],
+			source  => "gen_puppet/puppetmaster/auth.conf";
 	}
 }
 
