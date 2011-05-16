@@ -56,7 +56,7 @@ class powerdns::common {
 
 class powerdns::master inherits powerdns::common {
 	# Install needed packages.
-        package {
+	package {
 		"pdns-server":
 			ensure => installed;
 		"pdns-backend-mysql":
@@ -70,7 +70,7 @@ class powerdns::master inherits powerdns::common {
 
 class powerdns::slave inherits powerdns::common {
 	# Install needed packages.
-        package {
+	package {
 		"pdns-server":
 			ensure => installed;
 		"pdns-backend-sqlite":
@@ -84,7 +84,7 @@ class powerdns::slave inherits powerdns::common {
 
 class powerdns::recursor {
 	# Install needed packages.
-        package {
+	package {
 		"pdns-recursor":
 			ensure => installed;
 	}

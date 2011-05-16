@@ -28,10 +28,10 @@ class nagios::server {
 
 	# Change the homedir for Nagios to /var/lib/nagios3 so we can put e.g.
 	# a .mycnf with MySQL login details in there.
-        user { "nagios":
-                home => "/var/lib/nagios3",
-                require => Package["nagios3"],
-        }
+	user { "nagios":
+		home => "/var/lib/nagios3",
+		require => Package["nagios3"],
+	}
 
 	kfile {
 		"/etc/default/nagios3":

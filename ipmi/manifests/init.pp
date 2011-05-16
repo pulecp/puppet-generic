@@ -18,28 +18,28 @@ class ipmi {
 	}
 
 	# Load the modules on boot
-        line {
-                "ipmi_devintf":
-                        file => "/etc/modules",
-                        line => "ipmi_devintf",
-                        ensure => present;
-                "ipmi_si":
-                        file => "/etc/modules",
-                        line => "ipmi_si",
-                        ensure => present;
-        }
+	line {
+		"ipmi_devintf":
+			file => "/etc/modules",
+			line => "ipmi_devintf",
+			ensure => present;
+		"ipmi_si":
+			file => "/etc/modules",
+			line => "ipmi_si",
+			ensure => present;
+	}
 
-        package { "ipmitool":
-                ensure => installed,
-        }
+	package { "ipmitool":
+		ensure => installed,
+	}
 
-        file { "/etc/default/ipmievd":
-                content => "ENABLED=true\n",
-                require => Package["ipmitool"],
-        }
+	file { "/etc/default/ipmievd":
+		content => "ENABLED=true\n",
+		require => Package["ipmitool"],
+	}
 
-        service { "ipmievd":
-                ensure => running,
-                require => File["/etc/default/ipmievd"],
-        }
+	service { "ipmievd":
+		ensure => running,
+		require => File["/etc/default/ipmievd"],
+	}
 }

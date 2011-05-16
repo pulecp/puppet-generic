@@ -1,5 +1,5 @@
 class openldap::client {
-        package { ["ldap-utils", "libnss-ldap", "libpam-ldap", "nscd"]:
+	package { ["ldap-utils", "libnss-ldap", "libpam-ldap", "nscd"]:
 		ensure => installed,
 	}
 
@@ -150,7 +150,7 @@ class openldap::server {
 	service { "slapd":
 		hasrestart => true,
 		subscribe => [File["/etc/ldap/slapd.conf"],
-		              Exec["update-slapd-conf"]],
+			      Exec["update-slapd-conf"]],
 		ensure => running,
 	}
 

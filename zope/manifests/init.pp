@@ -96,7 +96,7 @@ class zope::server {
 			command => "/usr/bin/dzhandle -z 2.9 zopectl $name start",
 			refreshonly => true,
 			require => [File["/etc/zope2.9/$name/zope.conf"],
-			            File["/var/log/zope2.9/instance/$name"],
+				    File["/var/log/zope2.9/instance/$name"],
 				    File["/var/run/zope2.9/instance"]]
 		}
 
@@ -105,7 +105,7 @@ class zope::server {
 			creates => "/srv/zope2.9/instance/$name",
 			notify => Exec["start-zope-instance-$name"],
 			require => [File["/srv/zope2.9/instance"],
-			            Package["zope-common"],
+				    Package["zope-common"],
 				    Package["zope2.9"]],
 		}
 
@@ -250,9 +250,9 @@ class zope::zeo {
 			command => "/usr/bin/dzhandle -z 2.9 zeoctl $name start",
 			refreshonly => true,
 			require => [File["/var/log/zope2.9/zeo/$name.log"],
-			            File["/srv/zope2.9/zeo/$name/var"],
-			            File["/srv/zope2.9/zeo/$name/bin/zeoctl"],
-			            File["/srv/zope2.9/zeo/$name/bin/runzeo"],
+				    File["/srv/zope2.9/zeo/$name/var"],
+				    File["/srv/zope2.9/zeo/$name/bin/zeoctl"],
+				    File["/srv/zope2.9/zeo/$name/bin/runzeo"],
 				    File["/etc/zope2.9/$name/zeo.conf"]],
 		}
 

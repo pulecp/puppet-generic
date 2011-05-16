@@ -29,8 +29,8 @@ class bind {
 		ensure => running,
 		pattern => "/usr/sbin/named",
 		subscribe => [File["/etc/bind/named.conf.local"],
-		              File["/etc/bind/named.conf.options"],
-                              File["/etc/bind/named.conf"],
+			      File["/etc/bind/named.conf.options"],
+			      File["/etc/bind/named.conf"],
 			      Exec["update-zone-conf"]],
 	}
 
@@ -38,7 +38,7 @@ class bind {
 		command => "/bin/sh -c 'cd /etc/bind && make'",
 		refreshonly => true,
 		require => [File["/etc/bind/zones"],
-		            File["/etc/bind/create_zones_conf"],
+			    File["/etc/bind/create_zones_conf"],
 			    File["/etc/bind/Makefile"],
 			    Package["make"]],
 	}
