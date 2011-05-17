@@ -69,11 +69,30 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	}
 
 	# Create the puppet directories
-	kfile { [$vardir, $ssldir, $rundir, $logdir]:
-		ensure  => directory,
-		owner   => "puppet",
-		group   => "puppet",
-		require => Kpackage["puppet-common"],
+	kfile {
+		$vardir:
+			ensure  => directory,
+			owner   => "puppet",
+			group   => "puppet",
+			require => kpackage["puppet-common"],
+			mode    => 0751;
+		$ssldir:
+			ensure  => directory,
+			owner   => "puppet",
+			group   => "puppet",
+			require => kpackage["puppet-common"],
+			mode    => 0771;
+		$rundir:
+			ensure  => directory,
+			owner   => "puppet",
+			group   => "puppet",
+			require => kpackage["puppet-common"],
+			mode    => 1777;
+		$logdir:
+			ensure  => directory,
+			owner   => "puppet",
+			group   => "puppet",
+			require => kpackage["puppet-common"];
 	}
 
 	# If we don't have a customer-specific CA file, create one
