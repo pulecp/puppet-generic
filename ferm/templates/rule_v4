@@ -1,7 +1,7 @@
 		# <%= real_name %>
 		<% if interface %>interface <%= interface %> <% end -%>
 <% if outerface %>outerface <%= outerface %> <% end -%>
-<% if saddr %>saddr <% if saddr_is_ip=="ipv4" %><%= saddr %><% else %>@resolve(<%= saddr %>, A)<% end %> <% end -%>
+<% if saddr %>saddr <% if saddr_is_ip=="ipv4" %><%= saddr %><% else if saddr=="localhost" %>127.0.0.1<% else %>@resolve(<%= saddr %>, A)<% end %> <% end -%>
 <% if daddr %>daddr <% if daddr_is_ip=="ipv4" %><%= daddr %><% else %>@resolve(<%= daddr %>, A)<% end %> <% end -%>
 <% if proto %>proto <%= proto %> <% end -%>
 <% if icmptype %>icmp-type <%= icmptype %> <% end -%>
