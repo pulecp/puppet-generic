@@ -3,7 +3,8 @@ class gen_puppet {
 #	include gen_puppet::puppet_conf
 
 	kpackage {
-		["puppet","puppet-common"]:;
+		["puppet","puppet-common"]:
+			ensure => latest;
 		"checkpuppet":
 			ensure => latest;
 	}
