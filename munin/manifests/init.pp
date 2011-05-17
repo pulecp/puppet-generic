@@ -30,7 +30,13 @@ class munin::client {
 
 	kpackage { "munin-node":; }
 
-	if (($operatingsystem == "Debian") and (versioncmp($lsbdistrelease,"5.0") >= 0)) { # in Lenny and above we have the extra-plugins in a package
+	if versioncmp($lsbdistrelease,"5.0") >= 0 { # in Lenny and above we have the extra-plugins in a package
+		if versioncmp($lsbdistrelease, "6") < 0 { # in lenny we want our own package
+			gen_apt::preference { "munin-plugins-extra":
+				repo => "lenny-kumina";
+			}
+		}
+
 		kpackage { "munin-plugins-extra":
 			ensure => latest;
 		}
