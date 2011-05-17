@@ -112,7 +112,7 @@ define ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $
 			chain     => $chain,
 			ensure    => $ensure;
 		}
-	} elsif ($ip_proto=="v4" and ! $saddr=="ipv6" and ! $daddr=="ipv6") or ($ip_proto=="v6" and ! $saddr=="ipv4" and ! $daddr=="ipv4") {
+	} elsif ($ip_proto=="v4" and ! $saddr_is_ip=="ipv6" and ! $daddr_is_ip=="ipv6") or ($ip_proto=="v6" and ! $saddr_is_ip=="ipv4" and ! $daddr_is_ip=="ipv4") {
 		realize Table["${table}_${ip_proto}"]
 		realize Chain["${chain}_${ip_proto}"]
 		fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
