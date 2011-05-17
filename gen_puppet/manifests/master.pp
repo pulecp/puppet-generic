@@ -91,7 +91,6 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		$logdir:
 			ensure  => directory,
 			owner   => "puppet",
-			group   => "puppet",
 			require => kpackage["puppet-common"];
 	}
 
