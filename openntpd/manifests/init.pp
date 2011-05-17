@@ -1,7 +1,7 @@
 class openntpd::common {
 	package { "openntpd":
-                ensure => installed,
-        }
+		ensure => installed,
+	}
 
 	service { "openntpd":
 		hasrestart => true,

@@ -48,13 +48,13 @@ class mysql::server {
 		notify => Service["mysql"],
 	}
 
-        file { "/etc/mysql/conf.d/file-per-table.cnf":
-                mode    => 644,
-                owner   => "root",
-                group   => "root",
-                content => "[mysqld]\ninnodb_file_per_table\n",
-                notify  => Service["mysql"],
-        }
+	file { "/etc/mysql/conf.d/file-per-table.cnf":
+		mode    => 644,
+		owner   => "root",
+		group   => "root",
+		content => "[mysqld]\ninnodb_file_per_table\n",
+		notify  => Service["mysql"],
+	}
 
 	define db {
 		exec { "create-${name}-db":

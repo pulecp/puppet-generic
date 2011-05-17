@@ -2,21 +2,21 @@ import "*.pp"
 
 class tomcat {
 	define instance($ensure="running",
-                        $user="tomcat55", $group="root",
-                        $heap_size="256M",
+			$user="tomcat55", $group="root",
+			$heap_size="256M",
 			$permgen_size="128M",
-                        $shutdown_port="8005",
-                        $session_replication_port="8006",
-                        $ajp13_connector_port="8009",
-                        $http_connector_port="8180",
-                        $jmx_port="8016",
-                        $remote_debugging_port="8012",
-	                $clustering=false,
-                        $remote_debugging=false,
+			$shutdown_port="8005",
+			$session_replication_port="8006",
+			$ajp13_connector_port="8009",
+			$http_connector_port="8180",
+			$jmx_port="8016",
+			$remote_debugging_port="8012",
+			$clustering=false,
+			$remote_debugging=false,
 			$session_replication_mcast_addr=auto,
 			$session_replication_mcast_port=45564,
 			$session_replication_mcast_domain=false,
-		        $extra_java_opts=false) {
+			$extra_java_opts=false) {
 
 		# Add the project to the list of instances, so tomcat5.5.wrap
 		# knows it needs to start it. Unless of course we want this
@@ -95,11 +95,11 @@ class tomcat {
 		ensure => installed,
 	}
 
-        if ($lsbdistcodename == "lenny") {
-                package { "libtcnative-1":
-                        ensure => installed,
-                }
-        }
+	if ($lsbdistcodename == "lenny") {
+		package { "libtcnative-1":
+			ensure => installed,
+		}
+	}
 
 	# Basic directory structure for running multiple Tomcat instances.
 	file {	"/srv":

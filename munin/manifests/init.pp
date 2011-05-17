@@ -94,18 +94,18 @@ class munin::server {
 		require => Package["munin"],
 	}
 
-        # Needed when munin-graph runs as a CGI script
+	# Needed when munin-graph runs as a CGI script
 	package { "libdate-manip-perl":
 		ensure => installed,
 	}
 
 	kfile {
 		"/var/log/munin":
-                        ensure => directory,
+			ensure => directory,
 			owner => "munin",
 			mode => 771;
 		"/var/log/munin/munin-graph.log":
-                        owner => "munin",
+			owner => "munin",
 			group => "www-data",
 			mode  => 660;
 		"/etc/logrotate.d/munin":

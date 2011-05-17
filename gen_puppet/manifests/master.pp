@@ -68,6 +68,16 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		ensure => 'directory',
 	}
 
+	# Create the puppet directories
+	kfile { [$vardir, $ssldir, $rundir, $logdir]:
+		ensure => directory,
+	}
+
+	# If we don't have a customer-specific CA file, create one
+	if ! defined(Kfile["${ssldir}/ca/ca_crt.pem"]) {
+		fail("DANGER Will Robinson! DANGER You need to deploy a CA certificate at ${ssldir}/ca/ca_cert.pem via puppet.")
+	}
+
 	# Create the config file for the rack environment
 	concat { "${rackdir}/config.ru":
 		owner => "puppet",

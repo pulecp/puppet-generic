@@ -49,7 +49,7 @@ class nginx {
 	}
 
 	define site_config ($ipaddress = $ipaddress, $serveralias = false, $source = false,
-		            $documentroot = "/var/www", $content = false) {
+			    $documentroot = "/var/www", $content = false) {
 		$domain = $name
 
 		if $source {
