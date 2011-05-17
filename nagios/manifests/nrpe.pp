@@ -42,8 +42,8 @@ class nagios::nrpe {
 			default => "/usr/sbin/update-inetd --add 'nrpe stream tcp nowait nagios /usr/sbin/tcpd /usr/sbin/nrpe -c /etc/nagios/nrpe.cfg --inetd'",
 		},
 		unless => $virtual ? {
-		 	vserver => "/bin/grep -E -q '^#?\s*(<off>#)?\s*$ipaddress:nrpe /etc/inetd.conf",
-		 	default => "/bin/grep -E -q '^#?\s*(<off>#)?\s*nrpe' /etc/inetd.conf",
+			vserver => "/bin/grep -E -q '^#?\s*(<off>#)?\s*$ipaddress:nrpe /etc/inetd.conf",
+			default => "/bin/grep -E -q '^#?\s*(<off>#)?\s*nrpe' /etc/inetd.conf",
 		},
 		require => [Service["nagios-nrpe-server"], Exec["update-services-add-nrpe"]],
 		notify => Service["openbsd-inetd"],
