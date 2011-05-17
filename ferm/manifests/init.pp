@@ -95,6 +95,8 @@ define ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $
 		default                         => false,
 	}
 
+	notify { "${ip_proto}  ${saddr_is_ip}   ${daddr_is_ip}":; }
+
 	if $ip_proto == "v46" or $ip_proto == $name {
 		rule { ["${real_name}_v4","${real_name}_v6"]:
 			prio      => $prio,
