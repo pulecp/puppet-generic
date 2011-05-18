@@ -207,42 +207,38 @@ define concat::fragment($target, $content='', $source='', $order=10, $ensure = "
 #
 # It also copies out the concatfragments.sh file to /usr/local/bin
 class gen_puppet::concat::setup {
-    $concatdir = "/var/lib/puppet/concat"
-    $majorversion = regsubst($puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
-    $sort = "/usr/bin/sort"
+	$concatdir = "/var/lib/puppet/concat"
+	$majorversion = regsubst($puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
+	$sort = "/usr/bin/sort"
 
-    file{"/usr/local/bin/concatfragments.sh": 
-            owner  => root,
-            group  => root,
-            mode   => 755;
-# REMEMBER THE SEMICOLON
-#            source => $majorversion ? {
-#                        24      => "puppet:///concat/concatfragments.sh",
-#                        default => "puppet:///modules/gen_puppet/concat/concatfragments.sh"
-#                      };
-
-         $concatdir: 
-            ensure => directory,
-            owner  => root,
-            group  => root,
-            mode   => 755;
-    }
+	kfile{ 
+		"/usr/local/bin/concatfragments.sh":
+			mode   => 755,
+			source => $majorversion ? {
+				24      => "puppet:///concat/concatfragments.sh",
+				default => "puppet:///modules/gen_puppet/concat/concatfragments.sh"
+			};
+	 	$concatdir: 
+			ensure => directory,
+			mode   => 755;
+	}
 }
+
 class gen_puppet::concat {
-        include gen_puppet::concat::setup
+	include gen_puppet::concat::setup
 
-        define add_content($target, $content, $order=15, $ensure=present) {
-                $body = $content ? {
-                        false   => $name,
-                        default => $content,
-                }
+	define add_content($target, $content, $order=15, $ensure=present) {
+		$body = $content ? {
+			false   => $name,
+			default => $content,
+		}
 
-                concat::fragment{ "${target}_fragment_${name}":
-                        content => "${body}\n",
-                        target  => $target,
-                        order   => $order,
+		concat::fragment{ "${target}_fragment_${name}":
+			content => "${body}\n",
+			target  => $target,
+			order   => $order,
 			ensure  => $ensure;
-                        }
-                }
+			}
+		}
 }
 
