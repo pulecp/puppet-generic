@@ -214,10 +214,7 @@ class gen_puppet::concat::setup {
 	kfile{ 
 		"/usr/local/bin/concatfragments.sh":
 			mode   => 755,
-			source => $majorversion ? {
-				24      => "puppet:///concat/concatfragments.sh",
-				default => "puppet:///modules/gen_puppet/concat/concatfragments.sh"
-			};
+			source => "gen_puppet/concat/concatfragments.sh";
 	 	$concatdir: 
 			ensure => directory,
 			mode   => 755;
