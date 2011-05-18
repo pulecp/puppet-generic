@@ -1,4 +1,4 @@
-class xvfb {
+class gen_xvfb {
 	kpackage { "xvfb":
 		ensure => installed;
 	}
