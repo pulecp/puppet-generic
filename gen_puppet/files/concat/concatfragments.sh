@@ -28,7 +28,7 @@
 #  -s   Where to find the sort utility, defaults to /bin/sort
 #  -n	Sort the output numerically rather than the default alpha sort
 #
-# the command: 
+# the command:
 #
 #   concatfragments.sh -o /path/to/conffile.cfg -d /path/to/conf.d
 #
@@ -45,6 +45,7 @@ TEST=""
 FORCE=""
 WARN=""
 SORT="/bin/sort"
+DIRNAME="/usr/bin/dirname --"
 SORTARG="-z"
 
 while getopts "o:s:d:tnwf" options; do
@@ -62,26 +63,26 @@ while getopts "o:s:d:tnwf" options; do
 done
 
 # do we have -o?
-if [ x${OUTFILE} = "x" ]; then
+if [ "${OUTFILE}" = "" ]; then
 	echo "Please specify an output file with -o"
 	exit 1
 fi
 
 # do we have -d?
-if [ x${WORKDIR} = "x" ]; then
+if [ "${WORKDIR}" = "" ]; then
 	echo "Please fragments directory with -d"
 	exit 1
 fi
 
 # can we write to -o?
-if [ -a ${OUTFILE} ]; then
-	if [ ! -w ${OUTFILE} ]; then
+if [ -a "${OUTFILE}" ]; then
+	if [ ! -w "${OUTFILE}" ]; then
 		echo "Cannot write to ${OUTFILE}"
 		exit 1
 	fi
 else
-	if [ ! -w `dirname ${OUTFILE}` ]; then
-		echo "Cannot write to `dirname ${OUTFILE}` to create ${OUTFILE}"
+	if [ ! -w "`${DIRNAME} ${OUTFILE}`" ]; then
+		echo "Cannot write to `${DIRNAME} ${OUTFILE}` to create ${OUTFILE}"
 		exit 1
 	fi
 fi
@@ -94,24 +95,24 @@ fi
 
 # are there actually any fragments?
 if [ ! "$(ls -A ${WORKDIR}/fragments)" ]; then
-	if [ x${FORCE} = "x" ]; then
+	if [ "${FORCE}" = "" ]; then
 		echo "The fragments directory is empty, cowardly refusing to make empty config files"
 		exit 1
 	fi
 fi
 
-cd ${WORKDIR}
+cd "${WORKDIR}"
 
 if [ "${WARN}" = "true" ]; then
 	echo '# This file is managed by Puppet. DO NOT EDIT.' > "fragments.concat"
 else
-	cat /dev/null > "fragments.concat"
+	/bin/cat /dev/null > "fragments.concat"
 fi
 
 # find all the files in the fragments directory, sort them numerically and concat to fragments.concat in the working dir
 /usr/bin/find fragments/ -type f -follow -print0 |${SORT} ${SORTARG}|/usr/bin/xargs -0 /bin/cat >>"fragments.concat"
 
-if [ x${TEST} = "x" ]; then
+if [ "${TEST}" = "" ]; then
 	# This is a real run, copy the file to outfile
 	/bin/cp fragments.concat ${OUTFILE}
 	RETVAL=$?
