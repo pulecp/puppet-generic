@@ -50,7 +50,8 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		$fileserverconf = "/etc/puppet/fileserver.conf",
 		$logdir = "/var/log/puppet", $pluginsync = true,
 		$rackroot = "/usr/local/share/puppet/rack", $rundir = "/var/run/puppet",
-		$ssldir = "/var/lib/puppet/ssl", $vardir = "/var/lib/puppet") {
+		$ssldir = "/var/lib/puppet/ssl", $templatedir = '$confdir/templates',
+		$vardir = "/var/lib/puppet") {
 	# If the name is 'default', we want to change the puppetmaster name (pname)
 	# we're using for this instance to something without crud.
 	if $name == 'default' {
@@ -94,7 +95,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 			require => kpackage["puppet-common"];
 	}
 
-	# If we don't have a customer-specific CA file, create one
+	# If we don't have a customer-specific CA file, fail
 	if ! defined(Kfile["${ssldir}/ca/ca_crt.pem"]) {
 		fail("DANGER Will Robinson! DANGER You need to deploy a CA certificate at ${ssldir}/ca/ca_cert.pem via puppet.")
 	}
