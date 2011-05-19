@@ -119,14 +119,23 @@ class apache {
       require => Package["apache2"],
    }
 
-   file { "/etc/apache2/ports.conf":
-      owner => root,
-      group => root,
-      mode => 644,
-      content => template("apache/ports.conf"),
+   kfile { "/etc/apache2/ports.conf":
+      owner   => root,
+      group   => root,
+      mode    => 644,
       require => Package["apache2"],
-      notify => Exec["reload-apache2"],
+      notify  => Exec["reload-apache2"],
    }
+
+   define apache_ports {
+   	line { "open apache port ${name}":
+		content => $name,
+		file    => "/etc/apache2/ports.conf",
+		notify  => Exec["reload-apache2"],
+	}
+   }
+
+   apache_ports { $apache_ports:; }
 
    # A directory where we can put extra configuration statements for sites.
    # Every site has its own subdirectory where files can be put. The default
