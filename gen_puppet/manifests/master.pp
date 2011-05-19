@@ -162,19 +162,19 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		gen_puppet::concat::add_content {
 			"main section in ${configfile}":
 				target  => $configfile,
-				content => "[main]\n",
+				content => "[main]",
 				order   => '10';
 			"agent section in ${configfile}":
 				target  => $configfile,
-				content => "\n[agent]\n",
+				content => "\n[agent]",
 				order   => '20';
 			"master section in ${configfile}":
 				target  => $configfile,
-				content => "\n[master]\n",
+				content => "\n[master]",
 				order   => '30';
 			"queue section in ${configfile}":
 				target  => $configfile,
-				content => "\n[queue]\n",
+				content => "\n[queue]",
 				order   => '40';
 		}
 
