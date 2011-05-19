@@ -129,7 +129,7 @@ class apache {
 
    define apache_ports {
    	line { "open apache port ${name}":
-		content => $name,
+		content => "Listen $name",
 		file    => "/etc/apache2/ports.conf",
 		notify  => Exec["reload-apache2"],
 	}
