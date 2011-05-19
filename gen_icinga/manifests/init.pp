@@ -34,7 +34,7 @@ define gen_icinga::service($conf_dir="false", $use="generic_ha_service", $servic
 	}
 
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/service_${name}.cfg;${fqdn}":
-		content => template("kbp_icinga/service"),
+		content => template("gen_icinga/service"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
@@ -42,7 +42,7 @@ define gen_icinga::service($conf_dir="false", $use="generic_ha_service", $servic
 
 	if $nrpe and !defined(Kfile["/etc/nagios/nrpe.d/${checkcommand}.cfg"]) {
 		kfile { "/etc/nagios/nrpe.d/${checkcommand}.cfg":
-				source  => "kbp_icinga/client/${checkcommand}.cfg",
+				source  => "gen_icinga/client/${checkcommand}.cfg",
 				require => Package["nagios-nrpe-server"];
 		}
 	}
@@ -55,7 +55,7 @@ define gen_icinga::host($conf_dir="false", $use="generic_ha_host", $hostgroups="
 	}
 
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/host_${name}.cfg;${fqdn}":
-		content => template("kbp_icinga/host"),
+		content => template("gen_icinga/host"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
@@ -69,7 +69,7 @@ define gen_icinga::hostgroup($conf_dir="false", $hg_alias, $members="false") {
 	}
 
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/hostgroup_${name}.cfg;${fqdn}":
-		content => template("kbp_icinga/hostgroup"),
+		content => template("gen_icinga/hostgroup"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
@@ -83,7 +83,7 @@ define gen_icinga::contactgroup($conf_dir="false", $customer="generic", $cg_alia
 	}
 
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/contactgroup_${name}.cfg;${fqdn}":
-		content => template("kbp_icinga/contactgroup"),
+		content => template("gen_icinga/contactgroup"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
@@ -97,7 +97,7 @@ define gen_icinga::contact($conf_dir="false", $c_alias, $timeperiod="24x7", $not
 	}
 
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/contact_${name}.cfg;${fqdn}":
-		content => template("kbp_icinga/contact"),
+		content => template("gen_icinga/contact"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
@@ -111,7 +111,7 @@ define gen_icinga::timeperiod($conf_dir="false", $tp_alias, $monday="false", $tu
 	}
 
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/timeperiod_${name}.cfg;${fqdn}":
-		content => template("kbp_icinga/timeperiod"),
+		content => template("gen_icinga/timeperiod"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
@@ -136,7 +136,7 @@ define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argu
 	}
 
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/command_${name}.cfg;${fqdn}":
-		content => template("kbp_icinga/command"),
+		content => template("gen_icinga/command"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
