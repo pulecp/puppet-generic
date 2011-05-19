@@ -136,10 +136,10 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	gen_puppet::concat::add_content {
 		"Set location for configfile for puppetmaster ${pname}":
 			target  => "${rackdir}/config.ru",
-			content => "ARGV << \"--config $configfile\"\n";
+			content => "ARGV << \"--config=$configfile\"\n";
 		"Set location for fileserver configfile for puppetmaster ${pname}":
 			target  => "${rackdir}/config.ru",
-			content => "ARGV << \"--fileserverconfig ${fileserverconf}\"\n";
+			content => "ARGV << \"--fileserverconfig=${fileserverconf}\"\n";
 	}
 
 	# Next come a whole lot of settings that are quite a bit different if we're
