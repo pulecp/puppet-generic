@@ -70,28 +70,33 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	}
 
 	# Create the puppet directories
-	kfile {
-		$vardir:
+	gen_puppet::master::check_dir_existence {
+		"$vardir for $name":
+			path    => $vardir,
 			ensure  => directory,
 			owner   => "puppet",
 			group   => "puppet",
 			require => kpackage["puppet-common"],
 			mode    => 0751;
-		$ssldir:
+		"$ssldir for $name":
+			path    => $ssldir,
 			ensure  => directory,
 			owner   => "puppet",
 			group   => "puppet",
 			require => kpackage["puppet-common"],
 			mode    => 0771;
-		$rundir:
+		"$rundir for $name":
+			path    => $rundir,
 			ensure  => directory,
 			owner   => "puppet",
 			group   => "puppet",
 			require => kpackage["puppet-common"],
 			mode    => 1777;
-		$logdir:
+		"$logdir for $name":
+			path    => $logdir,
 			ensure  => directory,
 			owner   => "puppet",
+			mode    => 755,
 			require => kpackage["puppet-common"];
 	}
 
@@ -215,5 +220,16 @@ define gen_puppet::master::environment ($manifest, $manifestdir, $modulepath, $c
 		target   => "${configfile}",
 		content  => "\n[${name}]\nmanifestdir = ${manifestdir}\nmodulepath = ${modulepath}\nmanifest = ${manifest}\n\n",
 		order    => 60,
+	}
+}
+
+define gen_puppet::master::check_dir_existence ($path, $ensure, $owner = "root", $group = "root", $mode = 644) {
+	if ! defined(Kfile[$path]) {
+		kfile { $path:
+			ensure => $ensure,
+			owner  => $owner,
+			group  => $group,
+			mode   => $mode,
+		}
 	}
 }
