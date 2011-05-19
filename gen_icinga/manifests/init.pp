@@ -123,7 +123,7 @@ define gen_icinga::configdir($sub=false) {
 		ensure  => directory,
 		require => $sub ? {
 			false   => Package["icinga"],
-			default => [Package["icinga"],Kbp_icinga::Configdir["${sub}"]],
+			default => [Package["icinga"],Gen_icinga::Configdir["${sub}"]],
 		},
 		tag     => "icinga_config";
 	}
