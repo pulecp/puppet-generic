@@ -215,10 +215,13 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	}
 }
 
-define gen_puppet::master::environment ($manifest, $manifestdir, $modulepath, $configfile = "/etc/puppet/puppet.conf") {
-	gen_puppet::concat::add_content { "Add environment ${name} in file ${configfile}":
+define gen_puppet::master::environment ($manifest, $manifestdir, $modulepath, $configfile = "/etc/puppet/puppet.conf", $environment_name = false) {
+	if $environment_name { $envname = $environment_name }
+	else                 { $envname = $name }
+
+	gen_puppet::concat::add_content { "(${name}) Add environment ${envname} in file ${configfile}":
 		target   => "${configfile}",
-		content  => "\n[${name}]\nmanifestdir = ${manifestdir}\nmodulepath = ${modulepath}\nmanifest = ${manifest}\n\n",
+		content  => "\n[${envname}]\nmanifestdir = ${manifestdir}\nmodulepath = ${modulepath}\nmanifest = ${manifest}\n\n",
 		order    => 60,
 	}
 }
