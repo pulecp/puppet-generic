@@ -154,7 +154,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		concat { $configfile:
 			owner   => 'root',
 			group   => 'root',
-			mode    => '0640',
+			mode    => '0644',
 			require => Kpackage["puppet-common"],
 		}
 
