@@ -213,6 +213,20 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 				configfile => $configfile;
 		}
 	}
+
+	# Set ssl stuff needed in puppet master
+	gen_puppet::set_config {
+		"ssl_client_header in ${configfile}":
+			var        => 'ssl_client_header',
+			value      => 'SSL_CLIENT_S_DN',
+			section    => "master",
+			configfile => $configfile;
+		"ssl_client_verify_header in ${configfile}":
+			var        => 'ssl_client_verify_header',
+			value      => 'SSL_CLIENT_VERIFY',
+			section    => "master",
+			configfile => $configfile;
+	}
 }
 
 define gen_puppet::master::environment ($manifest, $manifestdir, $modulepath, $configfile = "/etc/puppet/puppet.conf", $environment_name = false) {
