@@ -67,7 +67,7 @@ class mysql::server {
 	define grant($user, $password, $permissions="all") {
 		exec { "grant-${user}-db":
 			unless  => "/usr/bin/mysql -u ${user} -p${password} ${name}",
-			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${name}.* to ${user}@localhost identified by '${password}';\"",
+			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${name}.* to '${user}'@'localhost' identified by '${password}';\"",
 			require => [Service["mysql"], Exec["create-${name}-db"]];
 		}
 	}
