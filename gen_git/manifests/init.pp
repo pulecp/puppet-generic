@@ -1,4 +1,24 @@
-class gen_gitlistchanges {
+class gen_git {
+	if $lsbmajdistrelease >= 6 { #squeeze or newer
+		$git_pkg = "git"
+	} else { #lenny or older
+		$git_pkg = "git-core"
+	}
+
+	kpackage { "${git_pkg}":
+		ensure => latest;
+	}
+}
+
+class gen_git::gitg {
+	if $lsbmajdistrelease >= 6 { # Available from squeeze on
+		kpackage { "gitg":
+			ensure => latest;
+		}
+	}
+}
+
+class gen_git::listchanges {
 	kpackage { "gitlistchanges":
 		ensure => latest;
 	}
@@ -8,7 +28,7 @@ class gen_gitlistchanges {
 			content => "includedir:/etc/gitlistchanges.conf.d\n";
 		"/etc/gitlistchanges.conf.d":
 			ensure  => directory,
-			source  => "gen_gitlistchanges/gitlistchanges.conf.d",
+			source  => "gen_git/listchanges/gitlistchanges.conf.d",
 			purge   => true,
 			recurse => true;
 	}
@@ -23,7 +43,7 @@ class gen_gitlistchanges {
 		realize Kfile["/etc/gitlistchanges.conf", "/etc/gitlistchanges.conf.d"]
 
 		kfile { "/etc/gitlistchanges.conf.d/${the_repo_safe}-${to}":
-			content => template("gen_gitlistchanges/repoconfig.erb");
+			content => template("gen_git/listchanges/repoconfig.erb");
 		}
 	}
 }
