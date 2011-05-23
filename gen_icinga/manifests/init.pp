@@ -27,7 +27,7 @@ class gen_icinga::server {
 	}
 }
 
-define gen_icinga::service($conf_dir=false, $use="generic_ha_service", $service_description=false, $hostname=$fqdn, $hostgroup_name=false, $initialstate=false, $active_checks_enabled=false, $passive_checks_enabled=false, $parallelize_check=false, $obsess_over_service=false, $check_freshness=false, $freshnessthreshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $failure_prediction_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $normal_check_interval=false, $retry_check_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $servicegroups=false, $max_check_attempts=false, $checkcommand=false, $argument1=false, $argument2=false, $argument3=false, $register=false, $nrpe=false) {
+define gen_icinga::service($conf_dir=false, $use="generic_wh_service", $service_description=false, $hostname=$fqdn, $hostgroup_name=false, $initialstate=false, $active_checks_enabled=false, $passive_checks_enabled=false, $parallelize_check=false, $obsess_over_service=false, $check_freshness=false, $freshnessthreshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $failure_prediction_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $normal_check_interval=false, $retry_check_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $servicegroups=false, $max_check_attempts=false, $checkcommand=false, $argument1=false, $argument2=false, $argument3=false, $register=false, $nrpe=false) {
 	$conf_dir_name = $conf_dir ? {
 		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
@@ -48,7 +48,7 @@ define gen_icinga::service($conf_dir=false, $use="generic_ha_service", $service_
 	}
 }
 
-define gen_icinga::host($conf_dir=false, $use="generic_ha_host", $hostgroups="ha_hosts", $parents=false, $address=$ipaddress, $initialstate=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $check_command=false, $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $max_check_attempts=false, $register=false) {
+define gen_icinga::host($conf_dir=false, $use="generic_wh_host", $hostgroups="wh_hosts", $parents=false, $address=$ipaddress, $initialstate=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $check_command=false, $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $max_check_attempts=false, $register=false) {
 	$conf_dir_name = $conf_dir ? {
 		false   => "${environment}/${name}",
 		default => $conf_dir,
