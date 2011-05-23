@@ -104,7 +104,7 @@ define gen_icinga::contact($conf_dir=false, $c_alias, $timeperiod="24x7", $notif
 	}
 }
 
-define gen_icinga::timeperiod($conf_dir=false, $tp_alias, $monday=false, $tuesday=false, $wednesday=false, $thursday=false, $friday=false, $saturday=false, $sunday=false)
+define gen_icinga::timeperiod($conf_dir=false, $tp_alias, $monday=false, $tuesday=false, $wednesday=false, $thursday=false, $friday=false, $saturday=false, $sunday=false) {
 	$conf_dir_name = $conf_dir ? {
 		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
