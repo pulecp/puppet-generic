@@ -1,11 +1,11 @@
 define timeperiod {
 	timeperiod_name <%= name %>
-	alias           <%= tp_alias %><% if monday != "false" %>
-	monday          <%= monday %><% end %><% if tuesday != "false" %>
-	tuesday         <%= tuesday %><% end %><% if wednesday != "false" %>
-	wednesday       <%= wednesday %><% end %><% if thursday != "false" %>
-	thursday        <%= thursday %><% end %><% if friday != "false" %>
-	friday          <%= friday %><% end %><% if saturday != "false" %>
-	saturday        <%= saturday %><% end %><% if sunday != "false" %>
+	alias           <%= tp_alias %><% if monday %>
+	monday          <%= monday %><% end %><% if tuesday %>
+	tuesday         <%= tuesday %><% end %><% if wednesday %>
+	wednesday       <%= wednesday %><% end %><% if thursday %>
+	thursday        <%= thursday %><% end %><% if friday %>
+	friday          <%= friday %><% end %><% if saturday %>
+	saturday        <%= saturday %><% end %><% if sunday %>
 	sunday          <%= sunday %><% end %>
 }

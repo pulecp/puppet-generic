@@ -1,5 +1,5 @@
 define hostgroup {
 	hostgroup_name <%= name %>
-	alias          <%= hg_alias %><% if members != "false" %>
+	alias          <%= hg_alias %><% if members %>
 	members        <%= members %><% end %>
 }
