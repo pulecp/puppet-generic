@@ -1,0 +1,8 @@
+define serviceescalation{<% if host_name %>
+	host_name             <%= host_name %><% elsif hostgroup_name -%>
+	hostgroup_name        <%= hostgroup_name %><% end %>
+	first_notification    <%= first_notification %>
+	last_notification     <%= last_notification %>
+	notification_interval <%= notification_interval %>
+	contact_groups        <%= contact_groups %>
+}
