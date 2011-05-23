@@ -141,6 +141,7 @@ define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argu
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
+}
 
 define gen_icinga::serviceescalation($conf_dir=false, $escalation_period, $host_name=false, $hostgroup_name=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
 	$conf_dir_name = $conf_dir ? {
