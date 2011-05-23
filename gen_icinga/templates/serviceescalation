@@ -4,5 +4,6 @@ define serviceescalation{<% if host_name %>
 	first_notification    <%= first_notification %>
 	last_notification     <%= last_notification %>
 	notification_interval <%= notification_interval %>
+	escalation_period     <%= escalation_period %>
 	contact_groups        <%= contact_groups %>
 }
