@@ -31,6 +31,7 @@ class ferm::release {
 
 	exec { "reload-ferm":
 		command     => "/etc/init.d/ferm reload",
+		require     => Kpackage["ferm"],
 		refreshonly => true;
 	}
 
@@ -39,7 +40,8 @@ class ferm::release {
 		group            => "adm",
 		mode             => "644",
 		remove_fragments => false,
-		notify           => Exec["reload-ferm"];
+		notify           => Exec["reload-ferm"],
+		require          => Kpackage["ferm"];
 	}
 }
 
@@ -76,6 +78,7 @@ class ferm::new {
 		owner            => "root",
 		group            => "adm",
 		mode             => "644",
+		require          => Kpackage["ferm"],
 		remove_fragments => false;
 	}
 }
