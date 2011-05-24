@@ -137,7 +137,7 @@ class mysql::munin {
 
 define mysql::user($user, $password, $hostname="localhost") {
 	exec { "create-${user}":
-		unless  => "`pgrep mysqld > /dev/null` && ! `mysql -u ${user} -p${password} > /dev/null 2>&1`",
+		unless  => "`/usr/bin/pgrep mysqld > /dev/null` && ! `/usr/bin/mysql -u ${user} -p${password} > /dev/null 2>&1`",
 #		unless  => "/usr/bin/mysql -u ${user} -p${password}",
 		command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create user '${user}'@'${hostname}' identified by '${password}';\"",
 		require => Service["mysql"];
