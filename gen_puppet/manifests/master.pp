@@ -236,13 +236,21 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	}
 }
 
-define gen_puppet::master::environment ($manifest, $manifestdir, $modulepath, $configfile = "/etc/puppet/puppet.conf", $environment_name = false) {
+define gen_puppet::master::environment ($configfile = "/etc/puppet/puppet.conf", $environment_name = false,
+					$manifest = false, $manifestdir = false, $modulepath = false) {
+	# Use the name of the resource to determine most paths
 	if $environment_name { $envname = $environment_name }
 	else                 { $envname = $name }
+	if $manifestdir { $real_manifestdir = $manifestdir }
+	else            { $real_manifestdir = "/srv/puppet" }
+	if $manifest { $real_manifest = $manifest }
+	else         { $real_manifest = "${manifestdir}/env/${name}/site.pp" }
+	if $modulepath { $real_modulepath = $modulepath }
+	else           { $real_modulepath = "/srv/puppet/generic:/srv/puppet/kbp:/srv/puppet/env/${name}" }
 
 	gen_puppet::concat::add_content { "(${name}) Add environment ${envname} in file ${configfile}":
 		target   => "${configfile}",
-		content  => "\n[${envname}]\nmanifestdir = ${manifestdir}\nmodulepath = ${modulepath}\nmanifest = ${manifest}\n\n",
+		content  => "\n[${envname}]\nmanifestdir = ${real_manifestdir}\nmodulepath = ${real_modulepath}\nmanifest = ${real_manifest}\n\n",
 		order    => 60,
 	}
 }
