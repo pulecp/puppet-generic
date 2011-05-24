@@ -135,6 +135,7 @@ class apache {
 		content => "Listen $name",
 		file    => "/etc/apache2/ports.conf",
 		notify  => Exec["reload-apache2"],
+		require => Package["apache2"],
 	}
    }
 
