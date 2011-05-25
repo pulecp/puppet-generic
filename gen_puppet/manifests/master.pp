@@ -76,34 +76,34 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 			ensure  => directory,
 			owner   => "puppet",
 			group   => "puppet",
-			require => kpackage["puppet-common"],
+			require => Kpackage["puppet-common"],
 			mode    => 0751;
 		"${ssldir} for ${name}":
 			path    => $ssldir,
 			ensure  => directory,
 			owner   => "puppet",
 			group   => "puppet",
-			require => kpackage["puppet-common"],
+			require => Kpackage["puppet-common"],
 			mode    => 0771;
 		"${rundir} for ${name}":
 			path    => $rundir,
 			ensure  => directory,
 			owner   => "puppet",
 			group   => "puppet",
-			require => kpackage["puppet-common"],
+			require => Kpackage["puppet-common"],
 			mode    => 1777;
 		"${logdir} for ${name}":
 			path    => $logdir,
 			ensure  => directory,
 			owner   => "puppet",
 			mode    => 755,
-			require => kpackage["puppet-common"];
+			require => Kpackage["puppet-common"];
 		"${ssldir}/ca for ${name}":
 			path    => "${ssldir}/ca",
 			ensure  => directory,
 			owner   => "puppet",
 			group   => "puppet",
-			require => kpackage["puppet-common"],
+			require => Kpackage["puppet-common"],
 			mode    => 0770;
 	}
 
