@@ -3,7 +3,7 @@ class gen_icinga::client {
 }
 
 class gen_icinga::server {
-	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin","nagios-plugins-standard"]:; }
+	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin"]:; }
 
 	service { "icinga":
 		ensure     => running,
