@@ -1,5 +1,9 @@
+class gen_icinga::client {
+	kpackage { "nagios-plugins-standard":; }
+}
+
 class gen_icinga::server {
-	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin","nagios-plugins-standard"]:; }
+	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin"]:; }
 
 	service { "icinga":
 		ensure     => running,
@@ -27,9 +31,9 @@ class gen_icinga::server {
 	}
 }
 
-define gen_icinga::service($conf_dir="false", $use="generic_ha_service", $service_description="false", $hostname=$fqdn, $hostgroup_name="false", $initialstate="false", $active_checks_enabled="false", $passive_checks_enabled="false", $parallelize_check="false", $obsess_over_service="false", $check_freshness="false", $freshnessthreshold="false", $notifications_enabled="false", $event_handler_enabled="false", $flap_detection_enabled="false", $failure_prediction_enabled="false", $process_perf_data="false", $retain_status_information="false", $retain_nonstatus_information="false", $notification_interval="false", $is_volatile="false", $check_period="false", $normal_check_interval="false", $retry_check_interval="false", $notification_period="false", $notification_options="false", $contact_groups="false", $servicegroups="false", $max_check_attempts="false", $checkcommand="false", $argument1=false, $argument2=false, $argument3=false, $register="false", $nrpe=false) {
+define gen_icinga::service($conf_dir=false, $use="generic_wh_service", $service_description=false, $hostname=$fqdn, $hostgroup_name=false, $initialstate=false, $active_checks_enabled=false, $passive_checks_enabled=false, $parallelize_check=false, $obsess_over_service=false, $check_freshness=false, $freshnessthreshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $failure_prediction_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $normal_check_interval=false, $retry_check_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $servicegroups=false, $max_check_attempts=false, $checkcommand=false, $argument1=false, $argument2=false, $argument3=false, $register=false, $nrpe=false) {
 	$conf_dir_name = $conf_dir ? {
-		"false" => "${environment}/${fqdn}",
+		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
 	}
 
@@ -48,9 +52,9 @@ define gen_icinga::service($conf_dir="false", $use="generic_ha_service", $servic
 	}
 }
 
-define gen_icinga::host($conf_dir="false", $use="generic_ha_host", $hostgroups="ha_hosts", $parents="false", $address=$ipaddress, $initialstate="false", $notifications_enabled="false", $event_handler_enabled="false", $flap_detection_enabled="false", $process_perf_data="false", $retain_status_information="false", $retain_nonstatus_information="false", $check_command="false", $check_interval="false", $notification_period="false", $notification_interval="false", $contact_groups="false", $max_check_attempts="false", $register="false") {
+define gen_icinga::host($conf_dir=false, $use="generic_wh_host", $hostgroups="wh_hosts", $parents=false, $address=$ipaddress, $initialstate=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $check_command=false, $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $max_check_attempts=false, $register=false) {
 	$conf_dir_name = $conf_dir ? {
-		"false" => "${environment}/${name}",
+		false   => "${environment}/${name}",
 		default => $conf_dir,
 	}
 
@@ -62,9 +66,9 @@ define gen_icinga::host($conf_dir="false", $use="generic_ha_host", $hostgroups="
 	}
 }
 
-define gen_icinga::hostgroup($conf_dir="false", $hg_alias, $members="false") {
+define gen_icinga::hostgroup($conf_dir=false, $hg_alias, $members=false) {
 	$conf_dir_name = $conf_dir ? {
-		"false" => "${environment}/${fqdn}",
+		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
 	}
 
@@ -76,9 +80,9 @@ define gen_icinga::hostgroup($conf_dir="false", $hg_alias, $members="false") {
 	}
 }
 
-define gen_icinga::contactgroup($conf_dir="false", $customer="generic", $cg_alias) {
+define gen_icinga::contactgroup($conf_dir=false, $customer="generic", $cg_alias) {
 	$conf_dir_name = $conf_dir ? {
-		"false" => "${environment}/${fqdn}",
+		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
 	}
 
@@ -90,9 +94,9 @@ define gen_icinga::contactgroup($conf_dir="false", $customer="generic", $cg_alia
 	}
 }
 
-define gen_icinga::contact($conf_dir="false", $c_alias, $timeperiod="24x7", $notification_type, $contactgroups="false", $contact_data) {
+define gen_icinga::contact($conf_dir=false, $c_alias, $timeperiod="24x7", $notification_type, $contactgroups=false, $contact_data) {
 	$conf_dir_name = $conf_dir ? {
-		"false" => "${environment}/${fqdn}",
+		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
 	}
 
@@ -104,9 +108,9 @@ define gen_icinga::contact($conf_dir="false", $c_alias, $timeperiod="24x7", $not
 	}
 }
 
-define gen_icinga::timeperiod($conf_dir="false", $tp_alias, $monday="false", $tuesday="false", $wednesday="false", $thursday="false", $friday="false", $saturday="false", $sunday="false") {
+define gen_icinga::timeperiod($conf_dir=false, $tp_alias, $monday=false, $tuesday=false, $wednesday=false, $thursday=false, $friday=false, $saturday=false, $sunday=false) {
 	$conf_dir_name = $conf_dir ? {
-		"false" => "${environment}/${fqdn}",
+		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
 	}
 
@@ -137,6 +141,20 @@ define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argu
 
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/command_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/command"),
+		notify  => Exec["reload-icinga"],
+		require => File["/etc/icinga/config/${conf_dir_name}"],
+		tag     => "icinga_config";
+	}
+}
+
+define gen_icinga::serviceescalation($contact_groups, $conf_dir=false, $escalation_period, $host_name=false, $hostgroup_name=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
+	$conf_dir_name = $conf_dir ? {
+		false => "${environment}/${fqdn}",
+		default => $conf_dir,
+	}
+
+	@@ekfile { "/etc/icinga/config/${conf_dir_name}/service_escalation_${name}.cfg;${fqdn}":
+		content => template("gen_icinga/serviceescalation"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";

@@ -66,8 +66,11 @@ class apache {
    }
 
    # Let's make sure we've got apache2 installed
-   kpackage { "apache2":
-        ensure => installed,
+   kpackage {
+	"apache2":
+		ensure => installed;
+	"libapr1":
+		ensure => latest;
    }
 
    # We want to make sure that Apache2 is running.
@@ -132,6 +135,7 @@ class apache {
 		content => "Listen $name",
 		file    => "/etc/apache2/ports.conf",
 		notify  => Exec["reload-apache2"],
+		require => Package["apache2"],
 	}
    }
 

@@ -64,10 +64,10 @@ class mysql::server {
 		}
 	}
 
-	define grant($user, $password, $permissions="all") {
-		exec { "grant-${user}-db":
-			unless  => "/usr/bin/mysql -u ${user} -p${password} ${name}",
-			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${name}.* to '${user}'@'localhost' identified by '${password}';\"",
+	define grant($user, $password, $db, $hostname="localhost", $permissions="all") {
+		exec { "grant-${user}-${db}":
+			unless  => "/usr/bin/mysql -u ${user} -p${password} ${db}",
+			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' identified by '${password}';\"",
 			require => [Service["mysql"], Exec["create-${name}-db"]];
 		}
 	}
@@ -132,4 +132,21 @@ class mysql::slave::delayed inherits mysql::slave {
 
 class mysql::munin {
 	munin::client::plugin { ["mysql_bytes","mysql_innodb","mysql_queries","mysql_slowqueries","mysql_threads"]:; }
+}
+
+
+define mysql::user($user, $password=false, $hostname="localhost") {
+	if $password {
+		exec { "create-${user}${hostname}":
+			onlyif  => "/usr/bin/pgrep mysqld && ! /usr/bin/mysql -u ${user} -p${password}",
+			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create user '${user}'@'${hostname}' identified by '${password}';\"",
+			require => Service["mysql"];
+		}
+	} else {
+		exec { "create-${user}${hostname}":
+			onlyif  => "/usr/bin/pgrep mysqld && ! /usr/bin/mysql -u ${user}",
+			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create user '${user}'@'${hostname}';\"",
+			require => Service["mysql"];
+		}
+	}
 }

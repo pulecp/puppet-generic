@@ -65,10 +65,6 @@ class nagios::server {
 class nagios::server::plugins {
 	include nagios::plugins
 
-	package { "nagios-plugins-standard":
-		ensure => installed,
-	}
-
 	# Check for a weak SSH host key. See
 	# http://lists.debian.org/debian-security-announce/2008/msg00152.html
 	check { "weak_ssh_host_key":
