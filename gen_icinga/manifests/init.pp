@@ -1,3 +1,7 @@
+class gen_icinga::client {
+	kpackage { "nagios-plugins-standard":; }
+}
+
 class gen_icinga::server {
 	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin","nagios-plugins-standard"]:; }
 
