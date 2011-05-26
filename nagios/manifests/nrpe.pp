@@ -164,6 +164,9 @@ class nagios::nrpe::plugins {
 
 	# Nagios-plugins-kumina checks
 	check {
+		"javaheapusage":
+			command => '/usr/lib/nagios/plugins/check_javaheapusage /etc/munin/plugins/jmx_$ARG1$_java_process_memory 90 80',
+			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];
 		"loadtrend":
 			command => '/usr/lib/nagios/plugins/check_loadtrend -m 1.5 -c 5 -w 2.5',
 			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];
