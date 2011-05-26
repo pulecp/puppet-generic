@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # 
 # Script to send an SMS email notifcation to Mollie's HTTP gateways
 # Based on the SMS2Email script which can also be found on nagiosexchange.org
