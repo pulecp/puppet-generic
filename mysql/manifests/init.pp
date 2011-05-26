@@ -64,11 +64,25 @@ class mysql::server {
 		}
 	}
 
-	define grant($user, $password, $db, $hostname="localhost", $permissions="all") {
-		exec { "grant-${user}-${db}":
-			unless  => "/usr/bin/mysql -u ${user} -p${password} ${db}",
-			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' identified by '${password}';\"",
-			require => [Service["mysql"], Exec["create-${name}-db"]];
+	define grant($user, $db, $password=false, $hostname="localhost", $permissions="all") {
+		if $password {
+			exec { "grant-${user}-${db}":
+				unless  => "/usr/bin/mysql -u ${user} -p${password} ${db}",
+				command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' identified by '${password}';\"",
+				require => $db ? {
+					"*"     => Service["mysql"],
+					default => [Service["mysql"], Exec["create-${db}-db"]],
+				};
+			}
+		} else {
+			exec { "grant-${user}-${db}":
+				unless  => "/usr/bin/mysql -u ${user} ${db}",
+				command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}';\"",
+				require => $db ? {
+					"*"     => Service["mysql"],
+					default => [Service["mysql"], Exec["create-${db}-db"]],
+				};
+			}
 		}
 	}
 }
