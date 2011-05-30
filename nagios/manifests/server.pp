@@ -1,6 +1,5 @@
 class nagios::server {
 	include nagios::plugins
-	include nagios::nsca
 
 	define check($command) {
 		nagios_command { "check_$name":
