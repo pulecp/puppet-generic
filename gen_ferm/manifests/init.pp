@@ -1,29 +1,15 @@
-class ferm {
-	kpackage { "ferm":
-		ensure => latest;
-	}
-
-	exec { "reload-ferm":
-		command     => "/etc/init.d/ferm reload",
-		subscribe   => File["/etc/ferm/ferm.conf"],
-		refreshonly => true;
-	}
-
-	kfile { "/etc/ferm/ferm.conf":
-		group   => "adm",
-		require => Package["ferm"];
-	}
-}
-
-class ferm::release {
+class gen_ferm {
 	include gen_puppet::concat
 
-#	kfile { "/var/lib/puppet/concat/_etc_ferm_ferm.conf_new":
-#		ensure  => absent,
-#		recurse => true,
-#		purge   => true,
-#		force   => true;
-#	}
+	kfile {
+		"/var/lib/puppet/concat/_etc_ferm_ferm.conf_new":
+			ensure  => absent,
+			recurse => true,
+			purge   => true,
+			force   => true;
+		"/etc/ferm/ferm.conf_new":
+			ensure => absent;
+	}
 
 	kpackage { "ferm":
 		ensure => latest;
@@ -43,47 +29,35 @@ class ferm::release {
 		notify           => Exec["reload-ferm"],
 		require          => Kpackage["ferm"];
 	}
-}
 
-class ferm::new {
-	include gen_puppet::concat
-
-	ferm::rule { "Accept local traffic":
+	rule { "Accept local traffic":
 		interface => "lo",
 		action    => "ACCEPT";
 	}
 
-	ferm::mod {
-		"INVALID_v46":
+	mod {
+		"INVALID":
 			value => "INVALID";
-		"ESTABLISHED_v46":
+		"ESTABLISHED":
 			value  => "(ESTABLISHED RELATED)",
 			action => "ACCEPT";
 	}
 
-	realize Ferm::Chain["OUTPUT_v4","OUTPUT_v6"]
+	realize Chain["OUTPUT_v4","OUTPUT_v6"]
 
-	@ferm::chain {
+	@chain {
 		["INPUT_v4","INPUT_v6","FORWARD_v4","FORWARD_v6"]:
 			policy => "DROP";
 		["OUTPUT_v4","OUTPUT_v6"]:
 			policy => "ACCEPT";
 	}
 
-	@ferm::table { ["filter_v4","filter_v6","mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
+	@table { ["filter_v4","filter_v6","mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
 
 	kpackage { "libnet-dns-perl":; }
-
-	concat { "/etc/ferm/ferm.conf_new":
-		owner            => "root",
-		group            => "adm",
-		mode             => "644",
-		require          => Kpackage["ferm"],
-		remove_fragments => false;
-	}
 }
 
-define ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter, $chain=INPUT, $ensure=present) {
+define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter, $chain=INPUT, $ensure=present) {
 	$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 	$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 	$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
@@ -120,8 +94,8 @@ define ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $
 		realize Chain["${chain}_${ip_proto}"]
 		fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
 			content => $ip_proto ? {
-				"v4" => template("ferm/rule_v4"),
-				"v6" => template("ferm/rule_v6"),
+				"v4" => template("gen_ferm/rule_v4"),
+				"v6" => template("gen_ferm/rule_v6"),
 			},
 			ensure  => $ensure,
 			require => Chain["${chain}_${ip_proto}"];
@@ -129,7 +103,7 @@ define ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $
 	}
 }
 
-define ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $param=state, $value=false, $action=DROP) {
+define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $param=state, $value=false, $action=DROP) {
 	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 	$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
@@ -147,13 +121,13 @@ define ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $param
 		realize Table["${table}_${ip_proto}"]
 		realize Chain["${chain}_${ip_proto}"]
 		fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
-			content => template("ferm/mod"),
+			content => template("gen_ferm/mod"),
 			require => Chain["${chain}_${ip_proto}"];
 		}
 	}
 }
 
-define ferm::chain($policy=false, $table=filter) {
+define gen_ferm::chain($policy=false, $table=filter) {
 	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 	$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
@@ -173,7 +147,7 @@ define ferm::chain($policy=false, $table=filter) {
 	}
 }
 
-define ferm::table() {
+define gen_ferm::table() {
 	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 	$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
 
@@ -188,10 +162,10 @@ define ferm::table() {
 	}
 }
 
-define ferm::fermfile($content, $ensure=present) {
+define gen_ferm::fermfile($content, $ensure=present) {
 	kbp_concat::add_content { $name:
 		content => $content,
-		target  => $firewall_file,
+		target  => "/etc/ferm/ferm.conf",
 		ensure  => $ensure;
 	}
 }
