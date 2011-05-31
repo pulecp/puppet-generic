@@ -100,12 +100,6 @@ define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $
                     default     => "",
                 }
 
-    File{
-        owner => $owner,
-        group => $group,
-        mode  => $mode,
-    }
-
     file{$fragdir:
             ensure   => directory;
 
@@ -122,14 +116,12 @@ define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $
             notify   => Exec["concat_${name}"];
 
          "${fragdir}/fragments.concat":
-            owner    => $owner,
-            group    => $group,
             ensure   => present;
 
          $name:
             owner    => $owner,
             group    => $group,
-            checksum => md5,
+            checksum => 'md5',
             mode     => $mode,
             ensure   => present,
             alias    => "concat_${name}";
