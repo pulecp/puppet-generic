@@ -167,10 +167,10 @@ define concat::fragment($target, $content='', $source='', $order=10, $ensure = "
                                          }
                                      }
                                  }
-                        default: { File{ source => $source } }
+                        default: { Kfile{ source => $source } }
                     }
                  }
-        default: { File{ content => $content } }
+        default: { Kfile{ content => $content } }
     }
 
     kfile{"${fragdir}/fragments/${order}_${safe_name}":
