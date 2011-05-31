@@ -26,8 +26,7 @@ define service {
 	notification_period          <%= notification_period %><% end %><% if notification_options %>
 	notification_options         <%= notification_options %><% end %><% if use %>
 	use                          <%= use %><% end %><% if contact_groups %>
-	contact_groups               <%= contact_groups %><% end %><% if servicegroups %>
-	servicegroups                <%= servicegroups %><% end %><% if max_check_attempts %>
+	contact_groups               <%= contact_groups %><% end %><% if max_check_attempts %>
 	max_check_attempts           <%= max_check_attempts %><% end %><% if checkcommand %>
 	check_command                <%= checkcommand %><% if argument1 %>!<%= argument1 %><% end %><% if argument2 %>!<%= argument2 %><% end %><% if argument3 %>!<%= argument3 %><% end %><% end %><% if register %>
 	register                     <%= register %><% end %>
