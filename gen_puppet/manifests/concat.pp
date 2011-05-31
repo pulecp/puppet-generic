@@ -48,12 +48,15 @@
 #
 # HISTORY:
 # 2010/02/19 - First release based on earlier concat_snippets work
+# 2011/05/31 - Fair amount of changes
 #
 # CONTACT:
 # R.I.Pienaar <rip@devco.net> 
 # Volcane on freenode
 # @ripienaar on twitter
 # www.devco.net
+#
+# This version modified by Kumina bv <info@kumina.nl>.
 
 
 # Sets up so that you can use fragments to build a final config file, 
@@ -154,10 +157,7 @@ define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $
 #               you can set it to anything else using this to influence the
 #               order of the content in the file
 #   - ensure    Present/Absent
-#   - mode      Mode for the file
-#   - owner     Owner of the file
-#   - group     Owner of the file
-define concat::fragment($target, $content='', $source='', $order=10, $ensure = "present", $mode = 0644, $owner = root, $group = root) {
+define concat::fragment($target, $content='', $source='', $order=10, $ensure = "present") {
     $safe_target_name = regsubst($target, '/', '_', 'G')
     $safe_name = regsubst($name, '/', '_', 'G')
     $concatdir = $gen_puppet::concat::setup::concatdir
@@ -181,10 +181,7 @@ define concat::fragment($target, $content='', $source='', $order=10, $ensure = "
         default: { File{ content => $content } }
     }
 
-    file{"${fragdir}/fragments/${order}_${safe_name}":
-        mode   => $mode,
-        owner  => $owner,
-        group  => $group,
+    kfile{"${fragdir}/fragments/${order}_${safe_name}":
         ensure => $ensure,
         alias  => "concat_fragment_${safe_name}",
         notify => Exec["concat_${target}"]
