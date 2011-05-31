@@ -1,5 +1,7 @@
 class gen_icinga::client {
-	kpackage { "nagios-plugins-standard":; }
+	kpackage { ["nagios-plugins-standard","dnsutils"]:
+		ensure => latest;
+	}
 }
 
 class gen_icinga::server {

@@ -1,6 +1,6 @@
 class gen_smokeping::server {
 
-	kpackage { ["smokeping","javascript-common", "libsocket6-perl", "libio-socket-inet6-perl", "dnsutils", "echoping"]:; }
+	kpackage { ["smokeping","javascript-common", "libsocket6-perl", "libio-socket-inet6-perl", "echoping"]:; }
 	service { "smokeping":
 		ensure => running,
 		hasrestart => true,
