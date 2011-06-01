@@ -32,7 +32,7 @@
 # $Log$
 # 
 LINK=`readlink $0`
-CONFIGNAME=`basename $0 | sed 's/^jmx_[a-z]*_[0-9]*_//g'`.conf
+CONFIGNAME=`basename $0 | sed 's/^jmx_[a-z-]*_[0-9]*_//g'`.conf
 RDIR=`dirname $LINK`
 
 basename $0 | cut --output-delimiter=" " -d_ -f2,3 | while read name port; do
