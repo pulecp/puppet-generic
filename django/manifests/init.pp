@@ -40,7 +40,7 @@ class django::wsgi {
 			documentroot => $documentroot,
 		}
 
-		apache::site { $name:
+		kbp_apache::site { $name:
 			ensure => $ensure,
 		}
 
