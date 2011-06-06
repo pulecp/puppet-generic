@@ -56,7 +56,7 @@ define gen_icinga::service($conf_dir=false, $use="generic_wh_service", $service_
 		tag     => "icinga_config";
 	}
 
-	if $nrpe and !defined(Kfile["/etc/nagios/nrpe.d/${checkcommand}.cfg"]) {
+	if $nrpe and $hostname == $fqdn and !defined(Kfile["/etc/nagios/nrpe.d/${checkcommand}.cfg"]) {
 		kfile { "/etc/nagios/nrpe.d/${checkcommand}.cfg":
 				source  => "gen_icinga/client/${checkcommand}.cfg",
 				require => Package["nagios-nrpe-server"];
