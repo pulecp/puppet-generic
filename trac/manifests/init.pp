@@ -1,3 +1,6 @@
+class trac::squeeze {
+}
+
 class trac::lenny {
 }
 
