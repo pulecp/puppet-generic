@@ -6,7 +6,7 @@ define setfacl ($dir = false, $acl) {
 	}
 
 	exec { "Set acls '${acl}' on ${real_dir}":
-		command => "/usr/bin/setfacl -m ${acl} ${real_dir}",
+		command => "/usr/bin/setfacl -R -m ${acl} ${real_dir}",
 		unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^${acl}'",
 		require => Kpackage["acl"],
 	}
