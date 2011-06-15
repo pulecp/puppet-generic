@@ -1,8 +1,18 @@
-define setfacl ($dir = false, $acl) {
+define setfacl ($dir = false, $default = false, $acl) {
 	if $dir {
 		$real_dir = $dir
 	} else {
 		$real_dir = $name
+	}
+
+	if $default {
+		if $acl =~ /^default/ {
+			fail("Can't make a default ACL if you have already specified default: in the acl. Please fix this.")
+		}
+		setfacl { "Set default ${acl} for ${real_dir}":
+			dir => $real_dir,
+			acl => "default:${acl}"
+		}
 	}
 
 	exec { "Set acls '${acl}' on ${real_dir}":
