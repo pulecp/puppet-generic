@@ -8,13 +8,6 @@ class gen_rabbitmq {
 		command     => "/etc/init.d/rabbitmq-server reload",
 		refreshonly => true,
 	}
-
-	kfile { "/etc/rabbitmq/rabbitmq-env.conf":
-		ensure   => file,
-		require  => Kpackage["rabbitmq-server"],
-		notify   => Exec["reload-rabbitmq"],
-		checksum => 'md5',
-	}
 }
 
 class gen_rabbitmq::plugin::amqp {
