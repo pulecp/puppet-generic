@@ -77,6 +77,11 @@ class offsitebackup::client {
 		require => Package["offsite-backup"],
 	}
 
+	$backup_rm_older_than = $backup_remove_older_than ? {
+		undef => "30B",
+		default => $backup_remove_older_than,
+	}
+
 	file { "/etc/backup/offsite-backup.conf":
 		content => template("offsitebackup/client/offsite-backup.conf"),
 		require => Package["offsite-backup"];
