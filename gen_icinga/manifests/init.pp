@@ -120,7 +120,7 @@ define gen_icinga::contactgroup($conf_dir=false, $customer="generic", $cg_alias)
 	}
 }
 
-define gen_icinga::contact($conf_dir=false, $c_alias, $timeperiod="24x7", $notification_type, $contactgroups=false, $contact_data) {
+define gen_icinga::contact($conf_dir=false, $c_alias, $timeperiod="24x7", $notification_type, $contactgroups=false, $contact_data, host_notifications_enabled=1, service_notifications_enabled=1) {
 	$conf_dir_name = $conf_dir ? {
 		false   => "${environment}/${fqdn}",
 		default => $conf_dir,

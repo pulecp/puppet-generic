@@ -1,13 +1,15 @@
 define contact {
 	contact_name                  <%= name %>
-	alias                         <%= c_alias %>
+	alias                         <%= c_alias %><% if service_notifications_enabled %>
+	service_notifications_enabled <%= service_notifications_enabled %><% end %><% if host_notifications_enabled %>
+	host_notifications_enabled    <%= host_notifications_enabled %><% end %>
 	service_notification_options  w,u,c,r
 	host_notification_options     d,u,r
 	host_notification_period      <%= timeperiod %>
 	service_notification_period   <%= timeperiod %>
 	service_notification_commands notify-service-by-<%= notification_type %>
 	host_notification_commands    notify-host-by-<%= notification_type %><% if contactgroups %>
-	contactgroups                 <%= contactgroups %><% end %><% if notification_type=="sms" %>
+	contactgroups                 <%= contactgroups %><% end %><% if contact_data %><% if notification_type=="sms" %>
 	pager                         <% else %>
-	email                         <% end %><%= contact_data %>
+	email                         <% end %><%= contact_data %><% end %>
 }
