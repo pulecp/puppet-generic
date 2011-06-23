@@ -1,0 +1,12 @@
+autojoin <%= autojoin %>
+warntime <%= warntime %>
+deadtime <%= deadtime %>
+initdead <%= initdead %>
+keepalive <%= keepalive %>
+<% nodes.each do |name, ucast| -%>
+node <%= name %>
+<% ucast.each do |dev,ip| -%>
+ucast <%= dev %> <%= ip %>
+<% end -%>
+<% end -%>
+crm <%= crm %>

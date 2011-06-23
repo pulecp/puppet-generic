@@ -1,0 +1,8 @@
+listen <%= name %> <%= listenaddress %>:<%= port %> <% if cookie %>
+	cookie		<%= cookie %><% end %><% if options %>
+<% options.each do |option| -%>
+	option		<%= option %>
+<% end %><% end %>
+<% server_options.each do |option| -%>
+	server		<%= option %>
+<% end %>

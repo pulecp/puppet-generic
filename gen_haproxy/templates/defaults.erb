@@ -1,0 +1,19 @@
+defaults
+	log			global
+	retries			5
+	mode			http
+	option			httpclose
+	option			redispatch
+	option			httplog
+	option			dontlognull
+	option			tcp-smart-connect
+	balance			roundrobin
+	maxconn			200000
+	# TCP connection timeout between proxy and server
+	timeout connect 	15s
+	# TCP connection timeout between client and proxy
+	timeout client  	10s
+	# Maximum time for the server to respond to the proxy
+	timeout server		10s
+	# Maximum time for HTTP request between client and proxy
+	timeout http-request	10s

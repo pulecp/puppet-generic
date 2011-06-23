@@ -1,0 +1,5 @@
+primitive <%= name %> <%= provider %><% if start_timeout or start_interval %> \
+	op start <% if start_timeout%>timeout="<%= start_timeout %>" <% end %><% if start_interval %>interval="<%= start_interval %>"<% end %><% end %><% if stop_timeout or stop_interval %> \
+	op stop <% if stop_timeout%>timeout="<%= stop_timeout %>" <% end %><% if stop_interval %>interval="<%= stop_interval %>"<% end %><% end %><% if monitor_interval or monitor_timeout%> \
+	op monitor <% if monitor_timeout %>timeout="<%= monitor_timeout %>" <% end %><%if monitor_interval %>interval="<%= monitor_interval %>"<% end %><% end %><% if params %> \
+	params <%= params %><% end %>
