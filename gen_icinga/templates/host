@@ -16,7 +16,8 @@ define host {<% if use %>
 	check_interval                <%= check_interval %><% end %><% if notification_period %>
 	notification_period           <%= notification_period %><% end %><% if notification_interval %>
 	notification_interval         <%= notification_interval %><% end %><% if contact_groups %>
-	contact_groups                <%= contact_groups %><% end %><% if max_check_attempts %>
+	contact_groups                <%= contact_groups %><% end %><% if contacts %>
+	contacts                      <%= contacts %><% end %><% if max_check_attempts %>
 	max_check_attempts            <%= max_check_attempts %><% end %><% if register %>
 	register                      <%= register %><% end %>
 }
