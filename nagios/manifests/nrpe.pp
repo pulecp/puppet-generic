@@ -38,12 +38,25 @@ class nagios::nrpe {
 	# Nagios configuration.
 	exec { "update-inetd-add-nrpe":
 		command => $virtual ? {
-			vserver => "/usr/sbin/update-inetd --add '$ipaddress:nrpe stream tcp nowait nagios /usr/sbin/tcpd /usr/sbin/nrpe -c /etc/nagios/nrpe.cfg --inetd'",
-			default => "/usr/sbin/update-inetd --add 'nrpe stream tcp nowait nagios /usr/sbin/tcpd /usr/sbin/nrpe -c /etc/nagios/nrpe.cfg --inetd'",
+			vserver => "/usr/sbin/update-inetd --add '$ipaddress:nrpe stream tcp nowait nagios /usr/sbin/nrpe -- -c /etc/nagios/nrpe.cfg --inetd'",
+			default => "/usr/sbin/update-inetd --add 'nrpe stream tcp nowait nagios /usr/sbin/nrpe -- -c /etc/nagios/nrpe.cfg --inetd'",
 		},
 		unless => $virtual ? {
 			vserver => "/bin/grep -E -q '^#?\s*(<off>#)?\s*$ipaddress:nrpe /etc/inetd.conf",
 			default => "/bin/grep -E -q '^#?\s*(<off>#)?\s*nrpe' /etc/inetd.conf",
+		},
+		require => [Service["nagios-nrpe-server"], Exec["update-services-add-nrpe"]],
+		notify => Service["openbsd-inetd"],
+	}
+
+	exec { "update-inetd-remove-nrpe":
+		command => $virtual ? {
+			vserver => "/usr/sbin/update-inetd --remove nrpe",
+			default => "/usr/sbin/update-inetd --remove nrpe",
+		},
+		onlyif => $virtual ? {
+			vserver => "/bin/grep -E -q '^#?\s*(<off>#)?\s*tcpd /usr/sbin/nrpe' /etc/inetd.conf",
+			default => "/bin/grep -E -q '^#?\s*(<off>#)?\s*tcpd /usr/sbin/nrpe' /etc/inetd.conf",
 		},
 		require => [Service["nagios-nrpe-server"], Exec["update-services-add-nrpe"]],
 		notify => Service["openbsd-inetd"],
