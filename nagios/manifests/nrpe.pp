@@ -45,7 +45,7 @@ class nagios::nrpe {
 			vserver => "/bin/grep -E -q '^#?\s*(<off>#)?\s*$ipaddress:nrpe /etc/inetd.conf",
 			default => "/bin/grep -E -q '^#?\s*(<off>#)?\s*nrpe' /etc/inetd.conf",
 		},
-		require => [Service["nagios-nrpe-server"], Exec["update-services-add-nrpe"]],
+		require => [Service["nagios-nrpe-server"], Exec["update-services-add-nrpe","update-inetd-remove-nrpe"]],
 		notify => Service["openbsd-inetd"],
 	}
 
