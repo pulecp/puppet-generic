@@ -55,8 +55,8 @@ class nagios::nrpe {
 			default => "/usr/sbin/update-inetd --remove nrpe",
 		},
 		onlyif => $virtual ? {
-			vserver => "/bin/grep -E -q '^#?\s*(<off>#)?\s*tcpd /usr/sbin/nrpe' /etc/inetd.conf",
-			default => "/bin/grep -E -q '^#?\s*(<off>#)?\s*tcpd /usr/sbin/nrpe' /etc/inetd.conf",
+			vserver => "/bin/grep -E -q '^#?\s*(<off>#)?.*tcpd /usr/sbin/nrpe' /etc/inetd.conf",
+			default => "/bin/grep -E -q '^#?\s*(<off>#)?.*tcpd /usr/sbin/nrpe' /etc/inetd.conf",
 		},
 		require => [Service["nagios-nrpe-server"], Exec["update-services-add-nrpe"]],
 		notify => Service["openbsd-inetd"],
