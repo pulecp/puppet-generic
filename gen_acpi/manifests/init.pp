@@ -1,9 +1,7 @@
 class gen_acpi {
 	kpackage { "acpi-support-base":; }
 
-	service { "acpid":
-		hasstatus => true,
-		ensure    => running,
-		require   => Kpackage["acpi-support-base"];
+	kservice { "acpid":
+		require => Kpackage["acpi-support-base"];
 	}
 }
