@@ -5,6 +5,7 @@ define hostescalation {<% if host_name %>
 	last_notification     <%= last_notification %>
 	notification_interval <%= notification_interval %>
 	escalation_period     <%= escalation_period %><% if escalation_options %>
-	escalation_options    <%= escalation_options %><% end %>
-	contact_groups        <%= contact_groups %>
+	escalation_options    <%= escalation_options %><% end %><% if contact_groups %>
+	contact_groups        <%= contact_groups %><% end %><% if contacts %>
+	contacts              <%= contacts %><% end %>
 }

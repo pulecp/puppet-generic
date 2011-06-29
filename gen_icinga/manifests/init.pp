@@ -43,7 +43,7 @@ class gen_icinga::server {
 	}
 }
 
-define gen_icinga::service($conf_dir=false, $use="generic_wh_service", $service_description=false, $servicegroups=false, $hostname=$fqdn, $hostgroup_name=false, $initialstate=false, $active_checks_enabled=false, $passive_checks_enabled=false, $parallelize_check=false, $obsess_over_service=false, $check_freshness=false, $freshnessthreshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $failure_prediction_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $normal_check_interval=false, $retry_check_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false, $servicegroups=false, $max_check_attempts=false, $checkcommand=false, $argument1=false, $argument2=false, $argument3=false, $register=false, $nrpe=false) {
+define gen_icinga::service($conf_dir=false, $use="generic_wh_service", $service_description=false, $servicegroups=false, $hostname=$fqdn, $hostgroup_name=false, $initialstate=false, $active_checks_enabled=false, $passive_checks_enabled=false, $parallelize_check=false, $obsess_over_service=false, $check_freshness=false, $freshnessthreshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $failure_prediction_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false, $servicegroups=false, $max_check_attempts=false, $checkcommand=false, $argument1=false, $argument2=false, $argument3=false, $register=false, $nrpe=false) {
 	$conf_dir_name = $conf_dir ? {
 		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
@@ -173,7 +173,7 @@ define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argu
 	}
 }
 
-define gen_icinga::hostescalation($contact_groups, $escalation_period, $conf_dir=false, $host_name=false, $hostgroup_name=false, $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
+define gen_icinga::hostescalation($contact_groups=false, $contacts=false, $escalation_period, $conf_dir=false, $host_name=false, $hostgroup_name=false, $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
 	$conf_dir_name = $conf_dir ? {
 		false => "${environment}/${fqdn}",
 		default => $conf_dir,
@@ -187,7 +187,7 @@ define gen_icinga::hostescalation($contact_groups, $escalation_period, $conf_dir
 	}
 }
 
-define gen_icinga::serviceescalation($contact_groups, $escalation_period, $conf_dir=false, $host_name=false, $hostgroup_name=false, $servicegroup_name=false, $service_description="*", $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
+define gen_icinga::serviceescalation($contact_groups=false, $contacts=false, $escalation_period, $conf_dir=false, $host_name=false, $hostgroup_name=false, $servicegroup_name=false, $service_description="*", $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
 	$conf_dir_name = $conf_dir ? {
 		false => "${environment}/${fqdn}",
 		default => $conf_dir,
