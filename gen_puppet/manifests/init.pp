@@ -1,3 +1,6 @@
+import "kservice.pp"
+import "concat.pp"
+
 class gen_puppet {
 # TODO For now, let's make this step optional
 #	include gen_puppet::puppet_conf
