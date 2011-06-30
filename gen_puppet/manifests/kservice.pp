@@ -12,7 +12,7 @@ define kservice ($ensure="running", $hasrestart=true, $hasstatus=true) {
 		}
 	} else {
 		exec { "reload-${name}":
-			command     => "service ${name} reload",
+			command     => "/usr/sbin/service ${name} reload",
 			refreshonly => true;
 		}
 	}
