@@ -5,7 +5,7 @@
 
 class gen_pacemaker {
 	kpackage { "pacemaker":; }
-	include gen_puppet::concat
+
 	concat { "/etc/heartbeat/cib.cfg":
 		notify => Exec["reload cib.cfg"];
 	}
@@ -19,7 +19,7 @@ class gen_pacemaker {
 	}
 
 	define cib_cfg ($content,$order) {
-		gen_puppet::concat::add_content { "${name}":
+		concat::add_content { "${name}":
 			target  => "/etc/heartbeat/cib.cfg",
 			order   => $order,
 			notify  => Exec["reload cib.cfg"],

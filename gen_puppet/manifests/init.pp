@@ -29,8 +29,6 @@ class gen_puppet {
 }
 
 class gen_puppet::puppet_conf {
-	include gen_puppet::concat
-
 	# Setup the default config file
 	concat { '/etc/puppet/puppet.conf':
 		owner   => 'root',
@@ -41,7 +39,7 @@ class gen_puppet::puppet_conf {
 	}
 
 	# Already define all the sections
-	gen_puppet::concat::add_content {
+	concat::add_content {
 		"main section":
 			target  => '/etc/puppet/puppet.conf',
 			content => "[main]",
@@ -83,7 +81,7 @@ define gen_puppet::set_config ($value, $configfile = '/etc/puppet/puppet.conf', 
 		}
 	}
 
-	gen_puppet::concat::add_content { $name:
+	concat::add_content { $name:
 		target  => $configfile,
 		content => "${real_var} = ${value}",
 		order   => $real_order,

@@ -1,5 +1,4 @@
 class gen_haproxy ($loadbalanced=false){
-	include gen_puppet::concat
 	kpackage { ["haproxy"]:; }
 
 	service { "haproxy":
@@ -20,11 +19,10 @@ class gen_haproxy ($loadbalanced=false){
 			require => Kpackage["haproxy"];
 	}
 
-
 	concat { "/etc/haproxy/haproxy.cfg" :; }
 
 	define proxyconfig ($order, $content) {
-		gen_puppet::concat::add_content { "${name}":
+		concat::add_content { "${name}":
 			order => $order,
 			content => $content,
 			target => "/etc/haproxy/haproxy.cfg";

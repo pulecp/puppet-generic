@@ -1,12 +1,8 @@
 class gen_apt {
 	if $lsbmajdistrelease < 6 {
-		include gen_puppet::concat
-
 		$preferences_file = "/etc/apt/preferences"
 
 		concat { $preferences_file:
-			owner   => "root",
-			group   => "root",
 			mode    => 440;
 		}
 	} else {
@@ -22,8 +18,8 @@ class gen_apt {
 			ensure => absent,
 			notify => Exec["/usr/bin/apt-get update"];
 		"/etc/apt/sources.list.d":
-			ensure  => directory,
-			notify  => Exec["/usr/bin/apt-get update"];
+			ensure => directory,
+			notify => Exec["/usr/bin/apt-get update"];
 		"/etc/apt/keys":
 			ensure => directory;
 		# Increase the available cachesize
@@ -44,13 +40,13 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 		default => $repo,
 	}
 
-	if $lsbmajdistrelease > 5 {
-		kfile { "/etc/apt/preferences.d/${name}":
+	if $lsbmajdistrelease < 6 {
+		add_rule { "${name}":
 			content => template("gen_apt/preference"),
 			notify  => Exec["/usr/bin/apt-get update"];
 		}
 	} else {
-		add_rule { "${name}":
+		kfile { "/etc/apt/preferences.d/${name}":
 			content => template("gen_apt/preference"),
 			notify  => Exec["/usr/bin/apt-get update"];
 		}
@@ -79,7 +75,7 @@ define gen_apt::key {
 }
 
 define gen_apt::add_rule($content, $order=15) {
-	kbp_concat::add_content { $name:
+	concat::add_content { $name:
 		content => $content,
 		order   => $order,
 		target  => "/etc/apt/preferences";

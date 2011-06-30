@@ -58,6 +58,95 @@
 #
 # This version modified by Kumina bv <info@kumina.nl>.
 
+# Sets up the concat system, you should set $concatdir to a place
+# you wish the fragments to live, this should not be somewhere like
+# /tmp since ideally these files should not be deleted ever, puppet
+# should always manage them
+#
+# $puppetversion should be either 24 or 25 to enable a 24 compatible
+# mode, in 24 mode you might see phantom notifies this is a side effect
+# of the method we use to clear the fragments directory.
+#
+# The regular expression below will try to figure out your puppet version
+# but this code will only work in 0.24.8 and newer.
+#
+# $sort keeps the path to the unix sort utility
+#
+# It also copies out the concatfragments.sh file to /usr/local/bin
+class concat::setup {
+	$concatdir    = "/var/lib/puppet/concat"
+	$majorversion = regsubst($puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
+	$sort         = "/usr/bin/sort"
+
+	kfile {
+		"/usr/local/bin/concatfragments.sh":
+			mode   => 755,
+			source => "gen_puppet/concat/concatfragments.sh";
+		$concatdir:
+			ensure => directory,
+			mode   => 755;
+	}
+}
+
+# Puts a file fragment into a directory previous setup using concat
+#
+# OPTIONS:
+#   - target    The file that these fragments belong to
+#   - content   If present puts the content into the file
+#   - source    If content was not specified, use the source
+#   - order     By default all files gets a 10_ prefix in the directory
+#               you can set it to anything else using this to influence the
+#               order of the content in the file
+#   - ensure    Present/Absent
+define concat::fragment($target, $content='', $source='', $order=10, $ensure = "present") {
+	$safe_target_name = regsubst($target, '/', '_', 'G')
+	$safe_name        = regsubst($name, '/', '_', 'G')
+	$concatdir        = $concat::setup::concatdir
+	$fragdir          = "${concatdir}/${safe_target_name}"
+
+	# if content is passed, use that, else if source is passed use that
+	# if neither passed, but $ensure is in symlink form, make a symlink
+	case $content {
+		"": {
+			case $source {
+				"": {
+					case $ensure {
+						"", "absent", "present", "file", "directory": {
+							crit("No content or source specified")
+						}
+					}
+				}
+				default: {
+					Kfile { source => $source }
+				}
+			}
+		}
+		default: {
+			Kfile{ content => $content }
+		}
+	}
+
+	kfile { "${fragdir}/fragments/${order}_${safe_name}":
+		ensure => $ensure,
+		alias  => "concat_fragment_${safe_name}",
+		notify => Exec["concat_${target}"];
+	}
+}
+
+define concat::add_content($target, $content, $order=15, $ensure=present) {
+
+	$body = $content ? {
+		false   => $name,
+		default => $content,
+	}
+
+	concat::fragment{ "${target}_fragment_${name}":
+		content => "${body}\n",
+		target  => $target,
+		order   => $order,
+		ensure  => $ensure;
+	}
+}
 
 # Sets up so that you can use fragments to build a final config file, 
 #
@@ -84,147 +173,55 @@
 #  - The exec can notified using Exec["concat_/path/to/file"] or Exec["concat_/path/to/directory"]
 #  - The final file can be referened as File["/path/to/file"] or File["concat_/path/to/file"]  
 define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $force = "false", $remove_fragments = "true" ) {
-    $safe_name = regsubst($name, '/', '_', 'G')
-    $concatdir = $gen_puppet::concat::setup::concatdir
-    $version   = $gen_puppet::concat::setup::majorversion
-    $sort      = $gen_puppet::concat::setup::sort
-    $fragdir   = "${concatdir}/${safe_name}"
+	require concat::setup
 
-    $warnflag = $warn ? {
-                    true      => "-w",
-                    default     => "",
-                }
+	$safe_name = regsubst($name, '/', '_', 'G')
+	$concatdir = $concat::setup::concatdir
+	$version   = $concat::setup::majorversion
+	$sort      = $concat::setup::sort
+	$fragdir   = "${concatdir}/${safe_name}"
+	$warnflag = $warn ? {
+		true    => "-w",
+		default => "",
+	}
+	$forceflag = $force ? {
+		true    => "-f",
+		default => "",
+	}
 
-    $forceflag = $force ? {
-                    true      => "-f",
-                    default     => "",
-                }
+	file {
+		$fragdir:
+			ensure => directory;
+		"${fragdir}/fragments":
+			ensure  => directory,
+			recurse => true,
+			purge   => $remove_fragments,
+			force   => true,
+			ignore  => [".svn", ".git"],
+			source  => $version ? {
+				24      => "puppet:///concat/null",
+				default => undef,
+			},
+			notify  => Exec["concat_${name}"];
+		"${fragdir}/fragments.concat":
+			ensure  => present;
+		$name:
+			owner    => $owner,
+			group    => $group,
+			checksum => "md5",
+			mode     => $mode,
+			ensure   => present,
+			alias    => "concat_${name}";
+	}
 
-    file{$fragdir:
-            ensure   => directory;
-
-         "${fragdir}/fragments":
-            ensure   => directory,
-            recurse  => true,
-            purge    => $remove_fragments,
-            force    => true,
-            ignore   => [".svn", ".git"],
-            source   => $version ? {
-                            24      => "puppet:///concat/null",
-                            default => undef,
-                        },
-            notify   => Exec["concat_${name}"];
-
-         "${fragdir}/fragments.concat":
-            ensure   => present;
-
-         $name:
-            owner    => $owner,
-            group    => $group,
-            checksum => 'md5',
-            mode     => $mode,
-            ensure   => present,
-            alias    => "concat_${name}";
-    }
-
-    exec{"concat_${name}":
-        user      => 'root',
-        group     => $group,
-        notify    => File[$name],
-        subscribe => File[$fragdir],
-        alias     => "concat_${fragdir}",
-        require   => [ File["/usr/local/bin/concatfragments.sh"], File[$fragdir], File["${fragdir}/fragments"], File["${fragdir}/fragments.concat"] ],
-        unless    => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
-        command   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
-    }
-}
-
-# Puts a file fragment into a directory previous setup using concat
-# 
-# OPTIONS:
-#   - target    The file that these fragments belong to
-#   - content   If present puts the content into the file
-#   - source    If content was not specified, use the source
-#   - order     By default all files gets a 10_ prefix in the directory
-#               you can set it to anything else using this to influence the
-#               order of the content in the file
-#   - ensure    Present/Absent
-define concat::fragment($target, $content='', $source='', $order=10, $ensure = "present") {
-    $safe_target_name = regsubst($target, '/', '_', 'G')
-    $safe_name = regsubst($name, '/', '_', 'G')
-    $concatdir = $gen_puppet::concat::setup::concatdir
-    $fragdir = "${concatdir}/${safe_target_name}"
-
-    # if content is passed, use that, else if source is passed use that
-    # if neither passed, but $ensure is in symlink form, make a symlink
-    case $content {
-             "": {
-                    case $source {
-                             "": {
-                                     case $ensure {
-                                         "", "absent", "present", "file", "directory": {
-                                                 crit("No content or source specified")
-                                         }
-                                     }
-                                 }
-                        default: { Kfile{ source => $source } }
-                    }
-                 }
-        default: { Kfile{ content => $content } }
-    }
-
-    kfile{"${fragdir}/fragments/${order}_${safe_name}":
-        ensure => $ensure,
-        alias  => "concat_fragment_${safe_name}",
-        notify => Exec["concat_${target}"]
-    }
-}
-
-# Sets up the concat system, you should set $concatdir to a place
-# you wish the fragments to live, this should not be somewhere like
-# /tmp since ideally these files should not be deleted ever, puppet
-# should always manage them
-#
-# $puppetversion should be either 24 or 25 to enable a 24 compatible
-# mode, in 24 mode you might see phantom notifies this is a side effect
-# of the method we use to clear the fragments directory.
-# 
-# The regular expression below will try to figure out your puppet version
-# but this code will only work in 0.24.8 and newer.
-#
-# $sort keeps the path to the unix sort utility
-#
-# It also copies out the concatfragments.sh file to /usr/local/bin
-class gen_puppet::concat::setup {
-	$concatdir = "/var/lib/puppet/concat"
-	$majorversion = regsubst($puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
-	$sort = "/usr/bin/sort"
-
-	kfile{ 
-		"/usr/local/bin/concatfragments.sh":
-			mode   => 755,
-			source => "gen_puppet/concat/concatfragments.sh";
-	 	$concatdir: 
-			ensure => directory,
-			mode   => 755;
+	exec { "concat_${name}":
+		user      => "root",
+		group     => $group,
+		alias     => "concat_${fragdir}",
+		unless    => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
+		command   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
+		notify    => File[$name],
+		subscribe => File[$fragdir],
+		require   => [File["/usr/local/bin/concatfragments.sh","${fragdir}/fragments","${fragdir}/fragments.concat"]];
 	}
 }
-
-class gen_puppet::concat {
-	include gen_puppet::concat::setup
-
-	define add_content($target, $content, $order=15, $ensure=present) {
-		$body = $content ? {
-			false   => $name,
-			default => $content,
-		}
-
-		concat::fragment{ "${target}_fragment_${name}":
-			content => "${body}\n",
-			target  => $target,
-			order   => $order,
-			ensure  => $ensure;
-			}
-		}
-}
-

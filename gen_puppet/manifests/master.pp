@@ -119,13 +119,13 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		mode  => 0640,
 	}
 
-	gen_puppet::concat::add_content { "Add header for config.ru for puppetmaster ${pname}":
+	concat::add_content { "Add header for config.ru for puppetmaster ${pname}":
 		target   => "${rackdir}/config.ru",
 		content  => '$0 = "master"',
 		order    => 10,
 	}
 
-	gen_puppet::concat::add_content { "Add footer for config.ru for puppetmaster ${pname}":
+	concat::add_content { "Add footer for config.ru for puppetmaster ${pname}":
 		target   => "${rackdir}/config.ru",
 		content  => "ARGV << \"--rack\"\nrequire 'puppet/application/master'\nrun Puppet::Application[:master].run\n",
 		order    => 20,
@@ -133,14 +133,14 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 
 	# We can easily enable debugging in puppetmaster
 	if $debug {
-		gen_puppet::concat::add_content { "Enable debug mode in config.ru for puppetmaster ${pname}":
+		concat::add_content { "Enable debug mode in config.ru for puppetmaster ${pname}":
 			target  => "${rackdir}/config.ru",
 			content => "ARGV << \"--debug\"\n",
 		}
 	}
 
 	# Make sure we set the config files explicitely for the puppetmaster
-	gen_puppet::concat::add_content {
+	concat::add_content {
 		"Set location for configfile for puppetmaster ${pname}":
 			target  => "${rackdir}/config.ru",
 			content => "ARGV << \"--config=$configfile\"\n";
@@ -155,8 +155,6 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	if $name == 'default' {
 		include gen_puppet::puppet_conf
 	} else {
-		include gen_puppet::concat
-
 		# Setup the default config file
 		concat { $configfile:
 			owner   => 'root',
@@ -166,7 +164,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		}
 
 		# Already define all the sections
-		gen_puppet::concat::add_content {
+		concat::add_content {
 			"main section in ${configfile}":
 				target  => $configfile,
 				content => "[main]",
@@ -248,7 +246,7 @@ define gen_puppet::master::environment ($configfile = "/etc/puppet/puppet.conf",
 	if $modulepath { $real_modulepath = $modulepath }
 	else           { $real_modulepath = "/srv/puppet/generic:/srv/puppet/kbp:/srv/puppet/env/${name}" }
 
-	gen_puppet::concat::add_content { "(${name}) Add environment ${envname} in file ${configfile}":
+	concat::add_content { "(${name}) Add environment ${envname} in file ${configfile}":
 		target   => "${configfile}",
 		content  => "\n[${envname}]\nmanifestdir = ${real_manifestdir}\nmodulepath = ${real_modulepath}\nmanifest = ${real_manifest}\n\n",
 		order    => 60,

@@ -18,7 +18,6 @@ class gen_sudo {
 			require => Package["sudo"];
 		}
 	} else { # Lenny and older
-		include gen_puppet::concat
 		$sudoers="/etc/sudoers" #in squeeze or higher we could use /etc/sudoers.d/ and put all the sudo config there.
 
 		concat { $sudoers:
@@ -30,7 +29,7 @@ class gen_sudo {
 
 		# This define is internal to gen_sudo and only needed on Lenny and older hosts
 		define add_rule($content, $order=15) {
-			gen_puppet::concat::add_content { $name:
+			concat::add_content { $name:
 				content => $content,
 				order   => $order,
 				target  => "/etc/sudoers";

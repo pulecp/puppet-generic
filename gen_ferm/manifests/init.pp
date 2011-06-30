@@ -1,6 +1,4 @@
 class gen_ferm {
-	include gen_puppet::concat
-
 	kfile {
 		"/var/lib/puppet/concat/_etc_ferm_ferm.conf_new":
 			ensure  => absent,
@@ -163,7 +161,7 @@ define gen_ferm::table() {
 }
 
 define gen_ferm::fermfile($content, $ensure=present) {
-	kbp_concat::add_content { $name:
+	concat::add_content { $name:
 		content => $content,
 		target  => "/etc/ferm/ferm.conf",
 		ensure  => $ensure;
