@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: munin::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class munin::client {
 	define plugin($ensure='present', $script_path='/usr/share/munin/plugins', $script=false) {
 		if $script {
@@ -84,6 +95,15 @@ class munin::client {
 	}
 }
 
+# Class: munin::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class munin::server {
 	package { ["munin"]:
 		ensure => installed,

@@ -1,9 +1,29 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: django::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class django::common {
 	package { "python-django":
 		ensure => installed,
 	}
 }
 
+# Class: django::wsgi
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class django::wsgi {
 	# At this time, Apache is the only common webserver which supports
 	# WSGI, so the below is Apache specific

@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_git
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_git {
 	if $lsbmajdistrelease >= 6 { #squeeze or newer
 		$git_pkg = "git"
@@ -10,6 +21,15 @@ class gen_git {
 	}
 }
 
+# Class: gen_git::gitg
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_git::gitg {
 	if $lsbmajdistrelease >= 6 { # Available from squeeze on
 		kpackage { "gitg":
@@ -18,6 +38,15 @@ class gen_git::gitg {
 	}
 }
 
+# Class: gen_git::listchanges
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_git::listchanges {
 	kpackage { "gitlistchanges":
 		ensure => latest;

@@ -1,3 +1,18 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_haproxy
+#
+# Parameters:
+#	loadbalanced
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_haproxy ($loadbalanced=false){
 	kpackage { ["haproxy"]:; }
 

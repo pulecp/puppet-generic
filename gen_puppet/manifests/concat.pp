@@ -1,3 +1,5 @@
+# Author: Kumina bv <support@kumina.nl>
+
 # A system to construct files using fragments from other files or templates.
 #
 # This requires at least puppet 0.25 to work correctly as we use some 
@@ -73,6 +75,15 @@
 # $sort keeps the path to the unix sort utility
 #
 # It also copies out the concatfragments.sh file to /usr/local/bin
+# Class: concat::setup
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class concat::setup {
 	$concatdir    = "/var/lib/puppet/concat"
 	$majorversion = regsubst($puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
@@ -98,6 +109,27 @@ class concat::setup {
 #               you can set it to anything else using this to influence the
 #               order of the content in the file
 #   - ensure    Present/Absent
+# Define: concat::fragment
+#
+# Parameters:
+#	content
+#		Undocumented
+#	source
+#		Undocumented
+#	order
+#		Undocumented
+#	ensure
+#		Undocumented
+#	target
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define concat::fragment($target, $content='', $source='', $order=10, $ensure = "present") {
 	$safe_target_name = regsubst($target, '/', '_', 'G')
 	$safe_name        = regsubst($name, '/', '_', 'G')
@@ -133,6 +165,25 @@ define concat::fragment($target, $content='', $source='', $order=10, $ensure = "
 	}
 }
 
+# Define: concat::add_content
+#
+# Parameters:
+#	content
+#		Undocumented
+#	order
+#		Undocumented
+#	ensure
+#		Undocumented
+#	target
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define concat::add_content($target, $content, $order=15, $ensure=present) {
 
 	$body = $content ? {
@@ -172,6 +223,29 @@ define concat::add_content($target, $content, $order=15, $ensure=present) {
 # ALIASES:
 #  - The exec can notified using Exec["concat_/path/to/file"] or Exec["concat_/path/to/directory"]
 #  - The final file can be referened as File["/path/to/file"] or File["concat_/path/to/file"]  
+# Define: concat
+#
+# Parameters:
+#	owner
+#		Undocumented
+#	group
+#		Undocumented
+#	warn
+#		Undocumented
+#	force
+#		Undocumented
+#	remove_fragments
+#		Undocumented
+#	mode
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $force = "false", $remove_fragments = "true" ) {
 	require concat::setup
 

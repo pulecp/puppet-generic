@@ -1,3 +1,5 @@
+# Author: Kumina bv <support@kumina.nl>
+
 # Puppet manifest for PowerDNS
 #
 # Copyright (c) 2009 by Kees Meijs <kees@kumina.nl> for Kumina bv.
@@ -11,6 +13,15 @@
 #
 # This manifest was tested on Debian GNU/Linux 4.0 (etch).
 
+# Class: powerdns::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class powerdns::common {
 	# Make sure directories have correct permissions.
 	file {
@@ -54,6 +65,15 @@ class powerdns::common {
 	}
 }
 
+# Class: powerdns::master
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class powerdns::master inherits powerdns::common {
 	# Install needed packages.
 	package {
@@ -68,6 +88,15 @@ class powerdns::master inherits powerdns::common {
 	}
 }
 
+# Class: powerdns::slave
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class powerdns::slave inherits powerdns::common {
 	# Install needed packages.
 	package {
@@ -82,6 +111,15 @@ class powerdns::slave inherits powerdns::common {
 	}
 }
 
+# Class: powerdns::recursor
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class powerdns::recursor {
 	# Install needed packages.
 	package {

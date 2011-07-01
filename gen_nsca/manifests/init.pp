@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_nsca::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_nsca::server {
 	kpackage { "nsca":; }
 
@@ -16,6 +27,15 @@ class gen_nsca::server {
 	}
 }
 
+# Class: gen_nsca::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_nsca::client {
 	kfile { "/etc/send_nsca.cfg":
 		source  => "gen_nsca/nsca.cfg",

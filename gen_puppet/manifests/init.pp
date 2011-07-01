@@ -1,6 +1,17 @@
+# Author: Kumina bv <support@kumina.nl>
+
 import "kservice.pp"
 import "concat.pp"
 
+# Class: gen_puppet
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_puppet {
 # TODO For now, let's make this step optional
 #	include gen_puppet::puppet_conf
@@ -28,6 +39,15 @@ class gen_puppet {
 	}
 }
 
+# Class: gen_puppet::puppet_conf
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_puppet::puppet_conf {
 	# Setup the default config file
 	concat { '/etc/puppet/puppet.conf':
@@ -59,6 +79,27 @@ class gen_puppet::puppet_conf {
 	}
 }
 
+# Define: gen_puppet::set_config
+#
+# Parameters:
+#	configfile
+#		Undocumented
+#	section
+#		Undocumented
+#	order
+#		Undocumented
+#	var
+#		Undocumented
+#	value
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_puppet::set_config ($value, $configfile = '/etc/puppet/puppet.conf', $section = 'main', $order = false, $var = false) {
 	# If no variable name is set, use the name
 	if $var {

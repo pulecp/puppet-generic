@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_ferm
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_ferm {
 	kfile {
 		"/var/lib/puppet/concat/_etc_ferm_ferm.conf_new":
@@ -55,6 +66,45 @@ class gen_ferm {
 	kpackage { "libnet-dns-perl":; }
 }
 
+# Define: gen_ferm::rule
+#
+# Parameters:
+#	sport
+#		Undocumented
+#	chain
+#		Undocumented
+#	interface
+#		Undocumented
+#	dport
+#		Undocumented
+#	ensure
+#		Undocumented
+#	outerface
+#		Undocumented
+#	saddr
+#		Undocumented
+#	daddr
+#		Undocumented
+#	jump
+#		Undocumented
+#	proto
+#		Undocumented
+#	action
+#		Undocumented
+#	icmptype
+#		Undocumented
+#	table
+#		Undocumented
+#	prio
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false, $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter, $chain=INPUT, $ensure=present) {
 	$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
 	$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
@@ -101,6 +151,31 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
 	}
 }
 
+# Define: gen_ferm::mod
+#
+# Parameters:
+#	table
+#		Undocumented
+#	chain
+#		Undocumented
+#	mod
+#		Undocumented
+#	param
+#		Undocumented
+#	value
+#		Undocumented
+#	action
+#		Undocumented
+#	comment
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $param=state, $value=false, $action=DROP) {
 	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 	$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
@@ -125,6 +200,21 @@ define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $p
 	}
 }
 
+# Define: gen_ferm::chain
+#
+# Parameters:
+#	table
+#		Undocumented
+#	policy
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_ferm::chain($policy=false, $table=filter) {
 	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 	$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
@@ -145,6 +235,15 @@ define gen_ferm::chain($policy=false, $table=filter) {
 	}
 }
 
+# Define: gen_ferm::table
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_ferm::table() {
 	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
 	$ip_proto = regsubst($name,'^(.*)_(.*)$','\2')
@@ -160,6 +259,21 @@ define gen_ferm::table() {
 	}
 }
 
+# Define: gen_ferm::fermfile
+#
+# Parameters:
+#	ensure
+#		Undocumented
+#	content
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_ferm::fermfile($content, $ensure=present) {
 	concat::add_content { $name:
 		content => $content,

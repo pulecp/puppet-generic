@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: nagios::nrpe
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class nagios::nrpe {
 	include nagios::nrpe::plugins
 
@@ -90,6 +101,15 @@ class nagios::nrpe {
 	}
 }
 
+# Class: nagios::nrpe::plugins
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class nagios::nrpe::plugins {
 	include nagios::plugins
 

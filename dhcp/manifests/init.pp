@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: dhcp::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class dhcp::server {
 	if versioncmp($lsbdistrelease, "6.0") < 0 {
 		kpackage { "dhcp3-server":; }

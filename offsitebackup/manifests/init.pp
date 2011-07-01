@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: offsitebackup::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class offsitebackup::common {
 	define line($file, $line, $ensure = 'present') {
 		case $ensure {
@@ -64,6 +75,15 @@ class offsitebackup::common {
 	}
 }
 
+# Class: offsitebackup::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class offsitebackup::client {
 	kpackage { ["offsite-backup","backup-scripts"]:
 		ensure => latest;
@@ -100,6 +120,15 @@ class offsitebackup::client {
 	}
 }
 
+# Class: offsitebackup::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class offsitebackup::server {
 	Offsitebackup::Common::Backupkey <<| backupserver == $fqdn |>>
 

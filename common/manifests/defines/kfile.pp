@@ -1,3 +1,40 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Define: kfile
+#
+# Parameters:
+#	mode
+#		Undocumented
+#	content
+#		Undocumented
+#	recurse
+#		Undocumented
+#	source
+#		Undocumented
+#	path
+#		Undocumented
+#	target
+#		Undocumented
+#	force
+#		Undocumented
+#	owner
+#		Undocumented
+#	purge
+#		Undocumented
+#	group
+#		Undocumented
+#	ignore
+#		Undocumented
+#	ensure
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define kfile ($ensure="present", $content=false, $source=false, $path=false, $target=false, $owner="root", $group="root", $mode="0644", $recurse=false, $force=false, $purge=false, $ignore=false) {
 	file { "${name}":
 		ensure  => $ensure,

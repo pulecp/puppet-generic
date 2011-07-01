@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: cyrus::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class cyrus::common {
 	package { ["cyrus-common-2.2", "cyrus-admin-2.2", "cyrus-clients-2.2"]:
 		ensure => installed,
@@ -30,6 +41,15 @@ class cyrus::common {
 	}
 }
 
+# Class: cyrus::imap
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class cyrus::imap {
 	package { "cyrus-imapd-2.2":
 		ensure => installed,

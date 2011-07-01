@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: libvirt
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class libvirt {
 	kpackage { ["libvirt-bin","libvirt-doc","netcat-openbsd"]:
 		ensure => latest;

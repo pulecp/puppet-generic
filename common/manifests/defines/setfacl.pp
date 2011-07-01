@@ -1,3 +1,22 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Define: setfacl
+#
+# Parameters:
+#	make_default
+#		Undocumented
+#	acl
+#		Undocumented
+#	dir
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define setfacl ($dir = false, $make_default = false, $acl) {
 	if $dir {
 		$real_dir = $dir

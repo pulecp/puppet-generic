@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: xen::dom0
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class xen::dom0 {
 	include "xen::dom0::$lsbdistcodename"
 
@@ -21,6 +32,15 @@ class xen::dom0 {
 	}
 }
 
+# Class: xen::domu
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class xen::domu {
 	$archdependent = $architecture ? {
 		i386  => "linux-modules-2.6-xen-686",
@@ -34,6 +54,15 @@ class xen::domu {
 	}
 }
 
+# Class: xen::dom0::etch
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class xen::dom0::etch {
 	$archdependent = $architecture ? {
 		i386  => ["xen-hypervisor-3.0.3-1-i386-pae", "linux-image-2.6-xen-686", "libc6-xen"],
@@ -67,6 +96,15 @@ class xen::dom0::etch {
 	}
 }
 
+# Class: xen::dom0::lenny
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class xen::dom0::lenny {
 	$archdependent = $architecture ? {
 		i386  => ["xen-hypervisor-3.2-1-i386", "linux-image-2.6-xen-686", "libc6-xen"],

@@ -1,5 +1,16 @@
+# Author: Kumina bv <support@kumina.nl>
+
 import "*.pp"
 
+# Class: tomcat
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class tomcat {
 	define instance($ensure="running",
 			$user="tomcat55", $group="root",

@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_apt
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_apt {
 	if $lsbmajdistrelease < 6 {
 		$preferences_file = "/etc/apt/preferences"
@@ -34,6 +45,25 @@ class gen_apt {
 	}
 }
 
+# Define: gen_apt::preference
+#
+# Parameters:
+#	repo
+#		Undocumented
+#	version
+#		Undocumented
+#	prio
+#		Undocumented
+#	package
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_apt::preference($package=false, $repo=false, $version=false, $prio="999") {
 	$use_repo = $repo ? {
 		false   => "${lsbdistcodename}-backports",
@@ -53,6 +83,29 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 	}
 }
 
+# Define: gen_apt::source
+#
+# Parameters:
+#	sourcetype
+#		Undocumented
+#	distribution
+#		Undocumented
+#	components
+#		Undocumented
+#	ensure
+#		Undocumented
+#	comment
+#		Undocumented
+#	uri
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $components=[], $ensure="file", $comment=false) {
 	kfile { "/etc/apt/sources.list.d/${name}.list":
 		ensure  => $ensure,
@@ -62,6 +115,15 @@ define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $compone
 	}
 }
 
+# Define: gen_apt::key
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_apt::key {
 	exec { "/usr/bin/apt-key add /etc/apt/keys/${name}":
 		unless  => "/usr/bin/apt-key list | grep -q ${name}",
@@ -74,6 +136,21 @@ define gen_apt::key {
 	}
 }
 
+# Define: gen_apt::add_rule
+#
+# Parameters:
+#	order
+#		Undocumented
+#	content
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_apt::add_rule($content, $order=15) {
 	concat::add_content { $name:
 		content => $content,

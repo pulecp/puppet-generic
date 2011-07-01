@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: localbackup::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class localbackup::common {
 	define line($file, $line, $ensure = 'present') {
 		case $ensure {
@@ -18,6 +29,15 @@ class localbackup::common {
 	}
 }
 
+# Class: localbackup::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class localbackup::client {
 	package { "local-backup":
 		ensure => installed,

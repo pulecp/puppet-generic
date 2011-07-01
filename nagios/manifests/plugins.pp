@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: nagios::plugins
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class nagios::plugins {
 	kpackage { "nagios-plugins-basic":
 		ensure => installed;

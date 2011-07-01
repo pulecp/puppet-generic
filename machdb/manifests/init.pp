@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: machdb::agent
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class machdb::agent {
 	file { "/etc/machdb/agent.conf":
 		owner => "root",

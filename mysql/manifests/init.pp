@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: mysql::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class mysql::server {
 	case $lsbdistcodename {
 		"lenny":   { $mysqlserver = "mysql-server-5.0" }
@@ -87,6 +98,15 @@ class mysql::server {
 	}
 }
 
+# Class: mysql::slave
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class mysql::slave inherits mysql::server {
 	file { "/etc/mysql/conf.d/slave.cnf":
 		owner => "root",
@@ -106,6 +126,15 @@ class mysql::slave inherits mysql::server {
 	}
 }
 
+# Class: mysql::slave::delayed
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class mysql::slave::delayed inherits mysql::slave {
 	service { "mk-slave-delay":
 		enable => true,
@@ -144,11 +173,37 @@ class mysql::slave::delayed inherits mysql::slave {
 	}
 }
 
+# Class: mysql::munin
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class mysql::munin {
 	munin::client::plugin { ["mysql_bytes","mysql_innodb","mysql_queries","mysql_slowqueries","mysql_threads"]:; }
 }
 
 
+# Define: mysql::user
+#
+# Parameters:
+#	password
+#		Undocumented
+#	hostname
+#		Undocumented
+#	user
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define mysql::user($user, $password=false, $hostname="localhost") {
 	if $password {
 		exec { "create-${user}${hostname}":

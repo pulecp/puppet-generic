@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_smokeping::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_smokeping::server {
 
 	kpackage { ["smokeping","javascript-common", "libsocket6-perl", "libio-socket-inet6-perl", "echoping"]:; }

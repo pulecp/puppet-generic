@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: sysklogd::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class sysklogd::common {
 	package { "sysklogd":
 		ensure => installed,
@@ -10,6 +21,15 @@ class sysklogd::common {
 	}
 }
 
+# Class: sysklogd::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class sysklogd::client {
 	include sysklogd::common
 
@@ -21,6 +41,15 @@ class sysklogd::client {
 	}
 }
 
+# Class: sysklogd::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class sysklogd::server {
 	include sysklogd::common
 

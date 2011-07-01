@@ -1,3 +1,5 @@
+# Author: Kumina bv <support@kumina.nl>
+
 # Copied on 2010-02-04 from http://github.com/puppet-modules/puppet-common/raw/master/manifests/defines/concatenated_file.pp
 
 # common/manifests/defines/concatenated_file.pp -- create a file from snippets
@@ -28,6 +30,15 @@
 #  concatenated_file { "/etc/some.conf":
 #  	dir => "/etc/some.conf.d",
 #  }
+# Define: concatenated_file
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define concatenated_file (
 	# where the snippets are located
 	$dir = '',
@@ -96,6 +107,15 @@ define concatenated_file (
 
 # Add a snippet called $name to the concatenated_file at $dir.
 # The file can be referenced as File["cf_part_${name}"]
+# Define: concatenated_file_part
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define concatenated_file_part (
 	$dir, $content = '', $ensure = present,
 	$mode = 0644, $owner = root, $group = 0 

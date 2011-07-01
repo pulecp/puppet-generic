@@ -1,3 +1,22 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Define: kservice
+#
+# Parameters:
+#	hasrestart
+#		Undocumented
+#	hasstatus
+#		Undocumented
+#	ensure
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define kservice ($ensure="running", $hasrestart=true, $hasstatus=true) {
 	service { "${name}":
 		ensure     => $ensure,

@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: openssl::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class openssl::common {
 	package { "openssl":
 		ensure => installed,
@@ -11,11 +22,29 @@ class openssl::common {
 	}
 }
 
+# Class: openssl::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class openssl::server {
 	include openssl::common
 
 }
 
+# Class: openssl::ca
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class openssl::ca {
 	include openssl::common
 

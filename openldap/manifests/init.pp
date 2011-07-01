@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: openldap::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class openldap::client {
 	package { ["ldap-utils", "libnss-ldap", "libpam-ldap", "nscd"]:
 		ensure => installed,
@@ -83,6 +94,15 @@ class openldap::client {
 	}
 }
 
+# Class: openldap::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class openldap::server {
 	define schema($source=false, $ensure=enabled) {
 		if $source {

@@ -1,15 +1,44 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_vim
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_vim {
 	kpackage { "vim":
 		ensure => latest,
 	}
 }
 
+# Class: gen_vim::addon_manager
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_vim::addon_manager {
 	kpackage { "vim-addon-manager":
 		ensure => "latest";
 	}
 }
 
+# Define: gen_vim::global_setting
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_vim::global_setting {
 	line { "global vim setting ${name}":
 		ensure  => "present",
@@ -18,6 +47,19 @@ define gen_vim::global_setting {
 	}
 }
 
+# Define: gen_vim::addon
+#
+# Parameters:
+#	package
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_vim::addon ($package=false) {
 	# Install and activate a vim addon. Use as follows:
 	# kbp_vim::vim_addon { "puppet": package => "vim-puppet"; }

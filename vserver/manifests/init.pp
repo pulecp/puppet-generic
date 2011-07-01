@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: vserver::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class vserver::common {
 	# Make sure sshd does not bind to all IP addresses
 	file { "/etc/ssh/sshd_config":
@@ -9,6 +20,15 @@ class vserver::common {
 	}
 }
 
+# Class: vserver::host
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class vserver::host {
 	include vserver::common
 	include debian::backports
@@ -32,6 +52,15 @@ class vserver::host {
 	}
 }
 
+# Class: vserver::guest
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class vserver::guest {
 	include vserver::common
 }

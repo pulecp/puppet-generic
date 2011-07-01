@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_rabbitmq
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_rabbitmq {
 	# This requires the source to be added!
 	kpackage { "rabbitmq-server":
@@ -10,6 +21,15 @@ class gen_rabbitmq {
 	}
 }
 
+# Class: gen_rabbitmq::plugin::amqp
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_rabbitmq::plugin::amqp {
 	include gen_rabbitmq
 
@@ -22,6 +42,15 @@ class gen_rabbitmq::plugin::amqp {
 	}
 }
 
+# Class: gen_rabbitmq::plugin::stomp
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_rabbitmq::plugin::stomp {
 	# Stomp plugin requires amqp
 	include gen_rabbitmq::plugin::amqp

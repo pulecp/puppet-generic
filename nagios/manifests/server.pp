@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: nagios::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class nagios::server {
 	include nagios::plugins
 
@@ -61,6 +72,15 @@ class nagios::server {
 	}
 }
 
+# Class: nagios::server::plugins
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class nagios::server::plugins {
 	include nagios::plugins
 

@@ -1,3 +1,18 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_puppet::master
+#
+# Parameters:
+#	servertype
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_puppet::master ($servertype = 'passenger') {
 	# Install the packages
 	kpackage {
@@ -44,6 +59,19 @@ class gen_puppet::master ($servertype = 'passenger') {
 # the actual puppetmaster settings. We do not provide settings for
 # the webserver, the database, puppet queue daemon or anything
 # else.
+#
+# Define: gen_puppet::master::config
+#
+# Parameters:
+#	configfile
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
 #
 define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		$debug = false, $factpath = '$vardir/lib/facter',
@@ -230,6 +258,21 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	}
 }
 
+# Define: gen_puppet::master::environment
+#
+# Parameters:
+#	environment_name
+#		Undocumented
+#	configfile
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_puppet::master::environment ($configfile = "/etc/puppet/puppet.conf", $environment_name = false,
 					$manifest = false, $manifestdir = false, $modulepath = false) {
 	# Use the name of the resource to determine most paths
@@ -249,6 +292,27 @@ define gen_puppet::master::environment ($configfile = "/etc/puppet/puppet.conf",
 	}
 }
 
+# Define: gen_puppet::master::check_dir_existence
+#
+# Parameters:
+#	ensure
+#		Undocumented
+#	owner
+#		Undocumented
+#	group
+#		Undocumented
+#	mode
+#		Undocumented
+#	path
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_puppet::master::check_dir_existence ($path, $ensure, $owner = "root", $group = "root", $mode = 644) {
 	if ! defined(Kfile[$path]) {
 		kfile { $path:

@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: syslog-ng::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class syslog-ng::common {
 	package { "syslog-ng":
 		ensure => installed,
@@ -10,6 +21,15 @@ class syslog-ng::common {
 	}
 }
 
+# Class: syslog-ng::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class syslog-ng::client {
 	include syslog-ng::common
 
@@ -22,6 +42,15 @@ class syslog-ng::client {
 	}
 }
 
+# Class: syslog-ng::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class syslog-ng::server {
 	include syslog-ng::common
 

@@ -1,3 +1,18 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_nfs::server
+#
+# Parameters:
+#	failover
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_nfs::server ($failover = false) {
 	include gen_nfs
 
@@ -23,6 +38,23 @@ class gen_nfs::server ($failover = false) {
 	}
 }
 
+# Define: gen_nfs::server::config
+#
+# Parameters:
+#	need_idmapd
+#		Undocumented
+#	need_statd
+#		Undocumented
+#	need_gssd
+#		Undocumented
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 define gen_nfs::server::config ($need_gssd = "no", $need_idmapd = "no", $need_statd = "yes",
 				$need_svcgssd = "no", $mountd_port = false, $incoming_port = false,
 				$outgoing_port = false, $lock_port = false, $rpcnfsdcount = "8",

@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: asterisk::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class asterisk::server {
 	package {
 		"asterisk":
@@ -14,6 +25,15 @@ class asterisk::server {
 
 }
 
+# Class: asterisk::zaptel-module-xen
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class asterisk::zaptel-module-xen {
 	$archdependent = $architecture ? {
 		i386  => "zaptel-modules-2.6.26-2-xen-686",

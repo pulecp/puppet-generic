@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: gen_sudo
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class gen_sudo {
 	kpackage { "sudo":; }
 	# Setup /etc/sudoers for either .d inclusion or concatination

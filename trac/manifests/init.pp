@@ -1,9 +1,38 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: trac::squeeze
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class trac::squeeze {
 }
 
+# Class: trac::lenny
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class trac::lenny {
 }
 
+# Class: trac::etch
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class trac::etch {
 	# Move the shared trac configuration to /etc/trac/trac.ini, where it
 	# belongs.
@@ -17,6 +46,15 @@ class trac::etch {
 	}
 }
 
+# Class: trac
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class trac {
 	include "trac::$lsbdistcodename"
 

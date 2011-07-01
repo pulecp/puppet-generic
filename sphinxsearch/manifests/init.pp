@@ -1,3 +1,5 @@
+# Author: Kumina bv <support@kumina.nl>
+
 # Puppet module for Sphinxsearch
 #
 # Copyright (c) 2009 by Kees Meijs <kees@kumina.nl> for Kumina bv.
@@ -11,6 +13,15 @@
 #
 # This manifest was tested on Debian GNU/Linux 5.0.1 (lenny).
 
+# Class: sphinxsearch::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class sphinxsearch::server {
 	# Install needed package.
 	package {

@@ -1,9 +1,29 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: tomcat::webapps
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class tomcat::webapps {
 	package { "tomcat5.5-admin":
 		ensure => present,
 	}
 }
 
+# Class: tomcat::webapps::admin
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class tomcat::webapps::admin {
 	include tomcat::webapps
 
@@ -25,6 +45,15 @@ class tomcat::webapps::admin {
 	}
 }
 
+# Class: tomcat::webapps::manager
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class tomcat::webapps::manager {
 	include tomcat::webapps
 
@@ -46,6 +75,15 @@ class tomcat::webapps::manager {
 	}
 }
 
+# Class: tomcat::webapps::host-manager
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class tomcat::webapps::host-manager {
 	include tomcat::webapps
 

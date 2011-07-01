@@ -1,7 +1,27 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: openvpn::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class openvpn::common {
 	kpackage { "openvpn":; }
 }
 
+# Class: openvpn::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class openvpn::server {
 	include openvpn::common
 
@@ -21,6 +41,15 @@ class openvpn::server {
 
 }
 
+# Class: openvpn::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class openvpn::client {
 	include openvpn::common
 

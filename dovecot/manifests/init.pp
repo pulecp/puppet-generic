@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: dovecot::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class dovecot::common {
 	package {
 		"dovecot-common":
@@ -40,6 +51,15 @@ class dovecot::common {
 	}
 }
 
+# Class: dovecot::imap
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class dovecot::imap inherits dovecot::common {
 	package {
 		"dovecot-imapd":
@@ -48,6 +68,15 @@ class dovecot::imap inherits dovecot::common {
 	}
 }
 
+# Class: dovecot::pop3
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class dovecot::pop3 inherits dovecot::common {
 	package {
 		"dovecot-pop3d":

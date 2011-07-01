@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: rsyslog::common
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class rsyslog::common {
 	package { "rsyslog":
 		ensure => installed,
@@ -9,6 +20,15 @@ class rsyslog::common {
 	}
 }
 
+# Class: rsyslog::client
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class rsyslog::client {
 	include rsyslog::common
 
@@ -19,6 +39,15 @@ class rsyslog::client {
 	}
 }
 
+# Class: rsyslog::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class rsyslog::server {
 	include rsyslog::common
 
@@ -29,6 +58,15 @@ class rsyslog::server {
 	}
 }
 
+# Class: rsyslog::mysql
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class rsyslog::mysql {
 	package { "rsyslog-mysql":
 		ensure => installed,

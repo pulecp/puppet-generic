@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: clamav
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class clamav {
 	package { ["clamav-daemon", "clamav-freshclam"]:
 		ensure => installed,

@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: zope
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class zope {
 	package { "zope2.9":
 		ensure => installed,
@@ -61,6 +72,15 @@ class zope {
 	}
 }
 
+# Class: zope::server
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class zope::server {
 	include zope
 
@@ -214,6 +234,15 @@ class zope::server {
 	}
 }
 
+# Class: zope::zeo
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class zope::zeo {
 	include zope
 

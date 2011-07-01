@@ -1,3 +1,14 @@
+# Author: Kumina bv <support@kumina.nl>
+
+# Class: apache
+#
+# Actions:
+#	Undocumented
+#
+# Depends:
+#	Undocumented
+#	gen_puppet
+#
 class apache {
    # Define an apache2 site. Place all site configs into
    # /etc/apache2/sites-available and en-/disable them with this type.
