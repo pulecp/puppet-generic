@@ -3,16 +3,11 @@
 # Class: gen_activemq
 #
 # Actions:
-#	Undocumented
+#	Sets up activemq
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
 class gen_activemq {
-	kpackage { "activemq":; }
-
-	kservice { "activemq":
-		require => Package["activemq"];
-	}
+	kservice { "activemq":; }
 }

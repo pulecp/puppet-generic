@@ -3,16 +3,13 @@
 # Class: gen_amavisd-new
 #
 # Actions:
-#	Undocumented
+#	Sets up amavis
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
 class gen_amavisd-new {
-	kpackage { "amavisd-new":; }
-
 	kservice { "amavis":
-		require => Kpackage["amavisd-new"];
+		package => "amavisd-new";
 	}
 }

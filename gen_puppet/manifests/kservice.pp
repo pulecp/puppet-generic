@@ -4,24 +4,33 @@
 #
 # Parameters:
 #	hasrestart
-#		Undocumented
+#		Defines if the service has a restart option
 #	hasstatus
-#		Undocumented
+#		Defines if the service has a status option
 #	ensure
-#		Undocumented
+#		Defines whether the service should be running or not
+#	package
+#		If defined sets the package to install
 #
 # Actions:
-#	Undocumented
+#	Install a package, starts the service and creates a reload exec.
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define kservice ($ensure="running", $hasrestart=true, $hasstatus=true) {
+define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $package=false) {
+	$package_name = $package ? {
+		false   => $name,
+		default => $package,
+	}
+
+	kpackage { "${package_name}":; }
+
 	service { "${name}":
 		ensure     => $ensure,
 		hasrestart => $hasrestart,
-		hasstatus  => $hasstatus;
+		hasstatus  => $hasstatus,
+		require    => Kpackage[$package_name];
 	}
 
 	if $lsbmajdistrelease < 6 {

@@ -3,16 +3,13 @@
 # Class: gen_acpi
 #
 # Actions:
-#	Undocumented
+#	Sets up acpi
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
 class gen_acpi {
-	kpackage { "acpi-support-base":; }
-
 	kservice { "acpid":
-		require => Kpackage["acpi-support-base"];
+		package => "acpi-support-base";
 	}
 }
