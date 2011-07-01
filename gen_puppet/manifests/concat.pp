@@ -130,7 +130,7 @@ class concat::setup {
 #	Undocumented
 #	gen_puppet
 #
-define concat::fragment($target, $content='', $source='', $order=10, $ensure = "present") {
+define concat::fragment($target, $content=false, $source=false, $order=10, $ensure = "present") {
 	$safe_target_name = regsubst($target, '/', '_', 'G')
 	$safe_name        = regsubst($name, '/', '_', 'G')
 	$concatdir        = $concat::setup::concatdir
@@ -139,9 +139,9 @@ define concat::fragment($target, $content='', $source='', $order=10, $ensure = "
 	# if content is passed, use that, else if source is passed use that
 	# if neither passed, but $ensure is in symlink form, make a symlink
 	case $content {
-		"": {
+		false: {
 			case $source {
-				"": {
+				false: {
 					case $ensure {
 						"", "absent", "present", "file", "directory": {
 							crit("No content or source specified")
@@ -176,6 +176,8 @@ define concat::fragment($target, $content='', $source='', $order=10, $ensure = "
 #		Undocumented
 #	target
 #		Undocumented
+#	linebreak
+#		Setting this to false allows for inline additions
 #
 # Actions:
 #	Undocumented
@@ -184,15 +186,20 @@ define concat::fragment($target, $content='', $source='', $order=10, $ensure = "
 #	Undocumented
 #	gen_puppet
 #
-define concat::add_content($target, $content, $order=15, $ensure=present) {
-
+define concat::add_content($target, $content=false, $order=15, $ensure=present, $linebreak=true) {
 	$body = $content ? {
-		false   => $name,
-		default => $content,
+		false   => $linebreak ? {
+			false => $name,
+			true  => "${name}\n",
+		},
+		default => $linebreak ? {
+			false => $content,
+			true  => "${content}\n",
+		},
 	}
 
 	concat::fragment{ "${target}_fragment_${name}":
-		content => "${body}\n",
+		content => $body,
 		target  => $target,
 		order   => $order,
 		ensure  => $ensure;
