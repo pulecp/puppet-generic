@@ -1,15 +1,14 @@
 # Author: Kumina bv <support@kumina.nl>
 
-# Class: gen_base
+# Class: gen_base::wget
 #
 # Actions:
-#	Undocumented
+#	Set up wget
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-class gen_base {
+class gen_base::wget {
 	kpackage { "wget":
 		ensure => latest;
 	}

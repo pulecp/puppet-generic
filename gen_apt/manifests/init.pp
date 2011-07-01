@@ -3,10 +3,9 @@
 # Class: gen_apt
 #
 # Actions:
-#	Undocumented
+#	Set up apt preferences using concat when on Lenny or older and a .d dir otherwise. Set up apt sources using a .d dir.
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
 class gen_apt {
@@ -14,7 +13,7 @@ class gen_apt {
 		$preferences_file = "/etc/apt/preferences"
 
 		concat { $preferences_file:
-			mode    => 440;
+			mode => 440;
 		}
 	} else {
 		kfile { "/etc/apt/preferences":
@@ -49,19 +48,18 @@ class gen_apt {
 #
 # Parameters:
 #	repo
-#		Undocumented
+#		The repo to pin on, defaults to ${lsbdistcodename}-backports
 #	version
-#		Undocumented
+#		The version to pin on, defaults to false
 #	prio
-#		Undocumented
+#		The prio to give to the pin, defaults to 999
 #	package
-#		Undocumented
+#		The package to pin, defaults to ${name}
 #
 # Actions:
-#	Undocumented
+#	Pins a package to a specific version or repo
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
 define gen_apt::preference($package=false, $repo=false, $version=false, $prio="999") {
@@ -71,8 +69,9 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 	}
 
 	if $lsbmajdistrelease < 6 {
-		add_rule { "${name}":
+		concat::add_content { "${name}":
 			content => template("gen_apt/preference"),
+			target  => "/etc/apt/preferences",
 			notify  => Exec["/usr/bin/apt-get update"];
 		}
 	} else {
@@ -86,42 +85,46 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 # Define: gen_apt::source
 #
 # Parameters:
+#	name
+#		THe package to define the source of
 #	sourcetype
-#		Undocumented
+#		The type of the source, defaults to deb
 #	distribution
-#		Undocumented
+#		The distribution of the source, defaults to stable
 #	components
-#		Undocumented
+#		An array of components, for example main, nonfree, contrib, defaults to []
 #	ensure
-#		Undocumented
+#		Defines if the source should be present, options are present and false, defaults to present
 #	comment
-#		Undocumented
+#		Adds a comment to the source, defaults to false
 #	uri
-#		Undocumented
+#		The uri of the source
 #
 # Actions:
-#	Undocumented
+#	Pins a package to a source.
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $components=[], $ensure="file", $comment=false) {
+define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $components=[], $ensure="present", $comment=false) {
 	kfile { "/etc/apt/sources.list.d/${name}.list":
 		ensure  => $ensure,
 		content => template("gen_apt/source.list"),
 		require => File["/etc/apt/sources.list.d"],
-		notify  => Exec["/usr/bin/apt-get update"],
+		notify  => Exec["/usr/bin/apt-get update"];
 	}
 }
 
 # Define: gen_apt::key
 #
 # Actions:
-#	Undocumented
+#	Import a repo key.
+#
+# Parameters:
+#	name
+#		The key to import.
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
 define gen_apt::key {
@@ -133,28 +136,5 @@ define gen_apt::key {
 
 	kfile { "/etc/apt/keys/${name}":
 		source => "kbp_apt/keys/${name}";
-	}
-}
-
-# Define: gen_apt::add_rule
-#
-# Parameters:
-#	order
-#		Undocumented
-#	content
-#		Undocumented
-#
-# Actions:
-#	Undocumented
-#
-# Depends:
-#	Undocumented
-#	gen_puppet
-#
-define gen_apt::add_rule($content, $order=15) {
-	concat::add_content { $name:
-		content => $content,
-		order   => $order,
-		target  => "/etc/apt/preferences";
 	}
 }
