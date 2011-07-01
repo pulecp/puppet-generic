@@ -116,7 +116,6 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	concat { "${rackdir}/config.ru":
 		owner => "puppet",
 		group => "puppet",
-		mode  => 0640,
 	}
 
 	concat::add_content { "Add header for config.ru for puppetmaster ${pname}":
@@ -157,9 +156,6 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 	} else {
 		# Setup the default config file
 		concat { $configfile:
-			owner   => 'root',
-			group   => 'root',
-			mode    => '0644',
 			require => Kpackage["puppet-common"],
 		}
 
