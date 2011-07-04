@@ -464,7 +464,7 @@ define gen_icinga::configdir($sub=false) {
 #	Undocumented
 #	gen_puppet
 #
-define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argument='-H $HOSTADDRESS$', $argument1=false, $argument2=false, $argument3=false, $nrpe=false, $time_out=false) {
+define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argument='-H $HOSTADDRESS$', $argument1=false, $argument2=false, $argument3=false, $nrpe=false, $time_out=30) {
 	$conf_dir_name = $conf_dir ? {
 		false => "${environment}/${fqdn}",
 		default => $conf_dir,
