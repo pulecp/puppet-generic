@@ -18,16 +18,20 @@
 # Depends:
 #	gen_puppet
 #
-define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $package=false) {
+define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $package=false, $pensure="present") {
 	$package_name = $package ? {
 		false   => $name,
 		default => $package,
 	}
 
-	kpackage { "${package_name}":; }
+	kpackage { "${package_name}":
+		ensure => $pensure; }
 
 	service { "${name}":
-		ensure     => $ensure,
+		ensure     => $ensure ? {
+			false   => undef,
+			default => $ensure,
+		},
 		hasrestart => $hasrestart,
 		hasstatus  => $hasstatus,
 		require    => Kpackage[$package_name];
