@@ -13,3 +13,15 @@ class gen_base::wget {
 		ensure => latest;
 	}
 }
+
+# Class: gen_base::libnet-dns-perl
+#
+# Actions:
+#	Set up libnet-dns-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libnet-dns-perl {
+	kpackage { "libnet-dns-perl":; }
+}
