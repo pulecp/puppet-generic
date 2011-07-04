@@ -142,6 +142,8 @@ class gen_icinga::server {
 #		Undocumented
 #	argument2
 #		Undocumented
+#	ensure
+#		Standard ensure
 #
 # Actions:
 #	Undocumented
@@ -150,7 +152,7 @@ class gen_icinga::server {
 #	Undocumented
 #	gen_puppet
 #
-define gen_icinga::service($conf_dir=false, $use="warnsms_service", $service_description=false, $servicegroups=false, $hostname=$fqdn, $hostgroup_name=false, $initialstate=false, $active_checks_enabled=false, $passive_checks_enabled=false, $parallelize_check=false, $obsess_over_service=false, $check_freshness=false, $freshnessthreshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $failure_prediction_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false, $servicegroups=false, $max_check_attempts=false, $checkcommand=false, $argument1=false, $argument2=false, $argument3=false, $register=false, $nrpe=false) {
+define gen_icinga::service($conf_dir=false, $use="warnsms_service", $service_description=false, $servicegroups=false, $hostname=$fqdn, $hostgroup_name=false, $initialstate=false, $active_checks_enabled=false, $passive_checks_enabled=false, $parallelize_check=false, $obsess_over_service=false, $check_freshness=false, $freshnessthreshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $failure_prediction_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false, $servicegroups=false, $max_check_attempts=false, $checkcommand=false, $argument1=false, $argument2=false, $argument3=false, $register=false, $nrpe=false, ensure=present) {
 	$conf_dir_name = $conf_dir ? {
 		false   => "${environment}/${fqdn}",
 		default => $conf_dir,
@@ -160,7 +162,8 @@ define gen_icinga::service($conf_dir=false, $use="warnsms_service", $service_des
 		content => template("gen_icinga/service"),
 		notify  => Exec["reload-icinga"],
 		require => File["/etc/icinga/config/${conf_dir_name}"],
-		tag     => "icinga_config";
+		tag     => "icinga_config",
+		ensure  => $ensure;
 	}
 
 	if $nrpe and $hostname == $fqdn and !defined(Kfile["/etc/nagios/nrpe.d/${checkcommand}.cfg"]) {
