@@ -138,3 +138,63 @@ define gen_apt::key {
 		source => "kbp_apt/keys/${name}";
 	}
 }
+
+# Class: gen_apt::cron_apt
+#
+# Actions:
+#	Install cron-apt
+#
+# Depends:
+#	gen_puppet
+#
+class gen_apt::cron_apt {
+	kpackage { "cron-apt":
+		ensure => latest;
+	}
+
+	concat {"/etc/cron.d/cron-apt":;}
+}
+
+# Define: gen_apt::cron_apt::config
+#
+# Actions:
+#	Create configuration for cron-apt
+#
+# Parameters:
+#	configfile
+#		The path to the config file for cron_apt
+#	mailto
+#		Where the cron-apt email should go to; see /usr/share/doc/cron-apt/examples/config
+#	mailon
+#		The condition cron-apt should mail on; see /usr/share/doc/cron-apt/examples/config
+#	apt_options
+#		Additional parameters to pass to apt-get; see /usr/share/doc/cron-apt/examples/config
+#	apt_hostname
+#		The hostname to put in the subject of the email; see /usr/share/doc/cron-apt/examples/config
+#	crontime
+#		The time to start the apt-get update (in cron format, like 0 4 * * * for 4 o'clock every night)
+#
+# Depends:
+#	gen_puppet
+#	gen_apt::cron_apt
+#
+define gen_apt::cron_apt::config ($mailto, $mailon, $apt_options="", $apt_hostname=false, $configfile="/etc/cron-apt/config", $crontime="0 3 * * *") {
+	include gen_apt::cron_apt
+	$config_hostname = $apt_hostname ? {
+		false   => "${fqdn}",
+		default => $apt_hostname,
+	}
+
+	kfile { "${configfile}":
+		content => template("gen_apt/cron_apt_configfile"),
+		require => Kpackage["cron-apt"];
+	}
+
+	$safe_configfile = regsubst($configfile, '/', '_')
+
+	concat::add_content { "${safe_configfile}":
+		target  => "/etc/cron.d/cron-apt",
+		content => template("gen_apt/cron_apt_cron"),
+		require => Kfile["${configfile}"];
+	}
+}

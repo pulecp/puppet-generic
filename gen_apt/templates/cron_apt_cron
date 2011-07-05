@@ -1,0 +1,1 @@
+<%= crontime %>	root	test -x /usr/sbin/cron-apt && /usr/sbin/cron-apt <%= configfile %>
