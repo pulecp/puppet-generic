@@ -3,10 +3,9 @@
 # Class: gen_git
 #
 # Actions:
-#	Undocumented
+#	Install git
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
 class gen_git {
@@ -21,58 +20,67 @@ class gen_git {
 	}
 }
 
-# Class: gen_git::gitg
-#
-# Actions:
-#	Undocumented
-#
-# Depends:
-#	Undocumented
-#	gen_puppet
-#
-class gen_git::gitg {
-	if $lsbmajdistrelease >= 6 { # Available from squeeze on
-		kpackage { "gitg":
-			ensure => latest;
-		}
-	}
-}
-
 # Class: gen_git::listchanges
 #
 # Actions:
-#	Undocumented
+#	Install gitlistchanges
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-class gen_git::listchanges {
+class gen_git::listchanges::install {
 	kpackage { "gitlistchanges":
 		ensure => latest;
 	}
 
-	@kfile {
+	kfile {
 		"/etc/gitlistchanges.conf":
 			content => "includedir:/etc/gitlistchanges.conf.d\n";
 		"/etc/gitlistchanges.conf.d":
 			ensure  => directory,
-			source  => "gen_git/listchanges/gitlistchanges.conf.d",
 			purge   => true,
 			recurse => true;
 	}
+}
 
-	define repoconfig ($to, $repo=false, $from=false, $branch=false, $since=false, $forcustomer=false) {
-		$the_repo = $name ? {
-			false   => $repo,
-			default => $name,
-		}
-		$the_repo_safe = regsubst($the_repo, '/', '_', "G")
+# Define: gen_git::repoconfig
+#
+# Actions:
+#	Set up config for gitlistchanges
+#
+# Parameters:
+#	to
+#		Mail address the changes will be mailed to
+#
+#	repo
+#		Path to the repo, defaults to the name
+#
+#	from
+#		Sender address, not set by default
+#
+#	branch
+#		Branch to report on, not set by default
+#
+#	since
+#		Report from this moment till now, not set by default
+#
+#	condense
+#		Leave out committer names and detailed info, not set by default
+#
+# Depends:
+#	gen_git::listchanges::install
+#	gen_puppet
+#
+define gen_git::listchanges ($to, $repo=false, $from=false, $branch=false, $since=false, $condense=false) {
+	include gen_git::listchanges::install
 
-		realize Kfile["/etc/gitlistchanges.conf", "/etc/gitlistchanges.conf.d"]
+	$the_repo = $name ? {
+		false   => $repo,
+		default => $name,
+	}
+	$the_repo_safe = regsubst($the_repo, '/', '_', "G")
 
-		kfile { "/etc/gitlistchanges.conf.d/${the_repo_safe}-${to}":
-			content => template("gen_git/listchanges/repoconfig.erb");
-		}
+	kfile { "/etc/gitlistchanges.conf.d/${the_repo_safe}-${to}":
+		content => template("gen_git/listchanges/repoconfig.erb");
 	}
 }
