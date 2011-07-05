@@ -51,19 +51,14 @@ class gen_git::listchanges::install {
 # Parameters:
 #	to
 #		Mail address the changes will be mailed to
-#
 #	repo
 #		Path to the repo, defaults to the name
-#
 #	from
 #		Sender address, not set by default
-#
 #	branch
 #		Branch to report on, not set by default
-#
 #	since
 #		Report from this moment till now, not set by default
-#
 #	condense
 #		Leave out committer names and detailed info, not set by default
 #
