@@ -45,7 +45,20 @@ set -e -x
 CREATED=`date -R`
 
 # Create the disk.
-lvcreate -L ${DISK_GB}G -n ${NAME}-disk0 ${DISK_VOLGRP}
+number_of_disks=$(($DISK_GB/125-1))
+DISK_CONFIG=""
+alfabet="abcdefghij"
+for x in `seq 0 $number_of_disks`; do
+	lvcreate -L 125G -n ${NAME}-disk${x} ${DISK_VOLGRP}
+	xplusone=$(($x+1))
+	drive_letter=`echo $alfabet | cut -b $xplusone`
+	DISK_CONFIG=$DISK_CONFIG"
+    <disk type='block' device='disk'>
+      <source dev='/dev/${DISK_VOLGRP}/${NAME}-disk${x}'/>
+      <target dev='vd${drive_letter}' bus='virtio'/>
+      <alias name='virtio-disk0'/>
+    </disk>"
+done
 
 # We want an initial installation PXE thingy.
 DD="dd of=/dev/${DISK_VOLGRP}/${NAME}-disk0 bs=1M"
@@ -58,7 +71,7 @@ else
 fi
 
 # Create the configuration for libvirt.
-virsh define /dev/stdin << EOF
+virsh define /dev/stdin <<EOF
 <domain type='kvm'>
   <name>${NAME}</name>
   <description>Created on: ${CREATED}</description>
@@ -80,11 +93,7 @@ virsh define /dev/stdin << EOF
   <on_crash>restart</on_crash>
   <devices>
     <emulator>/usr/bin/kvm</emulator>
-    <disk type='block' device='disk'>
-      <source dev='/dev/${DISK_VOLGRP}/${NAME}-disk0'/>
-      <target dev='vda' bus='virtio'/>
-      <alias name='virtio-disk0'/>
-    </disk>
+${DISK_CONFIG}
     <interface type='bridge'>
       <source bridge='ubr1'/>
       <model type='virtio'/>
