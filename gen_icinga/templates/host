@@ -4,8 +4,8 @@ define host {<% if use %>
 	host_name                     <% end%><%= name %>
 	hostgroups                    <%= hostgroups %>
 	address                       <%= address %><% if parents %>
-	parents                       <%= parents %><% end %><% if initialstate %>
-	initial_state                 <%= initialstate %><% end %><% if notifications_enabled %>
+	parents                       <%= parents %><% end %><% if initial_state %>
+	initial_state                 <%= initial_state %><% end %><% if notifications_enabled %>
 	notifications_enabled         <%= notifications_enabled %><% end %><% if event_handler_enabled %>
 	event_handler_enabled         <%= event_handler_enabled %><% end %><% if flap_detection_enabled %>
 	flap_detection_enabled        <%= flap_detection_enabled %><% end %><% if process_perf_data %>
