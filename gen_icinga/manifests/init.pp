@@ -3,40 +3,35 @@
 # Class: gen_icinga::client
 #
 # Actions:
-#	Undocumented
+#	Install packages needed for Icinga monitoring
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#	gen_base::nagios-plugins-standard
 #
 class gen_icinga::client {
-	kpackage { ["nagios-plugins-standard","dnsutils"]:
-		ensure => latest;
-	}
+	include gen_base::nagios-plugins-standard
 }
 
 # Class: gen_icinga::server
 #
 # Actions:
-#	Undocumented
+#	Set up an Icinga server
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
+#	gen_base::nagios-nrpe-plugin
+#	gen_base::curl
 #
 class gen_icinga::server {
-	kpackage { ["icinga","icinga-doc","nagios-nrpe-plugin","curl"]:; }
+	include gen_base::nagios-nrpe-plugin
+	include gen_base::curl
 
-	service { "icinga":
+	kpackage { "icinga-doc":; }
+
+	kservice { "icinga":
 		ensure     => running,
 		hasrestart => true,
 		hasstatus  => true,
-		require    => Package["icinga"];
-	}
-
-	exec { "reload-icinga":
-		command     => "/etc/init.d/icinga reload",
-		refreshonly => true;
 	}
 
 	kfile {
@@ -66,177 +61,152 @@ class gen_icinga::server {
 # Define: gen_icinga::service
 #
 # Parameters:
-#	hostname
-#		Undocumented
-#	fqdn
-#		Undocumented
-#	hostgroup_name
-#		Undocumented
-#	initialstate
-#		Undocumented
-#	active_checks_enabled
-#		Undocumented
-#	event_handler_enabled
-#		Undocumented
-#	passive_checks_enabled
-#		Undocumented
-#	flap_detection_enabled
-#		Undocumented
-#	failure_prediction_enabled
-#		Undocumented
-#	process_perf_data
-#		Undocumented
-#	retry_interval
-#		Undocumented
-#	retain_status_information
-#		Undocumented
-#	notification_period
-#		Undocumented
-#	notification_options
-#		Undocumented
-#	contact_groups
-#		Undocumented
-#	argument3
-#		Undocumented
+#	arguments
+#		Set the arguments of the check, defaults to false
 #	conf_dir
-#		Undocumented
-#	contacts
-#		Undocumented
-#	register
-#		Undocumented
-#	use
-#		Undocumented
+#		The config dir the service file will be placed in
 #	nrpe
-#		Undocumented
-#	service_description
-#		Undocumented
-#	servicegroups
-#		Undocumented
-#	parallelize_check
-#		Undocumented
-#	obsess_over_service
-#		Undocumented
-#	check_freshness
-#		Undocumented
-#	freshnessthreshold
-#		Undocumented
-#	retain_nonstatus_information
-#		Undocumented
-#	notifications_enabled
-#		Undocumented
-#	notification_interval
-#		Undocumented
-#	is_volatile
-#		Undocumented
-#	check_period
-#		Undocumented
-#	servicegroups
-#		Undocumented
-#	check_interval
-#		Undocumented
-#	max_check_attempts
-#		Undocumented
-#	checkcommand
-#		Undocumented
-#	argument1
-#		Undocumented
-#	argument2
-#		Undocumented
+#		Defines whether the check is run throught nrpe, defaults to false
 #	ensure
 #		Standard ensure
+#	name
+#		Same as Icinga
+#	host_name
+#		Same as Icinga, defaults to $fqdn
+#	hostgroup_name
+#		Same as Icinga
+#	initial_state
+#		Same as Icinga
+#	active_checks_enabled
+#		Same as Icinga
+#	event_handler_enabled
+#		Same as Icinga
+#	passive_checks_enabled
+#		Same as Icinga
+#	flap_detection_enabled
+#		Same as Icinga
+#	process_perf_data
+#		Same as Icinga
+#	retry_interval
+#		Same as Icinga
+#	retain_status_information
+#		Same as Icinga
+#	notification_period
+#		Same as Icinga
+#	notification_options
+#		Same as Icinga
+#	contact_groups
+#		Same as Icinga
+#	contacts
+#		Same as Icinga
+#	register
+#		Same as Icinga
+#	use
+#		Same as Icinga
+#	service_description
+#		Same as Icinga
+#	obsess_over_service
+#		Same as Icinga
+#	check_freshness
+#		Same as Icinga
+#	freshnessthreshold
+#		Same as Icinga
+#	retain_nonstatus_information
+#		Same as Icinga
+#	notifications_enabled
+#		Same as Icinga
+#	notification_interval
+#		Same as Icinga
+#	is_volatile
+#		Same as Icinga
+#	check_period
+#		Same as Icinga
+#	servicegroups
+#		Same as Icinga
+#	check_interval
+#		Same as Icinga
+#	max_check_attempts
+#		Same as Icinga
+#	check_command
+#		Same as Icinga
 #
 # Actions:
-#	Undocumented
+#	Define a service
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::service($conf_dir=false, $use="warnsms_service", $service_description=false, $servicegroups=false, $hostname=$fqdn, $hostgroup_name=false, $initialstate=false, $active_checks_enabled=false, $passive_checks_enabled=false, $parallelize_check=false, $obsess_over_service=false, $check_freshness=false, $freshnessthreshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $failure_prediction_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false, $servicegroups=false, $max_check_attempts=false, $checkcommand=false, $argument1=false, $argument2=false, $argument3=false, $register=false, $nrpe=false, ensure=present) {
-	$conf_dir_name = $conf_dir ? {
-		false   => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/service_${name}.cfg;${fqdn}":
+define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $service_description=false, $servicegroups=false,
+		$host_name=$fqdn, $hostgroup_name=false, $initial_state=false, $active_checks_enabled=false, $passive_checks_enabled=false,
+		$obsess_over_service=false, $check_freshness=false, $freshness_threshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false,
+		$process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false,
+		$check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false,
+		$max_check_attempts=false, $check_command=false, $arguments=false, $register=false, $nrpe=false, $ensure=present) {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/service_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/service"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config",
 		ensure  => $ensure;
-	}
-
-	if $nrpe and $hostname == $fqdn and !defined(Kfile["/etc/nagios/nrpe.d/${checkcommand}.cfg"]) {
-		kfile { "/etc/nagios/nrpe.d/${checkcommand}.cfg":
-				source  => "gen_icinga/client/${checkcommand}.cfg",
-				require => Package["nagios-nrpe-server"];
-		}
 	}
 }
 
 # Define: gen_icinga::host
 #
 # Parameters:
-#	address
-#		Undocumented
-#	ipaddress
-#		Undocumented
-#	initialstate
-#		Undocumented
-#	notifications_enabled
-#		Undocumented
-#	event_handler_enabled
-#		Undocumented
-#	notification_period
-#		Undocumented
-#	flap_detection_enabled
-#		Undocumented
-#	notification_interval
-#		Undocumented
-#	contact_groups
-#		Undocumented
-#	contacts
-#		Undocumented
-#	max_check_attempts
-#		Undocumented
 #	conf_dir
-#		Undocumented
+#		The config dir the host file will be placed in
+#	address
+#		Same as Icinga, defaults to $ipaddress
+#	initial_state
+#		Same as Icinga
+#	notifications_enabled
+#		Same as Icinga
+#	event_handler_enabled
+#		Same as Icinga
+#	notification_period
+#		Same as Icinga
+#	flap_detection_enabled
+#		Same as Icinga
+#	notification_interval
+#		Same as Icinga
+#	contact_groups
+#		Same as Icinga
+#	contacts
+#		Same as Icinga
+#	max_check_attempts
+#		Same as Icinga
 #	use
-#		Undocumented
+#		Same as Icinga
 #	hostgroups
-#		Undocumented
+#		Same as Icinga
 #	parents
-#		Undocumented
+#		Same as Icinga
 #	process_perf_data
-#		Undocumented
+#		Same as Icinga
 #	retain_status_information
-#		Undocumented
+#		Same as Icinga
 #	retain_nonstatus_information
-#		Undocumented
+#		Same as Icinga
 #	check_command
-#		Undocumented
+#		Same as Icinga
 #	register
-#		Undocumented
+#		Same as Icinga
 #	check_interval
-#		Undocumented
+#		Same as Icinga
 #
 # Actions:
-#	Undocumented
+#	Define a host
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::host($conf_dir=false, $use="wh_host", $hostgroups="wh_hosts", $parents=false, $address=$ipaddress, $initialstate=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $check_command=false, $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $contacts=false, $max_check_attempts=false, $register=false) {
-	$conf_dir_name = $conf_dir ? {
-		false   => "${environment}/${name}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/host_${name}.cfg;${fqdn}":
+define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgroups=false, $parents=false, $address=$ipaddress, $initial_state=false,
+		$notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false,
+		$check_command=false, $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $contacts=false,
+		$max_check_attempts=false, $register=false) {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/host_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/host"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -449,11 +419,7 @@ define gen_icinga::configdir($sub=false) {
 #		Undocumented
 #	HOSTADDRESS$'
 #		Undocumented
-#	argument1
-#		Undocumented
-#	argument2
-#		Undocumented
-#	argument3
+#	arguments
 #		Undocumented
 #	nrpe
 #		Undocumented
@@ -467,7 +433,7 @@ define gen_icinga::configdir($sub=false) {
 #	Undocumented
 #	gen_puppet
 #
-define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argument='-H $HOSTADDRESS$', $argument1=false, $argument2=false, $argument3=false, $nrpe=false, $time_out=30) {
+define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argument='-H $HOSTADDRESS$', $arguments=false, $nrpe=false, $time_out=30) {
 	$conf_dir_name = $conf_dir ? {
 		false => "${environment}/${fqdn}",
 		default => $conf_dir,

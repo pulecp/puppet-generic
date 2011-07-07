@@ -1,20 +1,18 @@
 define service {
 	name                         <%= name %><% if service_description %>
 	service_description          <%= service_description %><% end %><% if servicegroups %>
-	servicegroups                <%= servicegroups %><% end %><% if hostname %>
-	host_name                    <%= hostname %><% end %><% if hostgroup_name %>
-	hostgroup_name               <%= hostgroup_name %><% end %><% if initialstate %>
-	initial_state                <%= initialstate %><% end %><% if active_checks_enabled %>
+	servicegroups                <%= servicegroups %><% end %><% if host_name %>
+	host_name                    <%= host_name %><% end %><% if hostgroup_name %>
+	hostgroup_name               <%= hostgroup_name %><% end %><% if initial_state %>
+	initial_state                <%= initial_state %><% end %><% if active_checks_enabled %>
 	active_checks_enabled        <%= active_checks_enabled %><% end %><% if passive_checks_enabled %>
-	passive_checks_enabled       <%= passive_checks_enabled %><% end %><% if parallelize_check %>
-	parallelize_check            <%= parallelize_check %><% end %><% if obsess_over_service %>
+	passive_checks_enabled       <%= passive_checks_enabled %><% end %><% if obsess_over_service %>
 	obsess_over_service          <%= obsess_over_service %><% end %><% if check_freshness %>
-	check_freshness              <%= check_freshness %><% end %><% if freshnessthreshold %>
-	freshness_threshold          <%= freshnessthreshold %><% end %><% if notifications_enabled %>
+	check_freshness              <%= check_freshness %><% end %><% if freshness_threshold %>
+	freshness_threshold          <%= freshness_threshold %><% end %><% if notifications_enabled %>
 	notifications_enabled        <%= notifications_enabled %><% end %><% if event_handler_enabled %>
 	event_handler_enabled        <%= event_handler_enabled %><% end %><% if flap_detection_enabled %>
-	flap_detection_enabled       <%= flap_detection_enabled %><% end %><% if failure_prediction_enabled %>
-	failure_prediction_enabled   <%= failure_prediction_enabled %><% end %><% if process_perf_data %>
+	flap_detection_enabled       <%= flap_detection_enabled %><% end %><% if process_perf_data %>
 	process_perf_data            <%= process_perf_data %><% end %><% if retain_status_information %>
 	retain_status_information    <%= retain_status_information %><% end %><% if retain_nonstatus_information %>
 	retain_nonstatus_information <%= retain_nonstatus_information %><% end %><% if notification_interval %>
@@ -28,7 +26,7 @@ define service {
 	use                          <%= use %><% end %><% if contact_groups %>
 	contact_groups               <%= contact_groups %><% end %><% if contacts %>
 	contacts                     <%= contacts %><% end %><% if max_check_attempts %>
-	max_check_attempts           <%= max_check_attempts %><% end %><% if checkcommand %>
-	check_command                <%= checkcommand %><% if argument1 %>!<%= argument1 %><% end %><% if argument2 %>!<%= argument2 %><% end %><% if argument3 %>!<%= argument3 %><% end %><% end %><% if register %>
+	max_check_attempts           <%= max_check_attempts %><% end %><% if check_command %>
+	check_command                <%= check_command %><% if arguments %>!<%= Array(arguments).join("!") %><% end %><% end %><% if register %>
 	register                     <%= register %><% end %>
 }
