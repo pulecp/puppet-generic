@@ -215,29 +215,22 @@ define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgro
 #
 # Parameters:
 #	hg_alias
-#		Undocumented
+#		The alias param in Icinga
 #	members
-#		Undocumented
+#		Same as Icinga
 #	conf_dir
-#		Undocumented
+#		The config dir the hostgroup file will be placed in
 #
 # Actions:
-#	Undocumented
+#	Define a hostgroup
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::hostgroup($conf_dir=false, $hg_alias, $members=false) {
-	$conf_dir_name = $conf_dir ? {
-		false   => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/hostgroup_${name}.cfg;${fqdn}":
+define gen_icinga::hostgroup($hg_alias, $conf_dir="${environment}/${fqdn}", $members=false) {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/hostgroup_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/hostgroup"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -268,7 +261,6 @@ define gen_icinga::servicegroup($conf_dir=false, $sg_alias, $members=false) {
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/servicegroup_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/servicegroup"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -299,7 +291,6 @@ define gen_icinga::contactgroup($conf_dir=false, $customer="generic", $cg_alias)
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/contactgroup_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/contactgroup"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -336,7 +327,6 @@ define gen_icinga::contact($conf_dir=false, $c_alias, $timeperiod="24x7", $notif
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/contact_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/contact"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -379,7 +369,6 @@ define gen_icinga::timeperiod($conf_dir=false, $tp_alias, $monday=false, $tuesda
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/timeperiod_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/timeperiod"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -442,7 +431,6 @@ define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argu
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/command_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/command"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -487,7 +475,6 @@ define gen_icinga::hostescalation($contact_groups=false, $contacts=false, $escal
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/host_escalation_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/hostescalation"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -536,7 +523,6 @@ define gen_icinga::serviceescalation($contact_groups=false, $contacts=false, $es
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/service_escalation_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/serviceescalation"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
@@ -577,7 +563,6 @@ define gen_icinga::servicedependency($dependent_service_description, $host_name,
 	@@ekfile { "/etc/icinga/config/${conf_dir_name}/service_dependency_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/servicedependency"),
 		notify  => Exec["reload-icinga"],
-		require => File["/etc/icinga/config/${conf_dir_name}"],
 		tag     => "icinga_config";
 	}
 }
