@@ -28,6 +28,20 @@ class gen_base::dnsutils {
 	}
 }
 
+# Class: gen_base::jmxquery
+#
+# Actions:
+#	Install jmxquery
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::jmxquery {
+	kpackage { "jmxquery":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libnet-dns-perl
 #
 # Actions:
