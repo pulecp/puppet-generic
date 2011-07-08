@@ -1,8 +1,5 @@
 # Author: Kumina bv <support@kumina.nl>
 
-import "kservice.pp"
-import "concat.pp"
-
 # Class: gen_puppet
 #
 # Actions:
