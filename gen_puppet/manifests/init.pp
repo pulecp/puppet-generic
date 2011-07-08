@@ -2,6 +2,7 @@
 
 import "kservice.pp"
 import "concat.pp"
+import "ekfile.pp"
 
 # Class: gen_puppet
 #
