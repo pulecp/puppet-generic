@@ -1,5 +1,4 @@
 define servicegroup {
 	servicegroup_name <%= name %>
-	alias             <%= sg_alias %><% if members %>
-	members           <%= members %><% end %>
+	alias             <%= sg_alias %>
 }

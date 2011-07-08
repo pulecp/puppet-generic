@@ -239,26 +239,18 @@ define gen_icinga::hostgroup($hg_alias, $conf_dir="${environment}/${fqdn}", $mem
 #
 # Parameters:
 #	sg_alias
-#		Undocumented
-#	members
-#		Undocumented
+#		The alias param in Icinga
 #	conf_dir
-#		Undocumented
+#		The config dir the servicegroup file will be placed in
 #
 # Actions:
-#	Undocumented
+#	Define a servicegroup
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::servicegroup($conf_dir=false, $sg_alias, $members=false) {
-	$conf_dir_name = $conf_dir ? {
-		false   => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/servicegroup_${name}.cfg;${fqdn}":
+define gen_icinga::servicegroup($sg_alias, $conf_dir="${environment}/${fqdn}") {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/servicegroup_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/servicegroup"),
 		notify  => Exec["reload-icinga"],
 		tag     => "icinga_config";
@@ -268,27 +260,19 @@ define gen_icinga::servicegroup($conf_dir=false, $sg_alias, $members=false) {
 # Define: gen_icinga::contactgroup
 #
 # Parameters:
-#	customer
-#		Undocumented
 #	cg_alias
-#		Undocumented
+#		The alias param in Icinga
 #	conf_dir
-#		Undocumented
+#		The config dir the contactgroup file will be placed in
 #
 # Actions:
-#	Undocumented
+#	Define a contactgroup
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::contactgroup($conf_dir=false, $customer="generic", $cg_alias) {
-	$conf_dir_name = $conf_dir ? {
-		false   => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/contactgroup_${name}.cfg;${fqdn}":
+define gen_icinga::contactgroup($cg_alias, $conf_dir="${environment}/${fqdn}") {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/contactgroup_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/contactgroup"),
 		notify  => Exec["reload-icinga"],
 		tag     => "icinga_config";
@@ -299,32 +283,26 @@ define gen_icinga::contactgroup($conf_dir=false, $customer="generic", $cg_alias)
 #
 # Parameters:
 #	c_alias
-#		Undocumented
+#		The alias param in Icinga
 #	timeperiod
-#		Undocumented
+#		Same as Icinga
 #	notification_type
-#		Undocumented
+#		Same as Icinga
 #	contactgroups
-#		Undocumented
+#		Same as Icinga
 #	contact_data
-#		Undocumented
+#		Same as Icinga
 #	conf_dir
-#		Undocumented
+#		The config dir the contact file will be placed in
 #
 # Actions:
-#	Undocumented
+#	Define a contact
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::contact($conf_dir=false, $c_alias, $timeperiod="24x7", $notification_type, $contactgroups=false, $contact_data, host_notifications_enabled=1, service_notifications_enabled=1) {
-	$conf_dir_name = $conf_dir ? {
-		false   => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/contact_${name}.cfg;${fqdn}":
+define gen_icinga::contact($c_alias, $contact_data, $notification_type, $conf_dir="${environment}/${fqdn}", $timeperiod="24x7", $contactgroups=false, $host_notifications_enabled=1, $service_notifications_enabled=1) {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/contact_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/contact"),
 		notify  => Exec["reload-icinga"],
 		tag     => "icinga_config";
@@ -334,39 +312,33 @@ define gen_icinga::contact($conf_dir=false, $c_alias, $timeperiod="24x7", $notif
 # Define: gen_icinga::timeperiod
 #
 # Parameters:
-#	sunday
-#		Undocumented
 #	tp_alias
-#		Undocumented
+#		The alias param in Icinga
+#	sunday
+#		Same as Icinga
 #	monday
-#		Undocumented
+#		Same as Icinga
 #	tuesday
-#		Undocumented
+#		Same as Icinga
 #	wednesday
-#		Undocumented
+#		Same as Icinga
 #	thursday
-#		Undocumented
+#		Same as Icinga
 #	friday
-#		Undocumented
+#		Same as Icinga
 #	saturday
-#		Undocumented
+#		Same as Icinga
 #	conf_dir
-#		Undocumented
+#		Same as Icinga
 #
 # Actions:
-#	Undocumented
+#	Define a timeperiod
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::timeperiod($conf_dir=false, $tp_alias, $monday=false, $tuesday=false, $wednesday=false, $thursday=false, $friday=false, $saturday=false, $sunday=false) {
-	$conf_dir_name = $conf_dir ? {
-		false   => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/timeperiod_${name}.cfg;${fqdn}":
+define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $monday=false, $tuesday=false, $wednesday=false, $thursday=false, $friday=false, $saturday=false, $sunday=false) {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/timeperiod_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/timeperiod"),
 		notify  => Exec["reload-icinga"],
 		tag     => "icinga_config";
@@ -375,25 +347,20 @@ define gen_icinga::timeperiod($conf_dir=false, $tp_alias, $monday=false, $tuesda
 
 # Define: gen_icinga::configdir
 #
-# Parameters:
-#	sub
-#		Undocumented
+# Param:
+#	base:
+#		Defines the base dir of the config
 #
 # Actions:
-#	Undocumented
+#	Define a configdir
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::configdir($sub=false) {
-	@@ekfile { "/etc/icinga/config/${name};${fqdn}":
-		ensure  => directory,
-		require => $sub ? {
-			false   => Package["icinga"],
-			default => [Package["icinga"],Gen_icinga::Configdir["${sub}"]],
-		},
-		tag     => "icinga_config";
+define gen_icinga::configdir($base="/etc/icinga/config") {
+	@@ekfile { "${base}/${name};${fqdn}":
+		ensure => directory,
+		tag    => "icinga_config";
 	}
 }
 
@@ -401,34 +368,26 @@ define gen_icinga::configdir($sub=false) {
 #
 # Parameters:
 #	time_out
-#		Undocumented
-#	commandname
-#		Undocumented
+#		If the check is run through nrpe this defines the timeout
+#	command_name
+#		Same as Icinga
 #	host_argument
-#		Undocumented
-#	HOSTADDRESS$'
-#		Undocumented
+#		Defines how the check expects to receive the host argument, defaults to -H $HOSTADDRESS
 #	arguments
-#		Undocumented
+#		All arguments of the check
 #	nrpe
-#		Undocumented
+#		Defines whether the check should be run through nrpe, defaults to false
 #	conf_dir
-#		Undocumented
+#		The config dir the servercommand will be placed in
 #
 # Actions:
-#	Undocumented
+#	Define a servercommand
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argument='-H $HOSTADDRESS$', $arguments=false, $nrpe=false, $time_out=30) {
-	$conf_dir_name = $conf_dir ? {
-		false => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/command_${name}.cfg;${fqdn}":
+define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_name=false, $host_argument='-H $HOSTADDRESS$', $arguments=false, $nrpe=false, $time_out=30) {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/command"),
 		notify  => Exec["reload-icinga"],
 		tag     => "icinga_config";
@@ -439,40 +398,34 @@ define gen_icinga::servercommand($conf_dir=false, $commandname=false, $host_argu
 #
 # Parameters:
 #	last_notification
-#		Undocumented
+#		Same as Icinga
 #	contacts
-#		Undocumented
+#	Same as Icinga
 #	escalation_period
-#		Undocumented
+#		Same as Icinga
 #	conf_dir
-#		Undocumented
+#		The config dir the hostescalation will be placed in
 #	host_name
-#		Undocumented
+#		Same ass Icinga
 #	notification_interval
-#		Undocumented
+#		Same as Icinga
 #	hostgroup_name
-#		Undocumented
+#		Same as Icinga
 #	escalation_options
-#		Undocumented
+#		Same as Icinga
 #	first_notification
-#		Undocumented
+#		Same as Icinga
 #	contact_groups
-#		Undocumented
+#		Same as Icinga
 #
 # Actions:
-#	Undocumented
+#	Define a hostescalation
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::hostescalation($contact_groups=false, $contacts=false, $escalation_period, $conf_dir=false, $host_name=false, $hostgroup_name=false, $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
-	$conf_dir_name = $conf_dir ? {
-		false => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/host_escalation_${name}.cfg;${fqdn}":
+define gen_icinga::hostescalation($escalation_period, $contact_groups="${environment}/${fqdn}", $contacts=false, $conf_dir=false, $host_name=false, $hostgroup_name=false, $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/host_escalation_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/hostescalation"),
 		notify  => Exec["reload-icinga"],
 		tag     => "icinga_config";
@@ -483,44 +436,38 @@ define gen_icinga::hostescalation($contact_groups=false, $contacts=false, $escal
 #
 # Parameters:
 #	escalation_options
-#		Undocumented
+#		Same as Icinga
 #	contacts
-#		Undocumented
+#		Same as Icinga
 #	escalation_period
-#		Undocumented
+#		Same as Icinga
 #	conf_dir
-#		Undocumented
+#		The config dir the serviceescalation file will be placed in
 #	host_name
-#		Undocumented
+#		Same as Icinga
 #	first_notification
-#		Undocumented
+#		Same as Icinga
 #	hostgroup_name
-#		Undocumented
+#		Same as Icinga
 #	last_notification
-#		Undocumented
+#		Same as Icinga
 #	servicegroup_name
-#		Undocumented
+#		Same as Icinga
 #	notification_interval
-#		Undocumented
+#		Same as Icinga
 #	service_description
-#		Undocumented
+#		Same as Icinga
 #	contact_groups
-#		Undocumented
+#		Same as Icinga
 #
 # Actions:
-#	Undocumented
+#	Define a serviceescalation
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::serviceescalation($contact_groups=false, $contacts=false, $escalation_period, $conf_dir=false, $host_name=false, $hostgroup_name=false, $servicegroup_name=false, $service_description="*", $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
-	$conf_dir_name = $conf_dir ? {
-		false => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/service_escalation_${name}.cfg;${fqdn}":
+define gen_icinga::serviceescalation($escalation_period, $contact_groups=false, $contacts=false, $conf_dir="${environment}/${fqdn}", $host_name=false, $hostgroup_name=false, $servicegroup_name=false, $service_description="*", $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/service_escalation_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/serviceescalation"),
 		notify  => Exec["reload-icinga"],
 		tag     => "icinga_config";
@@ -531,36 +478,30 @@ define gen_icinga::serviceescalation($contact_groups=false, $contacts=false, $es
 #
 # Parameters:
 #	host_name
-#		Undocumented
+#		Same as Icinga
 #	service_description
-#		Undocumented
+#		Same as Icinga
 #	conf_dir
-#		Undocumented
+#		The config dir the serviceddependency file will be placed in
 #	dependent_host_name
-#		Undocumented
+#		Same as Icinga
 #	fqdn
-#		Undocumented
+#		Same as Icinga
 #	execution_failure_criteria
-#		Undocumented
+#		Same as Icinga
 #	notification_failure_criteria
-#		Undocumented
+#		Same as Icinga
 #	dependent_service_description
-#		Undocumented
+#		Same as Icinga
 #
 # Actions:
-#	Undocumented
+#	Define a servicedependency
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-define gen_icinga::servicedependency($dependent_service_description, $host_name, $service_description, $conf_dir=false, $dependent_host_name=$fqdn, $execution_failure_criteria=false, $notification_failure_criteria="o") {
-	$conf_dir_name = $conf_dir ? {
-		false => "${environment}/${fqdn}",
-		default => $conf_dir,
-	}
-
-	@@ekfile { "/etc/icinga/config/${conf_dir_name}/service_dependency_${name}.cfg;${fqdn}":
+define gen_icinga::servicedependency($dependent_service_description, $host_name, $service_description, $conf_dir="${environment}/${fqdn}", $dependent_host_name=$fqdn, $execution_failure_criteria=false, $notification_failure_criteria="o") {
+	@@ekfile { "/etc/icinga/config/${conf_dir}/service_dependency_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/servicedependency"),
 		notify  => Exec["reload-icinga"],
 		tag     => "icinga_config";
