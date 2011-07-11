@@ -72,12 +72,13 @@ define gen_git::repo ($branch = "master", $origin = false) {
 
 	exec { "/usr/bin/git init -q --shared=group ${name}":
 		creates => "${name}/.git",
-		require => $name,
+		require => Kfile[$name],
 	}
 
 	if $origin {
 		exec { "/usr/bin/git remote add -m ${branch} origin ${origin}":
-			unless => "/usr/bin/git config --get remote.origin.url | grep -q '${origin}'",
+			unless  => "/usr/bin/git config --get remote.origin.url | grep -q '${origin}'",
+			require => Exec["/usr/bin/git init -q --shared=group ${name}"],
 		}
 	}
 }
