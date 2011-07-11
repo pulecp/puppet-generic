@@ -283,7 +283,7 @@ define gen_puppet::master::environment ($configfile = "/etc/puppet/puppet.conf",
 
 	concat::add_content { "(${name}) Add environment ${envname} in file ${configfile}":
 		target   => "${configfile}",
-		content  => "\n[${envname}]\nmanifestdir = ${real_manifestdir}\nmodulepath = ${real_modulepath}\nmanifest = ${real_manifest}\n\n",
+		content  => "\n[${envname}]\nmanifestdir = ${real_manifestdir}\nmodulepath = ${real_modulepath}\nmanifest = ${real_manifest}",
 		order    => 60,
 	}
 }
