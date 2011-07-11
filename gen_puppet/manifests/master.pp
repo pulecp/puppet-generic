@@ -201,10 +201,6 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 				target  => $configfile,
 				content => "\n[master]",
 				order   => '30';
-			"queue section in ${configfile}":
-				target  => $configfile,
-				content => "\n[queue]",
-				order   => '40';
 		}
 
 		gen_puppet::set_config {
