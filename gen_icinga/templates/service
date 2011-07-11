@@ -1,5 +1,5 @@
 define service {
-	name                         <%= name %>_<%= fqdn %><% if service_description %>
+	name                         <%= name %><% if service_description %>
 	service_description          <%= service_description %><% end %><% if servicegroups %>
 	servicegroups                <%= servicegroups %><% end %><% if host_name %>
 	host_name                    <%= host_name %><% end %><% if hostgroup_name %>
