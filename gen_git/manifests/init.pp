@@ -43,6 +43,45 @@ class gen_git::listchanges::install {
 	}
 }
 
+# Define: gen_git::repo
+#
+# Actions:
+#	Set up git repository
+#
+# Parameters:
+#	name
+#		The directory where to create the repository.
+#		Needs to be a kfile already.
+#	branch
+#		The remote branch of the origin. Defaults to
+#		"master".
+#	origin
+#		Add an origin to the repository. This does
+#		not clone the remote repository.
+#
+# Depends:
+#	gen_git
+#	gen_puppet
+#
+define gen_git::repo ($branch = "master", $origin = false) {
+	include gen_git
+
+	# I thought about adding an option to automatically clone a remote
+	# repository, but that won't work very often since you'd have to
+	# give puppet access to your ssh secret key. You don't want that.
+
+	exec { "/usr/bin/git init -q --shared=group ${name}":
+		creates => "${name}/.git",
+		require => $name,
+	}
+
+	if $origin {
+		exec { "/usr/bin/git remote add -m ${branch} origin ${origin}":
+			unless => "/usr/bin/git config --get remote.origin.url | grep -q '${origin}'",
+		}
+	}
+}
+
 # Define: gen_git::repoconfig
 #
 # Actions:
