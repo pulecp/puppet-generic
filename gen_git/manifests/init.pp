@@ -76,9 +76,26 @@ define gen_git::repo ($branch = "master", $origin = false) {
 	}
 
 	if $origin {
-		exec { "/usr/bin/git remote add -m ${branch} origin ${origin}":
-			unless  => "/usr/bin/git config --get remote.origin.url | grep -q '${origin}'",
-			require => Exec["/usr/bin/git init -q --shared=group ${name}"],
+		exec {
+			"/usr/bin/git remote add -m ${branch} origin ${origin}":
+				cwd     => $name,
+				unless  => "/usr/bin/git config --get remote.origin.url | grep -q '${origin}'",
+				require => Exec["/usr/bin/git init -q --shared=group ${name}"];
+			"/usr/bin/git config --add branch.master.remote origin on ${name}":
+				command => "/usr/bin/git config --add branch.master.remote origin",
+				cwd     => $name,
+				unless  => "/usr/bin/git config --get branch.master.remote | grep -q 'origin'",
+				require => Exec["/usr/bin/git init -q --shared=group ${name}"];
+			"/usr/bin/git config --add branch.master.merge refs/heads/master on ${name}":
+				command => "/usr/bin/git config --add branch.master.merge refs/heads/master",
+				cwd     => $name,
+				unless  => "/usr/bin/git config --get branch.master.merge | grep -q 'refs/heads/master'",
+				require => Exec["/usr/bin/git init -q --shared=group ${name}"];
+			"/usr/bin/git config --add branch.master.rebase true on ${name}":
+				command => "/usr/bin/git config --add branch.master.rebase true",
+				cwd     => $name,
+				unless  => "/usr/bin/git config --get branch.master.rebase | grep -q 'true'",
+				require => Exec["/usr/bin/git init -q --shared=group ${name}"];
 		}
 	}
 }
