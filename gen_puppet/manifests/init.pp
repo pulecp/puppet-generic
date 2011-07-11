@@ -73,10 +73,6 @@ class gen_puppet::puppet_conf {
 			target  => '/etc/puppet/puppet.conf',
 			content => "\n[master]",
 			order   => '30';
-		"queue section":
-			target  => '/etc/puppet/puppet.conf',
-			content => "\n[queue]",
-			order   => '40';
 	}
 }
 
