@@ -137,7 +137,7 @@ define concat::fragment($target, $content=false, $source=false, $order=10, $ensu
 	$fragdir          = "${concatdir}/${safe_target_name}"
 
 	if $exported {
-		if $contentag {
+		if $contenttag {
 			$export = true
 		} else {
 			fail("Exported concat fragment without tag: ${name}")
@@ -177,14 +177,12 @@ define concat::fragment($target, $content=false, $source=false, $order=10, $ensu
 	if $export {
 		@@ekfile { "${fragdir}/fragments/${order}_${safe_name};${fqdn}":
 			ensure => $ensure,
-			alias  => "concat_fragment_${safe_name}",
 			notify => Exec["concat_${target}"],
 			tag    => $contenttag;
 		}
 	} else {
 		kfile { "${fragdir}/fragments/${order}_${safe_name}":
 			ensure => $ensure,
-			alias  => "concat_fragment_${safe_name}",
 			notify => Exec["concat_${target}"];
 		}
 	}
