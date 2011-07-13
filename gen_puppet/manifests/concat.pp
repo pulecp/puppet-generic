@@ -136,6 +136,14 @@ define concat::fragment($target, $content=false, $source=false, $order=10, $ensu
 	$concatdir        = $concat::setup::concatdir
 	$fragdir          = "${concatdir}/${safe_target_name}"
 
+	if $exported {
+		if $contentag {
+			$export = true
+		} else {
+			fail { "Exported concat fragment without tag: ${name}":; }
+		}
+	}
+
 	# if content is passed, use that, else if source is passed use that
 	# if neither passed, but $ensure is in symlink form, make a symlink
 	case $content {
@@ -149,25 +157,29 @@ define concat::fragment($target, $content=false, $source=false, $order=10, $ensu
 					}
 				}
 				default: {
-					Kfile { source => $source }
+					if $export {
+						Ekfile { source => $source }
+					} else {
+						Kfile { source => $source }
+					}
 				}
 			}
 		}
 		default: {
-			Kfile{ content => $content }
+			if $export {
+				Ekfile{ content => $content }
+			} else {
+				Kfile{ content => $content }
+			}
 		}
 	}
 
-	if $exported {
-		if $contenttag {
-			@@ekfile { "${fragdir}/fragments/${order}_${safe_name};${fqdn}":
-				ensure => $ensure,
-				alias  => "concat_fragment_${safe_name}",
-				notify => Exec["concat_${target}"],
-				tag    => $contenttag;
-			}
-		} else {
-			fail { "Exported concat fragment without tag: ${name}":; }
+	if $export {
+		@@ekfile { "${fragdir}/fragments/${order}_${safe_name};${fqdn}":
+			ensure => $ensure,
+			alias  => "concat_fragment_${safe_name}",
+			notify => Exec["concat_${target}"],
+			tag    => $contenttag;
 		}
 	} else {
 		kfile { "${fragdir}/fragments/${order}_${safe_name}":
