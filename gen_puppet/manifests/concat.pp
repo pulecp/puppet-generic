@@ -130,7 +130,7 @@ class concat::setup {
 #	Undocumented
 #	gen_puppet
 #
-define concat::fragment($target, $content=false, $source=false, $order=10, $ensure = "present") {
+define concat::fragment($target, $content=false, $source=false, $order=10, $ensure = "present", $exported=false, $contenttag=false) {
 	$safe_target_name = regsubst($target, '/', '_', 'G')
 	$safe_name        = regsubst($name, '/', '_', 'G')
 	$concatdir        = $concat::setup::concatdir
@@ -158,10 +158,23 @@ define concat::fragment($target, $content=false, $source=false, $order=10, $ensu
 		}
 	}
 
-	kfile { "${fragdir}/fragments/${order}_${safe_name}":
-		ensure => $ensure,
-		alias  => "concat_fragment_${safe_name}",
-		notify => Exec["concat_${target}"];
+	if $exported {
+		if $contenttag {
+			@@ekfile { "${fragdir}/fragments/${order}_${safe_name};${fqdn}":
+				ensure => $ensure,
+				alias  => "concat_fragment_${safe_name}",
+				notify => Exec["concat_${target}"],
+				tag    => $contenttag;
+			}
+		} else {
+			fail { "Exported concat fragment without tag: ${name}":; }
+		}
+	} else {
+		kfile { "${fragdir}/fragments/${order}_${safe_name}":
+			ensure => $ensure,
+			alias  => "concat_fragment_${safe_name}",
+			notify => Exec["concat_${target}"];
+		}
 	}
 }
 
@@ -186,7 +199,7 @@ define concat::fragment($target, $content=false, $source=false, $order=10, $ensu
 #	Undocumented
 #	gen_puppet
 #
-define concat::add_content($target, $content=false, $order=15, $ensure=present, $linebreak=true) {
+define concat::add_content($target, $content=false, $order=15, $ensure=present, $linebreak=true, $exported=false, $contenttag=false) {
 	$body = $content ? {
 		false   => $linebreak ? {
 			false => $name,
@@ -199,10 +212,12 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
 	}
 
 	concat::fragment{ "${target}_fragment_${name}":
-		content => $body,
-		target  => $target,
-		order   => $order,
-		ensure  => $ensure;
+		content    => $body,
+		target     => $target,
+		order      => $order,
+		ensure     => $ensure,
+		exported   => $exported,
+		contenttag => $contenttag;
 	}
 }
 
