@@ -140,7 +140,7 @@ define concat::fragment($target, $content=false, $source=false, $order=10, $ensu
 		if $contentag {
 			$export = true
 		} else {
-			fail { "Exported concat fragment without tag: ${name}":; }
+			fail("Exported concat fragment without tag: ${name}")
 		}
 	}
 
