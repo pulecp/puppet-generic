@@ -10,7 +10,7 @@
 #	ensure
 #		Defines whether the service should be running or not
 #	enable
-#		Defines whether the service should b e started at boot, defaults to true
+#		Defines whether the service should be started at boot, defaults to true
 #	package
 #		If defined sets the package to install
 #	pensure
@@ -38,7 +38,7 @@ define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=t
 		},
 		hasrestart => $hasrestart,
 		hasstatus  => $hasstatus,
-		enable     => true,
+		enable     => $enable,
 		require    => Kpackage[$package_name];
 	}
 
