@@ -256,17 +256,26 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 
 # Define: gen_puppet::master::environment
 #
+# Create an environment section with a puppet master's config file.
+#
 # Parameters:
 #	environment_name
-#		Undocumented
+#		The name of the environment, defaults to the namevar.
 #	configfile
-#		Undocumented
+#		The configfile to which to add the environment. Defaults to
+#		/etc/puppet/puppet.conf.
+#	manifest
+#		The manifest variable. Defaults to $manifestdir/env/$name/site.pp.
+#	manifestdir
+#		Where to find the manifests. Defaults to /srv/puppet.
+#	modulepath
+#		In which directies to look for puppet modules. Defaults to
+#		'/srv/puppet/generic:/srv/puppet/kbp:/srv/puppet/env/$name'.
 #
 # Actions:
-#	Undocumented
+#	Adds a section that describes a puppet environment to the configfile.
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
 define gen_puppet::master::environment ($configfile = "/etc/puppet/puppet.conf", $environment_name = false,
