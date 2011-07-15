@@ -22,7 +22,7 @@
 # Depends:
 #	gen_puppet
 #
-define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present") {
+define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present", $pattern=false) {
 	$package_name = $package ? {
 		false   => $name,
 		default => $package,
@@ -39,6 +39,10 @@ define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=t
 		hasrestart => $hasrestart,
 		hasstatus  => $hasstatus,
 		enable     => $enable,
+		pattern    => $pattern ? {
+			false   => undef,
+			default => $pattern,
+		},
 		require    => Kpackage[$package_name];
 	}
 

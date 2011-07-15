@@ -1,0 +1,5 @@
+NEED_SVCGSSD="<%= need_svcgssd %>"
+RPCMOUNTDOPTS="<%= rpcmountdopts %><% if mountd_port %> --port <%= mountd_port %>"<% end %>
+RPCNFSDCOUNT=<%= rpcnfsdcount %>
+RPCNFSDPRIORITY=<%= rpcnfsdpriority %>
+RPCSVCGSSDOPTS="<%= rpcsvcgssdopts %>"

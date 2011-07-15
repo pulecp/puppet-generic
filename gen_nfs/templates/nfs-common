@@ -1,0 +1,4 @@
+NEED_GSSD="<%= need_gssd %>"
+NEED_IDMAPD="<%= need_idmapd %>"
+NEED_STATD="<%= need_statd %>"
+STATDOPTS="<%= statdopts %><% if incoming_port %> --outgoing-port <%= outgoing_port %> --port <%= incoming_port %>"<% end %>
