@@ -272,7 +272,7 @@ define gen_ferm::table() {
 #		The content to enter into the firewall
 #	exported
 #		Define whether the file should be exported
-#	contenttag
+#	customtag
 #		The tag to give to the exported file
 #
 # Actions:
@@ -281,12 +281,12 @@ define gen_ferm::table() {
 # Depends:
 #	gen_puppet
 #
-define gen_ferm::fermfile($content, $ensure=present, $exported=false, $contenttag=false) {
+define gen_ferm::fermfile($content, $ensure=present, $exported=false, $customtag=false) {
 	concat::add_content { $name:
 		content    => $content,
 		target     => "/etc/ferm/ferm.conf",
 		ensure     => $ensure,
 		exported   => $exported,
-		contenttag => $contenttag;
+		contenttag => $customtag;
 	}
 }
