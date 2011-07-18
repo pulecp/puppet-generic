@@ -10,11 +10,12 @@
 #
 class gen_ferm {
 	# Needed for dns resolving
-	include gen_base::libnet-dns-perl
+	include gen_base::libnet_dns_perl
 
 	kservice { "ferm":
 		hasstatus => false,
 		ensure    => false,
+		require   => Kpackage["libnet-dns-perl"],
 		pensure   => latest;
 	}
 
