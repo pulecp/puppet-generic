@@ -142,7 +142,7 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
 			},
 			ensure    => $ensure,
 			exported  => $exported,
-			customtag => $customtag
+			customtag => $customtag,
 			require   => Chain["${chain}_${ip_proto}"];
 		}
 	}
