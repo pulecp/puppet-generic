@@ -32,7 +32,7 @@ my %state = (
 	      'Secondary' => { 'value' => 'OK', 'type' => 'st' },
 	      'Unknown' => { 'value' => 'CRITICAL', 'type' => 'st' },
 	      'Connected' => { 'value' => 'OK', 'type' => 'cs' },
-	      'StandAlone' => { 'value' => 'WARNING', 'type' => 'cs' },
+	      'StandAlone' => { 'value' => 'CRITICAL', 'type' => 'cs' },
 	      'Unconfigured' => { 'value' => 'CRITICAL', 'type' => 'cs' },
 	      'Unconnected' => { 'value' => 'CRITICAL', 'type' => 'cs' },
 	      'Timeout' => { 'value' => 'CRITICAL', 'type' => 'cs' },
@@ -54,7 +54,7 @@ my %state = (
 	      'PausedSyncS' => { 'value' => 'CRITICAL', 'type' => 'cs' },
 	      'PausedSyncT' => { 'value' => 'CRITICAL', 'type' => 'cs' },
 	      'Consistent' => { 'value' => 'OK', 'type' => 'ld' }, 
-	      'Inconsistent' => { 'value' => 'CRITICAL', 'type' => 'ld' },
+	      'Inconsistent' => { 'value' => 'WARNING', 'type' => 'ld' },
               # DRBD 8.0
 	      'UpToDate' => { 'value' => 'OK', 'type' => 'ds' },
 	      'Consistent' => { 'value' => 'OK', 'type' => 'ds' },
@@ -62,8 +62,8 @@ my %state = (
 	      'Attaching' => { 'value' => 'WARNING', 'type' => 'ds' },
 	      'Diskless' => { 'value' => 'CRITICAL', 'type' => 'ds' },
 	      'Failed' => { 'value' => 'CRITICAL', 'type' => 'ds' },
-	      'Outdated' => { 'value' => 'CRITICAL', 'type' => 'ds' },
-	      'Inconsistent' => { 'value' => 'CRITICAL', 'type' => 'ds' },
+	      'Outdated' => { 'value' => 'WARNING', 'type' => 'ds' },
+	      'Inconsistent' => { 'value' => 'WARNING', 'type' => 'ds' },
 	      'DUnknown' => { 'value' => 'CRITICAL', 'type' => 'ds' }
 );
 
