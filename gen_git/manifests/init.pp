@@ -64,6 +64,9 @@ class gen_git::listchanges::install {
 #	gen_git
 #	gen_puppet
 #
+# Todo:
+#	Add option for creating a bare repository, without the hook script.
+#
 define gen_git::repo ($branch = "master", $origin = false) {
 	include gen_git
 
@@ -104,6 +107,13 @@ define gen_git::repo ($branch = "master", $origin = false) {
 				unless  => "/usr/bin/git config --get branch.master.rebase | grep -q 'true'",
 				require => Exec["/usr/bin/git init -q --shared=group ${name}"];
 		}
+	}
+
+	# This is the hook that makes sure we always have the latest version checked out.
+	kfile { "${name}/.git/hooks/post-update":
+		source  => "gen_git/post-update",
+		mode    => 755,
+		require => Exec["/usr/bin/git init -q --shared=group ${name}"];
 	}
 }
 
