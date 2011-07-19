@@ -71,9 +71,15 @@ define gen_git::repo ($branch = "master", $origin = false) {
 	# repository, but that won't work very often since you'd have to
 	# give puppet access to your ssh secret key. You don't want that.
 
-	exec { "/usr/bin/git init -q --shared=group ${name}":
-		creates => "${name}/.git",
-		require => [Kfile[$name],Kpackage["git"]],
+	exec {
+		"/usr/bin/git init -q --shared=group ${name}":
+			creates => "${name}/.git",
+			require => [Kfile[$name],Kpackage["git"]];
+		"/usr/bin/git config --add receive.denyCurrentBranch ignore on ${name}":
+			command => "/usr/bin/git config --add receive.denyCurrentBranch ignore",
+			cwd     => $name,
+			unless  => "/usr/bin/git config --get receive.denyCurrentBranch | grep -q 'ignore'",
+			require => Exec["/usr/bin/git init -q --shared=group ${name}"];
 	}
 
 	if $origin {
@@ -101,7 +107,7 @@ define gen_git::repo ($branch = "master", $origin = false) {
 	}
 }
 
-# Define: gen_git::repoconfig
+# Define: gen_git::listchanges
 #
 # Actions:
 #	Set up config for gitlistchanges
