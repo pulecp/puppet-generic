@@ -3,6 +3,9 @@
 import "kservice.pp"
 import "concat.pp"
 import "ekfile.pp"
+# Actual puppet modules
+import "master.pp"
+import "queue.pp"
 
 # Class: gen_puppet
 #
@@ -54,7 +57,7 @@ class gen_puppet::puppet_conf {
 	concat { '/etc/puppet/puppet.conf':
 		owner   => 'root',
 		group   => 'root',
-		mode    => '0640',
+		mode    => '0644',
 		require => Kpackage["puppet-common"],
 		notify  => Exec["reload-puppet"],
 	}
