@@ -1,0 +1,3 @@
+# Defaults for <%= scriptname %> - sourced by /etc/init.d/<%= scriptname %>
+PUPPETQD=yes
+PUPPETQD_OPTS=""
