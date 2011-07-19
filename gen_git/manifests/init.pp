@@ -16,6 +16,7 @@ class gen_git {
 	}
 
 	kpackage { "${git_pkg}":
+		alias  => "git",
 		ensure => latest;
 	}
 }
@@ -72,7 +73,7 @@ define gen_git::repo ($branch = "master", $origin = false) {
 
 	exec { "/usr/bin/git init -q --shared=group ${name}":
 		creates => "${name}/.git",
-		require => Kfile[$name],
+		require => [Kfile[$name],Kpackage["git"]],
 	}
 
 	if $origin {
