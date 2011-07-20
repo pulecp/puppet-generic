@@ -17,10 +17,8 @@ class gen_puppet::master ($servertype = 'passenger') {
 	# Install the packages
 	kpackage {
 		"puppetmaster":
-			ensure  => present,
+			ensure  => latest,
 			require => Kfile["/etc/default/puppetmaster"];
-		"puppetmaster-common":
-			ensure  => latest;
 	}
 
 	# Keep in mind this only counts for the default puppetmaster,
@@ -76,7 +74,7 @@ class gen_puppet::master ($servertype = 'passenger') {
 define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		$debug = false, $factpath = '$vardir/lib/facter',
 		$fileserverconf = "/etc/puppet/fileserver.conf",
-		$logdir = "/var/log/puppet", $pluginsync = true,
+		$logdir = "/var/log/puppet", $pluginsync = true, queue = false,
 		$rackroot = "/usr/local/share/puppet/rack", $rundir = "/var/run/puppet",
 		$ssldir = "/var/lib/puppet/ssl", $templatedir = '$confdir/templates',
 		$vardir = "/var/lib/puppet") {
@@ -185,6 +183,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		# Setup the default config file
 		concat { $configfile:
 			require => Kpackage["puppet-common"],
+			mode    => 644,
 		}
 
 		# Already define all the sections
@@ -251,6 +250,12 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 			value      => 'SSL_CLIENT_VERIFY',
 			section    => "master",
 			configfile => $configfile;
+	}
+
+	if $queue {
+		gen_puppet::queue::runner { $name:
+			configfile => $configfile,
+		}
 	}
 }
 
