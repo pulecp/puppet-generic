@@ -509,9 +509,11 @@ define gen_icinga::serviceescalation($escalation_period, $contact_groups=false, 
 #	gen_puppet
 #
 define gen_icinga::servicedependency($dependent_service_description, $host_name, $service_description, $conf_dir="${environment}/${fqdn}", $dependent_host_name=$fqdn, $execution_failure_criteria=false, $notification_failure_criteria="o") {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/service_dependency_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/servicedependency"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/service_dependency_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/servicedependency"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
 	}
 }
