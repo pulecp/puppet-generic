@@ -408,7 +408,7 @@ define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_na
 #	last_notification
 #		Same as Icinga
 #	contacts
-#	Same as Icinga
+#		Same as Icinga
 #	escalation_period
 #		Same as Icinga
 #	conf_dir
