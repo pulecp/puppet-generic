@@ -26,7 +26,6 @@ class gen_nsca::server {
 	include gen_nsca
 
 	kfile { "/etc/nsca.cfg":
-		source  => "gen_nsca/nsca.cfg",
 		mode    => 640,
 		group   => "nagios",
 		require => Package["nsca"];
