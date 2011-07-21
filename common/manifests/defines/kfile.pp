@@ -35,7 +35,7 @@
 #	Undocumented
 #	gen_puppet
 #
-define kfile ($ensure="present", $content=false, $source=false, $path=false, $target=false, $owner="root", $group="root", $mode="0644", $recurse=false, $force=false, $purge=false, $ignore=false) {
+define kfile ($ensure="present", $content=false, $source=false, $path=false, $target=false, $owner="root", $group="root", $mode="0644", $recurse=false, $replace=true, $force=false, $purge=false, $ignore=false) {
 	file { "${name}":
 		ensure  => $ensure,
 		content => $content ? {
@@ -67,6 +67,7 @@ define kfile ($ensure="present", $content=false, $source=false, $path=false, $ta
 			false   => undef,
 			default => $recurse,
 		},
+		replace => $replace,
 		force   => $force ? {
 			false   => undef,
 			default => $force,
