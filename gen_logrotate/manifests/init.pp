@@ -9,7 +9,9 @@
 #	gen_puppet
 #
 class gen_logrotate {
-	kpackage { "logrotate":; }
+	kpackage { "logrotate":
+		ensure => latest,
+	}
 
 	kfile { "/etc/logrotate.d/":
 		ensure => directory,
