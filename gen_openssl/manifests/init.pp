@@ -22,21 +22,6 @@ class gen_openssl::common {
 	}
 }
 
-# Class: gen_openssl::server
-#
-# Actions:
-#	Undocumented
-#
-# Depends:
-#	Undocumented
-#	gen_puppet
-#
-class gen_openssl::server {
-	include gen_openssl::common
-
-	notify { "This host includes a class that's illogical. You want to remove it.":; }
-}
-
 # Class: gen_openssl::ca
 #
 # Actions:
