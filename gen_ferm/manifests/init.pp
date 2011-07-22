@@ -99,9 +99,9 @@ class gen_ferm {
 define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false,
 		$icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter,
 		$chain=INPUT, $ensure=present, $exported=false, $customtag=false) {
-	$real_name = regsubst($name,'^(.*)_(.*?)$','\1')
+	$real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
 	$sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
-	$ip_proto = regsubst($name,'^(.*)_(.*?)$','\2')
+	$ip_proto = regsubst($name,'^(.*)_(v4?6?)$','\2')
 	$saddr_is_ip = $saddr ? {
 		/(! )?\d+\.\d+\.\d+\.\d+\/?\d*/ => "ipv4",
 		/(! )?.*:.*:.*\/?d*/            => "ipv6",
@@ -176,8 +176,8 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
 #	gen_puppet
 #
 define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $param=state, $value=false, $action=DROP) {
-	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
-	$ip_proto  = regsubst($name,'^(.*)_(.*)$','\2')
+	$real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
+	$ip_proto  = regsubst($name,'^(.*)_(v4?6?)$','\2')
 
 	if $ip_proto == "v46" or $ip_proto == $name {
 		mod { ["${real_name}_v4","${real_name}_v6"]:
@@ -217,8 +217,8 @@ define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $p
 #	gen_puppet
 #
 define gen_ferm::chain($policy=false, $table=filter) {
-	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
-	$ip_proto  = regsubst($name,'^(.*)_(.*)$','\2')
+	$real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
+	$ip_proto  = regsubst($name,'^(.*)_(v4?6?)$','\2')
 
 	fermfile {
 		"${ip_proto}_${table}_${real_name}":
@@ -250,8 +250,8 @@ define gen_ferm::chain($policy=false, $table=filter) {
 #	gen_puppet
 #
 define gen_ferm::table() {
-	$real_name = regsubst($name,'^(.*)_(.*)$','\1')
-	$ip_proto  = regsubst($name,'^(.*)_(.*)$','\2')
+	$real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
+	$ip_proto  = regsubst($name,'^(.*)_(v4?6?)$','\2')
 
 	fermfile {
 		"${ip_proto}_${real_name}":
