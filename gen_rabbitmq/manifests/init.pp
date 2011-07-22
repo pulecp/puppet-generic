@@ -3,70 +3,63 @@
 # Class: gen_rabbitmq
 #
 # Actions:
-#	Undocumented
+#	Set up rabbitmq
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-class gen_rabbitmq {
-	# This requires the source to be added!
-	kpackage { "rabbitmq-server":
-		ensure => latest,
-	}
-
-	exec { "reload-rabbitmq":
-		command     => "/etc/init.d/rabbitmq-server reload",
-		refreshonly => true,
+class gen_rabbitmq($version) {
+	kservice { "rabbitmq-server":
+		pensure => $version;
 	}
 }
 
-# Class: gen_rabbitmq::plugin::amqp
+# Class: gen_rabbitmq::amqp
 #
 # Actions:
-#	Undocumented
+#	Set up rabbitmq with amqp
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-class gen_rabbitmq::plugin::amqp {
-	include gen_rabbitmq
+class gen_rabbitmq::amqp($version) {
+	class { "gen_rabbitmq":
+		version => $version;
+	}
 
-	# This probably should be a package as well, but let's solve it with a sourced
-	# file for now.
-	kfile { "/usr/lib/rabbitmq/lib/rabbitmq_server-2.4.1/plugins/amqp_client-2.4.1.ez":
-		source  => "gen_rabbitmq/plugins/amqp_client-2.4.1.ez",
+	$shortversion=regsubst($version,'^(.*?)-(.*)$','\1')
+
+	kfile { "/usr/lib/rabbitmq/lib/rabbitmq_server-$shortversion/plugins/amqp_client-$shortversion.ez":
+		source  => "gen_rabbitmq/amqp_client-$shortversion.ez",
 		require => Kpackage["rabbitmq-server"],
-		notify  => Exec["reload-rabbitmq"],
+		notify  => Exec["reload-rabbitmq-server"];
 	}
 }
 
-# Class: gen_rabbitmq::plugin::stomp
+# Class: gen_rabbitmq::stomp
 #
 # Actions:
-#	Undocumented
+#	Set up raasbitmq with stomp
 #
 # Depends:
-#	Undocumented
 #	gen_puppet
 #
-class gen_rabbitmq::plugin::stomp {
-	# Stomp plugin requires amqp
-	include gen_rabbitmq::plugin::amqp
+class gen_rabbitmq::stomp($version) {
+	class { "gen_rabbitmq::amqp":
+		version => $version;
+	}
 
-	# This probably should be a package as well, but let's solve it with a sourced
-	# file for now.
-	kfile { "/usr/lib/rabbitmq/lib/rabbitmq_server-2.4.1/plugins/stomp_client-2.4.1.ez":
-		source  => "gen_rabbitmq/plugins/stomp_client-2.4.1.ez",
+	$shortversion=regsubst($version,'^(.*?)-(.*)$','\1')
+
+	kfile { "/usr/lib/rabbitmq/lib/rabbitmq_server-$shortversion/plugins/stomp_client-$shortversion.ez":
+		source  => "gen_rabbitmq/stomp_client-$shortversion.ez",
 		require => Kpackage["rabbitmq-server"],
-		notify  => Exec["reload-rabbitmq"],
+		notify  => Exec["reload-rabbitmq-server"];
 	}
 
 	line { "rabbitmq config for stomp plugin":
 		file    => "/etc/rabbitmq/rabbitmq-env.conf",
 		content => 'SERVER_START_ARGS="-rabbit_stomp listeners [{\"0.0.0.0\",6163}]"',
-		require => Kfile["/etc/rabbitmq/rabbitmq-env.conf"],
+		require => Kfile["/etc/rabbitmq/rabbitmq-env.conf"];
 	}
 }
-
