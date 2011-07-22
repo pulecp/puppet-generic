@@ -9,9 +9,7 @@
 #	gen_puppet
 #
 class gen_nsca {
-	kservice { "nsca":
-		subscribe => File["/etc/nsca.cfg"];
-	}
+	kservice { "nsca":; }
 }
 
 # Class: gen_nsca::server
@@ -28,7 +26,8 @@ class gen_nsca::server {
 	kfile { "/etc/nsca.cfg":
 		mode    => 640,
 		group   => "nagios",
-		require => Package["nsca"];
+		require => Package["nsca"],
+		notify  => Exec["reload-nsca"];
 	}
 }
 

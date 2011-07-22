@@ -15,7 +15,7 @@
 #		If defined sets the package to install
 #	pensure
 #		The ensure for the kpackage
-#	subscribe
+#	ssubscribe
 #		Defines a file or directory to subscribe on, triggering a reload if it changed
 #
 # Actions:
@@ -24,7 +24,7 @@
 # Depends:
 #	gen_puppet
 #
-define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present", $pattern=false, $subscribe=false) {
+define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present", $pattern=false, $ssubscribe=false) {
 	$package_name = $package ? {
 		false   => $name,
 		default => $package,
@@ -45,9 +45,9 @@ define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=t
 			false   => undef,
 			default => $pattern,
 		},
-		subscribe  => $subscribe ? {
+		subscribe  => $ssubscribe ? {
 			false   => undef,
-			default => $subscribe,
+			default => $ssubscribe,
 		},
 		require    => Kpackage[$package_name];
 	}
