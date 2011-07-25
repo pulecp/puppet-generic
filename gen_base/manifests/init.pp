@@ -1,47 +1,5 @@
 # Author: Kumina bv <support@kumina.nl>
 
-# Class: gen_base::libactiverecord_ruby18
-#
-# Actions:
-#	Install libactiverecord-ruby1.8
-#
-# Depends:
-#	gen_puppet
-#
-class gen_base::libactiverecord_ruby18 {
-	kpackage { "libactiverecord-ruby1.8":
-		ensure => latest;
-	}
-}
-
-# Class: gen_base::libnet_dns_perl
-#
-# Actions:
-#	Install libnet-dns-perl
-#
-# Depends:
-#	gen_puppet
-#
-class gen_base::libnet_dns_perl {
-	kpackage { "libnet-dns-perl":
-		ensure => latest;
-	}
-}
-
-# Class: gen_base::libstomp_ruby
-#
-# Actions:
-#	Install libstomp-ruby
-#
-# Depends:
-#	gen_puppet
-#
-class gen_base::libstomp_ruby {
-	kpackage { "libstomp-ruby":
-		ensure => latest;
-	}
-}
-
 # Class: gen_base::curl
 #
 # Actions:
@@ -84,6 +42,62 @@ class gen_base::jmxquery {
 	}
 }
 
+# Class: gen_base::libactiverecord_ruby18
+#
+# Actions:
+#	Install libactiverecord-ruby1.8
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libactiverecord_ruby18 {
+	kpackage { "libactiverecord-ruby1.8":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libmysql-ruby
+#
+# Actions:
+#	Install libmysql-ruby
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libmysql-ruby {
+	kpackage { "libmysql-ruby":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libnet_dns_perl
+#
+# Actions:
+#	Install libnet-dns-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libnet_dns_perl {
+	kpackage { "libnet-dns-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libstomp_ruby
+#
+# Actions:
+#	Install libstomp-ruby
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libstomp_ruby {
+	kpackage { "libstomp-ruby":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::nagios-nrpe-plugin
 #
 # Actions:
@@ -108,6 +122,20 @@ class gen_base::nagios-nrpe-plugin {
 #
 class gen_base::nagios-plugins-standard {
 	kpackage { "nagios-plugins-standard":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::rails
+#
+# Actions:
+#	Install rails
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::rails {
+	kpackage { "rails":
 		ensure => latest;
 	}
 }
