@@ -515,5 +515,11 @@ define gen_icinga::servicedependency($dependent_service_description, $host_name,
 			notify  => Exec["reload-icinga"],
 			tag     => "icinga_config";
 		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/service_dependency_${name}.cfg;${fqdn}":
+			ensure => absent,
+			notify  => Exec["reload-icinga"],
+			tag    => "icinga_config";
+		}
 	}
 }
