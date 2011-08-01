@@ -28,6 +28,34 @@ class gen_base::dnsutils {
 	}
 }
 
+# Class: gen_base::echoping
+#
+# Actions:
+#	Install echoping
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::echoping {
+	kpackage { "echoping":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::javascript-common
+#
+# Actions:
+#	Install javascript-common
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::javascript-common {
+	kpackage { "javascript-common":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::jmxquery
 #
 # Actions:
@@ -52,6 +80,20 @@ class gen_base::jmxquery {
 #
 class gen_base::libactiverecord_ruby18 {
 	kpackage { "libactiverecord-ruby1.8":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libio-socket-inet6-perl
+#
+# Actions:
+#	Install libio-socket-inet6-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libio-socket-inet6-perl {
+	kpackage { "libio-socket-inet6-perl":
 		ensure => latest;
 	}
 }
@@ -84,6 +126,20 @@ class gen_base::libnet_dns_perl {
 	}
 }
 
+# Class: gen_base::libsocket6-perl
+#
+# Actions:
+#	Install libsocket6-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libsocket6-perl {
+	kpackage { "libsocket6-perl":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libstomp_ruby
 #
 # Actions:
@@ -94,6 +150,20 @@ class gen_base::libnet_dns_perl {
 #
 class gen_base::libstomp_ruby {
 	kpackage { "libstomp-ruby":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::mc
+#
+# Actions:
+#	Install mc
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::mc {
+	kpackage { "mc":
 		ensure => latest;
 	}
 }
