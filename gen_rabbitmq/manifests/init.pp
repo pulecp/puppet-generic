@@ -8,9 +8,23 @@
 # Depends:
 #	gen_puppet
 #
-class gen_rabbitmq($version) {
+class gen_rabbitmq($version, $ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
 	kservice { "rabbitmq-server":
 		pensure => $version;
+	}
+
+	if $ssl_cert {
+		kfile {
+			"/etc/rabbitmq/rabbitmq.key":
+				source => $ssl_key,
+				notify  => Service["rabbitmq-server"];
+			"/etc/rabbitmq/rabbitmq.pem":
+				source => $ssl_cert,
+				notify  => Service["rabbitmq-server"];
+			"/etc/rabbitmq/rabbitmq.config":
+				content => template("gen_rabbitmq/rabbitmq.config"),
+				notify  => Service["rabbitmq-server"];
+		}
 	}
 }
 
@@ -32,7 +46,7 @@ class gen_rabbitmq::amqp($version) {
 	kfile { "/usr/lib/rabbitmq/lib/rabbitmq_server-$shortversion/plugins/amqp_client-$shortversion.ez":
 		source  => "gen_rabbitmq/amqp_client-$shortversion.ez",
 		require => Kpackage["rabbitmq-server"],
-		notify  => Exec["reload-rabbitmq-server"];
+		notify  => Service["rabbitmq-server"],
 	}
 }
 
@@ -54,12 +68,13 @@ class gen_rabbitmq::stomp($version) {
 	kfile { "/usr/lib/rabbitmq/lib/rabbitmq_server-$shortversion/plugins/stomp_client-$shortversion.ez":
 		source  => "gen_rabbitmq/stomp_client-$shortversion.ez",
 		require => Kpackage["rabbitmq-server"],
-		notify  => Exec["reload-rabbitmq-server"];
+		notify  => Service["rabbitmq-server"],
 	}
 
 	line { "rabbitmq config for stomp plugin":
 		file    => "/etc/rabbitmq/rabbitmq-env.conf",
 		content => 'SERVER_START_ARGS="-rabbit_stomp listeners [{\"0.0.0.0\",6163}]"',
+		notify  => Service["rabbitmq-server"],
 		require => Kfile["/etc/rabbitmq/rabbitmq-env.conf"];
 	}
 }
