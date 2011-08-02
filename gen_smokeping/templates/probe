@@ -1,0 +1,17 @@
++ <%= name %>
+<% if binary %>
+binary = <%= binary %><% end %><% if forks %>
+forks = <%= forks %><% end %><% if offset %>
+offset = <%= offset %><% end %><% if step %>
+step = <%= step %><% end %><% if accept_redirects %>
+accept_redirects = <%= accept_redirects %><% end %><% if ignore_cache %>
+ignore_cache = <%= ignore_cache %><% end %><% if ipversion %>
+ipversion = <%= ipversion %><% end %><% if pings %>
+pings = <%= pings %><% end %><% if port %>
+port = <%= port %><% end %><% if priority %>
+priority = <%= priority %><% end %><% if revalidate_data %>
+revalidate_data = <%= revalidate_data %><% end %><% if timeout_value %>
+timeout = <%= timeout_value %><% end %><% if tos %>
+tos = <%= tos %><% end %><% if url %>
+url = <%= url %><% end %><% if waittime %>
+waittime = <%= waittime %><% end %>

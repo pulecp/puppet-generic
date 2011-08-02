@@ -1,0 +1,6 @@
+++ <%= sanitized_name %>
+menu = <%= name %>
+title = <%= name %>
+probe = <%= probe %>
+host = <%= real_host %><% if path %>
+url = <%= path %><% end %>

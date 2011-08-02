@@ -1,0 +1,4 @@
++ <%= sanitized_name %>
+menu = <%= name %>
+title = <%= name %><% if remark %>
+remark = <%= remark %><% end %>

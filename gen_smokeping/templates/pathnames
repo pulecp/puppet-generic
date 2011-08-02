@@ -1,0 +1,21 @@
+<% if name == "smokeping" -%>
+sendmail = /usr/sbin/sendmail
+imgcache = /var/cache/smokeping/images
+imgurl = /smokeping/images
+datadir = /var/lib/smokeping
+dyndir = /var/lib/smokeping/__cgi
+piddir = /var/run/smokeping
+smokemail = /etc/smokeping/smokemail
+tmail = /etc/smokeping/tmail
+precreateperms = 2775
+<% else -%>
+sendmail = /usr/sbin/sendmail
+imgcache = /var/cache/smokeping/images
+imgurl = /smokeping/images
+datadir = /var/lib/smokeping
+dyndir = /var/lib/smokeping/__cgi
+piddir = /var/run/smokeping/<%= name %>
+smokemail = /etc/smokeping/smokemail
+tmail = /etc/smokeping/tmail
+precreateperms = 2775
+<% end -%>

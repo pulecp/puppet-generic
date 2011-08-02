@@ -1,11 +1,11 @@
 *** General ***
 
-@include /etc/smokeping/config.d/pathnames
+@include /etc/smokeping/config.d/<% if name != "smokeping" %><%= name %>/<% end %>pathnames
 
 # Please edit this to suit your installation
-owner    = Kumina BV
-contact  = info@kumina.nl
-cgiurl   = http://smokeping.kumina.nl/smokeping.cgi
-mailhost = <%= mailrelay %>
-# specify this to get syslog logging
-syslogfacility = local0
+owner    = <%= owner %>
+contact  = <%= contact %>
+cgiurl   = <%= cgiurl %><% if mailhost %>
+mailhost = <%= mailhost %><% end %>
+# specify this to get syslog logging<% if syslogfacility %>
+syslogfacility = <%= syslogfacility %><% end %>
