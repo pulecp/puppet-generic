@@ -75,6 +75,7 @@
 # $sort keeps the path to the unix sort utility
 #
 # It also copies out the concatfragments.sh file to /usr/local/bin
+
 # Class: concat::setup
 #
 # Actions:
