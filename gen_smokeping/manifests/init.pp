@@ -54,7 +54,7 @@ class gen_smokeping::server {
 # Depends:
 #	gen_puppet
 #
-define gen_smokeping::environment(owner, contact, cgiurl, mailhost=false, syslogfacility=false) {
+define gen_smokeping::environment($owner, $contact, $cgiurl, $mailhost=false, $syslogfacility=false) {
 	$initname = $name ? {
 		"smokeping" => "smokeping",
 		default     => "smokeping_${name}",
