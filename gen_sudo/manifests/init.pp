@@ -37,14 +37,14 @@ class gen_sudo {
 			mode    => 440,
 			require => Package["sudo"];
 		}
+	}
 
-		# This define is internal to gen_sudo and only needed on Lenny and older hosts
-		define add_rule($content, $order=15) {
-			concat::add_content { $name:
-				content => $content,
-				order   => $order,
-				target  => "/etc/sudoers";
-			}
+	# This define is internal to gen_sudo and only needed on Lenny and older hosts
+	define add_rule($content, $order=15) {
+		concat::add_content { $name:
+			content => $content,
+			order   => $order,
+			target  => "/etc/sudoers";
 		}
 	}
 
