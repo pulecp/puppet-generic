@@ -297,7 +297,7 @@ define gen_smokeping::probe($package=false, $binary=false, $forks=false, $offset
 #	gen_puppet
 #
 define gen_smokeping::config ($content, $subdir=false, $initname) {
-	$filename = regsubst($name,'^(.*)_.*?$','\1')
+	$filename = regsubst($name,'^(.*?)_.*$','\1')
 
 	if $subdir {
 		kfile { "/etc/smokeping/config.d/$subdir/${filename}":
