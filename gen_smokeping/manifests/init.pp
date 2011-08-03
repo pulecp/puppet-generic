@@ -101,7 +101,8 @@ define gen_smokeping::environment(owner, contact, cgiurl, mailhost=false, syslog
 	} else {
 		kfile {
 			"/etc/smokeping/config.d/${name}":
-				ensure => directory;
+				ensure  => directory,
+				require => Package["smokeping"];
 			"/etc/init.d/${initname}":
 				mode    => 755,
 				content => template("gen_smokeping/initscript"),
