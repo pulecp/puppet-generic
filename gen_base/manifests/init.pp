@@ -84,6 +84,20 @@ class gen_base::libactiverecord_ruby18 {
 	}
 }
 
+# Class: gen_base::libapache2-mod-php5
+#
+# Actions:
+#	Install libapache2-mod-php5
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libapache2-mod-php5 {
+	kpackage { "libapache2-mod-php5":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libio-socket-inet6-perl
 #
 # Actions:
