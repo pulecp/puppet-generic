@@ -37,7 +37,10 @@ define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=t
 			default => $ensure,
 		},
 		hasrestart => $hasrestart,
-		hasstatus  => $hasstatus,
+		hasstatus  => $pattern ? {
+			false   => $hasstatus,
+			default => false,
+		},
 		enable     => $enable,
 		pattern    => $pattern ? {
 			false   => undef,
