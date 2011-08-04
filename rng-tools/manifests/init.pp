@@ -21,8 +21,9 @@ class rng-tools {
 	}
 
 	service { "rng-tools":
-		ensure  => running,
-		pattern => "/usr/sbin/rngd",
-		require => File["/etc/default/rng-tools"];
+		ensure    => running,
+		pattern   => "/usr/sbin/rngd",
+		hasstatus => false,
+		require   => File["/etc/default/rng-tools"];
 	}
 }
