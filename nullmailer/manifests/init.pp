@@ -10,15 +10,9 @@
 #	gen_puppet
 #
 class nullmailer {
-	package {
-		"nullmailer":
-			ensure => present;
-	}
-
-	service {
-		"nullmailer":
-			require => Package["nullmailer"],
-			ensure => running;
+	kservice { "nullmailer":
+		hasstatus => false,
+		ensure    => running;
 	}
 
 	package {
