@@ -223,11 +223,6 @@ class nagios::nrpe::plugins {
 		require => File["/usr/local/lib/nagios/plugins"];
 	}
 
-	# Check puppetd freshness.
-	check { "puppet_state_freshness":
-		command => "/usr/lib/nagios/plugins/check_file_age -f /var/lib/puppet/state/state.yaml -w 14400 -c 21600",
-	}
-
 	# Check ClamAV socket file and update service.
 	check {
 		"clamav_daemon_socket":
