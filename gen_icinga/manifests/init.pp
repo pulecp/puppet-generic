@@ -129,6 +129,8 @@ class gen_icinga::server {
 #		Same as Icinga
 #	check_command
 #		Same as Icinga
+#	proxy
+#		Defines a proxy through which the checks are run, defaults to false
 #
 # Actions:
 #	Define a service
@@ -141,7 +143,8 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
 		$obsess_over_service=false, $check_freshness=false, $freshness_threshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false,
 		$process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false,
 		$check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false,
-		$max_check_attempts=false, $check_command=false, $arguments=false, $register=false, $nrpe=false, $ensure=present) {
+		$max_check_attempts=false, $check_command=false, $arguments=false, $register=false, $nrpe=false, $ensure=present,
+		$proxy=false) {
 	@@ekfile { "/etc/icinga/config/${conf_dir}/service_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/service"),
 		notify  => Exec["reload-icinga"],
@@ -193,6 +196,8 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
 #		Same as Icinga
 #	check_interval
 #		Same as Icinga
+#	proxy
+#		Defines a proxy through which the checks are run, defaults to false
 #
 # Actions:
 #	Define a host
@@ -202,8 +207,8 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
 #
 define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgroups=false, $parents=false, $address=$ipaddress, $initial_state=false,
 		$notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false,
-		$check_command=false, $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $contacts=false,
-		$max_check_attempts=false, $register=false) {
+		$check_command="check-host-alive", $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $contacts=false,
+		$max_check_attempts=false, $register=false, $proxy=false) {
 	@@ekfile { "/etc/icinga/config/${conf_dir}/host_${name}.cfg;${fqdn}":
 		content => template("gen_icinga/host"),
 		notify  => Exec["reload-icinga"],
@@ -395,10 +400,15 @@ define gen_icinga::configdir($base="/etc/icinga/config") {
 #	gen_puppet
 #
 define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_name=false, $host_argument='-H $HOSTADDRESS$', $arguments=false, $nrpe=false, $time_out=30) {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/command"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	@@ekfile {
+		"/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/command"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		"/etc/icinga/config/${conf_dir}/command_proxy_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/proxycommand"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
 	}
 }
 
