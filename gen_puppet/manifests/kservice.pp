@@ -22,16 +22,16 @@
 # Depends:
 #	gen_puppet
 #
-define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present", $pattern=false) {
+define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present", $pattern=false) {
 	$package_name = $package ? {
 		false   => $name,
 		default => $package,
 	}
 
-	kpackage { "${package_name}":
+	kpackage { $package_name:
 		ensure => $pensure; }
 
-	service { "${name}":
+	service { $name:
 		ensure     => $ensure ? {
 			false   => undef,
 			default => $ensure,
@@ -49,14 +49,22 @@ define kservice ($ensure="running", $hasrestart=true, $hasstatus=true, $enable=t
 		require    => Kpackage[$package_name];
 	}
 
-	if $lsbmajdistrelease < 6 {
-		exec { "reload-${name}":
-			command     => "/etc/init.d/${name} reload",
-			refreshonly => true;
+	if $hasreload {
+		if $lsbmajdistrelease < 6 {
+			exec { "reload-${name}":
+				command     => "/etc/init.d/${name} reload",
+				refreshonly => true;
+			}
+		} else {
+			exec { "reload-${name}":
+				command     => "/usr/sbin/service ${name} reload",
+				refreshonly => true;
+			}
 		}
 	} else {
 		exec { "reload-${name}":
-			command     => "/usr/sbin/service ${name} reload",
+			command     => "/bin/true",
+			notify      => Service[$name],
 			refreshonly => true;
 		}
 	}

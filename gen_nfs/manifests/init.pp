@@ -10,7 +10,8 @@
 #
 class gen_nfs {
 	kservice {
-		"nfs-common":;
+		"nfs-common":
+			hasreload => false;
 		"portmap":
 			hasstatus => false,
 			pattern   => "/sbin/portmap",

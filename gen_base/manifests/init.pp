@@ -210,6 +210,20 @@ class gen_base::nagios-plugins-standard {
 	}
 }
 
+# Class: gen_base::php5-mysql
+#
+# Actions:
+#	Install php5-mysql
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php5-mysql {
+	kpackage { "php5-mysql":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::rails
 #
 # Actions:
