@@ -1,8 +1,8 @@
 define host {<% if use %>
 	use                           <%= use %><% end %><% if register == "0" %>
 	name                          <% else %>
-	host_name                     <% end%><%= name %>
-	hostgroups                    <%= hostgroups %>
+	host_name                     <% end%><%= name %><% if hostgroups %>
+	hostgroups                    <%= hostgroups %><% end %>
 	address                       <%= address %><% if parents %>
 	parents                       <%= parents %><% end %><% if initial_state %>
 	initial_state                 <%= initial_state %><% end %><% if notifications_enabled %>
