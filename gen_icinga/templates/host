@@ -12,7 +12,7 @@ define host {<% if use %>
 	process_perf_data             <%= process_perf_data %><% end %><% if retain_status_information %>
 	retain_status_information     <%= retain_status_information %><% end %><% if retain_nonstatus_information %>
 	retain_nonstatus_information  <%= retain_nonstatus_information %><% end %><% if check_command %>
-	check_command                 <% if proxy %>proxy_<% end %><%= check_command %><% end %><% proxy %>
+	check_command                 <% if proxy %>proxy_<% end %><%= check_command %><% end %><% if proxy %>
 	_PROXY                        <%= proxy %><% end %><% if check_interval %>
 	check_interval                <%= check_interval %><% end %><% if notification_period %>
 	notification_period           <%= notification_period %><% end %><% if notification_interval %>
