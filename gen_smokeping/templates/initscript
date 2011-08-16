@@ -27,7 +27,7 @@ DAEMON=/usr/sbin/smokeping
 NAME=smokeping_<%= name %>
 DESC="latency logger daemon"
 CONFIG=/etc/smokeping/config.d/<%= name %>/config
-PIDFILE=/var/run/smokeping/<%= name %>/smokeping.pid
+PIDFILE=/var/run/smokeping/smokeping_<%= name %>.pid
 DAEMON_USER=smokeping
 DEFAULTS=/etc/default/smokeping
 MODE=master
