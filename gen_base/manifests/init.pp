@@ -98,6 +98,21 @@ class gen_base::libapache2-mod-php5 {
 	}
 }
 
+# Class: gen_base::libfreetype6
+#
+# Actions:
+#	Install libfreetype6
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libfreetype6 {
+	kpackage { "libfreetype6":
+		ensure => latest;
+		# Grub needs this package......
+	}
+}
+
 # Class: gen_base::libio-socket-inet6-perl
 #
 # Actions:
