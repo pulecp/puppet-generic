@@ -10,9 +10,10 @@
 #	gen_puppet
 #
 class hylafax::server {
-	package {
-		"hylafax-server":
-			ensure => present;
+	include gen_base::libfreetype6
+
+	kpackage { "hylafax-server":
+		ensure => latest,
 	}
 
 	service {
