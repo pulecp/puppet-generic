@@ -127,6 +127,20 @@ class gen_base::libio-socket-inet6-perl {
 	}
 }
 
+# Class: gen_base::libmozjs2d
+#
+# Actions:
+#	Install libmozjs2d
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libmozjs2d {
+	kpackage { "libmozjs2d":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libmysql-ruby
 #
 # Actions:
