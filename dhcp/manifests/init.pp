@@ -19,6 +19,10 @@ class dhcp::server {
 			hasstatus => true;
 		}
 
+		Kpackage <| title == "dhcp3-common" |> {
+			ensure => latest,
+		}
+
 		kfile { "/etc/dhcp3/dhcpd.conf":
 			source => "dhcp/server/dhcpd.conf";
 		}
