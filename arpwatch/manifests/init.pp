@@ -14,6 +14,7 @@ class arpwatch {
 
 	service { "arpwatch":
 		ensure    => running,
+		hasstatus => false,
 		require   => File["/etc/default/arpwatch"],
 		subscribe => File["/etc/default/arpwatch"];
 	}
