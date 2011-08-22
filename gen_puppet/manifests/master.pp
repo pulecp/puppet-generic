@@ -291,7 +291,7 @@ define gen_puppet::master::environment ($configfile = "/etc/puppet/puppet.conf",
 	if $manifestdir { $real_manifestdir = $manifestdir }
 	else            { $real_manifestdir = "/srv/puppet" }
 	if $manifest { $real_manifest = $manifest }
-	else         { $real_manifest = "${manifestdir}/env/${name}/site.pp" }
+	else         { $real_manifest = "${real_manifestdir}/env/${name}/site.pp" }
 	if $modulepath { $real_modulepath = $modulepath }
 	else           { $real_modulepath = "/srv/puppet/generic:/srv/puppet/kbp:/srv/puppet/env/${name}" }
 
