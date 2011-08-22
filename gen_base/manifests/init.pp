@@ -267,6 +267,20 @@ class gen_base::rails {
 	}
 }
 
+# Class: gen_base::ruby_stomp
+#
+# Actions:
+#	Install ruby-stomp 1.1.9 from the Kumina repository
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::ruby_stomp {
+	kpackage { "ruby-stomp":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::wget
 #
 # Actions:

@@ -11,7 +11,9 @@
 #
 class gen_puppet::queue {
 	include gen_base::libactiverecord_ruby18
-	include gen_base::libstomp_ruby
+	# Nope, we don't want this one, need a newer version
+	#include gen_base::libstomp_ruby
+	include gen_base::ruby_stomp
 
 	kpackage { "puppetmaster-common":
 		ensure  => latest,
