@@ -48,7 +48,7 @@ class gen_sudo {
 		}
 	}
 
-	define rule($entity, $command, $as_user, $password_required = true, $comment = false, $order = 15) {
+	define rule($entity, $command, $as_user, $password_required = true, $comment = false, $order = 15, $preserve_env_vars=false) {
 		$the_comment = $comment ? {
 			false   => $name,
 			default => $comment
