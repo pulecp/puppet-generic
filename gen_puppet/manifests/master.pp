@@ -74,7 +74,7 @@ class gen_puppet::master ($servertype = 'passenger') {
 define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 		$debug = false, $factpath = '$vardir/lib/facter',
 		$fileserverconf = "/etc/puppet/fileserver.conf",
-		$logdir = "/var/log/puppet", $pluginsync = true, queue = false,
+		$logdir = "/var/log/puppet", $pluginsync = true, $queue = false,
 		$rackroot = "/usr/local/share/puppet/rack", $rundir = "/var/run/puppet",
 		$ssldir = "/var/lib/puppet/ssl", $templatedir = '$confdir/templates',
 		$vardir = "/var/lib/puppet") {
