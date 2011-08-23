@@ -217,6 +217,8 @@ define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $p
 #	gen_puppet
 #
 define gen_ferm::chain($policy=false, $table=filter) {
+	include gen_ferm
+
 	$real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
 	$ip_proto  = regsubst($name,'^(.*)_(v4?6?)$','\2')
 
