@@ -27,7 +27,8 @@ DAEMON=/usr/sbin/smokeping
 NAME=smokeping_<%= name %>
 DESC="latency logger daemon"
 CONFIG=/etc/smokeping/config.d/<%= name %>/config
-PIDFILE=/var/run/smokeping/smokeping_<%= name %>.pid
+PIDDIR=/var/run/smokeping/<%= name %>
+PIDFILE=$PIDDIR/smokeping.pid
 DAEMON_USER=smokeping
 DEFAULTS=/etc/default/smokeping
 MODE=master
@@ -49,7 +50,7 @@ fi
 check_slave() {
     if [ "$MODE" != "slave" ]
     then
-        DAEMON_ARGS="$DAEMON_ARGS --pid-dir /var/run/smokeping/<%= name %>"
+        DAEMON_ARGS="$DAEMON_ARGS --pid-dir $PIDFILE"
         DAEMON_ARGS="$DAEMON_ARGS --config $CONFIG"
         return
     fi
@@ -77,7 +78,7 @@ check_slave() {
         DAEMON_ARGS="$DAEMON_ARGS --slave-name $SLAVE_NAME"
     fi
     DAEMON_ARGS="$DAEMON_ARGS --cache-dir /var/lib/smokeping"
-    DAEMON_ARGS="$DAEMON_ARGS --pid-dir /var/run/smokeping/<%= name %>"
+    DAEMON_ARGS="$DAEMON_ARGS --pid-dir $PIDFILE"
     DAEMON_ARGS="$DAEMON_ARGS --config $CONFIG"
 }
 
@@ -107,10 +108,10 @@ case "$1" in
         exit $STATUS
     fi
 
-    if [ ! -d /var/run/smokeping/<%= name %> ]; then
-        mkdir -p /var/run/smokeping/<%= name %>
-        chown ${DAEMON_USER}.root /var/run/smokeping/<%= name %>
-        chmod 0755 /var/run/smokeping/<%= name %>
+    if [ ! -d $PIDDIR ]; then
+        mkdir -p $PIDDIR
+        chown ${DAEMON_USER}.root $PIDDIR
+        chmod 0755 $PIDDIR
     fi
 
     set +e
