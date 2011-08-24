@@ -52,37 +52,49 @@ class gen_git::listchanges::install {
 # Parameters:
 #	name
 #		The directory where to create the repository.
-#		Needs to be a kfile already.
+#		Needs to be a kfile already. Unless it's bare,
 #	branch
 #		The remote branch of the origin. Defaults to
 #		"master".
 #	origin
 #		Add an origin to the repository. This does
 #		not clone the remote repository.
+#	bare
+#		Should this repository be a bare repository?
 #
 # Depends:
 #	gen_git
 #	gen_puppet
 #
-# Todo:
-#	Add option for creating a bare repository, without the hook script.
-#
-define gen_git::repo ($branch = "master", $origin = false) {
+define gen_git::repo ($branch = "master", $origin = false, $bare = false) {
 	include gen_git
 
 	# I thought about adding an option to automatically clone a remote
 	# repository, but that won't work very often since you'd have to
 	# give puppet access to your ssh secret key. You don't want that.
 
-	exec {
-		"/usr/bin/git init -q --shared=group ${name}":
-			creates => "${name}/.git",
-			require => [Kfile[$name],Kpackage["git"]];
-		"/usr/bin/git config --add receive.denyCurrentBranch ignore on ${name}":
-			command => "/usr/bin/git config --add receive.denyCurrentBranch ignore",
-			cwd     => $name,
-			unless  => "/usr/bin/git config --get receive.denyCurrentBranch | grep -q 'ignore'",
+	if !$bare {
+		exec {
+			"/usr/bin/git init -q --shared=group ${name}":
+				creates => "${name}/.git",
+				require => [Kfile[$name],Kpackage["git"]];
+			"/usr/bin/git config --add receive.denyCurrentBranch ignore on ${name}":
+				command => "/usr/bin/git config --add receive.denyCurrentBranch ignore",
+				cwd     => $name,
+				unless  => "/usr/bin/git config --get receive.denyCurrentBranch | grep -q 'ignore'",
+				require => Exec["/usr/bin/git init -q --shared=group ${name}"];
+		}
+		# This is the hook that makes sure we always have the latest version checked out.
+		kfile { "${name}/.git/hooks/post-update":
+			source  => "gen_git/post-update",
+			mode    => 755,
 			require => Exec["/usr/bin/git init -q --shared=group ${name}"];
+		}
+	} else {
+		exec { "/usr/bin/git init --bare -q --shared=group ${name}":
+			creates => "${name}",
+			require => Kpackage["git"];
+		}
 	}
 
 	if $origin {
@@ -109,12 +121,6 @@ define gen_git::repo ($branch = "master", $origin = false) {
 		}
 	}
 
-	# This is the hook that makes sure we always have the latest version checked out.
-	kfile { "${name}/.git/hooks/post-update":
-		source  => "gen_git/post-update",
-		mode    => 755,
-		require => Exec["/usr/bin/git init -q --shared=group ${name}"];
-	}
 }
 
 # Define: gen_git::listchanges
