@@ -1,5 +1,21 @@
 # Author: Kumina bv <support@kumina.nl>
 
+# Class: mysql
+#
+# Actions:
+#	Make an exec available that flushes privileges.
+#
+# Depends:
+#	gen_puppet
+#
+class mysql {
+	exec { "MySQL flush privileges":
+		command     => "/usr/bin/mysqladmin --defaults-file=/etc/mysql/debian.cnf flush-privileges",
+		refreshonly => true,
+		require     => Service["mysql"],
+	}
+}
+
 # Class: mysql::server
 #
 # Actions:
@@ -10,6 +26,8 @@
 #	gen_puppet
 #
 class mysql::server {
+	include mysql
+
 	case $lsbdistcodename {
 		"lenny":   { $mysqlserver = "mysql-server-5.0" }
 		"squeeze": { $mysqlserver = "mysql-server-5.1" }
@@ -205,17 +223,20 @@ class mysql::munin {
 #	gen_puppet
 #
 define mysql::user($user, $password=false, $hostname="localhost") {
+	exec { "create MySQL user ${user} from ${hostname}":
+		onlyif  => "/usr/bin/pgrep mysqld && /usr/bin/test `/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf --skip-column-names -B -e \"select count(*) from mysql.user where User='${user}' and Host='${hostname}'\"` -eq 0",
+		command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create user '${user}'@'${hostname}';\"",
+		notify  => Exec["MySQL flush privileges"],
+		require => Service["mysql"];
+	}
+
 	if $password {
-		exec { "create-${user}${hostname}":
-			onlyif  => "/usr/bin/pgrep mysqld && ! /usr/bin/mysql -u ${user} -p${password}",
-			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create user '${user}'@'${hostname}' identified by '${password}';\"",
-			require => Service["mysql"];
-		}
-	} else {
-		exec { "create-${user}${hostname}":
-			onlyif  => "/usr/bin/pgrep mysqld && ! /usr/bin/mysql -u ${user}",
-			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create user '${user}'@'${hostname}';\"",
-			require => Service["mysql"];
+		exec { "create ${user} from ${hostname} with a password":
+			onlyif  => "/usr/bin/test `mysql --defaults-file=/etc/mysql/debian.cnf --skip-column-names -B -e \"select count(*) from mysql.user where User='${user}' and Host='${hostname}' and Password=PASSWORD('${password}')\" -eq 0",
+			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"update mysql.user set Password = PASSWORD('${password}') where User = '${user}' and Host = '${hostname}';\"",
+			notify  => Exec["MySQL flush privileges"],
+			require => Exec["create MySQL user ${user} from ${hostname}"];
 		}
 	}
 }
+
