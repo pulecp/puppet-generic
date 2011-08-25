@@ -77,9 +77,10 @@ class apache {
    }
 
 	# Mitigation for CVE-2011-3192, can be removed when patched
+	include apache::headers
 	kfile { "/etc/apache2/conf.d/cve-2011-3192.conf":
 		ensure  => present,
-		content => "# Drop the Range header when more than 5 ranges.\n# CVE-2011-3192\nSetEnvIf Range (,.*?){5,} bad-range=1\nRequestHeader unset Range env=bad-range\noptional logging.\nCustomLog logs/range-CVE-2011-3192.log common env=bad-range",
+		content => "# Drop the Range header when more than 5 ranges.\n# CVE-2011-3192\nSetEnvIf Range (,.*?){5,} bad-range=1\nRequestHeader unset Range env=bad-range\n# optional logging.\nCustomLog /var/log/apache2/range-CVE-2011-3192.log common env=bad-range",
 		notify  => Exec["reload-apache2"];
 	}
 
@@ -200,4 +201,8 @@ class apache {
                 require => File["/etc/apache2/vhost-additions"],
         }
    }
+}
+
+class apache::headers {
+	apache::module { "headers":; }
 }
