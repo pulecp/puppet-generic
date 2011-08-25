@@ -152,7 +152,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
 
 	concat::add_content { "Add footer for config.ru for puppetmaster ${pname}":
 		target   => "${rackdir}/config.ru",
-		content  => "ARGV << \"--rack\"\nrequire 'puppet/application/master'\nrun Puppet::Application[:master].run\n",
+		content  => "ARGV << \"--rack\"\nrequire 'puppet/application/master'\nEncoding.default_external = Encoding::UTF_8\nEncoding.default_internal = Encoding::UTF_8\nrun Puppet::Application[:master].run\n",
 		order    => 20,
 	}
 
