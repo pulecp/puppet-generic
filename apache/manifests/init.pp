@@ -76,6 +76,14 @@ class apache {
       }
    }
 
+	# Mitigation for CVE-2011-3192, can be removed when patched
+	kfile { "/etc/apache2/conf.d/cve-2011-3192.conf":
+		ensure  => present,
+		content => "# Drop the Range header when more than 5 ranges.\n# CVE-2011-3192\nSetEnvIf Range (,.*?){5,} bad-range=1\nRequestHeader unset Range env=bad-range\noptional logging.\nCustomLog logs/range-CVE-2011-3192.log common env=bad-range",
+		notify  => Exec["reload-apache2"];
+	}
+
+
    # Let's make sure we've got apache2 installed
    kpackage {
 	"apache2":
