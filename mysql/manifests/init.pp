@@ -85,10 +85,13 @@ class mysql::server {
 		notify  => Service["mysql"],
 	}
 
-	define db {
+	define db ($use_utf8=false) {
 		exec { "create-${name}-db":
 			unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf ${name}",
-			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create database ${name};\"",
+			command => $use_utf8 ? { 
+				false   => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create database ${name};\"",
+				default => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create database ${name} CHARACTER SET utf8 COLLATE utf8_general_ci;\"",
+			},
 			require => Service["mysql"];
 		}
 	}
@@ -240,3 +243,8 @@ define mysql::user($user, $password=false, $hostname="localhost") {
 	}
 }
 
+class mysql::java {
+	package { "libmysql-java":
+		ensure => installed,
+	}
+}

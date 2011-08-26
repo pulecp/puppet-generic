@@ -1,5 +1,19 @@
 # Author: Kumina bv <support@kumina.nl>
 
+# Class: gen_base::ant
+#
+# Actions:
+#	Install ant
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::ant {
+	kpackage { "ant":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::curl
 #
 # Actions:
@@ -98,6 +112,20 @@ class gen_base::libapache2-mod-php5 {
 	}
 }
 
+# Class: gen_base::libcommons-logging-java
+#
+# Actions:
+#	Install libcommons-logging-java
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libcommons-logging-java {
+	kpackage { "libcommons-logging-java":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libfreetype6
 #
 # Actions:
@@ -165,6 +193,20 @@ class gen_base::libmysql-ruby {
 #
 class gen_base::libnet_dns_perl {
 	kpackage { "libnet-dns-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::liblog4j1.2-java
+#
+# Actions:
+#	Install liblog4j1.2-java
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::liblog4j1_2-java {
+	kpackage { "liblog4j1.2-java":
 		ensure => latest;
 	}
 }
@@ -239,6 +281,20 @@ class gen_base::nagios-plugins-standard {
 	}
 }
 
+# Class: gen_base::openjdk-6-jre
+#
+# Actions:
+#	Install openjdk-6-jre
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::openjdk-6-jre {
+	kpackage { "openjdk-6-jre":
+		ensure => installed;
+	}
+}
+
 # Class: gen_base::php5-mysql
 #
 # Actions:
@@ -277,6 +333,20 @@ class gen_base::rails {
 #
 class gen_base::ruby_stomp {
 	kpackage { "ruby-stomp":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::unzip
+#
+# Actions:
+#	Install unzip
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::unzip {
+	kpackage { "unzip":
 		ensure => latest;
 	}
 }
