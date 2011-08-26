@@ -14,7 +14,8 @@ class gen_heartbeat ($customtag="heartbeat_${environment}") {
 	# These ekfiles contain the configuration fragments for heartbeat.
 	Ekfile <<| tag == $customtag |>>
 	concat { "/etc/heartbeat/ha.cf":
-#		notify => Kservice["heartbeat"];
+		remove_fragments => false,
+		notify           => Service["heartbeat"];
 	}
 
 	# We don't use auth-keys, as the port is firewalled and only open to the other hosts(s) in the cluster(done in kbp_heartbeat)

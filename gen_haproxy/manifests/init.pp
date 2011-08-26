@@ -34,8 +34,9 @@ class gen_haproxy ($failover=false, $customtag="haproxy_${environment}"){
 	# They should be exported on the webservers-to-be-loadbalanced
 	Ekfile <<| tag == $customtag |>>
 	concat { "/etc/haproxy/haproxy.cfg" :
-		notify => $failover ? {
-			true => undef,
+		remove_fragments => false,
+		notify           => $failover ? {
+			true    => undef,
 			default => Kservice["haproxy"],
 		};
 	}
