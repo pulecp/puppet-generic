@@ -77,9 +77,10 @@ class apache {
    }
 
 	# Mitigation for CVE-2011-3192, can be removed when patched
+	# TODO remove this puppet resource after september first
 	include apache::headers
 	kfile { "/etc/apache2/conf.d/cve-2011-3192.conf":
-		ensure  => present,
+		ensure  => absent,
 		content => "# Drop the Range header when more than 5 ranges.\n# CVE-2011-3192\nSetEnvIf Range (,.*?){5,} bad-range=1\nRequestHeader unset Range env=bad-range\n# optional logging.\nCustomLog /var/log/apache2/range-CVE-2011-3192.log common env=bad-range",
 		notify  => Exec["reload-apache2"];
 	}
