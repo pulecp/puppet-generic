@@ -10,7 +10,8 @@
 #	Undocumented
 #	gen_puppet
 #
-class gen_tomcat ($java_home="/usr/lib/jvm/java-6-openjdk/", $catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080") {
+class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080", $java_opts="") {
+	$java_home="/usr/lib/jvm/java-6-openjdk/"
 	kservice { "tomcat6":
 		hasreload => false,
 		require   => File["/srv/tomcat"];
