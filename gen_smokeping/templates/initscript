@@ -97,11 +97,7 @@ case "$1" in
     log_daemon_msg "Starting $DESC" $NAME
     check_config
     check_slave
-    set +e
-    pidofproc "$NAME" > /dev/null
-    STATUS=$?
-    set -e
-    if [ "$STATUS" = 0 ]
+    if kill -s 0 `cat $PIDFILE 2> /dev/null` 2> /dev/null
     then
         log_progress_msg "already running"
         log_end_msg $STATUS
