@@ -214,7 +214,7 @@ class mysql::munin {
 }
 
 
-# Define: mysql::user
+# Define: mysql::server::user
 #
 # Parameters:
 #	password
@@ -254,3 +254,16 @@ class mysql::java {
 		ensure => installed,
 	}
 }
+
+define mysql::server::permissions ($user, $db, $hostname="localhost", $permissions="all") {
+	# $name is not used, make it whatever you like
+	if "select" in $permissions or $permissions == "all" {
+		exec { "set select permission on $db for $user at $hostname":
+			onlyif  => "/usr/bin/pgrep mysqld && /usr/bin/test `/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf --skip-column-names -B -e \"select count(*) from mysql.user where User='${user}' and Host='${hostname}'\"` -eq 0",
+			command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant select on ${db}.* to '${user}'@'{hostname}';\"",
+			require => Exec["create MySQL user ${user} from ${hostname}"],
+			notify  => Exec["MySQL flush privileges"],
+		}
+	}
+}
+
