@@ -10,8 +10,13 @@
 #	Undocumented
 #	gen_puppet
 #
-class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080", $java_opts="") {
+class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080", $java_opts="", $jvm_max_mem=false) {
 	$java_home="/usr/lib/jvm/java-6-openjdk/"
+	if !$jvm_max_mem {
+		$jvm_mem = $memorysizeinbytes/1024/1024*0.75
+	} else {
+		$jvm_mem = $jvm_max_mem
+	}
 	kservice { "tomcat6":
 		hasreload => false,
 		require   => File["/srv/tomcat"];
@@ -59,7 +64,8 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 			require => Package["tomcat6"];
 		"/etc/default/tomcat6":
 			content => template("gen_tomcat/default"),
-			require => Package["tomcat6"];
+			require => Package["tomcat6"],
+			notify  => Service["tomcat6"];
 		"/etc/tomcat6/server.xml":
 			content => template("gen_tomcat/server.xml"),
 			require => Package["tomcat6"];
