@@ -206,6 +206,9 @@ class nagios::nrpe::plugins {
 		"sslcert":
 			command => 'sudo /usr/lib/nagios/plugins/check_sslcert -c 7 -w 30 $ARG1$',
 			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];
+		"rabbitmqctl":
+			command => 'sudo /usr/lib/nagios/plugins/check_rabbitmqctl -p $ARG1$',
+			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];
 	}
 
 	kpackage { "nagios-plugins-kumina":
