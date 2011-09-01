@@ -392,3 +392,17 @@ class gen_base::wget {
 		ensure => latest;
 	}
 }
+
+# Class: gen_base::xvfb
+#
+# Actions:
+#	Install xvfb
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::xvfb {
+	kpackage { "xvfb":
+		ensure => latest;
+	}
+}
