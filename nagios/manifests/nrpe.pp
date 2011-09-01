@@ -133,7 +133,6 @@ class nagios::nrpe::plugins {
 	}
 
 	# TODO This should be done by kbp_monitoring::client::pacemaker
-	include gen_sudo
 	gen_sudo::rule { "pacemaker sudo rules":
 		entity => "nagios",
 		as_user => "root",
@@ -170,7 +169,6 @@ class nagios::nrpe::plugins {
 			require => File["/etc/nagios/nrpe.d"];
 	}
 
-	include gen_sudo
 	gen_sudo::rule { "Nagios can run all plugins as root":
 		entity => "nagios",
 		as_user => "ALL",
