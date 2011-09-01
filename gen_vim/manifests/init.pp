@@ -1,49 +1,25 @@
 # Author: Kumina bv <support@kumina.nl>
 
-# Class: gen_vim
-#
-# Actions:
-#	Undocumented
-#
-# Depends:
-#	Undocumented
-#	gen_puppet
-#
-class gen_vim {
-	kpackage { "vim":
-		ensure => latest,
-	}
-}
-
-# Class: gen_vim::addon_manager
-#
-# Actions:
-#	Undocumented
-#
-# Depends:
-#	Undocumented
-#	gen_puppet
-#
-class gen_vim::addon_manager {
-	kpackage { "vim-addon-manager":
-		ensure => "latest";
-	}
-}
-
 # Define: gen_vim::global_setting
 #
 # Actions:
-#	Undocumented
+#	Set a global setting
+#
+# Parameters:
+#	name
+#		The setting to set
 #
 # Depends:
-#	Undocumented
+#	gen_base::vim
 #	gen_puppet
 #
 define gen_vim::global_setting {
+	include gen_base::vim
+
 	line { "global vim setting ${name}":
-		ensure  => "present",
 		file    => "/etc/vim/vimrc",
-		content => "${name}",
+		content => $name,
+		require => Package["vim"];
 	}
 }
 
@@ -51,19 +27,19 @@ define gen_vim::global_setting {
 #
 # Parameters:
 #	package
-#		Undocumented
+#		The package to install, defaults to $name
 #
 # Actions:
-#	Undocumented
+#	Install and activate a vim addon
 #
 # Depends:
-#	Undocumented
+#	gen_base::vim
+#	gen_base::vim-addon-manager
 #	gen_puppet
 #
 define gen_vim::addon ($package=false) {
-	# Install and activate a vim addon. Use as follows:
-	# kbp_vim::vim_addon { "puppet": package => "vim-puppet"; }
-	include gen_vim::addon_manager
+	include gen_base::vim
+	include gen_base::vim-addon-manager
 
 	$the_package = $package ? {
 		false   => $name,
@@ -76,6 +52,6 @@ define gen_vim::addon ($package=false) {
 
 	exec { "/usr/bin/vim-addons -w install ${name}":
 		unless  => "/usr/bin/vim-addons -w -q show ${name} | /bin/grep 'installed' 2>&1 > /dev/null",
-		require => Kpackage["vim-addon-manager", "${the_package}"];
+		require => Package["vim-addon-manager", $the_package];
 	}
 }

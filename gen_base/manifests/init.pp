@@ -351,6 +351,34 @@ class gen_base::unzip {
 	}
 }
 
+# Class: gen_base::vim
+#
+# Actions:
+#	Install vim
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::vim {
+	kpackage { "vim":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::vim-addon-manager
+#
+# Actions:
+#	Install vim-addon-manager
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::vim-addon-manager {
+	kpackage { "vim-addon-manager":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::wget
 #
 # Actions:

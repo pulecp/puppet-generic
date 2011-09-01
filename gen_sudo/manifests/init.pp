@@ -34,9 +34,6 @@ class gen_sudo {
 
 # Define: gen_sudo::rule
 #
-# Actions:
-#	Set up a sudo rule
-#
 # Parameters:
 #	entity
 #		The user or group that can use the rule
@@ -51,7 +48,11 @@ class gen_sudo {
 #	preserve_env_vars
 #		Do the environment vars need to be preserved? Defaults to false
 #
+# Actions:
+#	Set up a sudo rule
+#
 # Depends:
+#	gen_sudo
 #	gen_puppet
 #
 define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $comment = false, $preserve_env_vars=false) {
@@ -59,7 +60,7 @@ define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $c
 
 	$the_comment = $comment ? {
 		false   => $name,
-		default => $comment
+		default => $comment,
 	}
 
 	if $lsbmajdistrelease > 5 { # Squeeze or newer
@@ -76,12 +77,12 @@ define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $c
 
 # Define: gen_sudo::add_rule
 #
-# Actions:
-#	Internal define to add a sudo rule
-#
 # Parameters:
 #	content
 #		The content of the rule
+#
+# Actions:
+#	Internal define to add a sudo rule
 #
 # Depends:
 #	gen_puppet
