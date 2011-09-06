@@ -8,9 +8,12 @@
 # Depends:
 #	gen_puppet
 #
-class gen_rabbitmq($version, $ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
+class gen_rabbitmq($version=false, $ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
 	kservice { "rabbitmq-server":
-		pensure => $version;
+		pensure => $version ? {
+			false   => undef,
+			default => $version,
+		};
 	}
 
 	if $ssl_cert {
