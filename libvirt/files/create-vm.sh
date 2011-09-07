@@ -28,7 +28,7 @@
 
 if test $# -ne 7
 then
-	echo "usage: $0 name nproc ram_mb disk_volgrp disk_gb vnc_port vnc_secret" >&2
+	echo "usage: $0 name nproc ram_kb disk_volgrp disk_gb vnc_port vnc_secret" >&2
 	exit 1
 fi
 
