@@ -145,11 +145,17 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
 		$check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false,
 		$max_check_attempts=false, $check_command=false, $arguments=false, $register=false, $nrpe=false, $ensure=present,
 		$proxy=false) {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/service_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/service"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config",
-		ensure  => $ensure;
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/service_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/service"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config",
+			ensure  => $ensure;
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/service_${name}.cfg;${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -209,10 +215,16 @@ define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgro
 		$notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false,
 		$check_command="check-host-alive", $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $contacts=false,
 		$max_check_attempts=false, $register=false, $proxy=false) {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/host_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/host"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/host_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/host"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/host_${name}.cfg;${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -233,10 +245,16 @@ define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgro
 #	gen_puppet
 #
 define gen_icinga::hostgroup($hg_alias, $conf_dir="${environment}/${fqdn}", $members=false) {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/hostgroup_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/hostgroup"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/hostgroup_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/hostgroup"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/hostgroup_${name}.cfg;${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -255,10 +273,16 @@ define gen_icinga::hostgroup($hg_alias, $conf_dir="${environment}/${fqdn}", $mem
 #	gen_puppet
 #
 define gen_icinga::servicegroup($sg_alias, $conf_dir="${environment}/${fqdn}") {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/servicegroup_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/servicegroup"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/servicegroup_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/servicegroup"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/servicegroup_${name}.cfg;${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -277,10 +301,16 @@ define gen_icinga::servicegroup($sg_alias, $conf_dir="${environment}/${fqdn}") {
 #	gen_puppet
 #
 define gen_icinga::contactgroup($cg_alias, $conf_dir="${environment}/${fqdn}") {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/contactgroup_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/contactgroup"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/contactgroup_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/contactgroup"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/contactgroup_${name}.cfg;${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -316,11 +346,17 @@ define gen_icinga::contact($c_alias, $contact_data=false, $notification_type=fal
 		},
 	}
 
-	@@ekfile { "/etc/icinga/config/${conf_dir}/contact_${name}.cfg;${fqdn}":
-		ensure  => $ensure,
-		content => template("gen_icinga/contact"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/contact_${name}.cfg;${fqdn}":
+			ensure  => $ensure,
+			content => template("gen_icinga/contact"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/contact_${name}.cfg;${fqdn}":
+			ensure  => absent;
+		}
 	}
 }
 
@@ -353,10 +389,16 @@ define gen_icinga::contact($c_alias, $contact_data=false, $notification_type=fal
 #	gen_puppet
 #
 define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $monday=false, $tuesday=false, $wednesday=false, $thursday=false, $friday=false, $saturday=false, $sunday=false) {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/timeperiod_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/timeperiod"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/timeperiod_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/timeperiod"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/timeperiod_${name}.cfg;${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -373,9 +415,15 @@ define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $mo
 #	gen_puppet
 #
 define gen_icinga::configdir($base="/etc/icinga/config") {
-	@@ekfile { "${base}/${name};${fqdn}":
-		ensure => directory,
-		tag    => "icinga_config";
+	if $monitoring {
+		@@ekfile { "${base}/${name};${fqdn}":
+			ensure => directory,
+			tag    => "icinga_config";
+		}
+	} else {
+		@@ekfile { "${base}/${name};${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -402,15 +450,21 @@ define gen_icinga::configdir($base="/etc/icinga/config") {
 #	gen_puppet
 #
 define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_name=false, $host_argument='-H $HOSTADDRESS$', $arguments=false, $nrpe=false, $time_out=30) {
-	@@ekfile {
-		"/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}":
-			content => template("gen_icinga/command"),
-			notify  => Exec["reload-icinga"],
-			tag     => "icinga_config";
-		"/etc/icinga/config/${conf_dir}/command_proxy_${name}.cfg;${fqdn}":
-			content => template("gen_icinga/proxycommand"),
-			notify  => Exec["reload-icinga"],
-			tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile {
+			"/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}":
+				content => template("gen_icinga/command"),
+				notify  => Exec["reload-icinga"],
+				tag     => "icinga_config";
+			"/etc/icinga/config/${conf_dir}/command_proxy_${name}.cfg;${fqdn}":
+				content => template("gen_icinga/proxycommand"),
+				notify  => Exec["reload-icinga"],
+				tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { ["/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}","/etc/icinga/config/${conf_dir}/command_proxy_${name}.cfg;${fqdn}"]:
+			ensure => absent;
+		}
 	}
 }
 
@@ -445,10 +499,16 @@ define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_na
 #	gen_puppet
 #
 define gen_icinga::hostescalation($escalation_period, $contact_groups="${environment}/${fqdn}", $contacts=false, $conf_dir=false, $host_name=false, $hostgroup_name=false, $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/host_escalation_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/hostescalation"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/host_escalation_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/hostescalation"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/host_escalation_${name}.cfg;${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -487,10 +547,16 @@ define gen_icinga::hostescalation($escalation_period, $contact_groups="${environ
 #	gen_puppet
 #
 define gen_icinga::serviceescalation($escalation_period, $contact_groups=false, $contacts=false, $conf_dir="${environment}/${fqdn}", $host_name=false, $hostgroup_name=false, $servicegroup_name=false, $service_description="*", $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
-	@@ekfile { "/etc/icinga/config/${conf_dir}/service_escalation_${name}.cfg;${fqdn}":
-		content => template("gen_icinga/serviceescalation"),
-		notify  => Exec["reload-icinga"],
-		tag     => "icinga_config";
+	if $monitoring {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/service_escalation_${name}.cfg;${fqdn}":
+			content => template("gen_icinga/serviceescalation"),
+			notify  => Exec["reload-icinga"],
+			tag     => "icinga_config";
+		}
+	} else {
+		@@ekfile { "/etc/icinga/config/${conf_dir}/service_escalation_${name}.cfg;${fqdn}":
+			ensure => absent;
+		}
 	}
 }
 
@@ -529,9 +595,7 @@ define gen_icinga::servicedependency($dependent_service_description, $host_name,
 		}
 	} else {
 		@@ekfile { "/etc/icinga/config/${conf_dir}/service_dependency_${name}.cfg;${fqdn}":
-			ensure => absent,
-			notify  => Exec["reload-icinga"],
-			tag    => "icinga_config";
+			ensure => absent;
 		}
 	}
 }
