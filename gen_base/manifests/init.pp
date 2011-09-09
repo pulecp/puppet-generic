@@ -112,6 +112,20 @@ class gen_base::libapache2-mod-php5 {
 	}
 }
 
+# Class: gen_base::libapr1
+#
+# Actions:
+#	Install libapr1
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libapr1 {
+	kpackage { "libapr1":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libcommons-logging-java
 #
 # Actions:
@@ -305,6 +319,20 @@ class gen_base::openjdk-6-jre {
 #
 class gen_base::php5-mysql {
 	kpackage { "php5-mysql":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::python-argparse
+#
+# Actions:
+#	Install python-argparse
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::python-argparse {
+	kpackage { "python-argparse":
 		ensure => latest;
 	}
 }
