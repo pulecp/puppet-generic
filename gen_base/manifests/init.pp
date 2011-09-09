@@ -253,6 +253,48 @@ class gen_base::libstomp_ruby {
 	}
 }
 
+# Class: gen_base::linux-base
+#
+# Actions:
+#	Install linux-base
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::linux-base {
+	kpackage { "linux-base":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::linux-image-2_6_32-5-amd64
+#
+# Actions:
+#	Install linux-image-2.6.32-5-amd64
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::linux-image-2_6_32-5-amd64 {
+	kpackage { "linux-image-2.6.32-5-amd64":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::linux-image-2_6_32-bpo_5-amd64
+#
+# Actions:
+#	Install linux-image-2.6.32-bpo.5-amd64
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::linux-image-2_6_32-bpo_5-amd64 {
+	kpackage { "linux-image-2.6.32-bpo.5-amd64":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::mc
 #
 # Actions:
