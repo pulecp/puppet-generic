@@ -295,6 +295,19 @@ class gen_base::linux-image-2_6_32-bpo_5-amd64 {
 	}
 }
 
+# Class: gen_base::linux-image-2_6_26-2-amd64
+#
+# Actions:
+#	Install linux-image-2.6.26-2-amd64
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::linux-image-2_6_26-2-amd64 {
+	kpackage { "linux-image-2.6.26-2-amd64":
+		ensure => latest;
+	}
+}
 # Class: gen_base::mc
 #
 # Actions:
@@ -375,6 +388,34 @@ class gen_base::php5-mysql {
 #
 class gen_base::python-argparse {
 	kpackage { "python-argparse":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::python-dnspython
+#
+# Actions:
+#	Install python-dnspython
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::python-dnspython {
+	kpackage { "python-dnspython":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::python-ipaddr
+#
+# Actions:
+#	Install python-ipaddr
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::python-ipaddr {
+	kpackage { "python-ipaddr":
 		ensure => latest;
 	}
 }
