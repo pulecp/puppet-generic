@@ -76,7 +76,7 @@ virsh define /dev/stdin <<EOF
   <name>${NAME}</name>
   <description>Created on: ${CREATED}</description>
   <memory>$((${RAM_MB} * 1024))</memory>
-  <currentMemory>${RAM_MB}</currentMemory>
+  <currentMemory>$((${RAM_MB} * 1024))</currentMemory>
   <vcpu>${NPROC}</vcpu>
   <os>
     <type arch='x86_64' machine='pc-0.12'>hvm</type>
