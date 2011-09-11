@@ -46,22 +46,9 @@ class ksplice {
 	}
 
 	# The modified configuration file
-	case $fqdn {
-		"srv01-host.twenty-five.nl",
-		"srv04-host.twenty-five.nl",
-		"srv06-host.twenty-five.nl",
-		"srv08-host.twenty-five.nl": {
-			kfile { "/etc/uptrack/uptrack.conf":
-				source  => "ksplice/uptrack.conf.disabled",
-				require => Package["uptrack"],
-			}
-		}
-		default: {
-			kfile { "/etc/uptrack/uptrack.conf":
-				source  => "ksplice/uptrack.conf",
-				require => Package["uptrack"],
-			}
-		}
+	kfile { "/etc/uptrack/uptrack.conf":
+		source  => "ksplice/uptrack.conf",
+		require => Package["uptrack"],
 	}
 
 	# Set directory permissions so Nagios can read status
