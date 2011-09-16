@@ -20,7 +20,7 @@ class gen_haproxy ($failover=false, $customtag="haproxy_${environment}", $loglev
 	kservice { "haproxy":
 		ensure     => $failover ? {
 			false   => "running",
-			default => undef,
+			default => "undef",
 		},
 	}
 
