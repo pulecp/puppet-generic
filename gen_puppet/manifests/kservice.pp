@@ -32,7 +32,10 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
 		ensure => $pensure; }
 
 	service { $name:
-		ensure     => $ensure,
+		ensure     => $ensure ? {
+			"undef" => undef,
+			default => $ensure,
+		},
 		hasrestart => $hasrestart,
 		hasstatus  => $pattern ? {
 			false   => $hasstatus,
