@@ -42,6 +42,12 @@ class mysql::server {
 		hasstatus => true,
 	}
 
+	exec { "reload-mysql":
+		command     => "/etc/init.d/mysql reload",
+		refreshonly => true;
+	}
+
+
 	kfile {
 		"/etc/mysql/my.cnf":
 			content => template("mysql/my.cnf"),
