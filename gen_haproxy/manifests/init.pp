@@ -15,7 +15,7 @@
 # Depends:
 #	gen_puppet
 #
-class gen_haproxy ($failover=false, $customtag="haproxy_${environment}", $loglevel="warning"){
+class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $loglevel="warning"){
 	# When haproxy is in a failover setup (e.g. in pacemaker/heartbeat), don't start or stop it from puppet.
 	kservice { "haproxy":
 		ensure     => $failover ? {
@@ -27,17 +27,17 @@ class gen_haproxy ($failover=false, $customtag="haproxy_${environment}", $loglev
 	# Yes, we would like to be able to start the service.....
 	kfile { "/etc/default/haproxy":
 		content => "ENABLED=1\n",
-		require => Kpackage["haproxy"];
+		require => Package["haproxy"];
 	}
 
 	# These exported kfiles contain the configuration fragments
 	# They should be exported on the webservers-to-be-loadbalanced
-	Ekfile <<| tag == $customtag |>>
+	Ekfile <<| tag == $haproxy_tag |>>
 	concat { "/etc/haproxy/haproxy.cfg" :
 		remove_fragments => false,
 		notify           => $failover ? {
 			true    => undef,
-			default => Kservice["haproxy"],
+			default => Service["haproxy"],
 		};
 	}
 
@@ -45,12 +45,12 @@ class gen_haproxy ($failover=false, $customtag="haproxy_${environment}", $loglev
 	concat::add_content {
 		"globals":
 			order      => 10,
-			contenttag => $customtag,
+			contenttag => $haproxy_tag,
 			target     => "/etc/haproxy/haproxy.cfg",
 			content    => template("gen_haproxy/global.erb");
 		"defaults":
 			order      => 11,
-			contenttag => $customtag,
+			contenttag => $haproxy_tag,
 			target     => "/etc/haproxy/haproxy.cfg",
 			content    => template("gen_haproxy/defaults.erb");
 	}
@@ -80,13 +80,19 @@ class gen_haproxy ($failover=false, $customtag="haproxy_${environment}", $loglev
 #		The IP of the backend server
 #	balance
 #		The balancing-method to use
-#	customtag="haproxy_${environment}"
+#	timeout_connect
+#		TCP connection timeout between proxy and server
+#	timeout_server_client
+#		TCP connection timeout between client and proxy and Maximum time for the server to respond to the proxy
+#	timeout_http_request
+#		Maximum time for HTTP request between client and proxy
+#	haproxy_tag="haproxy_${environment}"
 #		Change this when there are multiple loadbalancers in one environment
 #
 # Depends:
 #	gen_puppet
 #
-define gen_haproxy::site ($listenaddress, $port=80, $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $balance="static-rr", $serverip=$ipaddress_eth0, $customtag="haproxy_${environment}") {
+define gen_haproxy::site ($listenaddress, $port=80, $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $balance="static-rr", $serverip=$ipaddress_eth0, $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s",  $haproxy_tag="haproxy_${environment}") {
 	if $httpcheck_port and ! $httpcheck_uri {
 		fail("Please specify a uri to check when you add a port to check on")
 	}
@@ -100,6 +106,8 @@ define gen_haproxy::site ($listenaddress, $port=80, $servername=$hostname, $serv
 			content => template("gen_haproxy/listen.erb");
 		"site_${safe_name}_2_server_${servername}":
 			content => template("gen_haproxy/server.erb");
+		"site_${safe_name}_3_timeouts":
+			content => template("gen_haproxy/timeouts.erb");
 	}
 
 	if $cookie {
@@ -135,7 +143,7 @@ define gen_haproxy::proxyconfig ($content) {
 	concat::add_content { "${name}":
 		content    => $content,
 		exported   => true,
-		contenttag => $customtag,
+		contenttag => $haproxy_tag,
 		target     => "/etc/haproxy/haproxy.cfg";
 	}
 }
