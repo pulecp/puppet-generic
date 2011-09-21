@@ -295,47 +295,24 @@ class gen_base::linux-base {
 	}
 }
 
-# Class: gen_base::linux-image-2_6_32-5-amd64
+# Class: gen_base::linux-image
 #
 # Actions:
-#	Install linux-image-2.6.32-5-amd64
+#	Make sure the latest image is installed
+#
+# Parameters:
+#	version
+#		The version we need to install the latest package of.
 #
 # Depends:
 #	gen_puppet
 #
-class gen_base::linux-image-2_6_32-5-amd64 {
-	kpackage { "linux-image-2.6.32-5-amd64":
+class gen_base::linux-image ($version) {
+	kpackage { "linux-image-${version}":
 		ensure => latest;
 	}
 }
 
-# Class: gen_base::linux-image-2_6_32-bpo_5-amd64
-#
-# Actions:
-#	Install linux-image-2.6.32-bpo.5-amd64
-#
-# Depends:
-#	gen_puppet
-#
-class gen_base::linux-image-2_6_32-bpo_5-amd64 {
-	kpackage { "linux-image-2.6.32-bpo.5-amd64":
-		ensure => latest;
-	}
-}
-
-# Class: gen_base::linux-image-2_6_26-2-amd64
-#
-# Actions:
-#	Install linux-image-2.6.26-2-amd64
-#
-# Depends:
-#	gen_puppet
-#
-class gen_base::linux-image-2_6_26-2-amd64 {
-	kpackage { "linux-image-2.6.26-2-amd64":
-		ensure => latest;
-	}
-}
 # Class: gen_base::mc
 #
 # Actions:
