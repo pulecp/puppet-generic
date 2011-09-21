@@ -449,7 +449,7 @@ define gen_icinga::configdir($base="/etc/icinga/config") {
 # Depends:
 #	gen_puppet
 #
-define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_name=false, $host_argument='-H $HOSTNAME$', $arguments=false, $nrpe=false, $time_out=30) {
+define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_name=false, $host_argument='-H $HOSTADDRESS$', $arguments=false, $nrpe=false, $time_out=30) {
 	if $monitoring == "true" {
 		@@ekfile {
 			"/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}":
