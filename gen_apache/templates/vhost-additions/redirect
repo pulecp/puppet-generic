@@ -1,0 +1,2 @@
+<% if usecond %>RewriteCond <%= teststring %> <%= condpattern %><% end -%>
+RewriteRule <%= pattern %> <%= substitution %> [<%= flags %>]

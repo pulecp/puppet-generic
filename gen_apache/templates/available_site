@@ -1,0 +1,3 @@
+<VirtualHost <%= address %>:<%= port %>>
+  Include	/etc/apache2/vhost-additions/<%= full_name %>/
+</VirtualHost>
