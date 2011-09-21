@@ -225,6 +225,20 @@ class gen_base::liblog4j1_2-java {
 	}
 }
 
+# Class: gen_base::libreadline5-dev
+#
+# Actions:
+#	Install libreadline5-dev
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libreadline5-dev {
+	kpackage { "libreadline5-dev":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libsocket6-perl
 #
 # Actions:
@@ -235,6 +249,20 @@ class gen_base::liblog4j1_2-java {
 #
 class gen_base::libsocket6-perl {
 	kpackage { "libsocket6-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libssl-dev
+#
+# Actions:
+#	Install libssl-dev
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libssl-dev {
+	kpackage { "libssl-dev":
 		ensure => latest;
 	}
 }

@@ -15,12 +15,12 @@
 # Depends:
 #	gen_puppet
 #
-class gen_haproxy ($failover=false, $customtag="haproxy_${environment}"){
+class gen_haproxy ($failover=false, $customtag="haproxy_${environment}", $loglevel="warning"){
 	# When haproxy is in a failover setup (e.g. in pacemaker/heartbeat), don't start or stop it from puppet.
 	kservice { "haproxy":
 		ensure     => $failover ? {
 			false   => "running",
-			default => false,
+			default => "undef",
 		},
 	}
 
@@ -47,13 +47,11 @@ class gen_haproxy ($failover=false, $customtag="haproxy_${environment}"){
 			order      => 10,
 			contenttag => $customtag,
 			target     => "/etc/haproxy/haproxy.cfg",
-			exported   => true,
 			content    => template("gen_haproxy/global.erb");
 		"defaults":
 			order      => 11,
 			contenttag => $customtag,
 			target     => "/etc/haproxy/haproxy.cfg",
-			exported   => true,
 			content    => template("gen_haproxy/defaults.erb");
 	}
 }
