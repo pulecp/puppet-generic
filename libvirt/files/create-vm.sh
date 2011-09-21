@@ -88,9 +88,9 @@ virsh define /dev/stdin <<EOF
     <pae/>
   </features>
   <clock offset='utc'/>
-  <on_poweroff>restart</on_poweroff>
-  <on_reboot>restart</on_reboot>
-  <on_crash>restart</on_crash>
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
   <devices>
     <emulator>/usr/bin/kvm</emulator>
 ${DISK_CONFIG}
