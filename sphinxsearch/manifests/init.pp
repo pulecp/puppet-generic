@@ -32,8 +32,8 @@ class sphinxsearch::server {
 	# Run Sphinxsearch searchd daemon.
 	service {
 		"sphinxsearch":
-			ensure => running,
-			pattern => "searchd",
+			ensure    => running,
+			pattern   => "/usr/bin/searchd",
 			hasstatus => false;
 	}
 
