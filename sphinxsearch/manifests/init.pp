@@ -36,4 +36,12 @@ class sphinxsearch::server {
 			pattern => "searchd",
 			hasstatus => false;
 	}
+
+	# The config file was added in Squeeze
+	if $lsbmajdistrelease > 5 {
+		kfile { "/etc/default/sphinxsearch":
+			source => "default/sphinxsearch",
+			notify => Service["sphinxsearch"],
+		}
+	}
 }
