@@ -211,12 +211,13 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
 # Depends:
 #	gen_puppet
 #
-define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgroups=false, $parents=false, $address=$ipaddress, $initial_state=false,
+define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgroups=false, $parents=false, $address=$ipaddress, $initial_state=false, ensure=present,
 		$notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false,
 		$check_command="check-host-alive", $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $contacts=false,
 		$max_check_attempts=false, $register=false, $proxy=false) {
 	if $monitoring == "true" {
 		@@ekfile { "/etc/icinga/config/${conf_dir}/host_${name}.cfg;${fqdn}":
+			ensure  => $ensure,
 			content => template("gen_icinga/host"),
 			notify  => Exec["reload-icinga"],
 			tag     => "icinga_config";
@@ -414,10 +415,14 @@ define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $mo
 # Depends:
 #	gen_puppet
 #
-define gen_icinga::configdir($base="/etc/icinga/config") {
+define gen_icinga::configdir($ensure="present",$base="/etc/icinga/config") {
 	if $monitoring == "true" {
 		@@ekfile { "${base}/${name};${fqdn}":
-			ensure => directory,
+			ensure => $ensure ? {
+				"present" => "directory",
+				"absent"  => "absent",
+				default   => "directory",
+			},
 			tag    => "icinga_config";
 		}
 	} else {
