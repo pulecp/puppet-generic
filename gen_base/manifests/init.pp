@@ -311,6 +311,13 @@ class gen_base::linux-image ($version) {
 	kpackage { "linux-image-${version}":
 		ensure => latest;
 	}
+
+	# Also install the normal lenny kernel if we're not running the backports kernel already
+	if ($lsbdistcodename == "lenny") and ($kernelrelease != "2.6.26-2-amd64") {
+		kpackage { "linux-image-2.6.26-2-amd64":
+			ensure => latest;
+		}
+	}
 }
 
 # Class: gen_base::mc
