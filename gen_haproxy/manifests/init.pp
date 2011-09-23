@@ -92,12 +92,16 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 # Depends:
 #	gen_puppet
 #
-define gen_haproxy::site ($listenaddress, $port=80, $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $balance="static-rr", $serverip=$ipaddress_eth0, $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s",  $haproxy_tag="haproxy_${environment}") {
+define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $balance="static-rr", $serverip=$ipaddress_eth0, $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s",  $haproxy_tag="haproxy_${environment}") {
 	if $httpcheck_port and ! $httpcheck_uri {
 		fail("Please specify a uri to check when you add a port to check on")
 	}
 	if !($balance in ["roundrobin","static-rr","source"]) {
 		fail("${balance} is not a valid balancing type")
+	}
+
+	if !($mode in ["http","tcp"]) {
+		fail("Please select either http or tcp as mode")
 	}
 
 	$safe_name = regsubst($name, " ", "_")
@@ -119,6 +123,12 @@ define gen_haproxy::site ($listenaddress, $port=80, $servername=$hostname, $serv
 	if $httpcheck_uri {
 		gen_haproxy::proxyconfig { "site_${safe_name}_3_httpcheck":
 			content => "\toption httpchk GET ${httpcheck_uri}";
+		}
+	}
+
+	if $mode != "http" {
+		gen_haproxy::proxyconfig { "site_${safe_name}_2_mode":
+			content => "\tmode ${mode}";
 		}
 	}
 

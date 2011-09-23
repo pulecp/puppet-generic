@@ -102,7 +102,7 @@ define gen_pacemaker::primitive ($provider, $location, $location_score="50", $lo
 			content   => " ${name}",
 			customtag => $customtag,
 			linebreak => false,
-			require   => Gen_pacemaker::Group["${group}"];
+			require   => Gen_pacemaker::Group[$group];
 		}
 	}
 
