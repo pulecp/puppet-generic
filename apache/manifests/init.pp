@@ -123,7 +123,9 @@ class apache {
    }
 
    if !$::apache_ports {
-      $::apache_ports = 80
+      $apache_ports = 80
+   } else {
+      $apache_ports = $::apache_ports
    }
 
    if !$apache_virtualhosts {
