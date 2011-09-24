@@ -122,8 +122,8 @@ class apache {
       require => Package["apache2"],
    }
 
-   if !$apache_ports {
-      $apache_ports = 80
+   if !$::apache_ports {
+      $::apache_ports = 80
    }
 
    if !$apache_virtualhosts {
@@ -160,7 +160,7 @@ class apache {
 	}
    }
 
-   apache_ports { $apache_ports:; }
+   apache_ports { $::apache_ports:; }
 
    # A directory where we can put extra configuration statements for sites.
    # Every site has its own subdirectory where files can be put. The default
