@@ -211,7 +211,7 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
 # Depends:
 #	gen_puppet
 #
-define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgroups=false, $parents=false, $address=$ipaddress, $initial_state=false, ensure=present,
+define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgroups=false, $parents=false, $address=$ipaddress, $initial_state=false, $ensure=present,
 		$notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false,
 		$check_command="check-host-alive", $check_interval=false, $notification_period=false, $notification_interval=false, $contact_groups=false, $contacts=false,
 		$max_check_attempts=false, $register=false, $proxy=false) {
