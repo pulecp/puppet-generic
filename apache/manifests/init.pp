@@ -154,15 +154,26 @@ class apache {
    }
 
    define apache_ports {
-   	line { "open apache port ${name}":
-		content => "Listen $name",
-		file    => "/etc/apache2/ports.conf",
-		notify  => Exec["reload-apache2"],
-		require => Package["apache2"],
+   	if $name != "" {
+		line { "open apache port ${name}":
+			content => "Listen $name",
+			file    => "/etc/apache2/ports.conf",
+			notify  => Exec["reload-apache2"],
+			require => Package["apache2"],
+		}
 	}
    }
 
-   apache_ports { $::apache_ports:; }
+   apache_ports { $apache_ports:; }
+
+   # This doesn't always work as expected, so remove the faulty line that's deployed now and again.
+   # This can be removed when the new apache module is finished.
+   line { "remove faulty line from apache ports":
+   	content => "Listen ",
+	ensure  => absent,
+	file    => "/etc/apache2/ports.conf",
+	require => Package["apache2"],
+   }
 
    # A directory where we can put extra configuration statements for sites.
    # Every site has its own subdirectory where files can be put. The default
