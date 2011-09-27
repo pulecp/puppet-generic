@@ -35,10 +35,23 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 	Ekfile <<| tag == $haproxy_tag |>>
 	concat { "/etc/haproxy/haproxy.cfg" :
 		remove_fragments => false,
-		notify           => $failover ? {
-			true    => undef,
-			default => Service["haproxy"],
+		require          => Package["haproxy"],
+		notify           => Exec["test-haproxy-config-and-reload"];
+	}
+
+	exec { "test-haproxy-config-and-reload":
+		command     => "/usr/sbin/haproxy -c -f /etc/haproxy/haproxy.cfg > /dev/null 2>&1",
+		refreshonly => true,
+		notify      => $failover ? {
+			false   => Service["haproxy"],
+			default => Exec["reload-failover-haproxy"],
 		};
+	}
+
+	# This is needed to reload the config when in failover. We don't want puppet failures because we can't reload the dormant server.
+	exec { "reload-failover-haproxy":
+		command      => "/usr/sbin/service haproxy status > /dev/null || exit 0; /usr/sbin/service haproxy reload > /dev/null",
+		refreshonly => true;
 	}
 
 	# Some default configuration. Alter the templates and add the options when needed.
@@ -114,6 +127,22 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$h
 			content => template("gen_haproxy/timeouts.erb");
 	}
 
+	if $mode != "http" {
+		gen_haproxy::proxyconfig { "site_${safe_name}_2_mode":
+			content => "\tmode ${mode}";
+		}
+		if $mode == "tcp" {
+			gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
+				content => "\toption tcplog";
+			}
+		}
+	} elsif $mode == "http" {
+		gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
+			content => "\toption httplog";
+		}
+	
+	}
+
 	if $cookie {
 		gen_haproxy::proxyconfig { "site_${safe_name}_3_cookie":
 			content => "\tcookie ${cookie}";
@@ -123,12 +152,6 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$h
 	if $httpcheck_uri {
 		gen_haproxy::proxyconfig { "site_${safe_name}_3_httpcheck":
 			content => "\toption httpchk GET ${httpcheck_uri}";
-		}
-	}
-
-	if $mode != "http" {
-		gen_haproxy::proxyconfig { "site_${safe_name}_2_mode":
-			content => "\tmode ${mode}";
 		}
 	}
 
