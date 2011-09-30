@@ -10,12 +10,13 @@
 #	gen_puppet
 #
 class sysctl {
-	#exec { "/sbin/sysctl -p /etc/sysctl.conf":
-	#	subscribe   => File["/etc/sysctl.conf"],
-	#	refreshonly => true;
-	#}
+	exec { "/sbin/sysctl -p /etc/sysctl.conf":
+		subscribe   => File["/etc/sysctl.conf"],
+		refreshonly => true;
+	}
 	# XXX: Above construct seems broken?
-	exec { "/sbin/sysctl -p /etc/sysctl.conf":; }
+	#      Why?
+	#exec { "/sbin/sysctl -p /etc/sysctl.conf":; }
 
 	file { "/etc/sysctl.conf":
 		checksum => "md5",
