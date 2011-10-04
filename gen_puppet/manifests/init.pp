@@ -19,11 +19,10 @@ import "queue.pp"
 class gen_puppet {
 # TODO For now, let's make this step optional
 #	include gen_puppet::puppet_conf
+	include gen_base::augeas
 
 	kpackage {
-		["puppet","puppet-common"]:
-			ensure => latest;
-		"checkpuppet":
+		["checkpuppet","puppet","puppet-common"]:
 			ensure => latest;
 	}
 

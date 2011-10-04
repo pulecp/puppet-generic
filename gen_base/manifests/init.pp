@@ -14,6 +14,20 @@ class gen_base::ant {
 	}
 }
 
+# Class: gen_base::libaugeas-ruby
+#
+# Actions:
+#	Install augeas and it's lenses
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::augeas {
+	kpackage { ["libaugeas-ruby", "augeas-lenses"]:
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::curl
 #
 # Actions:
@@ -359,6 +373,20 @@ class gen_base::nagios-nrpe-plugin {
 class gen_base::nagios-plugins-standard {
 	kpackage { "nagios-plugins-standard":
 		ensure => latest;
+	}
+}
+
+# Class: gen_base::openssl
+#
+# Actions:
+#	Install openssl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::openssl {
+	kpackage { "openssl":
+		ensure => installed;
 	}
 }
 

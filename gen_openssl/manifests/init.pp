@@ -10,15 +10,11 @@
 #	gen_puppet
 #
 class gen_openssl::common {
-	kpackage { "openssl":
-		ensure => latest,
-	}
+	include gen_base::openssl
 
-	kfile {
-		"/etc/ssl/certs":
-			require  => Package["openssl"],
-			checksum => "md5",
-			recurse  => true;
+	kfile { "/etc/ssl/certs":
+		recurse  => true,
+		require  => Package["openssl"];
 	}
 }
 
