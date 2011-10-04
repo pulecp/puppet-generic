@@ -34,9 +34,13 @@ class nagios::nrpe {
 	kpackage { "openbsd-inetd":; }
 
 	service { "openbsd-inetd":
-		ensure => running,
-		pattern => "/usr/sbin/inetd",
-		require => Package["openbsd-inetd"],
+		ensure    => running,
+		pattern   => "/usr/sbin/inetd",
+		hasstatus => $lsbdistcodename ? {
+			"lenny" => false,
+			default => true,
+		},
+		require   => Package["openbsd-inetd"],
 	}
 
 	exec { "update-services-add-nrpe":

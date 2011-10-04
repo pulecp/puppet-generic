@@ -17,6 +17,10 @@ class openntpd::common {
 	service { "openntpd":
 		hasrestart => true,
 		ensure => running,
+		hasstatus => $lsbdistcodename ? {
+			"lenny" => false,
+			default => true,
+		},
 		pattern => "/usr/sbin/ntpd",
 		require => Package["openntpd"],
 	}
