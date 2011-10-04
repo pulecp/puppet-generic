@@ -36,6 +36,10 @@ class openvpn::server {
 
 	service { "openvpn":
 		subscribe => File["/etc/openvpn/server.conf"],
+		hasstatus => $lsbdistcodename ? {
+			"lenny" => false,
+			default => undef,
+		},
 		ensure    => running;
 	}
 
