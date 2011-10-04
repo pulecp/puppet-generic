@@ -17,7 +17,11 @@ class iaxmodem {
 
 	service {
 		"iaxmodem":
-			require => Package["iaxmodem"],
-			ensure => running;
+			require   => Package["iaxmodem"],
+			ensure    => running,
+			hasstatus => $lsbdistcodename ? {
+				"lenny" => false,
+				default => undef,
+			};
 	}
 }

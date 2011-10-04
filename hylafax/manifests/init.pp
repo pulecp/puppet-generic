@@ -18,8 +18,12 @@ class hylafax::server {
 
 	service {
 		"hylafax":
-			require => Package["hylafax-server"],
-			pattern => "hfaxd",
-			ensure => running;
+			require   => Package["hylafax-server"],
+			hasstatus => $lsbdistcodename ? {
+				"lenny" => false,
+				default => undef,
+			},
+			pattern   => "hfaxd",
+			ensure    => running;
 	}
 }
