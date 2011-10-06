@@ -173,10 +173,8 @@ define gen_apache::rewrite_on {
 	}
 }
 
-define gen_apache::vhost_addition($site=$fqdn, $port=80, $content=false, $source=false) {
-	$full_site = "${site}_${port}"
-
-	kfile { "/etc/apache2/vhost-additions/${full_site}/${name}":
+define gen_apache::vhost_addition($content=false, $source=false) {
+	kfile { "/etc/apache2/vhost-additions/${name}":
 		content => $content ? {
 			false   => undef,
 			default => $content,
