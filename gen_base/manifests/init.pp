@@ -23,7 +23,21 @@ class gen_base::ant {
 #	gen_puppet
 #
 class gen_base::augeas {
-	kpackage { ["libaugeas-ruby", "augeas-lenses"]:
+	kpackage { ["libaugeas-ruby", "augeas-lenses","libaugeas-ruby1.8","libaugeas0"]:
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::base-files
+#
+# Actions:
+#	Install base-files
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::base-files {
+	kpackage { "base-files":
 		ensure => latest;
 	}
 }
@@ -67,6 +81,21 @@ class gen_base::dnsutils {
 class gen_base::echoping {
 	kpackage { "echoping":
 		ensure => latest;
+	}
+}
+
+# Class: gen_base::facter
+#
+# Actions:
+#	Install facter
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::facter {
+	kpackage { "facter":
+		ensure => latest,
+		notify => Exec["reload-puppet"];
 	}
 }
 

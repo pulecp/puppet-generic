@@ -20,6 +20,7 @@ class gen_puppet {
 # TODO For now, let's make this step optional
 #	include gen_puppet::puppet_conf
 	include gen_base::augeas
+	include gen_base::facter
 
 	kpackage {
 		["checkpuppet","puppet","puppet-common"]:
