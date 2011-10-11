@@ -15,6 +15,10 @@ class p910nd::server {
 	service {
 		"p910nd":
 			ensure => running,
+			hasstatus => $lsbdistcodename ? {
+				"lenny" => false,
+				default => true,
+			},
 			pattern => "p9100d",
 			require => File["/etc/default/p910nd"],
 			subscribe => File["/etc/default/p910nd"];

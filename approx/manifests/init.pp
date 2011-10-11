@@ -14,6 +14,10 @@ class approx {
 
 	service  { "approx":
 		ensure => running,
+		hasstatus => $lsbdistcodename ? {
+			"lenny" => false,
+			default => true,
+		},
 		require => Package["approx"],
 		subscribe => File["/etc/approx/approx.conf"],
 	}
