@@ -45,16 +45,23 @@ class gen_apache::headers {
 	apache::module { "headers":; }
 }
 
-define gen_apache::site($ensure="present", $address="*", $serveralias=false, $scriptalias=false, $documentroot="/var/www", $tomcatinstance="",
-		$proxy_port="", $djangoproject="", $djangoprojectpath="", $ssl_ipaddress="*", $ssl_ip6address="", $ssl=false,
-		$make_default=false) {
-	$full_name = regsubst($name,'^([^_]*)$','\1_80')
-	$real_name = regsubst($full_name,'^(.*)_(.*)$','\1')
-	$port      = regsubst($full_name,'^(.*)_(.*)$','\2')
-	$template  = $ssl ? {
-		false => "gen_apache/vhost-additions/basic",
-		true  => "gen_apache/vhost-additions/basic_ssl",
+define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $address=false, $address6=false, $port=false,
+		$make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $redirect_non_ssl=true) {
+	$temp_name = $port ? {
+		false   => $name,
+		default => "${name}_${port}",
 	}
+	if $key or $cert or $intermediate or $ssl {
+		$full_name     = regsubst($temp_name,'^([^_]*)$','\1_443')
+		$real_address  = $address
+		$real_address6 = $address6
+	} else {
+		$full_name     = regsubst($temp_name,'^([^_]*)$','\1_80')
+		$real_address  = "*"
+		$real_address6 = "*"
+	}
+	$real_name = regsubst($full_name,'^(.*)_(.*)$','\1')
+	$real_port = regsubst($full_name,'^(.*)_(.*)$','\2')
 
 	kfile {
 		"/etc/apache2/sites-available/${full_name}":
@@ -69,14 +76,13 @@ define gen_apache::site($ensure="present", $address="*", $serveralias=false, $sc
 			};
 		"/etc/apache2/vhost-additions/${full_name}/${full_name}":
 			ensure  => $ensure,
-			content => template($template),
-			require => Package["apache2"],
+			content => template("gen_apache/vhost-additions/basic"),
 			notify  => Exec["reload-apache2"];
 	}
 
 	case $ensure {
 		"present": {
-			if $real_name == "default" or $real_name == "default_ssl" {
+			if $real_name == "default" {
 				kfile { "/etc/apache2/sites-enabled/000_${full_name}":
 					ensure => link,
 					target => "/etc/apache2/sites-available/${full_name}";
@@ -89,15 +95,9 @@ define gen_apache::site($ensure="present", $address="*", $serveralias=false, $sc
 				}
 			}
 
-			if !defined(Concat::Add_content["Listen ${port}"]) {
-				concat::add_content { "Listen ${port}":
+			if !defined(Concat::Add_content["Listen ${real_port}"]) {
+				concat::add_content { "Listen ${real_port}":
 					target => "/etc/apache2/ports.conf";
-				}
-			}
-
-			if $make_default {
-				gen_apache::forward_vhost { "default":
-					forward      => "http://${name}";
 				}
 			}
 		}
@@ -108,24 +108,35 @@ define gen_apache::site($ensure="present", $address="*", $serveralias=false, $sc
 			}
 		}
 	}
+
+	if $make_default {
+		gen_apache::forward_vhost { "default":
+			ensure  => $ensure,
+			forward => "http://${real_name}";
+		}
+	}
+
+	if $key or $cert or $intermediate or $ssl {
+		kfile { "/etc/apache2/vhost-additions/${full_name}/ssl":
+			content => template("gen_apache/vhost-additions/ssl"),
+			notify  => Exec["reload-apache2"];
+		}
+
+		if $redirect_non_ssl {
+			gen_apache::forward_vhost { $real_name:
+				ensure      => $ensure,
+				forward     => "https://${real_name}/\$1",
+				serveralias => $serveralias;
+			}
+		}
+	}
 }
 
-define gen_apache::module($ensure="present") {
-	case $ensure {
-		"present": {
-			exec { "/usr/sbin/a2enmod ${name}":
-				unless  => "/bin/sh -c '[ -L /etc/apache2/mods-enabled/${name}.load ] && [ /etc/apache2/mods-enabled/${name}.load -ef /etc/apache2/mods-available/${name}.load ]'",
-				require => Package["apache2"],
-				notify  => Exec["force-reload-apache2"];
-			}
-		}
-		"absent": {
-			exec { "/usr/sbin/a2dismod ${name}":
-				onlyif  => "/bin/sh -c '[ -L /etc/apache2/mods-enabled/${name}.load ] && [ /etc/apache2/mods-enabled/${name}.load -ef /etc/apache2/mods-available/${name}.load ]'",
-				require => Package["apache2"],
-				notify  => Exec["force-reload-apache2"];
-			}
-		}
+define gen_apache::module {
+	exec { "/usr/sbin/a2enmod ${name}":
+		unless  => "/bin/sh -c '[ -L /etc/apache2/mods-enabled/${name}.load ] && [ /etc/apache2/mods-enabled/${name}.load -ef /etc/apache2/mods-available/${name}.load ]'",
+		require => Package["apache2"],
+		notify  => Exec["force-reload-apache2"];
 	}
 }
 
@@ -145,7 +156,7 @@ define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $servera
 	}
 }
 
-define gen_apache::redirect($site=$fqdn, $port=80, $usecond=true, $condpattern=false, $teststring="%{HTTP_HOST}", $pattern="^/*", $substitution, $flags="R=301") {
+define gen_apache::redirect($site=$fqdn, $port=80, $usecond=true, $condpattern=false, $teststring="%{HTTP_HOST}", $pattern="^(.*)$", $substitution, $flags="R=301") {
 	if $rewritecond and !$condpattern {
 		fail { "A condpattern must be supplied if rewritecond is set to true (gen_apache::redirect ${name}).":; }
 	}
@@ -164,7 +175,8 @@ define gen_apache::redirect($site=$fqdn, $port=80, $usecond=true, $condpattern=f
 
 define gen_apache::rewrite_on {
 	concat { "/etc/apache2/vhost-additions/${name}/redirects":
-		notify => Exec["reload-apache2"];
+		require => File["/etc/apache2/vhost-additions/${name}"],
+		notify  => Exec["reload-apache2"];
 	}
 
 	concat::add_content { "000_Enable rewrite engine for ${name}":
@@ -173,8 +185,17 @@ define gen_apache::rewrite_on {
 	}
 }
 
-define gen_apache::vhost_addition($content=false, $source=false) {
+define gen_apache::vhost_addition($ensure="present", $content=false, $source=false) {
+	$full_site_name = regsubst($name,'^(.*)/(.*)$','\1')
+	$site_name = regsubst($full_site_name,'^(.*)_(.*)$','\1')
+	if defined(Gen_apache::Site["$site_name"]) {
+		$require_name = $site_name
+	} else {
+		$require_name = $full_site_name
+	}
+
 	kfile { "/etc/apache2/vhost-additions/${name}":
+		ensure  => $ensure,
 		content => $content ? {
 			false   => undef,
 			default => $content,
@@ -183,6 +204,7 @@ define gen_apache::vhost_addition($content=false, $source=false) {
 			false   => undef,
 			default => $source,
 		},
+		require => Gen_apache::Site[$require_name],
 		notify  => Exec["reload-apache2"];
 	}
 }

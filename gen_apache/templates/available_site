@@ -1,3 +1,10 @@
-<VirtualHost <%= address %>:<%= port %>>
-  Include	/etc/apache2/vhost-additions/<%= full_name %>/
+<% if real_address -%>
+<VirtualHost <%= real_address %>:<%= real_port %>>
+  Include /etc/apache2/vhost-additions/<%= full_name %>/
 </VirtualHost>
+<% end -%>
+<% if real_address6 and real_address6 != real_address -%>
+<VirtualHost [<%= real_address6 %>]:<%= real_port %>>
+  Include /etc/apache2/vhost-additions/<%= full_name %>/
+</VirtualHost>
+<% end -%>
