@@ -1,6 +1,14 @@
 SSLEngine             On
+<% if cert -%>
+SSLCertificateFile    /etc/ssl/certs/<%= cert %>
+<% else -%>
 SSLCertificateFile    /etc/ssl/certs/<%= real_name %>.pem
+<% end -%>
+<% if key -%>
+SSLCertificateKeyFile /etc/ssl/private/<%= key %>
+<% else %>
 SSLCertificateKeyFile /etc/ssl/private/<%= real_name %>.key
+<% end -%>
 <% if intermediate -%>
 SSLCACertificateFile /etc/ssl/certs/<%= intermediate %>
 <% end -%>
