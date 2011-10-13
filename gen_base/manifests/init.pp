@@ -141,6 +141,20 @@ class gen_base::libactiverecord_ruby18 {
 	}
 }
 
+# Class: gen_base::libapache2-mod-passenger
+#
+# Actions:
+#	Install libapache2-mod-passenger
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libapache2-mod-passenger {
+	kpackage { "libapache2-mod-passenger":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libapache2-mod-php5
 #
 # Actions:
