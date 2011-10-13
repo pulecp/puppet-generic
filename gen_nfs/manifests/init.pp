@@ -117,7 +117,9 @@ define gen_nfs::mount($source) {
 		require => [Kpackage["nfs-common"], Kfile[$name]];
 	}
 
-	kfile { $name:
-		ensure => directory;
+	if ! defined(Kfile[$name]) {
+		kfile { $name:
+			ensure => directory;
+		}
 	}
 }
