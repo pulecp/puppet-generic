@@ -100,7 +100,9 @@ class nagios::nrpe {
 			source => "nagios/nrpe/${lsbdistcodename}/nrpe.cfg",
 			require => Package["nagios-nrpe-server"];
 		"/etc/nagios/nrpe.d":
-			ensure => directory,
+			ensure  => directory,
+			purge   => true,
+			recurse => true,
 			require => Package["nagios-nrpe-server"];
 	}
 }
@@ -117,25 +119,6 @@ class nagios::nrpe {
 class nagios::nrpe::plugins {
 	include nagios::plugins
 
-	# Check DRBD replication health
-	check {
-		"drbd":
-			command => '/usr/local/lib/nagios/plugins/check_drbd -d All',
-			require => File["/usr/local/lib/nagios/plugins/check_drbd"];
-		"drbd_primary":
-			command => '/usr/local/lib/nagios/plugins/check_drbd -d All -r Primary',
-			require => File["/usr/local/lib/nagios/plugins/check_drbd"];
-		"drbd_secondary":
-			command => '/usr/local/lib/nagios/plugins/check_drbd -d All -r Secondary',
-			require => File["/usr/local/lib/nagios/plugins/check_drbd"];
-	}
-
-	# Check Pacemaker status
-	check {
-		"pacemaker":
-			command => '/usr/bin/sudo /usr/sbin/crm_mon -s';
-	}
-
 	# TODO This should be done by kbp_monitoring::client::pacemaker
 	gen_sudo::rule { "pacemaker sudo rules":
 		entity => "nagios",
@@ -144,192 +127,7 @@ class nagios::nrpe::plugins {
 		password_required => false;
 	}
 
-	# aMaVis checks
-	check {
-		"amavis_scanner":
-			command => '/usr/lib/nagios/plugins/check_smtp -H 127.0.0.1 -p 10024',
-			require => File["/etc/nagios/nrpe.d"];
-		"amavis_mta":
-			command => '/usr/lib/nagios/plugins/check_smtp -H 127.0.0.1 -p 10025',
-			require => File["/etc/nagios/nrpe.d"];
-		"local_smtp":
-			command => '/usr/lib/nagios/plugins/check_smtp -H 127.0.0.1',
-			require => File["/etc/nagios/nrpe.d"];
-	}
-
-	# Various checks
-	check {
-		"libvirtd":
-			command => '/usr/lib/nagios/plugins/check_procs -c 1: -C libvirtd',
-			require => File["/etc/nagios/nrpe.d"];
-		"arpwatch":
-			command => '/usr/lib/nagios/plugins/check_procs -c 1: -C arpwatch',
-			require => File["/etc/nagios/nrpe.d"];
-		"remote_ntp":
-			command => '/usr/lib/nagios/plugins/check_ntp_time -H 0.debian.pool.ntp.org',
-			require => File["/etc/nagios/nrpe.d"];
-		"ntpd":
-			command => '/usr/lib/nagios/plugins/check_procs -c 1: -C ntpd',
-			require => File["/etc/nagios/nrpe.d"];
-	}
-
-	gen_sudo::rule { "Nagios can run all plugins as root":
-		entity => "nagios",
-		as_user => "ALL",
-		password_required => false,
-		command => ["/usr/lib/nagios/plugins/", "/usr/local/lib/nagios/plugins/"];
-	}
-
-	if versioncmp($lsbdistrelease, "6.0") >= 0 { #squeeze or later
-		check{
-			"dhcpd":
-				command => '/usr/lib/nagios/plugins/check_procs -c 1: -C dhcpd',
-				require => File["/etc/nagios/nrpe.d"];
-		}
-	}
-
-	if versioncmp($lsbdistrelease, "6.0") <  0 { # before squeeze
-		check{
-			"dhcpd":
-				command => '/usr/lib/nagios/plugins/check_procs -c 1: -C dhcpd3',
-				require => File["/etc/nagios/nrpe.d"];
-		}
-	}
-
-
-	# Nagios-plugins-kumina checks
-	check {
-		"javaheapusage":
-			command => '/usr/lib/nagios/plugins/check_javaheapusage /etc/munin/plugins/jmx_$ARG1$_java_process_memory 90 80',
-			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];
-		"loadtrend":
-			command => '/usr/lib/nagios/plugins/check_loadtrend -m 1.5 -c 5 -w 2.5',
-			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];
-		"sslcert":
-			command => 'sudo /usr/lib/nagios/plugins/check_sslcert -c 7 -w 30 $ARG1$',
-			require => [File["/etc/nagios/nrpe.d"], Package["nagios-plugins-kumina"]];
-	}
-
 	kpackage { "nagios-plugins-kumina":
 		ensure => latest;
-	}
-
-	check { "pacemaker_config":
-		command => '/usr/lib/nagios/plugins/check_pacemaker_config';
-	}
-
-	kfile { "/usr/local/lib/nagios/plugins/check_drbd":
-		source => "nagios/plugins/check_drbd",
-		group => "staff",
-		mode => 755,
-		require => File["/usr/local/lib/nagios/plugins"];
-	}
-
-	# Check ClamAV socket file and update service.
-	check {
-		"clamav_daemon_socket":
-			command => "/usr/lib/nagios/plugins/check_file_age -w 0 -c 0 -C 0 -f /var/run/clamav/clamd.ctl";
-		"clamav_freshclam":
-			command => "/usr/lib/nagios/plugins/check_procs -C freshclam -w 1:1 -c 1:10";
-	}
-
-	# Check software RAID arrays.
-	check {
-		"mdraid":
-			command => "sudo /usr/local/lib/nagios/plugins/check_mdraid",
-	}
-
-	# Check STP network.
-	check {
-		"stp_bridges":
-			command => "/usr/local/lib/nagios/plugins/check_stp_bridges.sh",
-	}
-
-	kfile { "/usr/local/lib/nagios/plugins/check_mdraid":
-		source => "nagios/plugins/check_mdraid",
-		group => "staff",
-		mode => 755,
-		require => File["/usr/local/lib/nagios/plugins"];
-	}
-
-	kfile { "/usr/local/lib/nagios/plugins/check_stp_bridges.sh":
-		source => "nagios/plugins/check_stp_bridges.sh",
-		group => "staff",
-		mode => 755,
-		require => File["/usr/local/lib/nagios/plugins"];
-	}
-
-	# Check 3Ware RAID arrays.
-	check {
-		"3ware":
-			command => "sudo /usr/local/lib/nagios/plugins/check_3ware",
-	}
-
-	kfile { "/usr/local/lib/nagios/plugins/check_3ware":
-		source => "nagios/plugins/check_3ware",
-		group => "staff",
-		mode => 755,
-		require => File["/usr/local/lib/nagios/plugins"];
-	}
-
-	# Check Adaptec RAID arrays.
-	check {
-		"adaptec":
-			command => "sudo /usr/local/lib/nagios/plugins/check_adaptec",
-	}
-
-	kfile { "/usr/local/lib/nagios/plugins/check_adaptec":
-		source => "nagios/plugins/check_adaptec",
-		group => "staff",
-		mode => 755,
-		require => File["/usr/local/lib/nagios/plugins"];
-	}
-
-	# Make sure the latest installed kernel is also the running kernel.
-	# (To reminds us to reboot a server after a kernel upgrade.)
-	check { "running_kernel":
-		command => "/usr/local/lib/nagios/plugins/check_running_kernel",
-		require => File["/usr/local/lib/nagios/plugins/check_running_kernel"],
-	}
-
-	kfile { "/usr/local/lib/nagios/plugins/check_running_kernel":
-		source => "nagios/plugins/check_running_kernel",
-		group => "staff",
-		mode => 755,
-		require => File["/usr/local/lib/nagios/plugins"];
-	}
-
-	# Check the status of the bonding interfaces
-	check { "bonding":
-		command => "/usr/local/lib/nagios/plugins/check_bonding",
-		require => File["/usr/local/lib/nagios/plugins/check_bonding"],
-	}
-
-	# Check service status using /etc/init.d scripts.
-	check { "status_init":
-		command => "sudo /usr/local/lib/nagios/plugins/check_proc_status.sh \$ARG1\$",
-		require => File["/usr/local/lib/nagios/plugins/check_proc_status.sh"],
-	}
-
-	# This check is so we have a dependency for the backup machine. It checks if
-	# there are processes called 'rdiff-backup', which would indicate an ongoing
-	# backup. The CPU and Load checks depend on this check, so they won't fire
-	# if backups are in progress.
-	check { "rdiff-backup":
-		command => "/usr/lib/nagios/plugins/check_procs -C rdiff-backup -w 0",
-	}
-
-	kfile { "/usr/local/lib/nagios/plugins/check_bonding":
-		source => "nagios/plugins/check_bonding",
-		group => "staff",
-		mode => 755,
-		require => File["/usr/local/lib/nagios/plugins"];
-	}
-
-	kfile { "/usr/local/lib/nagios/plugins/check_proc_status.sh":
-		source => "nagios/plugins/check_proc_status.sh",
-		group => "staff",
-		mode => 755,
-		require => File["/usr/local/lib/nagios/plugins"];
 	}
 }
