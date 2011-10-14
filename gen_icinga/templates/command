@@ -1,5 +1,5 @@
 define command {
 	command_name <%= name %><% if nrpe %>
-	command_line /usr/lib/nagios/plugins/check_nrpe<% if time_out %> -t <%= time_out %><% end %><% if host_argument %> <%= host_argument %><% end %> -c <% if command_name %><%= command_name %><% else %><%= name %><% end %><% if arguments %> -a <%= Array(arguments).join(" ") %><% end %><% else %>
+	command_line /usr/lib/nagios/plugins/check_nrpe -u <% if time_out %> -t <%= time_out %><% end %><% if host_argument %> <%= host_argument %><% end %> -c <% if command_name %><%= command_name %><% else %><%= name %><% end %><% if arguments %> -a <%= Array(arguments).join(" ") %><% end %><% else %>
 	command_line /usr/lib/nagios/plugins/<% if command_name %><%= command_name %><% else %><%= name %><% end %><% if host_argument %> <%= host_argument %><% end %><% if arguments %> <%= Array(arguments).join(" ") %><% end %><% end %>
 }
