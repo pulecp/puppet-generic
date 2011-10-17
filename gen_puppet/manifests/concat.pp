@@ -279,9 +279,14 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
 #	Undocumented
 #	gen_puppet
 #
-define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $force = "false", $remove_fragments = "true" ) {
+define concat($mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=false, $testpms=[]) {
 	require concat::setup
 
+	if $servername in $testpms {
+		$purge = $purge_on_testpm
+	} else {
+		$purge = $purge_on_pm
+	}
 	$safe_name = regsubst($name, '/', '_', 'G')
 	$concatdir = $concat::setup::concatdir
 	$version   = $concat::setup::majorversion
@@ -302,7 +307,7 @@ define concat($mode = 0644, $owner = "root", $group = "root", $warn = "false", $
 		"${fragdir}/fragments":
 			ensure  => directory,
 			recurse => true,
-			purge   => $remove_fragments,
+			purge   => $purge,
 			force   => true,
 			ignore  => [".svn", ".git"],
 			source  => $version ? {

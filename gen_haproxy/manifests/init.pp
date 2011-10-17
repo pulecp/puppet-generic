@@ -34,7 +34,6 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 	# They should be exported on the webservers-to-be-loadbalanced
 	Ekfile <<| tag == $haproxy_tag |>>
 	concat { "/etc/haproxy/haproxy.cfg" :
-		remove_fragments => false,
 		require          => Package["haproxy"],
 		notify           => Exec["test-haproxy-config-and-reload"];
 	}

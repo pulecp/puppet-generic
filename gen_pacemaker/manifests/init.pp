@@ -20,7 +20,6 @@ class gen_pacemaker ($customtag="pacemaker_${environment}"){
 	Ekfile <<| tag == $customtag |>>
 
 	concat { "/etc/heartbeat/cib.cfg":
-		remove_fragments => false,
 		notify           => Exec["reload cib.cfg"];
 	}
 

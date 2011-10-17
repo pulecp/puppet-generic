@@ -21,7 +21,6 @@ class gen_ferm {
 
 	concat { "/etc/ferm/ferm.conf":
 		group            => "adm",
-		remove_fragments => false,
 		notify           => Exec["reload-ferm"],
 		require          => Kpackage["ferm"];
 	}

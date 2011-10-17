@@ -14,7 +14,6 @@ class gen_heartbeat ($customtag="heartbeat_${environment}") {
 	# These ekfiles contain the configuration fragments for heartbeat.
 	Ekfile <<| tag == $customtag |>>
 	concat { "/etc/heartbeat/ha.cf":
-		remove_fragments => false,
 		notify           => Service["heartbeat"];
 	}
 
