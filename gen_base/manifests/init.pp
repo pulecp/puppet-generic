@@ -419,6 +419,20 @@ class gen_base::nagios-plugins-standard {
 	}
 }
 
+# Class: gen_base::netpbm
+#
+# Actions:
+#	Install netpbm
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::netpbm {
+	kpackage { "netpbm":
+		ensure => installed;
+	}
+}
+
 # Class: gen_base::openssl
 #
 # Actions:
