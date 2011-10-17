@@ -1,0 +1,6 @@
+# This empty directory on the puppetmaster is needed so we can
+# clean out the munin plugins and only add the plugins we actually
+# define in our config. And this file is needed so we can add the
+# directory to git...
+
+# Fml.
