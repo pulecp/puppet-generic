@@ -42,6 +42,20 @@ class gen_base::base-files {
 	}
 }
 
+# Class: gen_base::bsdtar
+#
+# Actions:
+#	Install bsdtar
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::bsdtar {
+	kpackage { "bsdtar":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::curl
 #
 # Actions:
