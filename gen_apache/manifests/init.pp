@@ -26,13 +26,23 @@ class gen_apache {
 			require => Package["apache2"];
 		"/etc/apache2/vhost-additions":
 			ensure  => directory,
+			purge   => true,
+			recurse => true,
+			require => Package["apache2"];
+		"/etc/apache2/sites-enabled":
+			ensure  => directory,
+			purge   => true,
+			recurse => true,
+			require => Package["apache2"];
+		"/etc/apache2/sites-available":
+			ensure  => directory,
+			purge   => true,
+			recurse => true,
 			require => Package["apache2"];
 		"/etc/apache2/sites-available/default":
-			ensure  => absent,
-			require => Package["apache2"];
+			ensure  => absent;
 		"/etc/apache2/sites-available/default-ssl":
-			ensure  => absent,
-			require => Package["apache2"];
+			ensure  => absent;
 	}
 
 	concat { "/etc/apache2/ports.conf":
