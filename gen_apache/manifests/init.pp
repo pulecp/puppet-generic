@@ -99,7 +99,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 					notify => Exec["reload-apache2"];
 				}
 			} else {
-				kfile { "/etc/apache/sites-enabled/${full_name}":
+				kfile { "/etc/apache2/sites-enabled/${full_name}":
 					ensure => link,
 					target => "/etc/apache2/sites-available/${full_name}",
 					notify => Exec["reload-apache2"];
@@ -113,7 +113,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 			}
 		}
 		"absent": {
-			kfile { "/etc/apache/sites-enabled/${full_name}":
+			kfile { "/etc/apache2/sites-enabled/${full_name}":
 				ensure => absent,
 				notify => Exec["reload-apache2"];
 			}
