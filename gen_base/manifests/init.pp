@@ -42,6 +42,20 @@ class gen_base::base-files {
 	}
 }
 
+# Class: gen_base::bsdtar
+#
+# Actions:
+#	Install bsdtar
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::bsdtar {
+	kpackage { "bsdtar":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::curl
 #
 # Actions:
@@ -416,6 +430,20 @@ class gen_base::nagios-nrpe-plugin {
 class gen_base::nagios-plugins-standard {
 	kpackage { "nagios-plugins-standard":
 		ensure => latest;
+	}
+}
+
+# Class: gen_base::netpbm
+#
+# Actions:
+#	Install netpbm
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::netpbm {
+	kpackage { "netpbm":
+		ensure => installed;
 	}
 }
 
