@@ -95,13 +95,14 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 			if $real_name == "default" {
 				kfile { "/etc/apache2/sites-enabled/000_${full_name}":
 					ensure => link,
-					target => "/etc/apache2/sites-available/${full_name}";
+					target => "/etc/apache2/sites-available/${full_name}",
+					notify => Exec["reload-apache2"];
 				}
 			} else {
-				exec { "/usr/sbin/a2ensite ${full_name}":
-					unless  => "/bin/sh -c '[ -L /etc/apache2/sites-enabled/${full_name} ] && [ /etc/apache2/sites-enabled/${full_name} -ef /etc/apache2/sites-available/${full_name} ]'",
-					require => [Package["apache2"], File["/etc/apache2/sites-available/${full_name}"]],
-					notify  => Exec["reload-apache2"];
+				kfile { "/etc/apache/sites-enabled/${full_name}":
+					ensure => link,
+					target => "/etc/apache2/sites-available/${full_name}",
+					notify => Exec["reload-apache2"];
 				}
 			}
 
@@ -112,8 +113,8 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 			}
 		}
 		"absent": {
-			exec { "/usr/sbin/a2dissite ${full_name}":
-				onlyif => "/bin/sh -c '[ -L /etc/apache2/sites-enabled/${full_name} ] && [ /etc/apache2/sites-enabled/${full_name} -ef /etc/apache2/sites-available/${full_name} ]'",
+			kfile { "/etc/apache/sites-enabled/${full_name}":
+				ensure => absent,
 				notify => Exec["reload-apache2"];
 			}
 		}
