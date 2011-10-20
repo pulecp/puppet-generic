@@ -79,7 +79,8 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $failover=false, $need_gssd="
 
 	# The mountd service is controlled by nfs-kernel-server, but that status command doesn't check it.
 	exec { "/etc/init.d/nfs-kernel-server restart":
-		unless => "/bin/pidof rpc.mountd";
+		unless  => "/bin/pidof rpc.mountd",
+		require => Kpackage["nfs-kernel-server"];
 	}
 
 	kfile {
