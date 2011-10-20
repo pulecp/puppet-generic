@@ -69,6 +69,12 @@ class rsyslog::server {
 #
 class rsyslog::mysql {
 	package { "rsyslog-mysql":
-		ensure => installed,
+		ensure => installed;
+	}
+
+	kfile { "/etc/rsyslog.d/mysql.conf":
+		source  => "rsyslog/server/mysql.conf",
+		require => Package["rsyslog-mysql"],
+		notify  => Service["rsyslog"];
 	}
 }
