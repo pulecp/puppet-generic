@@ -37,7 +37,7 @@ class apache {
    }
 
    # The next define is for creating virtual hosts that only forward to another site/page
-   define forward_vhost ($ensure = present, $forward, $serveralias = false) {
+   define forward_vhost ($ensure = present, $forward, $serveralias = false, $status = "301") {
            apache::site_config { $name:
                    template     => "apache/sites-available/simple.erb",
                    serveralias => $serveralias,
@@ -48,9 +48,9 @@ class apache {
                    ensure => $ensure,
            }
 
-           file { "/etc/apache2/vhost-additions/$name/redirect.conf":
+           file { "/etc/apache2/vhost-additions/${name}/redirect.conf":
                    ensure => $ensure,
-                   content => "RewriteEngine on\nRewriteRule ^/* $forward [R=301]\n",
+                   content => "RewriteEngine on\nRewriteRule ^/* ${forward} [R=${status}]\n",
            }
    }
 
