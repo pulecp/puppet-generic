@@ -1,5 +1,19 @@
 # Author: Kumina bv <support@kumina.nl>
 
+# Class: gen_base::abswrap
+#
+# Actions:
+#	Install abswrap
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::abswrap {
+	kpackage { "abswrap":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::ant
 #
 # Actions:
@@ -541,6 +555,20 @@ class gen_base::python-ipaddr {
 #
 class gen_base::rails {
 	kpackage { "rails":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::realpath
+#
+# Actions:
+#	Install realpath
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::realpath {
+	kpackage { "realpath":
 		ensure => latest;
 	}
 }
