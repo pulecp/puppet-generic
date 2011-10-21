@@ -77,7 +77,7 @@ define gen_git::repo ($branch = "master", $origin = false, $bare = false) {
 		exec {
 			"/usr/bin/git init -q --shared=group ${name}":
 				creates => "${name}/.git",
-				require => [Kfile[$name],Kpackage["git"]];
+				require => [Package["git"]];
 			"/usr/bin/git config --add receive.denyCurrentBranch ignore on ${name}":
 				command => "/usr/bin/git config --add receive.denyCurrentBranch ignore",
 				cwd     => $name,
@@ -93,7 +93,7 @@ define gen_git::repo ($branch = "master", $origin = false, $bare = false) {
 	} else {
 		exec { "/usr/bin/git init --bare -q --shared=group ${name}":
 			creates => "${name}",
-			require => Kpackage["git"];
+			require => Package["git"];
 		}
 	}
 
