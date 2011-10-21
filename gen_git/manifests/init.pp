@@ -66,7 +66,7 @@ class gen_git::listchanges::install {
 #	gen_git
 #	gen_puppet
 #
-define gen_git::repo ($branch = "master", $origin = false, $bare = false) {
+define gen_git::repo ($branch = "master", $origin = false, $bare = false, $post_update_src = false) {
 	include gen_git
 
 	# I thought about adding an option to automatically clone a remote
@@ -86,7 +86,10 @@ define gen_git::repo ($branch = "master", $origin = false, $bare = false) {
 		}
 		# This is the hook that makes sure we always have the latest version checked out.
 		kfile { "${name}/.git/hooks/post-update":
-			source  => "gen_git/post-update",
+			source  => $post_update_src ? {
+				false   => "gen_git/post-update",
+				default => $post_update_src,
+			},
 			mode    => 755,
 			require => Exec["/usr/bin/git init -q --shared=group ${name}"];
 		}
@@ -94,6 +97,14 @@ define gen_git::repo ($branch = "master", $origin = false, $bare = false) {
 		exec { "/usr/bin/git init --bare -q --shared=group ${name}":
 			creates => "${name}",
 			require => Package["git"];
+		}
+		# Install a post-update hook if we supply a source
+		if $post_update_src {
+			kfile { "${name}/hooks/post-update":
+				source  => $post_update_src,
+				mode    => 755,
+				require => Exec["/usr/bin/git init --bare -q --shared=group ${name}"];
+			}
 		}
 	}
 
@@ -120,7 +131,6 @@ define gen_git::repo ($branch = "master", $origin = false, $bare = false) {
 				require => Exec["/usr/bin/git init -q --shared=group ${name}"];
 		}
 	}
-
 }
 
 # Define: gen_git::listchanges
