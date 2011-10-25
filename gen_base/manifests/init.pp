@@ -587,20 +587,6 @@ class gen_base::ruby_stomp {
 	}
 }
 
-# Class: gen_base::simple-cdd
-#
-# Actions:
-#	Install simple-cdd
-#
-# Depends:
-#	gen_puppet
-#
-class gen_base::simple-cdd {
-	kpackage { "simple-cdd":
-		ensure => latest;
-	}
-}
-
 # Class: gen_base::unzip
 #
 # Actions:
