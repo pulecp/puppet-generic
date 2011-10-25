@@ -104,7 +104,7 @@ class mysql::server {
 
 	define grant($user, $db, $password=false, $hostname="localhost", $permissions="all") {
 		if $password {
-			exec { "grant-${user}-${db}":
+			exec { "grant_${user}_${db}_${hostname}":
 				unless  => "/usr/bin/mysql -u ${user} -p${password} ${db}",
 				command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' identified by '${password}';\"",
 				require => $db ? {
@@ -113,7 +113,7 @@ class mysql::server {
 				};
 			}
 		} else {
-			exec { "grant-${user}-${db}":
+			exec { "grant_${user}_${db}_${hostname}":
 				unless  => "/usr/bin/mysql -u ${user} ${db}",
 				command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}';\"",
 				require => $db ? {
