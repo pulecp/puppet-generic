@@ -55,8 +55,9 @@ class gen_apache::headers {
 	apache::module { "headers":; }
 }
 
-define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $address=false, $address6=false, $port=false,
-		$make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $redirect_non_ssl=true) {
+define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address=false, $address6=false,
+		$port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false,
+		$redirect_non_ssl=true) {
 	$temp_name = $port ? {
 		false   => $name,
 		default => "${name}_${port}",
@@ -74,6 +75,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 	$real_port = regsubst($full_name,'^(.*)_(.*)$','\2')
 
 	kfile {
+		$documentroot:;
 		"/etc/apache2/sites-available/${full_name}":
 			ensure  => $ensure,
 			content => template("gen_apache/available_site"),
