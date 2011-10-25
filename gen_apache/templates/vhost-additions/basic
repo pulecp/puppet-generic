@@ -6,4 +6,6 @@ ServerAlias <%= serveralias.to_a.join(" ") %>
 
 CustomLog    /var/log/apache2/<%= real_name %>-access.log combined
 ErrorLog     /var/log/apache2/<%= real_name %>-error.log
-<% if documentroot %>DocumentRoot <%= documentroot %><% end -%>
+<% if documentroot -%>
+DocumentRoot <%= documentroot %>
+<% end -%>
