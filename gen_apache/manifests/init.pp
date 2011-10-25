@@ -74,8 +74,10 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 	$real_name = regsubst($full_name,'^(.*)_(.*)$','\1')
 	$real_port = regsubst($full_name,'^(.*)_(.*)$','\2')
 
+	if $documentroot {
+		kfile { $documentroot:; }
+	}
 	kfile {
-		$documentroot:;
 		"/etc/apache2/sites-available/${full_name}":
 			ensure  => $ensure,
 			content => template("gen_apache/available_site"),
@@ -153,13 +155,13 @@ define gen_apache::module {
 	}
 }
 
-define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $serveralias=false, $documentroot="/var/www/") {
+define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $serveralias=false) {
 	$full_name = "${name}_${port}"
 
 	gen_apache::site { $full_name:
 		ensure       => $ensure,
 		serveralias  => $serveralias,
-		documentroot => $documentroot;
+		documentroot => false;
 	}
 
 	gen_apache::redirect { $full_name:
