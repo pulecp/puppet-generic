@@ -64,8 +64,14 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 	}
 	if $key or $cert or $intermediate or $ssl {
 		$full_name     = regsubst($temp_name,'^([^_]*)$','\1_443')
-		$real_address  = $address
-		$real_address6 = $address6
+		$real_address  = $address ? {
+			false   => "*",
+			default => $address,
+		}
+		$real_address6 = $address6 ? {
+			false   => "*",
+			default => $address6,
+		}
 	} else {
 		$full_name     = regsubst($temp_name,'^([^_]*)$','\1_80')
 		$real_address  = "*"
@@ -77,6 +83,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 	if $documentroot {
 		kfile { $documentroot:; }
 	}
+
 	kfile {
 		"/etc/apache2/sites-available/${full_name}":
 			ensure  => $ensure,
