@@ -127,6 +127,20 @@ class gen_base::facter {
 	}
 }
 
+# Class: gen_base::imagemagick
+#
+# Actions:
+#	Install imagemagick
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::imagemagick {
+	kpackage { "imagemagick":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::javascript-common
 #
 # Actions:
@@ -169,6 +183,36 @@ class gen_base::libactiverecord_ruby18 {
 	}
 }
 
+# Class: gen_base::libapache2-mod-auth-mysql
+#
+# Actions:
+#	Install libapache2-mod-auth-mysql
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libapache2-mod-auth-mysql {
+	kpackage { "libapache2-mod-auth-mysql":
+		ensure => latest,
+		notify => Exec["reload-apache2"];
+	}
+}
+
+# Class: gen_base::libapache2-mod-fcgid
+#
+# Actions:
+#	Install libapache2-mod-fcgid
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libapache2-mod-fcgid {
+	kpackage { "libapache2-mod-fcgid":
+		ensure => latest,
+		notify => Exec["reload-apache2"];
+	}
+}
+
 # Class: gen_base::libapache2-mod-passenger
 #
 # Actions:
@@ -179,6 +223,20 @@ class gen_base::libactiverecord_ruby18 {
 #
 class gen_base::libapache2-mod-passenger {
 	kpackage { "libapache2-mod-passenger":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libapache2-mod-perl2
+#
+# Actions:
+#	Install libapache2-mod-perl2
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libapache2-mod-perl2 {
+	kpackage { "libapache2-mod-perl2":
 		ensure => latest;
 	}
 }
@@ -225,6 +283,48 @@ class gen_base::libcommons-logging-java {
 	}
 }
 
+# Class: gen_base::libdate-calc-perl
+#
+# Actions:
+#	Install libdate-calc-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libdate-calc-perl {
+	kpackage { "libdate-calc-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libdate-manip-perl
+#
+# Actions:
+#	Install libdate-manip-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libdate-manip-perl {
+	kpackage { "libdate-manip-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libdbi-perl
+#
+# Actions:
+#	Install libdbi-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libdbi-perl {
+	kpackage { "libdbi-perl":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libfreetype6
 #
 # Actions:
@@ -236,7 +336,6 @@ class gen_base::libcommons-logging-java {
 class gen_base::libfreetype6 {
 	kpackage { "libfreetype6":
 		ensure => latest;
-		# Grub needs this package......
 	}
 }
 
@@ -296,6 +395,34 @@ class gen_base::libnet_dns_perl {
 	}
 }
 
+# Class: gen_base::libnet-ip-perl
+#
+# Actions:
+#	Install libnet-ip-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libnet-ip-perl {
+	kpackage { "libnet-ip-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libnet-ping-external-perl
+#
+# Actions:
+#	Install libnet-ping-external-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libnet-ping-external-perl {
+	kpackage { "libnet-ping-external-perl":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::liblog4j1.2-java
 #
 # Actions:
@@ -306,6 +433,76 @@ class gen_base::libnet_dns_perl {
 #
 class gen_base::liblog4j1_2-java {
 	kpackage { "liblog4j1.2-java":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libmailtools-perl
+#
+# Actions:
+#	Install libmailtools-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libmailtools-perl {
+	kpackage { "libmailtools-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libpam-modules
+#
+# Actions:
+#	Install libpam-modules
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libpam-modules {
+	kpackage { "libpam-modules":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libpam-runtime
+#
+# Actions:
+#	Install libpam-runtime
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libpam-runtime {
+	kpackage { "libpam-runtime":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libpam0g
+#
+# Actions:
+#	Install libpam0g
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libpam0g {
+	kpackage { "libpam0g":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libparallel-forkmanager-perl
+#
+# Actions:
+#	Install libparallel-forkmanager-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libparallel-forkmanager-perl {
+	kpackage { "libparallel-forkmanager-perl":
 		ensure => latest;
 	}
 }
@@ -324,6 +521,20 @@ class gen_base::libreadline5-dev {
 	}
 }
 
+# Class: gen_base::libsnmp-perl
+#
+# Actions:
+#	Install libsnmp-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libsnmp-perl {
+	kpackage { "libsnmp-perl":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::libsocket6-perl
 #
 # Actions:
@@ -334,6 +545,20 @@ class gen_base::libreadline5-dev {
 #
 class gen_base::libsocket6-perl {
 	kpackage { "libsocket6-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libspreadsheet-parseexcel-perl
+#
+# Actions:
+#	Install libspreadsheet-parseexcel-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libspreadsheet-parseexcel-perl {
+	kpackage { "libspreadsheet-parseexcel-perl":
 		ensure => latest;
 	}
 }
@@ -362,6 +587,34 @@ class gen_base::libssl-dev {
 #
 class gen_base::libstomp_ruby {
 	kpackage { "libstomp-ruby":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libtime-modules-perl
+#
+# Actions:
+#	Install libtime-modules-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libtime-modules-perl {
+	kpackage { "libtime-modules-perl":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::libwww-perl
+#
+# Actions:
+#	Install libwww-perl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::libwww-perl {
+	kpackage { "libwww-perl":
 		ensure => latest;
 	}
 }
@@ -489,6 +742,104 @@ class gen_base::openjdk-6-jre {
 	}
 }
 
+# Class: gen_base::php-apc
+#
+# Actions:
+#	Install php-apc
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php-apc {
+	kpackage { "php-apc":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::php-pear
+#
+# Actions:
+#	Install php-pear
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php-pear {
+	kpackage { "php-pear":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::php5-cgi
+#
+# Actions:
+#	Install php5-cgi
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php5-cgi {
+	kpackage { "php5-cgi":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::php5-cli
+#
+# Actions:
+#	Install php5-cli
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php5-cli {
+	kpackage { "php5-cli":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::php5-common
+#
+# Actions:
+#	Install php5-common
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php5-common {
+	kpackage { "php5-common":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::php5-curl
+#
+# Actions:
+#	Install php5-curl
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php5-curl {
+	kpackage { "php5-mcrypt":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::php5-mcrypt
+#
+# Actions:
+#	Install php5-mcrypt
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php5-mcrypt {
+	kpackage { "php5-mcrypt":
+		ensure => latest;
+	}
+}
+
 # Class: gen_base::php5-mysql
 #
 # Actions:
@@ -499,6 +850,20 @@ class gen_base::openjdk-6-jre {
 #
 class gen_base::php5-mysql {
 	kpackage { "php5-mysql":
+		ensure => latest;
+	}
+}
+
+# Class: gen_base::php5-xdebug
+#
+# Actions:
+#	Install php5-xdebug
+#
+# Depends:
+#	gen_puppet
+#
+class gen_base::php5-xdebug {
+	kpackage { "php5-xdebug":
 		ensure => latest;
 	}
 }
