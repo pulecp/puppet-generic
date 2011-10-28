@@ -10,8 +10,8 @@
 #	gen_puppet
 #
 class clamav {
-	package { ["clamav-daemon", "clamav-freshclam"]:
-		ensure => installed,
+	package { ["clamav-daemon", "clamav-freshclam", "clamav-base", "libclamav6"]:
+		ensure => latest,
 	}
 
 	service { "clamav-daemon":
