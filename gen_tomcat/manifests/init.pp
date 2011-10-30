@@ -28,8 +28,8 @@
 #	gen_base::openjdk-6-jre
 #	gen_tomcat::manager
 #
-class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080", $java_home="/usr/lib/jvm/java-6-openjdk/", $java_opts="",
-                  $jvm_max_mem=false, $tomcat_tag="tomcat_${environment}") {
+class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
+                  $java_home="/usr/lib/jvm/java-6-openjdk/", $java_opts="", $jvm_max_mem=false, $tomcat_tag="tomcat_${environment}") {
 	include gen_tomcat::manager
 	include gen_base::openjdk-6-jre
 
@@ -56,7 +56,6 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 			target  => "/srv/tomcat/conf/tomcat-users.xml";
 	}
 
-	# TODO Where do we get the $tomcat_tag variable from?
 	Ekfile <<| tag == "${tomcat_tag}_user" |>>
 
 	# Create the actual tomcat-users.xml file
