@@ -821,7 +821,7 @@ class gen_base::php5-common {
 #	gen_puppet
 #
 class gen_base::php5-curl {
-	kpackage { "php5-mcrypt":
+	kpackage { "php5-curl":
 		ensure => latest;
 	}
 }

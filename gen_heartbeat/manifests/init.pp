@@ -13,14 +13,17 @@ class gen_heartbeat ($customtag="heartbeat_${environment}") {
 
 	# These ekfiles contain the configuration fragments for heartbeat.
 	Ekfile <<| tag == $customtag |>>
+
 	concat { "/etc/heartbeat/ha.cf":
-		notify           => Service["heartbeat"];
+		require => Package["heartbeat"],
+		notify  => Service["heartbeat"];
 	}
 
 	# We don't use auth-keys, as the port is firewalled and only open to the other hosts(s) in the cluster(done in kbp_heartbeat)
 	kfile { "/etc/ha.d/authkeys":
 		content => "auth 1\n1 crc",
-		mode => 600,
+		mode    => 600,
+		require => Package["heartbeat"];
 	}
 }
 
@@ -62,8 +65,8 @@ define gen_heartbeat::ha_cf ($autojoin="none", $warntime=5, $deadtime=15, $initd
 			target     => "/etc/heartbeat/ha.cf",
 			contenttag => $customtag;
 		"heartbeat node ${node_name}":
-			content => "node ${node_name}\nucast ${node_dev} ${node_ip}",
-			exported => true,
+			content    => "node ${node_name}\nucast ${node_dev} ${node_ip}",
+			exported   => true,
 			target     => "/etc/heartbeat/ha.cf",
 			contenttag => $customtag;
 	}

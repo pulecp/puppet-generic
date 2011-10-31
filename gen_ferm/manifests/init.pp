@@ -113,23 +113,44 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
 	}
 
 	if $ip_proto == "v46" or $ip_proto == $name {
-		rule { ["${real_name}_v4","${real_name}_v6"]:
-			prio      => $prio,
-			interface => $interface,
-			outerface => $outerface,
-			saddr     => $saddr,
-			daddr     => $daddr,
-			proto     => $proto,
-			icmptype  => $icmptype,
-			sport     => $sport,
-			dport     => $dport,
-			jump      => $jump,
-			action    => $action,
-			table     => $table,
-			chain     => $chain,
-			ensure    => $ensure,
-			exported  => $exported,
-			customtag => $customtag;
+		if ($saddr == $fqdn or $daddr == $fqdn) and ! $ipaddress6 {
+			rule { "${real_name}_v4":
+				prio      => $prio,
+				interface => $interface,
+				outerface => $outerface,
+				saddr     => $saddr,
+				daddr     => $daddr,
+				proto     => $proto,
+				icmptype  => $icmptype,
+				sport     => $sport,
+				dport     => $dport,
+				jump      => $jump,
+				action    => $action,
+				table     => $table,
+				chain     => $chain,
+				ensure    => $ensure,
+				exported  => $exported,
+				customtag => $customtag;
+			}
+		} else {
+			rule { ["${real_name}_v4","${real_name}_v6"]:
+				prio      => $prio,
+				interface => $interface,
+				outerface => $outerface,
+				saddr     => $saddr,
+				daddr     => $daddr,
+				proto     => $proto,
+				icmptype  => $icmptype,
+				sport     => $sport,
+				dport     => $dport,
+				jump      => $jump,
+				action    => $action,
+				table     => $table,
+				chain     => $chain,
+				ensure    => $ensure,
+				exported  => $exported,
+				customtag => $customtag;
+			}
 		}
 	} elsif ($ip_proto=="v4" and ! ($saddr_is_ip=="ipv6") and ! ($daddr_is_ip=="ipv6")) or ($ip_proto=="v6" and ! ($saddr_is_ip=="ipv4") and ! ($daddr_is_ip=="ipv4")) {
 		realize Table["${table}_${ip_proto}"]
