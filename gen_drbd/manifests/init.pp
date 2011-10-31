@@ -29,7 +29,8 @@ define gen_drbd($mastermaster=true, $time_out=false, $connect_int=false, $ping_i
 	}
 
 	concat { "/etc/drbd.d/${name}.res":
-		notify => Service["drbd"];
+		require => Package["drbd8-utils"],
+		notify  => Service["drbd"];
 	}
 
 	if !defined(Concat::Add_content["0_${name}"]) {
