@@ -105,17 +105,18 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $failover=false, $need_gssd="
 # Depends:
 #	gen_puppet
 #
-define gen_nfs::mount($source) {
+define gen_nfs::mount($source, $options="wsize=1024,rsize=1024") {
 	include gen_nfs
 
 	mount { $name:
-		ensure  => "mounted",
-		device  => $source,
-		fstype  => "nfs",
-		options => "proto=udp,wsize=1024,rsize=1024",
-		dump    => 0,
-		pass    => 0,
-		require => [Kpackage["nfs-common"], Kfile[$name]];
+		ensure   => "mounted",
+		device   => $source,
+		fstype   => "nfs",
+		options  => $options,
+		dump     => 0,
+		pass     => 0,
+		remounts => false,
+		require  => [Kpackage["nfs-common"], Kfile[$name]];
 	}
 
 	if ! defined(Kfile[$name]) {
