@@ -17,7 +17,7 @@ class gen_apache {
 	exec { "force-reload-apache2":
 		command     => "/etc/init.d/apache2 force-reload",
 		refreshonly => true,
-		require     => Package["apache2"];
+		require     => Exec["reload-apache2"];
 	}
 
 	kfile {
@@ -28,6 +28,7 @@ class gen_apache {
 			ensure  => directory,
 			purge   => true,
 			recurse => true,
+			force   => true,
 			require => Package["apache2"];
 		"/etc/apache2/sites-enabled":
 			ensure  => directory,
@@ -46,8 +47,8 @@ class gen_apache {
 	}
 
 	concat { "/etc/apache2/ports.conf":
-			require => Package["apache2"],
-			notify  => Exec["reload-apache2"];
+		require => Package["apache2"],
+		notify  => Exec["reload-apache2"];
 	}
 }
 
@@ -80,8 +81,10 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 	$real_name = regsubst($full_name,'^(.*)_(.*)$','\1')
 	$real_port = regsubst($full_name,'^(.*)_(.*)$','\2')
 
-	if $documentroot {
-		kfile { $documentroot:; }
+	if $create_documentroot {
+		kfile { $documentroot:
+			ensure => directory;
+		}
 	}
 
 	kfile {
@@ -166,9 +169,9 @@ define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $servera
 	$full_name = "${name}_${port}"
 
 	gen_apache::site { $full_name:
-		ensure       => $ensure,
-		serveralias  => $serveralias,
-		documentroot => false;
+		ensure              => $ensure,
+		serveralias         => $serveralias,
+		create_documentroot => false;
 	}
 
 	gen_apache::redirect { $full_name:
