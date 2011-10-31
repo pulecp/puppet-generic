@@ -158,3 +158,9 @@ class subversion {
 		}
 	}
 }
+
+class subversion::client {
+	kpackage { "subversion":
+		ensure => latest;
+	}
+}
