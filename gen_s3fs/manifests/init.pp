@@ -3,13 +3,13 @@
 # Class: gen_s3fs
 #
 # Actions:
-#	Set up s3fs
+#  Set up s3fs
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_s3fs {
-	kpackage { "s3fs":
-		ensure => latest,
-	}
+  kpackage { "s3fs":
+    ensure => latest,
+  }
 }

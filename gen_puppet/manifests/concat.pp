@@ -79,25 +79,25 @@
 # Class: concat::setup
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class concat::setup {
-	$concatdir    = "/var/lib/puppet/concat"
-	$majorversion = regsubst($puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
-	$sort         = "/usr/bin/sort"
+  $concatdir    = "/var/lib/puppet/concat"
+  $majorversion = regsubst($puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
+  $sort         = "/usr/bin/sort"
 
-	kfile {
-		"/usr/local/bin/concatfragments.sh":
-			mode   => 755,
-			source => "gen_puppet/concat/concatfragments.sh";
-		$concatdir:
-			ensure => directory,
-			mode   => 755;
-	}
+  kfile {
+    "/usr/local/bin/concatfragments.sh":
+      mode   => 755,
+      source => "gen_puppet/concat/concatfragments.sh";
+    $concatdir:
+      ensure => directory,
+      mode   => 755;
+  }
 }
 
 # Puts a file fragment into a directory previous setup using concat
@@ -113,123 +113,123 @@ class concat::setup {
 # Define: concat::fragment
 #
 # Parameters:
-#	content
-#		Undocumented
-#	source
-#		Undocumented
-#	order
-#		Undocumented
-#	ensure
-#		Undocumented
-#	target
-#		Undocumented
+#  content
+#    Undocumented
+#  source
+#    Undocumented
+#  order
+#    Undocumented
+#  ensure
+#    Undocumented
+#  target
+#    Undocumented
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 define concat::fragment($target, $content=false, $source=false, $order=10, $ensure = "present", $exported=false, $contenttag=false) {
-	$safe_target_name = regsubst($target, '/', '_', 'G')
-	$safe_name        = regsubst($name, '/', '_', 'G')
-	$concatdir        = $concat::setup::concatdir
-	$fragdir          = "${concatdir}/${safe_target_name}"
+  $safe_target_name = regsubst($target, '/', '_', 'G')
+  $safe_name        = regsubst($name, '/', '_', 'G')
+  $concatdir        = $concat::setup::concatdir
+  $fragdir          = "${concatdir}/${safe_target_name}"
 
-	if $exported {
-		if $contenttag {
-			$export = true
-		} else {
-			fail("Exported concat fragment without tag: ${name}")
-		}
-	}
+  if $exported {
+    if $contenttag {
+      $export = true
+    } else {
+      fail("Exported concat fragment without tag: ${name}")
+    }
+  }
 
-	# if content is passed, use that, else if source is passed use that
-	# if neither passed, but $ensure is in symlink form, make a symlink
-	case $content {
-		false: {
-			case $source {
-				false: {
-					case $ensure {
-						"", "absent", "present", "file", "directory": {
-							crit("No content or source specified")
-						}
-					}
-				}
-				default: {
-					if $export {
-						Ekfile { source => $source }
-					} else {
-						Kfile { source => $source }
-					}
-				}
-			}
-		}
-		default: {
-			if $export {
-				Ekfile{ content => $content }
-			} else {
-				Kfile{ content => $content }
-			}
-		}
-	}
+  # if content is passed, use that, else if source is passed use that
+  # if neither passed, but $ensure is in symlink form, make a symlink
+  case $content {
+    false: {
+      case $source {
+        false: {
+          case $ensure {
+            "", "absent", "present", "file", "directory": {
+              crit("No content or source specified")
+            }
+          }
+        }
+        default: {
+          if $export {
+            Ekfile { source => $source }
+          } else {
+            Kfile { source => $source }
+          }
+        }
+      }
+    }
+    default: {
+      if $export {
+        Ekfile{ content => $content }
+      } else {
+        Kfile{ content => $content }
+      }
+    }
+  }
 
-	if $export {
-		@@ekfile { "${fragdir}/fragments/${order}_${safe_name};${fqdn}":
-			ensure => $ensure,
-			notify => Exec["concat_${target}"],
-			tag    => $contenttag;
-		}
-	} else {
-		kfile { "${fragdir}/fragments/${order}_${safe_name}":
-			ensure => $ensure,
-			notify => Exec["concat_${target}"];
-		}
-	}
+  if $export {
+    @@ekfile { "${fragdir}/fragments/${order}_${safe_name};${fqdn}":
+      ensure => $ensure,
+      notify => Exec["concat_${target}"],
+      tag    => $contenttag;
+    }
+  } else {
+    kfile { "${fragdir}/fragments/${order}_${safe_name}":
+      ensure => $ensure,
+      notify => Exec["concat_${target}"];
+    }
+  }
 }
 
 # Define: concat::add_content
 #
 # Parameters:
-#	content
-#		Undocumented
-#	order
-#		Undocumented
-#	ensure
-#		Undocumented
-#	target
-#		Undocumented
-#	linebreak
-#		Setting this to false allows for inline additions
+#  content
+#    Undocumented
+#  order
+#    Undocumented
+#  ensure
+#    Undocumented
+#  target
+#    Undocumented
+#  linebreak
+#    Setting this to false allows for inline additions
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 define concat::add_content($target, $content=false, $order=15, $ensure=present, $linebreak=true, $exported=false, $contenttag=false) {
-	$body = $content ? {
-		false   => $linebreak ? {
-			false => $name,
-			true  => "${name}\n",
-		},
-		default => $linebreak ? {
-			false => $content,
-			true  => "${content}\n",
-		},
-	}
+  $body = $content ? {
+    false   => $linebreak ? {
+      false => $name,
+      true  => "${name}\n",
+    },
+    default => $linebreak ? {
+      false => $content,
+      true  => "${content}\n",
+    },
+  }
 
-	concat::fragment{ "${target}_fragment_${name}":
-		content    => $body,
-		target     => $target,
-		order      => $order,
-		ensure     => $ensure,
-		exported   => $exported,
-		contenttag => $contenttag;
-	}
+  concat::fragment{ "${target}_fragment_${name}":
+    content    => $body,
+    target     => $target,
+    order      => $order,
+    ensure     => $ensure,
+    exported   => $exported,
+    contenttag => $contenttag;
+  }
 }
 
 # Sets up so that you can use fragments to build a final config file, 
@@ -259,81 +259,81 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
 # Define: concat
 #
 # Parameters:
-#	owner
-#		Undocumented
-#	group
-#		Undocumented
-#	warn
-#		Undocumented
-#	force
-#		Undocumented
-#	remove_fragments
-#		Undocumented
-#	mode
-#		Undocumented
+#  owner
+#    Undocumented
+#  group
+#    Undocumented
+#  warn
+#    Undocumented
+#  force
+#    Undocumented
+#  remove_fragments
+#    Undocumented
+#  mode
+#    Undocumented
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 define concat($mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=false, $testpms=[]) {
-	require concat::setup
+  require concat::setup
 
-	if $servername in $testpms {
-		$purge = $purge_on_testpm
-	} else {
-		$purge = $purge_on_pm
-	}
-	$safe_name = regsubst($name, '/', '_', 'G')
-	$concatdir = $concat::setup::concatdir
-	$version   = $concat::setup::majorversion
-	$sort      = $concat::setup::sort
-	$fragdir   = "${concatdir}/${safe_name}"
-	$warnflag = $warn ? {
-		true    => "-w",
-		default => "",
-	}
-	$forceflag = $force ? {
-		true    => "-f",
-		default => "",
-	}
+  if $servername in $testpms {
+    $purge = $purge_on_testpm
+  } else {
+    $purge = $purge_on_pm
+  }
+  $safe_name = regsubst($name, '/', '_', 'G')
+  $concatdir = $concat::setup::concatdir
+  $version   = $concat::setup::majorversion
+  $sort      = $concat::setup::sort
+  $fragdir   = "${concatdir}/${safe_name}"
+  $warnflag = $warn ? {
+    true    => "-w",
+    default => "",
+  }
+  $forceflag = $force ? {
+    true    => "-f",
+    default => "",
+  }
 
-	file {
-		$fragdir:
-			ensure => directory;
-		"${fragdir}/fragments":
-			ensure  => directory,
-			recurse => true,
-			purge   => $purge,
-			force   => true,
-			ignore  => [".svn", ".git"],
-			source  => $version ? {
-				24      => "puppet:///concat/null",
-				default => undef,
-			},
-			notify  => Exec["concat_${name}"];
-		"${fragdir}/fragments.concat":
-			ensure  => present;
-		$name:
-			owner    => $owner,
-			group    => $group,
-			checksum => "md5",
-			mode     => $mode,
-			ensure   => present,
-			alias    => "concat_${name}";
-	}
+  file {
+    $fragdir:
+      ensure => directory;
+    "${fragdir}/fragments":
+      ensure  => directory,
+      recurse => true,
+      purge   => $purge,
+      force   => true,
+      ignore  => [".svn", ".git"],
+      source  => $version ? {
+        24      => "puppet:///concat/null",
+        default => undef,
+      },
+      notify  => Exec["concat_${name}"];
+    "${fragdir}/fragments.concat":
+      ensure  => present;
+    $name:
+      owner    => $owner,
+      group    => $group,
+      checksum => "md5",
+      mode     => $mode,
+      ensure   => present,
+      alias    => "concat_${name}";
+  }
 
-	exec { "concat_${name}":
-		user      => "root",
-		group     => $group,
-		alias     => "concat_${fragdir}",
-		unless    => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
-		command   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
-		notify    => File[$name],
-		subscribe => File[$fragdir],
-		require   => [File["/usr/local/bin/concatfragments.sh","${fragdir}/fragments","${fragdir}/fragments.concat"]];
-	}
+  exec { "concat_${name}":
+    user      => "root",
+    group     => $group,
+    alias     => "concat_${fragdir}",
+    unless    => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
+    command   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
+    notify    => File[$name],
+    subscribe => File[$fragdir],
+    require   => [File["/usr/local/bin/concatfragments.sh","${fragdir}/fragments","${fragdir}/fragments.concat"]];
+  }
 }

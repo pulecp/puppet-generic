@@ -3,78 +3,78 @@
 # Class: gen_openssl::common
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class gen_openssl::common {
-	include gen_base::openssl
+  include gen_base::openssl
 
-	kfile { "/etc/ssl/certs":
-		recurse  => true,
-		require  => Package["openssl"];
-	}
+  kfile { "/etc/ssl/certs":
+    recurse  => true,
+    require  => Package["openssl"];
+  }
 }
 
 # Class: gen_openssl::ca
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class gen_openssl::ca {
-	include gen_openssl::common
+  include gen_openssl::common
 
-	kfile {
-		"/etc/ssl/newcerts":
-			ensure  => directory,
-			mode    => 750,
-			require => Kpackage["openssl"];
-		"/etc/ssl/requests":
-			ensure  => directory,
-			mode    => 750,
-			require => Kpackage["openssl"];
-		"/etc/ssl/Makefile":
-			source  => "gen_openssl/Makefile",
-			require => Kpackage["openssl"];
-	}
+  kfile {
+    "/etc/ssl/newcerts":
+      ensure  => directory,
+      mode    => 750,
+      require => Kpackage["openssl"];
+    "/etc/ssl/requests":
+      ensure  => directory,
+      mode    => 750,
+      require => Kpackage["openssl"];
+    "/etc/ssl/Makefile":
+      source  => "gen_openssl/Makefile",
+      require => Kpackage["openssl"];
+  }
 }
 
 # Define: gen_openssl::create_ca
 #
 # Parameters:
-#	length
-#		Undocumented
+#  length
+#    Undocumented
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 define gen_openssl::create_ca ($length = 4096) {
-	exec { "create ca secret key ${name}":
-		command  => "/usr/bin/openssl genrsa -out '${name}' ${length}",
-		creates  => "${name}",
-		requires => Kpackage["openssl"],
-	}
+  exec { "create ca secret key ${name}":
+    command  => "/usr/bin/openssl genrsa -out '${name}' ${length}",
+    creates  => "${name}",
+    requires => Kpackage["openssl"],
+  }
 }
 
 # Define: gen_openssl::create_ca_csr
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 define gen_openssl::create_ca_csr () {
-	# Bother, needs a config file for the values? Silly.
+  # Bother, needs a config file for the values? Silly.
 }

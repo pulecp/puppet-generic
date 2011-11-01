@@ -3,1021 +3,1021 @@
 # Class: gen_base::abswrap
 #
 # Actions:
-#	Install abswrap
+#  Install abswrap
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::abswrap {
-	kpackage { "abswrap":
-		ensure => latest;
-	}
+  kpackage { "abswrap":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::ant
 #
 # Actions:
-#	Install ant
+#  Install ant
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::ant {
-	kpackage { "ant":
-		ensure => latest;
-	}
+  kpackage { "ant":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libaugeas-ruby
 #
 # Actions:
-#	Install augeas and it's lenses
+#  Install augeas and it's lenses
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::augeas {
-	kpackage { ["libaugeas-ruby", "augeas-lenses","libaugeas-ruby1.8","libaugeas0"]:
-		ensure => latest;
-	}
+  kpackage { ["libaugeas-ruby", "augeas-lenses","libaugeas-ruby1.8","libaugeas0"]:
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::base-files
 #
 # Actions:
-#	Install base-files
+#  Install base-files
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::base-files {
-	kpackage { "base-files":
-		ensure => latest;
-	}
+  kpackage { "base-files":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::bsdtar
 #
 # Actions:
-#	Install bsdtar
+#  Install bsdtar
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::bsdtar {
-	kpackage { "bsdtar":
-		ensure => latest;
-	}
+  kpackage { "bsdtar":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::curl
 #
 # Actions:
-#	Install curl
+#  Install curl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::curl {
-	kpackage { "curl":
-		ensure => latest;
-	}
+  kpackage { "curl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::dnsutils
 #
 # Actions:
-#	Install dnsutils
+#  Install dnsutils
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::dnsutils {
-	kpackage { "dnsutils":
-		ensure => latest;
-	}
+  kpackage { "dnsutils":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::echoping
 #
 # Actions:
-#	Install echoping
+#  Install echoping
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::echoping {
-	kpackage { "echoping":
-		ensure => latest;
-	}
+  kpackage { "echoping":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::facter
 #
 # Actions:
-#	Install facter
+#  Install facter
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::facter {
-	kpackage { "facter":
-		ensure => latest,
-		notify => Exec["reload-puppet"];
-	}
+  kpackage { "facter":
+    ensure => latest,
+    notify => Exec["reload-puppet"];
+  }
 }
 
 # Class: gen_base::imagemagick
 #
 # Actions:
-#	Install imagemagick
+#  Install imagemagick
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::imagemagick {
-	kpackage { "imagemagick":
-		ensure => latest;
-	}
+  kpackage { "imagemagick":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::javascript-common
 #
 # Actions:
-#	Install javascript-common
+#  Install javascript-common
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::javascript-common {
-	kpackage { "javascript-common":
-		ensure => latest;
-	}
+  kpackage { "javascript-common":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::jmxquery
 #
 # Actions:
-#	Install jmxquery
+#  Install jmxquery
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::jmxquery {
-	kpackage { "jmxquery":
-		ensure => latest;
-	}
+  kpackage { "jmxquery":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libactiverecord_ruby18
 #
 # Actions:
-#	Install libactiverecord-ruby1.8
+#  Install libactiverecord-ruby1.8
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libactiverecord_ruby18 {
-	kpackage { "libactiverecord-ruby1.8":
-		ensure => latest;
-	}
+  kpackage { "libactiverecord-ruby1.8":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libapache2-mod-auth-mysql
 #
 # Actions:
-#	Install libapache2-mod-auth-mysql
+#  Install libapache2-mod-auth-mysql
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libapache2-mod-auth-mysql {
-	kpackage { "libapache2-mod-auth-mysql":
-		ensure => latest,
-		notify => Exec["reload-apache2"];
-	}
+  kpackage { "libapache2-mod-auth-mysql":
+    ensure => latest,
+    notify => Exec["reload-apache2"];
+  }
 }
 
 # Class: gen_base::libapache2-mod-fcgid
 #
 # Actions:
-#	Install libapache2-mod-fcgid
+#  Install libapache2-mod-fcgid
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libapache2-mod-fcgid {
-	kpackage { "libapache2-mod-fcgid":
-		ensure => latest,
-		notify => Exec["reload-apache2"];
-	}
+  kpackage { "libapache2-mod-fcgid":
+    ensure => latest,
+    notify => Exec["reload-apache2"];
+  }
 }
 
 # Class: gen_base::libapache2-mod-passenger
 #
 # Actions:
-#	Install libapache2-mod-passenger
+#  Install libapache2-mod-passenger
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libapache2-mod-passenger {
-	kpackage { "libapache2-mod-passenger":
-		ensure => latest;
-	}
+  kpackage { "libapache2-mod-passenger":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libapache2-mod-perl2
 #
 # Actions:
-#	Install libapache2-mod-perl2
+#  Install libapache2-mod-perl2
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libapache2-mod-perl2 {
-	kpackage { "libapache2-mod-perl2":
-		ensure => latest;
-	}
+  kpackage { "libapache2-mod-perl2":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libapache2-mod-php5
 #
 # Actions:
-#	Install libapache2-mod-php5
+#  Install libapache2-mod-php5
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libapache2-mod-php5 {
-	kpackage { "libapache2-mod-php5":
-		ensure => latest;
-	}
+  kpackage { "libapache2-mod-php5":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libapr1
 #
 # Actions:
-#	Install libapr1
+#  Install libapr1
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libapr1 {
-	kpackage { "libapr1":
-		ensure => latest;
-	}
+  kpackage { "libapr1":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libcommons-logging-java
 #
 # Actions:
-#	Install libcommons-logging-java
+#  Install libcommons-logging-java
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libcommons-logging-java {
-	kpackage { "libcommons-logging-java":
-		ensure => latest;
-	}
+  kpackage { "libcommons-logging-java":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libdate-calc-perl
 #
 # Actions:
-#	Install libdate-calc-perl
+#  Install libdate-calc-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libdate-calc-perl {
-	kpackage { "libdate-calc-perl":
-		ensure => latest;
-	}
+  kpackage { "libdate-calc-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libdate-manip-perl
 #
 # Actions:
-#	Install libdate-manip-perl
+#  Install libdate-manip-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libdate-manip-perl {
-	kpackage { "libdate-manip-perl":
-		ensure => latest;
-	}
+  kpackage { "libdate-manip-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libdbi-perl
 #
 # Actions:
-#	Install libdbi-perl
+#  Install libdbi-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libdbi-perl {
-	kpackage { "libdbi-perl":
-		ensure => latest;
-	}
+  kpackage { "libdbi-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libfreetype6
 #
 # Actions:
-#	Install libfreetype6
+#  Install libfreetype6
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libfreetype6 {
-	kpackage { "libfreetype6":
-		ensure => latest;
-	}
+  kpackage { "libfreetype6":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libio-socket-inet6-perl
 #
 # Actions:
-#	Install libio-socket-inet6-perl
+#  Install libio-socket-inet6-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libio-socket-inet6-perl {
-	kpackage { "libio-socket-inet6-perl":
-		ensure => latest;
-	}
+  kpackage { "libio-socket-inet6-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libmozjs2d
 #
 # Actions:
-#	Install libmozjs2d
+#  Install libmozjs2d
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libmozjs2d {
-	kpackage { "libmozjs2d":
-		ensure => latest;
-	}
+  kpackage { "libmozjs2d":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libmysql-ruby
 #
 # Actions:
-#	Install libmysql-ruby
+#  Install libmysql-ruby
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libmysql-ruby {
-	kpackage { "libmysql-ruby":
-		ensure => latest;
-	}
+  kpackage { "libmysql-ruby":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libnet_dns_perl
 #
 # Actions:
-#	Install libnet-dns-perl
+#  Install libnet-dns-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libnet_dns_perl {
-	kpackage { "libnet-dns-perl":
-		ensure => latest;
-	}
+  kpackage { "libnet-dns-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libnet-ip-perl
 #
 # Actions:
-#	Install libnet-ip-perl
+#  Install libnet-ip-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libnet-ip-perl {
-	kpackage { "libnet-ip-perl":
-		ensure => latest;
-	}
+  kpackage { "libnet-ip-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libnet-ping-external-perl
 #
 # Actions:
-#	Install libnet-ping-external-perl
+#  Install libnet-ping-external-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libnet-ping-external-perl {
-	kpackage { "libnet-ping-external-perl":
-		ensure => latest;
-	}
+  kpackage { "libnet-ping-external-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::liblog4j1.2-java
 #
 # Actions:
-#	Install liblog4j1.2-java
+#  Install liblog4j1.2-java
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::liblog4j1_2-java {
-	kpackage { "liblog4j1.2-java":
-		ensure => latest;
-	}
+  kpackage { "liblog4j1.2-java":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libmailtools-perl
 #
 # Actions:
-#	Install libmailtools-perl
+#  Install libmailtools-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libmailtools-perl {
-	kpackage { "libmailtools-perl":
-		ensure => latest;
-	}
+  kpackage { "libmailtools-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libpam-modules
 #
 # Actions:
-#	Install libpam-modules
+#  Install libpam-modules
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libpam-modules {
-	kpackage { "libpam-modules":
-		ensure => latest;
-	}
+  kpackage { "libpam-modules":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libpam-runtime
 #
 # Actions:
-#	Install libpam-runtime
+#  Install libpam-runtime
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libpam-runtime {
-	kpackage { "libpam-runtime":
-		ensure => latest;
-	}
+  kpackage { "libpam-runtime":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libpam0g
 #
 # Actions:
-#	Install libpam0g
+#  Install libpam0g
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libpam0g {
-	kpackage { "libpam0g":
-		ensure => latest;
-	}
+  kpackage { "libpam0g":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libparallel-forkmanager-perl
 #
 # Actions:
-#	Install libparallel-forkmanager-perl
+#  Install libparallel-forkmanager-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libparallel-forkmanager-perl {
-	kpackage { "libparallel-forkmanager-perl":
-		ensure => latest;
-	}
+  kpackage { "libparallel-forkmanager-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libreadline5-dev
 #
 # Actions:
-#	Install libreadline5-dev
+#  Install libreadline5-dev
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libreadline5-dev {
-	kpackage { "libreadline5-dev":
-		ensure => latest;
-	}
+  kpackage { "libreadline5-dev":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libsnmp-perl
 #
 # Actions:
-#	Install libsnmp-perl
+#  Install libsnmp-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libsnmp-perl {
-	kpackage { "libsnmp-perl":
-		ensure => latest;
-	}
+  kpackage { "libsnmp-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libsocket6-perl
 #
 # Actions:
-#	Install libsocket6-perl
+#  Install libsocket6-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libsocket6-perl {
-	kpackage { "libsocket6-perl":
-		ensure => latest;
-	}
+  kpackage { "libsocket6-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libspreadsheet-parseexcel-perl
 #
 # Actions:
-#	Install libspreadsheet-parseexcel-perl
+#  Install libspreadsheet-parseexcel-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libspreadsheet-parseexcel-perl {
-	kpackage { "libspreadsheet-parseexcel-perl":
-		ensure => latest;
-	}
+  kpackage { "libspreadsheet-parseexcel-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libssl-dev
 #
 # Actions:
-#	Install libssl-dev
+#  Install libssl-dev
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libssl-dev {
-	kpackage { "libssl-dev":
-		ensure => latest;
-	}
+  kpackage { "libssl-dev":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libstomp_ruby
 #
 # Actions:
-#	Install libstomp-ruby
+#  Install libstomp-ruby
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libstomp_ruby {
-	kpackage { "libstomp-ruby":
-		ensure => latest;
-	}
+  kpackage { "libstomp-ruby":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libtime-modules-perl
 #
 # Actions:
-#	Install libtime-modules-perl
+#  Install libtime-modules-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libtime-modules-perl {
-	kpackage { "libtime-modules-perl":
-		ensure => latest;
-	}
+  kpackage { "libtime-modules-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::libwww-perl
 #
 # Actions:
-#	Install libwww-perl
+#  Install libwww-perl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::libwww-perl {
-	kpackage { "libwww-perl":
-		ensure => latest;
-	}
+  kpackage { "libwww-perl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::linux-base
 #
 # Actions:
-#	Install linux-base
+#  Install linux-base
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::linux-base {
-	kpackage { "linux-base":
-		ensure => latest;
-	}
+  kpackage { "linux-base":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::linux-image
 #
 # Actions:
-#	Make sure the latest image is installed
+#  Make sure the latest image is installed
 #
 # Parameters:
-#	version
-#		The version we need to install the latest package of.
+#  version
+#    The version we need to install the latest package of.
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::linux-image ($version) {
-	kpackage { "linux-image-${version}":
-		ensure => latest;
-	}
+  kpackage { "linux-image-${version}":
+    ensure => latest;
+  }
 
-	# Also install the normal lenny kernel if we're not running the backports kernel already
-	if ($lsbdistcodename == "lenny") and ($kernelrelease != "2.6.26-2-amd64") {
-		kpackage { "linux-image-2.6.26-2-amd64":
-			ensure => latest;
-		}
-	}
+  # Also install the normal lenny kernel if we're not running the backports kernel already
+  if ($lsbdistcodename == "lenny") and ($kernelrelease != "2.6.26-2-amd64") {
+    kpackage { "linux-image-2.6.26-2-amd64":
+      ensure => latest;
+    }
+  }
 }
 
 # Class: gen_base::mc
 #
 # Actions:
-#	Install mc
+#  Install mc
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::mc {
-	kpackage { "mc":
-		ensure => latest;
-	}
+  kpackage { "mc":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::nagios-nrpe-plugin
 #
 # Actions:
-#	Install nagios-nrpe-plugin
+#  Install nagios-nrpe-plugin
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::nagios-nrpe-plugin {
-	kpackage { "nagios-nrpe-plugin":
-		ensure => latest;
-	}
+  kpackage { "nagios-nrpe-plugin":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::nagios-plugins-standard
 #
 # Actions:
-#	Install nagios-plugins-standard
+#  Install nagios-plugins-standard
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::nagios-plugins-standard {
-	kpackage { "nagios-plugins-standard":
-		ensure => latest;
-	}
+  kpackage { "nagios-plugins-standard":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::netpbm
 #
 # Actions:
-#	Install netpbm
+#  Install netpbm
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::netpbm {
-	kpackage { "netpbm":
-		ensure => installed;
-	}
+  kpackage { "netpbm":
+    ensure => installed;
+  }
 }
 
 # Class: gen_base::openssl
 #
 # Actions:
-#	Install openssl
+#  Install openssl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::openssl {
-	kpackage { "openssl":
-		ensure => installed;
-	}
+  kpackage { "openssl":
+    ensure => installed;
+  }
 }
 
 # Class: gen_base::openjdk-6-jre
 #
 # Actions:
-#	Install openjdk-6-jre
+#  Install openjdk-6-jre
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::openjdk-6-jre {
-	kpackage { "openjdk-6-jre":
-		ensure => installed;
-	}
+  kpackage { "openjdk-6-jre":
+    ensure => installed;
+  }
 }
 
 # Class: gen_base::php-apc
 #
 # Actions:
-#	Install php-apc
+#  Install php-apc
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php-apc {
-	kpackage { "php-apc":
-		ensure => latest;
-	}
+  kpackage { "php-apc":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::php-pear
 #
 # Actions:
-#	Install php-pear
+#  Install php-pear
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php-pear {
-	kpackage { "php-pear":
-		ensure => latest;
-	}
+  kpackage { "php-pear":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::php5-cgi
 #
 # Actions:
-#	Install php5-cgi
+#  Install php5-cgi
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php5-cgi {
-	kpackage { "php5-cgi":
-		ensure => latest;
-	}
+  kpackage { "php5-cgi":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::php5-cli
 #
 # Actions:
-#	Install php5-cli
+#  Install php5-cli
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php5-cli {
-	kpackage { "php5-cli":
-		ensure => latest;
-	}
+  kpackage { "php5-cli":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::php5-common
 #
 # Actions:
-#	Install php5-common
+#  Install php5-common
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php5-common {
-	kpackage { "php5-common":
-		ensure => latest;
-	}
+  kpackage { "php5-common":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::php5-curl
 #
 # Actions:
-#	Install php5-curl
+#  Install php5-curl
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php5-curl {
-	kpackage { "php5-curl":
-		ensure => latest;
-	}
+  kpackage { "php5-curl":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::php5-mcrypt
 #
 # Actions:
-#	Install php5-mcrypt
+#  Install php5-mcrypt
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php5-mcrypt {
-	kpackage { "php5-mcrypt":
-		ensure => latest;
-	}
+  kpackage { "php5-mcrypt":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::php5-mysql
 #
 # Actions:
-#	Install php5-mysql
+#  Install php5-mysql
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php5-mysql {
-	kpackage { "php5-mysql":
-		ensure => latest;
-	}
+  kpackage { "php5-mysql":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::php5-xdebug
 #
 # Actions:
-#	Install php5-xdebug
+#  Install php5-xdebug
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::php5-xdebug {
-	kpackage { "php5-xdebug":
-		ensure => latest;
-	}
+  kpackage { "php5-xdebug":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::python-argparse
 #
 # Actions:
-#	Install python-argparse
+#  Install python-argparse
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::python-argparse {
-	kpackage { "python-argparse":
-		ensure => latest;
-	}
+  kpackage { "python-argparse":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::python-dnspython
 #
 # Actions:
-#	Install python-dnspython
+#  Install python-dnspython
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::python-dnspython {
-	kpackage { "python-dnspython":
-		ensure => latest;
-	}
+  kpackage { "python-dnspython":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::python-ipaddr
 #
 # Actions:
-#	Install python-ipaddr
+#  Install python-ipaddr
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::python-ipaddr {
-	kpackage { "python-ipaddr":
-		ensure => latest;
-	}
+  kpackage { "python-ipaddr":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::rails
 #
 # Actions:
-#	Install rails
+#  Install rails
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::rails {
-	kpackage { "rails":
-		ensure => latest;
-	}
+  kpackage { "rails":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::realpath
 #
 # Actions:
-#	Install realpath
+#  Install realpath
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::realpath {
-	kpackage { "realpath":
-		ensure => latest;
-	}
+  kpackage { "realpath":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::ruby_stomp
 #
 # Actions:
-#	Install ruby-stomp 1.1.9 from the Kumina repository
+#  Install ruby-stomp 1.1.9 from the Kumina repository
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::ruby_stomp {
-	kpackage { "ruby-stomp":
-		ensure => latest;
-	}
+  kpackage { "ruby-stomp":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::unzip
 #
 # Actions:
-#	Install unzip
+#  Install unzip
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::unzip {
-	kpackage { "unzip":
-		ensure => latest;
-	}
+  kpackage { "unzip":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::vim
 #
 # Actions:
-#	Install vim
+#  Install vim
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::vim {
-	kpackage { "vim":
-		ensure => latest;
-	}
+  kpackage { "vim":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::vim-addon-manager
 #
 # Actions:
-#	Install vim-addon-manager
+#  Install vim-addon-manager
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::vim-addon-manager {
-	kpackage { "vim-addon-manager":
-		ensure => latest;
-	}
+  kpackage { "vim-addon-manager":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::wget
 #
 # Actions:
-#	Install wget
+#  Install wget
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::wget {
-	kpackage { "wget":
-		ensure => latest;
-	}
+  kpackage { "wget":
+    ensure => latest;
+  }
 }
 
 # Class: gen_base::xvfb
 #
 # Actions:
-#	Install xvfb
+#  Install xvfb
 #
 # Depends:
-#	gen_puppet
+#  gen_puppet
 #
 class gen_base::xvfb {
-	kpackage { "xvfb":
-		ensure => latest;
-	}
+  kpackage { "xvfb":
+    ensure => latest;
+  }
 }
