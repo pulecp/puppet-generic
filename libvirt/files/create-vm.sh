@@ -28,7 +28,7 @@
 
 if test $# -ne 10
 then
-	echo "usage: $0 name nproc ram_mb disk_volgrp disk_gb disk_splitsize disk_image [-|vnc_port] [-|vnc_secret] bridge_dev" >&2
+	echo "usage: $0 name nproc ram_mb disk_volgrp disk_gb [-|disk_splitsize] disk_image [-|vnc_port] [-|vnc_secret] bridge_dev" >&2
 	exit 1
 fi
 
@@ -51,7 +51,7 @@ CREATED=`date -R`
 I=0
 while test $DISK_GB -gt 0
 do
-	if test $DISK_GB -gt $DISK_SPLITSIZE
+	if test $DISK_SPLITSIZE != '-' && test $DISK_GB -gt $DISK_SPLITSIZE
 	then
 		SLICE=$DISK_SPLITSIZE
 	else
