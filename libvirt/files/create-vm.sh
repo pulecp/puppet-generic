@@ -26,9 +26,9 @@
 
 # create-vm.sh: Create a virtual machine using libvirt/KVM
 
-if test $# -ne 7
+if test $# -ne 9
 then
-	echo "usage: $0 name nproc ram_mb disk_volgrp disk_gb vnc_port vnc_secret" >&2
+	echo "usage: $0 name nproc ram_mb disk_volgrp disk_gb disk_image [-|vnc_port] [-|vnc_secret] bridge_dev" >&2
 	exit 1
 fi
 
@@ -37,47 +37,77 @@ NPROC=$2
 RAM_MB=$3
 DISK_VOLGRP=$4
 DISK_GB=$5
-VNC_PORT=$6
-VNC_SECRET=$7
+DISK_IMAGE=$6
+VNC_PORT=$7
+VNC_SECRET=$8
+BRIDGE_DEV=$9
 
 set -e -x
 
 CREATED=`date -R`
 
 # Create the disk.
-number_of_disks=$(($DISK_GB/125-1))
-DISK_CONFIG=""
-alfabet="abcdefghij"
-for x in `seq 0 $number_of_disks`; do
-	lvcreate -L 125G -n ${NAME}-disk${x} ${DISK_VOLGRP}
-	xplusone=$(($x+1))
-	drive_letter=`echo $alfabet | cut -b $xplusone`
-	DISK_CONFIG=$DISK_CONFIG"
+I=0
+while test $DISK_GB -gt 0
+do
+	if test $DISK_GB -gt 125
+	then
+		SLICE=125
+	else
+		SLICE=$DISK_GB
+	fi
+	lvcreate -L ${SLICE}G -n $NAME-disk$I $DISK_VOLGRP
+	DISKDEV_HOST="/dev/$DISK_VOLGRP/$NAME-disk$I"
+	DISKDEV_VM="vd`abcdefghijklmnopqrstuvwxyz | cut -b $(($I + 1))`"
+	DISK_CONFIG="$DISK_CONFIG
     <disk type='block' device='disk'>
-      <source dev='/dev/${DISK_VOLGRP}/${NAME}-disk${x}'/>
-      <target dev='vd${drive_letter}' bus='virtio'/>
+      <source dev='$DISKDEV_HOST'/>
+      <target dev='$DISKDEV_VM' bus='virtio'/>
       <alias name='virtio-disk0'/>
     </disk>"
+	dd if=/dev/zero of=$DISKDEV_HOST bs=1M count=1000
+
+	DISK_GB=$(($DISK_GB - $SLICE))
+	I=$(($I + 1))
 done
 
-# We want an initial installation PXE thingy.
-DD="dd of=/dev/${DISK_VOLGRP}/${NAME}-disk0 bs=1M"
-if test -f /var/lib/media/initial.raw
+# Generate VNC password if needed.
+if test $VNC_PORT = '-'
 then
-	$DD if=/var/lib/media/initial.raw
+	GRAPHICS_CONFIG="autoport='yes'"
 else
-	HATCH=http://debian.kumina.nl/d-i/squeeze/kumihatch-kvm-initial.raw
-	wget -O - $HATCH | $DD
+	GRAPHICS_CONFIG="autoport='no' port='$VNC_PORT'"
 fi
+test $VNC_SECRET = '-' || GRAPHICS_CONFIG=" passwd='$VNC_SECRET'"
+
+# We want an initial installation PXE thingy.
+DD="dd of=/dev/$DISK_VOLGRP/$NAME-disk0 bs=1M"
+if test $DISK_IMAGE = '-'
+then
+	if test -f /var/lib/media/initial.raw
+	then
+		DISK_IMAGE=/var/lib/media/initial.raw
+	else
+		DISK_IMAGE=http://debian.kumina.nl/d-i/squeeze/kumihatch-kvm-initial.raw
+	fi
+fi
+case $DISK_IMAGE in
+ftp://*|http://*|https://*)
+	wget -O - $DISK_IMAGE | $DD
+	;;
+*)
+	$DD if=$DISK_IMAGE
+	;;
+esac
 
 # Create the configuration for libvirt.
 virsh define /dev/stdin <<EOF
 <domain type='kvm'>
-  <name>${NAME}</name>
-  <description>Created on: ${CREATED}</description>
-  <memory>$((${RAM_MB} * 1024))</memory>
-  <currentMemory>$((${RAM_MB} * 1024))</currentMemory>
-  <vcpu>${NPROC}</vcpu>
+  <name>$NAME</name>
+  <description>Created on: $CREATED</description>
+  <memory>$(($RAM_MB * 1024))</memory>
+  <currentMemory>$(($RAM_MB * 1024))</currentMemory>
+  <vcpu>$NPROC</vcpu>
   <os>
     <type arch='x86_64' machine='pc-0.12'>hvm</type>
     <boot dev='hd'/>
@@ -93,13 +123,13 @@ virsh define /dev/stdin <<EOF
   <on_crash>destroy</on_crash>
   <devices>
     <emulator>/usr/bin/kvm</emulator>
-${DISK_CONFIG}
+$DISK_CONFIG
     <interface type='bridge'>
-      <source bridge='ubr1'/>
+      <source bridge='$BRIDGE_DEV'/>
       <model type='virtio'/>
     </interface>
     <input type='mouse' bus='ps2'/>
-    <graphics type='vnc' port='${VNC_PORT}' autoport='no' listen='0.0.0.0' passwd='${VNC_SECRET}'/>
+    <graphics type='vnc' listen='0.0.0.0' $GRAPHICS_CONFIG/>
     <video>
       <model type='cirrus' vram='9216' heads='1'/>
     </video>
@@ -108,4 +138,4 @@ ${DISK_CONFIG}
 EOF
 
 # Systems should autostart.
-virsh autostart ${NAME}
+virsh autostart $NAME
