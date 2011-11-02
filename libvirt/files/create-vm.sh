@@ -26,9 +26,9 @@
 
 # create-vm.sh: Create a virtual machine using libvirt/KVM
 
-if test $# -ne 9
+if test $# -ne 10
 then
-	echo "usage: $0 name nproc ram_mb disk_volgrp disk_gb disk_image [-|vnc_port] [-|vnc_secret] bridge_dev" >&2
+	echo "usage: $0 name nproc ram_mb disk_volgrp disk_gb disk_splitsize disk_image [-|vnc_port] [-|vnc_secret] bridge_dev" >&2
 	exit 1
 fi
 
@@ -37,10 +37,11 @@ NPROC=$2
 RAM_MB=$3
 DISK_VOLGRP=$4
 DISK_GB=$5
-DISK_IMAGE=$6
-VNC_PORT=$7
-VNC_SECRET=$8
-BRIDGE_DEV=$9
+DISK_SPLITSIZE=$6
+DISK_IMAGE=$7
+VNC_PORT=$8
+VNC_SECRET=$9
+BRIDGE_DEV=$10
 
 set -e -x
 
@@ -50,9 +51,9 @@ CREATED=`date -R`
 I=0
 while test $DISK_GB -gt 0
 do
-	if test $DISK_GB -gt 125
+	if test $DISK_GB -gt $DISK_SPLITSIZE
 	then
-		SLICE=125
+		SLICE=$DISK_SPLITSIZE
 	else
 		SLICE=$DISK_GB
 	fi
