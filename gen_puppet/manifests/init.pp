@@ -23,8 +23,11 @@ class gen_puppet {
   include gen_base::facter
 
   kpackage {
-    ["checkpuppet","puppet","puppet-common"]:
+    ["checkpuppet","puppet-common"]:
       ensure => latest;
+    "puppet":
+      ensure => latest,
+      notify => Exec["reload-puppet"];
   }
 
   exec { "reload-puppet":
