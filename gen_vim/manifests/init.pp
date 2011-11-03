@@ -8,15 +8,18 @@
 # Parameters:
 #  name
 #    The setting to set
+#  ensure
+#    If the line should be present or absent
 #
 # Depends:
 #  gen_base::vim
 #  gen_puppet
 #
-define gen_vim::global_setting {
+define gen_vim::global_setting ($ensure = "present") {
   include gen_base::vim
 
   line { "global vim setting ${name}":
+    ensure  => $ensure,
     file    => "/etc/vim/vimrc",
     content => $name,
     require => Package["vim"];
