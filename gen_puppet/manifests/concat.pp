@@ -279,7 +279,7 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
 #  Undocumented
 #  gen_puppet
 #
-define concat($mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=false, $testpms=[]) {
+define concat($mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=true, $testpms=[]) {
   require concat::setup
 
   if $servername in $testpms {
