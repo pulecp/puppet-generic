@@ -42,6 +42,20 @@ class gen_base::augeas {
   }
 }
 
+# Class: gen_base::backup-scripts
+#
+# Actions:
+#  Install backup-scripts
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::backup-scripts {
+  kpackage { "backup-scripts":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::base-files
 #
 # Actions:
