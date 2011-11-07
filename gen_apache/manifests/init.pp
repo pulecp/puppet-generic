@@ -57,13 +57,13 @@ class gen_apache::headers {
 }
 
 define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address=false, $address6=false,
-    $port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false,
+    $port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false
     $redirect_non_ssl=true) {
   $temp_name = $port ? {
     false   => $name,
     default => "${name}_${port}",
   }
-  if $key or $cert or $intermediate or $ssl {
+  if $key or $cert or $intermediate or $wildcard or $ssl {
     $full_name     = regsubst($temp_name,'^([^_]*)$','\1_443')
     $real_address  = $address ? {
       false   => "*",
@@ -141,10 +141,26 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
     }
   }
 
-  if $key or $cert or $intermediate or $ssl {
+  if $key or $cert or $intermediate or $wildcard or $ssl {
     kfile { "/etc/apache2/vhost-additions/${full_name}/ssl":
       content => template("gen_apache/vhost-additions/ssl"),
       notify  => Exec["reload-apache2"];
+    }
+
+    if $wildcard {
+      $real_cert = $cert ? {
+        false   => "/etc/ssl/${real_name}.pem",
+        default => $cert,
+      }
+      $real_key = $key ? {
+        false   => "/etc/ssl/${real_name}.key",
+        default => $key,
+      }
+
+      kfile { ["/etc/ssl/${real_cert}","/etc/ssl/${real_key}"]:
+        ensure => link,
+        target => "/etc/ssl/${wildcard}";
+      }
     }
 
     if $redirect_non_ssl {
