@@ -21,9 +21,6 @@ class gen_apache {
   }
 
   kfile {
-    "/etc/apache2/httpd.conf":
-      content => template("gen_apache/httpd.conf"),
-      require => Package["apache2"];
     "/etc/apache2/vhost-additions":
       ensure  => directory,
       purge   => true,
@@ -46,9 +43,18 @@ class gen_apache {
       ensure  => absent;
   }
 
-  concat { "/etc/apache2/ports.conf":
-    require => Package["apache2"],
-    notify  => Exec["reload-apache2"];
+  concat {
+    "/etc/apache2/ports.conf":
+      require => Package["apache2"],
+      notify  => Exec["reload-apache2"];
+    "/etc/apache2/httpd.conf":
+      require => Package["apache2"],
+      notify  => Exec["reload-apache2"];
+  }
+
+  concat::add_content { "base_httpd":
+    content => template("gen_apache/httpd.conf"),
+    target  => "/etc/apache2/httpd.conf";
   }
 }
 
@@ -57,7 +63,7 @@ class gen_apache::headers {
 }
 
 define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address=false, $address6=false,
-    $port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false
+    $port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false,
     $redirect_non_ssl=true) {
   $temp_name = $port ? {
     false   => $name,
@@ -125,6 +131,12 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
           target => "/etc/apache2/ports.conf";
         }
       }
+
+      if !defined(Concat::Add_content["NameVirtualHost ${real_address}:${real_port}"]) {
+        concat::add_content { "NameVirtualHost ${real_address}:${real_port}":
+          target => "/etc/apache2/httpd.conf";
+        }
+      }
     }
     "absent": {
       kfile { "/etc/apache2/sites-enabled/${full_name}":
@@ -149,21 +161,21 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 
     if $wildcard {
       $real_cert = $cert ? {
-        false   => "/etc/ssl/${real_name}.pem",
+        false   => "${real_name}.pem",
         default => $cert,
       }
       $real_key = $key ? {
-        false   => "/etc/ssl/${real_name}.key",
+        false   => "${real_name}.key",
         default => $key,
       }
 
       kfile {
-        "/etc/ssl/${real_cert}":
+        "/etc/ssl/certs/${real_cert}":
           ensure => link,
-          target => "/etc/ssl/${wildcard}.pem";
-        "/etc/ssl/${real_key}":
+          target => "/etc/ssl/certs/${wildcard}.pem";
+        "/etc/ssl/private/${real_key}":
           ensure => link,
-          target => "/etc/ssl/${wildcard}.key";
+          target => "/etc/ssl/private/${wildcard}.key";
       }
     }
 
