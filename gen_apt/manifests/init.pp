@@ -86,7 +86,7 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 #
 # Parameters:
 #  name
-#    THe package to define the source of
+#    The package to define the source of
 #  sourcetype
 #    The type of the source, defaults to deb
 #  distribution
