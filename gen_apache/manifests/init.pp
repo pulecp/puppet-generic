@@ -157,9 +157,13 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
         default => $key,
       }
 
-      kfile { ["/etc/ssl/${real_cert}","/etc/ssl/${real_key}"]:
-        ensure => link,
-        target => "/etc/ssl/${wildcard}";
+      kfile {
+        "/etc/ssl/${real_cert}":
+          ensure => link,
+          target => "/etc/ssl/${wildcard}.pem";
+        "/etc/ssl/${real_key}":
+          ensure => link,
+          target => "/etc/ssl/${wildcard}.key";
       }
     }
 
