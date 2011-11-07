@@ -101,7 +101,7 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 #    The uri of the source
 #
 # Actions:
-#  Pins a package to a source.
+#  Adds a source entry in the apt config.
 #
 # Depends:
 #  gen_puppet
