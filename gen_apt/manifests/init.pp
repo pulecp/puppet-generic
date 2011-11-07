@@ -99,6 +99,8 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 #    Adds a comment to the source, defaults to false
 #  uri
 #    The uri of the source
+#  key
+#    The key used for this repository, if defined.
 #
 # Actions:
 #  Adds a source entry in the apt config.
@@ -106,11 +108,14 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 # Depends:
 #  gen_puppet
 #
-define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $components=[], $ensure="present", $comment=false) {
+define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $components=[], $ensure="present", $comment=false, $key=false) {
   kfile { "/etc/apt/sources.list.d/${name}.list":
     ensure  => $ensure,
     content => template("gen_apt/source.list"),
-    require => File["/etc/apt/sources.list.d"],
+    require => $key ? {
+        false   => File["/etc/apt/sources.list.d"],
+        default => [File["/etc/apt/sources.list.d"],Gen_apt::Key[$key]],
+      },
     notify  => Exec["/usr/bin/apt-get update"];
   }
 }
@@ -118,16 +123,20 @@ define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $compone
 # Define: gen_apt::key
 #
 # Actions:
-#  Import a repo key.
+#  Import a repo key, where the key is local to the module. Keep in mind that even when the key comes out of a package, you still need to
+#  add it as a file in puppet. Otherwise you need to install the keychain package, which is probably not signed with a default key, before
+#  you have the key available. This is unsafe and actually puppet doesn't allow you to ignore the error apt-get gives you at that time.
 #
 # Parameters:
 #  name
 #    The key to import.
+#  source
+#    Where to find key on the puppetmaster.
 #
 # Depends:
 #  gen_puppet
 #
-define gen_apt::key {
+define gen_apt::key ($source) {
   exec { "/usr/bin/apt-key add /etc/apt/keys/${name}":
     unless  => "/usr/bin/apt-key list | grep -q ${name}",
     require => File["/etc/apt/keys/${name}"],
@@ -135,7 +144,7 @@ define gen_apt::key {
   }
 
   kfile { "/etc/apt/keys/${name}":
-    source => "kbp_apt/keys/${name}";
+    source => $source;
   }
 }
 
