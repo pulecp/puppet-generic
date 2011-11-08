@@ -521,6 +521,20 @@ class gen_base::libparallel-forkmanager-perl {
   }
 }
 
+# Class: gen_base::libpq5
+#
+# Actions:
+#  Install libpq5
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libpq5 {
+  kpackage { "libpq5":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libreadline5-dev
 #
 # Actions:
