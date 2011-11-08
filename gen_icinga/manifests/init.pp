@@ -10,6 +10,8 @@
 #
 class gen_icinga::client {
   include gen_base::nagios-plugins-standard
+  # libpq5 is a dependency of nagios-plugins-standard
+  include gen_base::libpq5
 }
 
 # Class: gen_icinga::server

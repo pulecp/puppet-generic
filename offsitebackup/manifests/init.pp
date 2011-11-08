@@ -85,7 +85,9 @@ class offsitebackup::common {
 #	gen_puppet
 #
 class offsitebackup::client {
-	kpackage { ["offsite-backup","backup-scripts"]:
+  include gen_base::backup-scripts
+
+	kpackage { ["offsite-backup"]:
 		ensure => latest;
 	}
 

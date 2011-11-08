@@ -42,6 +42,20 @@ class gen_base::augeas {
   }
 }
 
+# Class: gen_base::backup-scripts
+#
+# Actions:
+#  Install backup-scripts
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::backup-scripts {
+  kpackage { "backup-scripts":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::base-files
 #
 # Actions:
@@ -503,6 +517,20 @@ class gen_base::libpam0g {
 #
 class gen_base::libparallel-forkmanager-perl {
   kpackage { "libparallel-forkmanager-perl":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libpq5
+#
+# Actions:
+#  Install libpq5
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libpq5 {
+  kpackage { "libpq5":
     ensure => latest;
   }
 }
