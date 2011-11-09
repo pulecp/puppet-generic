@@ -41,7 +41,7 @@ DISK_SPLITSIZE=$6
 DISK_IMAGE=$7
 VNC_PORT=$8
 VNC_SECRET=$9
-BRIDGE_DEV=$10
+BRIDGE_DEV=s10
 
 set -e -x
 
@@ -79,7 +79,7 @@ then
 else
 	GRAPHICS_CONFIG="autoport='no' port='$VNC_PORT'"
 fi
-test $VNC_SECRET = '-' || GRAPHICS_CONFIG=" passwd='$VNC_SECRET'"
+test $VNC_SECRET = '-' || GRAPHICS_CONFIG="$GRAPHICS_CONFIG passwd='$VNC_SECRET'"
 
 # We want an initial installation PXE thingy.
 DD="dd of=/dev/$DISK_VOLGRP/$NAME-disk0 bs=1M"
