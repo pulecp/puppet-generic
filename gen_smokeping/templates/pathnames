@@ -11,7 +11,7 @@ precreateperms = 2775
 <% else -%>
 sendmail = /usr/sbin/sendmail
 imgcache = /var/cache/smokeping/images
-imgurl = /smokeping/images
+imgurl = /<%= name %>/images
 datadir = /var/lib/smokeping
 dyndir = /var/lib/smokeping/__cgi
 piddir = /var/run/smokeping/<%= name %>

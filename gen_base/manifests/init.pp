@@ -42,6 +42,20 @@ class gen_base::augeas {
   }
 }
 
+# Class: gen_base::backup-scripts
+#
+# Actions:
+#  Install backup-scripts
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::backup-scripts {
+  kpackage { "backup-scripts":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::base-files
 #
 # Actions:
@@ -507,6 +521,20 @@ class gen_base::libparallel-forkmanager-perl {
   }
 }
 
+# Class: gen_base::libpq5
+#
+# Actions:
+#  Install libpq5
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libpq5 {
+  kpackage { "libpq5":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libreadline5-dev
 #
 # Actions:
@@ -619,6 +647,20 @@ class gen_base::libwww-perl {
   }
 }
 
+# Class: gen_base::libxenstore3_0
+#
+# Actions:
+#  Install libxenstore3.0
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libxenstore3_0 {
+  kpackage { "libxenstore3.0":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::linux-base
 #
 # Actions:
@@ -668,6 +710,21 @@ class gen_base::linux-image ($version) {
 #
 class gen_base::mc {
   kpackage { "mc":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::munin-libvirt-plugins
+#
+# Actions:
+#  Install munin-libvirt-plugins
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::munin-libvirt-plugins {
+  include gen_base::python-libvirt
+  kpackage { "munin-libvirt-plugins":
     ensure => latest;
   }
 }
@@ -906,6 +963,21 @@ class gen_base::python-dnspython {
 #
 class gen_base::python-ipaddr {
   kpackage { "python-ipaddr":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python-libvirt
+#
+# Actions:
+#  Install python-libvirt
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-libvirt {
+  include gen_base::libxenstore3_0
+  kpackage { "python-libvirt":
     ensure => latest;
   }
 }

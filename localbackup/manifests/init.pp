@@ -39,8 +39,10 @@ class localbackup::common {
 #	gen_puppet
 #
 class localbackup::client {
+  include gen_base::backup-scripts
+
 	package { "local-backup":
-		ensure => installed,
+		ensure => latest;
 	}
 
 	file { "/etc/backup/local-backup.conf":
