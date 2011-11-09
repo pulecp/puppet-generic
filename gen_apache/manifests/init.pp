@@ -182,7 +182,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
     if $redirect_non_ssl {
       gen_apache::forward_vhost { $real_name:
         ensure      => $ensure,
-        forward     => "https://${real_name}$1",
+        forward     => "https://${real_name}",
         serveralias => $serveralias;
       }
     }
@@ -208,7 +208,7 @@ define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $servera
 
   gen_apache::redirect { $full_name:
     site         => $name,
-    substitution => $forward,
+    substitution => "${forward}\$1",
     usecond      => false;
   }
 }
