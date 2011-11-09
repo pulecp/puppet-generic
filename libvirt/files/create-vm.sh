@@ -59,7 +59,7 @@ do
 	fi
 	lvcreate -L ${SLICE}G -n $NAME-disk$I $DISK_VOLGRP
 	DISKDEV_HOST="/dev/$DISK_VOLGRP/$NAME-disk$I"
-	DISKDEV_VM="vd`abcdefghijklmnopqrstuvwxyz | cut -b $(($I + 1))`"
+	DISKDEV_VM="vd`echo abcdefghijklmnopqrstuvwxyz | cut -b $(($I + 1))`"
 	DISK_CONFIG="$DISK_CONFIG
     <disk type='block' device='disk'>
       <source dev='$DISKDEV_HOST'/>
