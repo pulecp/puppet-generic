@@ -67,15 +67,16 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
     false   => "${lsbdistcodename}-backports",
     default => $repo,
   }
+  $sanitized_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
 
   if $lsbmajdistrelease < 6 {
-    concat::add_content { "${name}":
+    concat::add_content { $name:
       content => template("gen_apt/preference"),
       target  => "/etc/apt/preferences",
       notify  => Exec["/usr/bin/apt-get update"];
     }
   } else {
-    kfile { "/etc/apt/preferences.d/${name}":
+    kfile { "/etc/apt/preferences.d/${sanitized_name}":
       content => template("gen_apt/preference"),
       notify  => Exec["/usr/bin/apt-get update"];
     }
@@ -189,21 +190,22 @@ class gen_apt::cron_apt {
 #
 define gen_apt::cron_apt::config ($mailto, $mailon, $apt_options="", $apt_hostname=false, $configfile="/etc/cron-apt/config", $crontime="0 3 * * *") {
   include gen_apt::cron_apt
+
   $config_hostname = $apt_hostname ? {
-    false   => "${fqdn}",
+    false   => $fqdn,
     default => $apt_hostname,
   }
 
-  kfile { "${configfile}":
+  kfile { $configfile:
     content => template("gen_apt/cron_apt_configfile"),
     require => Kpackage["cron-apt"];
   }
 
   $safe_configfile = regsubst($configfile, '/', '_')
 
-  concat::add_content { "${safe_configfile}":
+  concat::add_content { $safe_configfile:
     target  => "/etc/cron.d/cron-apt",
     content => template("gen_apt/cron_apt_cron"),
-    require => Kfile["${configfile}"];
+    require => Kfile[$configfile];
   }
 }
