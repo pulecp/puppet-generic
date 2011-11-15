@@ -771,20 +771,6 @@ class gen_base::netpbm {
   }
 }
 
-# Class: gen_base::openssl
-#
-# Actions:
-#  Install openssl
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::openssl {
-  kpackage { "openssl":
-    ensure => installed;
-  }
-}
-
 # Class: gen_base::openjdk-6-jre
 #
 # Actions:
