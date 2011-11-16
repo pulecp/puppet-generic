@@ -1,11 +1,17 @@
 # Author: Kumina bv <support@kumina.nl>
 
-import "kservice.pp"
 import "concat.pp"
 import "ekfile.pp"
+import "kaugeas.pp"
+import "kfile.pp"
+import "kpackage.pp"
+import "kservice.pp"
+import "line.pp"
+import "setfacl.pp"
+
 # Actual puppet modules
-import "master.pp"
 import "queue.pp"
+import "master.pp"
 
 # Class: gen_puppet
 #
