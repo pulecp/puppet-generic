@@ -57,6 +57,7 @@ class gen_sudo {
 #
 define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $comment = false, $preserve_env_vars=false) {
   include gen_sudo
+  $safe_name = regsubst($name, ' ', '_', 'G')
 
   $the_comment = $comment ? {
     false   => $name,
@@ -64,12 +65,12 @@ define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $c
   }
 
   if $lsbmajdistrelease > 5 { # Squeeze or newer
-    kfile { "/etc/sudoers.d/${name}":
+    kfile { "/etc/sudoers.d/${safe_name}":
       content => template("gen_sudo/sudo"),
       mode    => 440;
     }
   } else {
-    gen_sudo::add_rule { "${name}":
+    gen_sudo::add_rule { "${safe_name}":
       content => template("gen_sudo/sudo");
     }
   }
