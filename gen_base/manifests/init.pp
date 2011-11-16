@@ -996,6 +996,20 @@ class gen_base::realpath {
   }
 }
 
+# Class: gen_base::rsync
+#
+# Actions:
+#  Install rsync
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::rsync {
+  kpackage { "rsync":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ruby_stomp
 #
 # Actions:
