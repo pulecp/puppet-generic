@@ -115,7 +115,7 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 #  gen_puppet
 #  gen_tomcat
 #
-define gen_tomcat::context($war=false, $urlpath=false, $extra_opts="", $context_xml_content=false, $root_app=false) {
+define gen_tomcat::context($war=false, $urlpath=false, $extra_opts="", $context_xml_content=false, $root_app=false, $tomcat_tag="tomcat_${environment}") {
   kfile { "/srv/tomcat/conf/Catalina/localhost/${name}.xml":
     content => $context_xml_content ? {
       false   => "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Context path=\"${urlpath}\" docBase=\"${war}\">${extra_opts}</Context>",
@@ -142,7 +142,7 @@ define gen_tomcat::context($war=false, $urlpath=false, $extra_opts="", $context_
 #  gen_puppet
 #  gen_tomcat
 #
-class gen_tomcat::manager {
+class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
   kpackage { "tomcat6-admin":; }
 
   # lockdown the manager
@@ -156,13 +156,15 @@ class gen_tomcat::manager {
   }
 
   gen_tomcat::user { "manager":
-    username => "manager",
-    role     => "manager",
-    password => "BOGUS";
+    tomcat_tag => $tomcat_tag,
+    username   => "manager",
+    role       => "manager",
+    password   => "BOGUS";
   }
 
   gen_tomcat::role { "manager":
-    role => "manager";
+    tomcat_tag => $tomcat_tag,
+    role       => "manager";
   }
 }
 
