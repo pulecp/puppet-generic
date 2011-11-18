@@ -119,13 +119,6 @@ class nagios::nrpe {
 class nagios::nrpe::plugins {
 	include nagios::plugins
 
-	# TODO This should be done by kbp_monitoring::client::pacemaker
-	gen_sudo::rule { "pacemaker sudo rules":
-		entity => "nagios",
-		as_user => "root",
-		command => "/usr/sbin/crm_mon -s",
-		password_required => false;
-	}
 
 	kpackage { "nagios-plugins-kumina":
 		ensure => latest;
