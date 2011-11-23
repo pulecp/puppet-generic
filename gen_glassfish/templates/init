@@ -1,0 +1,19 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides: glassfish-<%= name %>
+# Required-Start:    $glassfish
+# Required-Stop:     $glassfish
+# Default-Start:
+# Default-Stop:
+# Short-Description: Wrapper for glassfish domain <%= name %>
+### END INIT INFO
+#
+
+case "$1" in
+	start) /etc/init.d/glassfish start <%= name %>; exit $? ;;
+	stop) /etc/init.d/glassfish stop <%= name %>; exit $? ;;
+	status) /etc/init.d/glassfish status <%= name %>; exit $? ;;
+	restart|force-reload) /etc/init.d/glassfish restart <%= name %>; exit $? ;;
+	reload) /etc/init.d/glassfish reload <%= name %>; exit $? ;;
+	*) /etc/init.d/glassfish; exit $? ;;
+esac

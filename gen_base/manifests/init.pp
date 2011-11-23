@@ -1025,27 +1025,6 @@ class gen_base::ruby_stomp {
   }
 }
 
-# Class: gen_base::sun_java6_jdk
-#
-# Actions:
-#  Install sun-java6-jdk from the Kumina repository
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::sun_java6_jdk {
-  kpackage { "sun-java6-jdk":
-    ensure  => installed,
-    responsefile => "/tmp/sunlicense.pre",
-    require => File['/tmp/sunlicense.pre'];
-  }
-
-  kfile { '/tmp/sunlicense.pre':
-    content => 'sun-java6-bin  shared/accepted-sun-dlj-v1-1  boolean  true';
-  }
-
-}
-
 # Class: gen_base::unzip
 #
 # Actions:
