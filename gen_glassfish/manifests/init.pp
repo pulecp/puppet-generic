@@ -9,7 +9,7 @@
 #  gen_puppet
 #
 class gen_glassfish {
-  include gen_base::sun_java6_jdk
+  include gen_java::sun_java6_jdk
 
   kpackage { "glassfish":
     require => Package['sun-java6-jdk'];
