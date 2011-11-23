@@ -112,6 +112,10 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
     default                         => false,
   }
 
+  if ($sport or $dport) and ! $proto {
+    fail("sport or dport supplied without proto in gen_ferm::rule ${name}")
+  }
+
   if $ip_proto == "v46" or $ip_proto == $name {
     if ($saddr == $fqdn or $daddr == $fqdn) and ! $ipaddress6 {
       rule { "${real_name}_v4":
