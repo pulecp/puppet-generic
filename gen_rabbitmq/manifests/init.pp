@@ -36,6 +36,7 @@ class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
   concat { "/etc/rabbitmq/rabbitmq.config":
     require => Package["mcollective"],
     notify  => Service["mcollective"];
+  }
 }
 
 # Class: gen_rabbitmq::amqp
@@ -71,7 +72,7 @@ class gen_rabbitmq::stomp($ssl_cert = false, $ssl_key = false, $ssl_port = 5671)
 
   concat::add_content { "rabbitmq config for stomp plugin":
       content => '[ {rabbitmq_stomp, [{tcp_listeners, [6163]} ]} ].',
-      target  => "/etc/rabbitmq/rabbitmq.config",
+      target  => "/etc/rabbitmq/rabbitmq.config";
   }
 
   line { "rabbitmq config for enabling stomp plugin":
