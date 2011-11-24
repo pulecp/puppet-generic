@@ -32,6 +32,10 @@ class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
   }
 
   gen_rabbitmq::delete_user { "guest":; }
+
+  concat { "/etc/rabbitmq/rabbitmq.config":
+    require => Package["mcollective"],
+    notify  => Service["mcollective"];
 }
 
 # Class: gen_rabbitmq::amqp
@@ -65,17 +69,16 @@ class gen_rabbitmq::stomp($ssl_cert = false, $ssl_key = false, $ssl_port = 5671)
     ssl_port => 5671;
   }
 
-  line {
-    "rabbitmq config for stomp plugin":
-      file    => "/etc/rabbitmq/rabbitmq.config",
+  concat::add_content { "rabbitmq config for stomp plugin":
       content => '[ {rabbitmq_stomp, [{tcp_listeners, [6163]} ]} ].',
-      require => Package["rabbitmq-server"],
-      notify  => Service["rabbitmq-server"];
-    "rabbitmq config for enabling stomp plugin":
-      file    => "/etc/rabbitmq/enabled_plugins",
-      content => '[rabbitmq_stomp].',
-      require => Package["rabbitmq-server"],
-      notify  => Service["rabbitmq-server"];
+      target  => "/etc/rabbitmq/rabbitmq.config",
+  }
+
+  line { "rabbitmq config for enabling stomp plugin":
+    file    => "/etc/rabbitmq/enabled_plugins",
+    content => '[rabbitmq_stomp].',
+    require => Package["rabbitmq-server"],
+    notify  => Service["rabbitmq-server"];
   }
 }
 
