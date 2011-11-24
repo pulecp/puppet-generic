@@ -1,0 +1,21 @@
+topicprefix = /topic/
+main_collective = mcollective
+collectives = mcollective
+libdir = /usr/share/mcollective/plugins
+logfile = /var/log/mcollective_client.log
+loglevel = info
+identity = <%= fqdn %>
+
+# Facts
+factsource = yaml
+plugin.yaml = /etc/mcollective/facts.yaml
+
+# Plugins
+securityprovider = aes_security
+plugin.aes.client_public = /var/lib/puppet/ssl/public_keys/<%= fqdn %>.pem
+plugin.aes.client_private = /var/lib/puppet/ssl/private_keys/<%= fqdn %>.pem
+plugin.aes.send_pubkey = 0
+plugin.aes.learn_pubkeys = 0
+plugin.aes.serializer = yaml
+
+connector = stomp
