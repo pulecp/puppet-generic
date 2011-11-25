@@ -1,3 +1,5 @@
+# As described here:
+# http://groups.google.com/group/puppet-users/browse_thread/thread/162d86ed39d6d8da
 module Puppet::Parser::Functions
   newfunction(:hash_keys, :type => :rvalue) do |args|
     unless args[0].is_a?(Hash)
