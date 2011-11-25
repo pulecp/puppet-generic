@@ -166,7 +166,7 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
 
   if $context_xml_content == false {
     kaugeas {
-      "Context path for ${name}":
+      "Context path and docBase for ${name}":
         file    => "/srv/tomcat/conf/Catalina/localhost/${name}.xml",
         lens    => "Xml.lns",
         changes => ["set Context/#attribute/path '${urlpath}'",
@@ -180,6 +180,44 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
       content => "<% response.sendRedirect(\"${name}\"); %>",
       require => Kfile["/srv/tomcat/webapps/ROOT"];
     }
+  }
+}
+
+# Define: gen_tomcat::additional_context_settings
+#
+# Actions:
+#  Setup additional context settings for a specific Tomcat context
+#
+# Parameters:
+#  name
+#    Can be setup like "context: setting_name" to not have to have duplicate information
+#  context
+#    The context this variable should apply to. Optional, can be determined if the name of the resource
+#    is properly setup.
+#  setting_name
+#    The setting to set in the context. Optional, can be determined if the name of the resource is
+#    properly setup.
+#  value
+#    The value the setting should have in the context.
+#
+# Depends:
+#  gen_puppet
+#  gen_tomcat::context
+define gen_tomcat::environment ($value, $context = false, $setting_name = false) {
+  if $context and $setting_name {
+    $real_context = $context
+    $real_name = $setting_name
+  } else {
+    $real_context = regsubst($name, '(.*):.*', '\1')
+    $real_name = regsubst($name, '.*: (.*)', '\1')
+  }
+
+  kaugeas {
+    "Context setting ${real_name} for ${real_context}":
+      file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
+      lens    => "Xml.lns",
+      changes => "set Context/#attribute/${real_name} '${value}'",
+      notify  => Service["tomcat6"],
   }
 }
 
