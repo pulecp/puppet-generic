@@ -25,9 +25,11 @@ class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
       "/etc/rabbitmq/rabbitmq.pem":
         source => $ssl_cert,
         notify => Service["rabbitmq-server"];
-      "/etc/rabbitmq/rabbitmq.config":
-        content => template("gen_rabbitmq/rabbitmq.config"),
-        notify  => Service["rabbitmq-server"];
+    }
+
+    concat_add_content { "/etc/rabbitmq/rabbitmq.config":
+      content => template("gen_rabbitmq/rabbitmq.config"),
+      target  => "/etc/rabbitmq/rabbitmq.config";
     }
   }
 
