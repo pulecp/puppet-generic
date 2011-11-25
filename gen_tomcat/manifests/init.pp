@@ -115,13 +115,28 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 #  gen_puppet
 #  gen_tomcat
 #
-define gen_tomcat::context($war=false, $urlpath=false, $extra_opts="", $context_xml_content=false, $root_app=false, $tomcat_tag="tomcat_${environment}") {
+define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=false, $root_app=false, $tomcat_tag="tomcat_${environment}") {
   kfile { "/srv/tomcat/conf/Catalina/localhost/${name}.xml":
     content => $context_xml_content ? {
       false   => "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Context path=\"${urlpath}\" docBase=\"${war}\">${extra_opts}</Context>",
       default => $context_xml_content
     },
+    replace => $context_xml_content ? {
+      false   => false,
+      default => true
+    },
     require => [Kpackage["tomcat6"], Kfile["/srv/tomcat/conf"]];
+  }
+
+  if $context_xml_content == false {
+    kaugeas {
+      "Context path for ${name}":
+        file    => "/srv/tomcat/conf/Catalina/localhost/${name}.xml",
+        lens    => "Xml.lns",
+        changes => ["set Context/#attribute/path '${urlpath}'",
+                    "set Context/#attribute/docBase '${war}'"],
+        notify  => Service["tomcat6"],
+    }
   }
 
   if $root_app {
@@ -166,6 +181,31 @@ class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
     tomcat_tag => $tomcat_tag,
     role       => "manager";
   }
+}
+
+# Define: gen_tomcat::environment
+#
+# Actions:
+#  Setup <Environment/> tags for a specific Tomcat context
+#
+# Parameters:
+#  name
+#    Can be setup like "context: var_name" to not have to have double information
+#  context
+#    The context this variable should apply to. Optional, can be determined if the name of the resource
+#    is properly setup.
+#  var_name
+#    The variable to set in the environment. Optional, can be determined if the name of the resource is
+#    properly setup.
+#  var_value
+#    The value the variable should have in the environment.
+#  var_type
+#    The type the value is in. Examples are 'java.lang.String' or 'java.lang.Integer'.
+#
+# Depends:
+#  gen_puppet
+#  gen_tomcat::context
+define gen_tomcat::environment ($var_type, $var_value, $context = false, $var_name = false) {
 }
 
 # Define: gen_tomcat::user
