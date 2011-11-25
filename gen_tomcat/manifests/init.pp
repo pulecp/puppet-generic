@@ -235,7 +235,7 @@ define gen_tomcat::environment ($value, $context = false, $setting_name = false)
 #  var_name
 #    The variable to set in the environment. Optional, can be determined if the name of the resource is
 #    properly setup.
-#  var_value
+#  value
 #    The value the variable should have in the environment.
 #  var_type
 #    The type the value is in. Examples are 'java.lang.String' or 'java.lang.Integer'.
@@ -243,7 +243,24 @@ define gen_tomcat::environment ($value, $context = false, $setting_name = false)
 # Depends:
 #  gen_puppet
 #  gen_tomcat::context
-define gen_tomcat::environment ($var_type, $var_value, $context = false, $var_name = false) {
+define gen_tomcat::environment ($var_type, $value, $context = false, $var_name = false) {
+  if $context and $var_name {
+    $real_context = $context
+    $real_name = $var_name
+  } else {
+    $real_context = regsubst($name, '(.*):.*', '\1')
+    $real_name = regsubst($name, '.*: (.*)', '\1')
+  }
+
+  kaugeas {
+    "Context setting ${real_name} for ${real_context}":
+      file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
+      lens    => "Xml.lns",
+      changes => ["set Context/Environment[#attribute/name='${real_name}]/#attribute/name '${real_name}'",
+                  "set Context/Environment[#attribute/name='${real_name}]/#attribute/value '${value}'",
+                  "set Context/Environment[#attribute/name='${real_name}]/#attribute/type '${var_type}'"],
+      notify  => Service["tomcat6"],
+  }
 }
 
 # Define: gen_tomcat::user
