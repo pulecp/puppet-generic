@@ -95,6 +95,42 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
   }
 }
 
+# Class: gen_tomcat::manager
+#
+# Actions:
+#  The manager app is used to control different contexts within Tomcat. You need one per instance.
+#  In addition to this, you need to override the Gen_tomcat::User["manager"] to set the password.
+#
+# Depends:
+#  gen_puppet
+#  gen_tomcat
+#
+class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
+  kpackage { "tomcat6-admin":; }
+
+  # lockdown the manager
+  kfile {
+    "/srv/tomcat/conf/Catalina/localhost/manager.xml":
+      content => '<?xml version="1.0" encoding="UTF-8"?><Context path="/manager" docBase="/usr/share/tomcat6-admin/manager" antiResourceLocking="false" privileged="true"><Valve className="org.apache.catalina.valves.RemoteHostValve" allow="localhost,127.0.0.1"/></Context>',
+      require => [Kpackage["tomcat6-admin"], Kfile["/srv/tomcat/conf"]];
+    "/srv/tomcat/conf/Catalina/localhost/host-manager.xml":
+      content => '<?xml version="1.0" encoding="UTF-8"?><Context path="/host-manager" docBase="/usr/share/tomcat6-admin/host-manager" antiResourceLocking="false" privileged="true"><Valve className="org.apache.catalina.valves.RemoteHostValve" allow="localhost,127.0.0.1"/></Context>',
+      require => [Kpackage["tomcat6-admin"], Kfile["/srv/tomcat/conf"]];
+  }
+
+  gen_tomcat::user { "manager":
+    tomcat_tag => $tomcat_tag,
+    username   => "manager",
+    role       => "manager",
+    password   => "BOGUS";
+  }
+
+  gen_tomcat::role { "manager":
+    tomcat_tag => $tomcat_tag,
+    role       => "manager";
+  }
+}
+
 # Define: gen_tomcat::context
 #
 # Actions:
@@ -144,42 +180,6 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
       content => "<% response.sendRedirect(\"${name}\"); %>",
       require => Kfile["/srv/tomcat/webapps/ROOT"];
     }
-  }
-}
-
-# Class: gen_tomcat::manager
-#
-# Actions:
-#  The manager app is used to control different contexts within Tomcat. You need one per instance.
-#  In addition to this, you need to override the Gen_tomcat::User["manager"] to set the password.
-#
-# Depends:
-#  gen_puppet
-#  gen_tomcat
-#
-class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
-  kpackage { "tomcat6-admin":; }
-
-  # lockdown the manager
-  kfile {
-    "/srv/tomcat/conf/Catalina/localhost/manager.xml":
-      content => '<?xml version="1.0" encoding="UTF-8"?><Context path="/manager" docBase="/usr/share/tomcat6-admin/manager" antiResourceLocking="false" privileged="true"><Valve className="org.apache.catalina.valves.RemoteHostValve" allow="localhost,127.0.0.1"/></Context>',
-      require => [Kpackage["tomcat6-admin"], Kfile["/srv/tomcat/conf"]];
-    "/srv/tomcat/conf/Catalina/localhost/host-manager.xml":
-      content => '<?xml version="1.0" encoding="UTF-8"?><Context path="/host-manager" docBase="/usr/share/tomcat6-admin/host-manager" antiResourceLocking="false" privileged="true"><Valve className="org.apache.catalina.valves.RemoteHostValve" allow="localhost,127.0.0.1"/></Context>',
-      require => [Kpackage["tomcat6-admin"], Kfile["/srv/tomcat/conf"]];
-  }
-
-  gen_tomcat::user { "manager":
-    tomcat_tag => $tomcat_tag,
-    username   => "manager",
-    role       => "manager",
-    password   => "BOGUS";
-  }
-
-  gen_tomcat::role { "manager":
-    tomcat_tag => $tomcat_tag,
-    role       => "manager";
   }
 }
 
