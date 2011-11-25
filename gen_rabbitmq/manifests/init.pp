@@ -27,7 +27,7 @@ class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
         notify => Service["rabbitmq-server"];
     }
 
-    concat_add_content { "/etc/rabbitmq/rabbitmq.config":
+    concat::add_content { "/etc/rabbitmq/rabbitmq.config":
       content => template("gen_rabbitmq/rabbitmq.config"),
       target  => "/etc/rabbitmq/rabbitmq.config";
     }
