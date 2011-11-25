@@ -97,7 +97,7 @@ class gen_ferm {
 #
 define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false,
     $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter,
-    $chain=INPUT, $ensure=present, $exported=false, $customtag=false, $fqdn=false, $ipaddress6=false) {
+    $chain=INPUT, $ensure=present, $exported=false, $customtag=false, $fqdn=$fqdn, $ipaddress6=$ipaddress6) {
   $real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
   $sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
   $ip_proto = regsubst($name,'^(.*)_(v4?6?)$','\2')
