@@ -108,14 +108,33 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
   kpackage { "tomcat6-admin":; }
 
-  # lockdown the manager
-  kfile {
-    "/srv/tomcat/conf/Catalina/localhost/manager.xml":
-      content => '<?xml version="1.0" encoding="UTF-8"?><Context path="/manager" docBase="/usr/share/tomcat6-admin/manager" antiResourceLocking="false" privileged="true"><Valve className="org.apache.catalina.valves.RemoteHostValve" allow="localhost,127.0.0.1"/></Context>',
-      require => [Kpackage["tomcat6-admin"], Kfile["/srv/tomcat/conf"]];
-    "/srv/tomcat/conf/Catalina/localhost/host-manager.xml":
-      content => '<?xml version="1.0" encoding="UTF-8"?><Context path="/host-manager" docBase="/usr/share/tomcat6-admin/host-manager" antiResourceLocking="false" privileged="true"><Valve className="org.apache.catalina.valves.RemoteHostValve" allow="localhost,127.0.0.1"/></Context>',
-      require => [Kpackage["tomcat6-admin"], Kfile["/srv/tomcat/conf"]];
+  gen_tomcat::context {
+    "manager":
+      war     => "/usr/share/tomcat6-admin/manager",
+      require => Package["tomcat6-admin"],
+      urlpath => "/manager";
+    "host-manager":
+      war     => "/usr/share/tomcat6-admin/host-manager",
+      require => Package["tomcat6-admin"],
+      urlpath => "/host-manager";
+  }
+
+  gen_tomcat::additional_context_setting {
+    "manager: antiResourceLocking":
+      value => "false";
+    "manager: privileged":
+      value => "true";
+    "host-manager: antiResourceLocking":
+      value => "false";
+    "host-manager: privileged":
+      value => "true";
+  }
+
+  gen_tomcat::valve {
+    "manager: org.apache.catalina.valves.RemoteHostValve":
+      allow => "localhost,127.0.0.1";
+    "host-manager: org.apache.catalina.valves.RemoteHostValve":
+      allow => "localhost,127.0.0.1";
   }
 
   gen_tomcat::user { "manager":
@@ -183,7 +202,7 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
   }
 }
 
-# Define: gen_tomcat::additional_context_settings
+# Define: gen_tomcat::additional_context_setting
 #
 # Actions:
 #  Setup additional context settings for a specific Tomcat context
@@ -203,7 +222,7 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
 # Depends:
 #  gen_puppet
 #  gen_tomcat::context
-define gen_tomcat::environment ($value, $context = false, $setting_name = false) {
+define gen_tomcat::additional_context_setting($value, $context = false, $setting_name = false) {
   if $context and $setting_name {
     $real_context = $context
     $real_name = $setting_name
@@ -259,6 +278,45 @@ define gen_tomcat::environment ($var_type, $value, $context = false, $var_name =
       changes => ["set Context/Environment[#attribute/name='${real_name}]/#attribute/name '${real_name}'",
                   "set Context/Environment[#attribute/name='${real_name}]/#attribute/value '${value}'",
                   "set Context/Environment[#attribute/name='${real_name}]/#attribute/type '${var_type}'"],
+      notify  => Service["tomcat6"],
+  }
+}
+
+# Define: gen_tomcat::valve
+#
+# Actions:
+#  Setup <Valve/> tags for a specific Tomcat context
+#
+# Parameters:
+#  name
+#    Can be setup like "context: classname" to not have to have double information
+#  context
+#    The context this variable should apply to. Optional, can be determined if the name of the resource
+#    is properly setup.
+#  classname
+#    The className to set in the context. Optional, can be determined if the name of the resource is
+#    properly setup.
+#  allow
+#    The allow parameter in the Valve class.
+#
+# Depends:
+#  gen_puppet
+#  gen_tomcat::context
+define gen_tomcat::valve($allow, $context = false, $classname = false) {
+  if $context and $classname {
+    $real_context = $context
+    $real_name = $classname
+  } else {
+    $real_context = regsubst($name, '(.*):.*', '\1')
+    $real_name = regsubst($name, '.*: (.*)', '\1')
+  }
+
+  kaugeas {
+    "Context valve ${real_name} for ${real_context}":
+      file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
+      lens    => "Xml.lns",
+      changes => ["set Context/Valve[#attribute/className='${real_name}']/#attribute/className '${real_name}'",
+                  "set Context/Valve[#attribute/className='${real_name}']/#attribute/allow '${allow}'"],
       notify  => Service["tomcat6"],
   }
 }
