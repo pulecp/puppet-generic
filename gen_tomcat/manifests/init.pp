@@ -323,6 +323,60 @@ define gen_tomcat::valve($allow, $context = false, $classname = false) {
   }
 }
 
+# Define: gen_tomcat::datasource
+#
+# Actions:
+#  Setup <Resource/> tags for a specific Tomcat context for a datasource.
+#
+# Parameters:
+#  name
+#    Can be setup like "context: resource" to not have to have double information
+#  context
+#    The context this variable should apply to. Optional, can be determined if the name of the resource
+#    is properly setup.
+#  resource
+#    The name of the resource to set up. Optional, can be determined if the name of the resource is
+#    properly setup.
+#  username
+#    The username to connect as.
+#  password
+#    The password to connect with.
+#  url
+#    The DSN to connect to. Something like "jdbc:mysql://mysql/database".
+#  max_active
+#    Maximum active connections.
+#  max_idle
+#    Maximum number of idle connections.
+#
+# Depends:
+#  gen_puppet
+#  gen_tomcat::context
+define gen_tomcat::valve($username, $password, $url, $context = false, $max_active = "8", $max_idle = "4", $resource = false) {
+  if $context and $resource {
+    $real_context = $context
+    $real_name = $classname
+  } else {
+    $real_context = regsubst($name, '(.*):.*', '\1')
+    $real_name = regsubst($name, '.*: (.*)', '\1')
+  }
+
+  kaugeas {
+    "Context datasource resource ${real_name} for ${real_context}":
+      file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
+      lens    => "Xml.lns",
+      changes => ["set Context/Resource[#attribute/name='${real_name}']/#attribute/name '${real_name}'",
+                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/auth 'Container'",
+                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/type 'javax.sql.DataSource'",
+                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/driverClassName 'com.mysql.jdbc.Driver'",
+                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/username '${username}'",
+                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/password '${password}'",
+                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/url '${url}'",
+                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/maxActive '${max_active}'",
+                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/maxIdle '${max_idle}'"],
+      notify  => Service["tomcat6"],
+  }
+}
+
 # Define: gen_tomcat::user
 #
 # Actions:
