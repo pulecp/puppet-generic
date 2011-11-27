@@ -224,6 +224,7 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
 # Depends:
 #  gen_puppet
 #  gen_tomcat::context
+#
 define gen_tomcat::additional_context_setting($value, $context = false, $setting_name = false) {
   if $context and $setting_name {
     $real_context = $context
@@ -264,6 +265,7 @@ define gen_tomcat::additional_context_setting($value, $context = false, $setting
 # Depends:
 #  gen_puppet
 #  gen_tomcat::context
+#
 define gen_tomcat::environment ($var_type, $value, $context = false, $var_name = false) {
   if $context and $var_name {
     $real_context = $context
@@ -277,9 +279,9 @@ define gen_tomcat::environment ($var_type, $value, $context = false, $var_name =
     "Context setting ${real_name} for ${real_context}":
       file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
       lens    => "Xml.lns",
-      changes => ["set Context/Environment[#attribute/name='${real_name}]/#attribute/name '${real_name}'",
-                  "set Context/Environment[#attribute/name='${real_name}]/#attribute/value '${value}'",
-                  "set Context/Environment[#attribute/name='${real_name}]/#attribute/type '${var_type}'"],
+      changes => ["set Context/Environment[#attribute/name='${real_name}']/#attribute/name '${real_name}'",
+                  "set Context/Environment[#attribute/name='${real_name}']/#attribute/value '${value}'",
+                  "set Context/Environment[#attribute/name='${real_name}']/#attribute/type '${var_type}'"],
       notify  => Service["tomcat6"],
   }
 }
@@ -304,6 +306,7 @@ define gen_tomcat::environment ($var_type, $value, $context = false, $var_name =
 # Depends:
 #  gen_puppet
 #  gen_tomcat::context
+#
 define gen_tomcat::valve($allow, $context = false, $classname = false) {
   if $context and $classname {
     $real_context = $context
@@ -351,10 +354,11 @@ define gen_tomcat::valve($allow, $context = false, $classname = false) {
 # Depends:
 #  gen_puppet
 #  gen_tomcat::context
-define gen_tomcat::valve($username, $password, $url, $context = false, $max_active = "8", $max_idle = "4", $resource = false) {
+#
+define gen_tomcat::datasource($username, $password, $url, $context = false, $max_active = "8", $max_idle = "4", $resource = false) {
   if $context and $resource {
     $real_context = $context
-    $real_name = $classname
+    $real_name = $resource
   } else {
     $real_context = regsubst($name, '(.*):.*', '\1')
     $real_name = regsubst($name, '.*: (.*)', '\1')
