@@ -192,6 +192,8 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
                     "set Context/#attribute/docBase '${war}'"],
         notify  => Service["tomcat6"],
     }
+  } else {
+    notify { "The context_xml_content parameter is deprecated. Please remove asap.":; }
   }
 
   if $root_app {
