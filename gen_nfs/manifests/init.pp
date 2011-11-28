@@ -121,7 +121,10 @@ define gen_nfs::mount($source, $options="wsize=1024,rsize=1024") {
 
   if ! defined(Kfile[$name]) {
     kfile { $name:
-      ensure => directory;
+      ensure => directory,
+      owner  => false,
+      group  => false,
+      mode   => false;
     }
   }
 }
