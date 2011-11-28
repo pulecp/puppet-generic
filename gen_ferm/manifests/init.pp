@@ -117,9 +117,6 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
   }
 
   if $ip_proto == "v46" or $ip_proto == $name {
-    if $fqdn == "srv04-host.breezz.nl" {
-      notify { "IPADDRRESS6: ${ipaddress6}":; }
-    }
     if ($saddr == $fqdn or $daddr == $fqdn) and ! $ipaddress6 {
       rule { "${real_name}_v4":
         prio      => $prio,
