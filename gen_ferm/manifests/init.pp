@@ -97,7 +97,7 @@ class gen_ferm {
 #
 define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false,
     $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter,
-    $chain=INPUT, $ensure=present, $exported=false, $customtag=false, $fqdn=$fqdn, $ipaddress6=$ipaddress6) {
+    $chain=INPUT, $ensure=present, $exported=false, $customtag=false, $fqdn=$fqdn, $ipaddress6=false) {
   $real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
   $sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
   $ip_proto = regsubst($name,'^(.*)_(v4?6?)$','\2')
@@ -117,6 +117,9 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
   }
 
   if $ip_proto == "v46" or $ip_proto == $name {
+    if $fqdn == "srv04-host.breezz.nl" {
+      notify { "IPADDRRESS6: ${ipaddress6}":; }
+    }
     if ($saddr == $fqdn or $daddr == $fqdn) and ! $ipaddress6 {
       rule { "${real_name}_v4":
         prio      => $prio,
