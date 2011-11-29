@@ -11,13 +11,12 @@
 class gen_heartbeat ($customtag="heartbeat_${environment}") {
   kservice { "heartbeat":; }
 
-  # These ekfiles contain the configuration fragments for heartbeat.
-  Ekfile <<| tag == $customtag |>>
-
   concat { "/etc/heartbeat/ha.cf":
     require => Package["heartbeat"],
     notify  => Service["heartbeat"];
   }
+
+  Concat::Add_content <<| tag == $customtag |>>
 
   # We don't use auth-keys, as the port is firewalled and only open to the other hosts(s) in the cluster(done in kbp_heartbeat)
   kfile { "/etc/ha.d/authkeys":
@@ -58,16 +57,14 @@ class gen_heartbeat ($customtag="heartbeat_${environment}") {
 #  gen_puppet
 #
 define gen_heartbeat::ha_cf ($autojoin="none", $warntime=5, $deadtime=15, $initdead=60, $keepalive=2, $crm="respawn", $node_name=$hostname, $node_dev="eth0", $node_ip=$ipaddress_eth0, $customtag="heartbeat_${environment}") {
-  concat::add_content {
-    "default heartbeat config":
-      content    => template("gen_heartbeat/ha.cf.erb"),
-      exported   => true,
-      target     => "/etc/heartbeat/ha.cf",
-      contenttag => $customtag;
-    "heartbeat node ${node_name}":
-      content    => "node ${node_name}\nucast ${node_dev} ${node_ip}",
-      exported   => true,
-      target     => "/etc/heartbeat/ha.cf",
-      contenttag => $customtag;
+  concat::add_content { "default heartbeat config":
+    content    => template("gen_heartbeat/ha.cf.erb"),
+    target     => "/etc/heartbeat/ha.cf";
+  }
+
+  @@concat::add_content { "heartbeat node ${node_name}":
+    content    => "node ${node_name}\nucast ${node_dev} ${node_ip}",
+    target     => "/etc/heartbeat/ha.cf",
+    contenttag => $customtag;
   }
 }
