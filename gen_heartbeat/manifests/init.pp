@@ -63,8 +63,8 @@ define gen_heartbeat::ha_cf ($autojoin="none", $warntime=5, $deadtime=15, $initd
   }
 
   @@concat::add_content { "heartbeat node ${node_name}":
-    content    => "node ${node_name}\nucast ${node_dev} ${node_ip}",
-    target     => "/etc/heartbeat/ha.cf",
-    contenttag => $customtag;
+    content => "node ${node_name}\nucast ${node_dev} ${node_ip}",
+    target  => "/etc/heartbeat/ha.cf",
+    tag     => $customtag;
   }
 }
