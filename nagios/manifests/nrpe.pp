@@ -16,7 +16,6 @@ class nagios::nrpe {
 		kfile { "/etc/nagios/nrpe.d/$name.cfg":
 			content => "command[check_$name]=$command\n",
 			require => File["/etc/nagios/nrpe.d"],
-			notify => Service["nagios-nrpe-server"],
 		}
 	}
 
