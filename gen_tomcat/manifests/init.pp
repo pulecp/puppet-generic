@@ -66,24 +66,26 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 
   kfile {
     "/srv/tomcat":
-      ensure => directory;
+      ensure  => directory;
     ["/srv/tomcat/webapps",
      "/srv/tomcat/webapps/ROOT",
      "/srv/tomcat/lib"]:
-      ensure => directory,
-      owner  => "tomcat6",
+      ensure  => directory,
+      owner   => "tomcat6",
+      group   => "tomcat6",
+      mode    => 775,
       require => Kpackage["tomcat6"];
     "/srv/tomcat/conf":
-      ensure => link,
-      target => "/etc/tomcat6",
+      ensure  => link,
+      target  => "/etc/tomcat6",
       require => Kpackage["tomcat6"];
     "/srv/tomcat/logs":
-      ensure => link,
-      target => "/var/log/tomcat6",
+      ensure  => link,
+      target  => "/var/log/tomcat6",
       require => Kpackage["tomcat6"];
     "/srv/tomcat/work":
-      ensure => link,
-      target => "/var/cache/tomcat6",
+      ensure  => link,
+      target  => "/var/cache/tomcat6",
       require => Kpackage["tomcat6"];
     "/etc/default/tomcat6":
       content => template("gen_tomcat/default"),
