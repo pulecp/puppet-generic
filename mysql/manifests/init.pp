@@ -66,15 +66,6 @@ class mysql::server {
 		}
 	}
 
-	if ($mysql_bindaddress) {
-		file { "/etc/mysql/conf.d/bind-address.cnf":
-			mode => 644,
-			owner => "root",
-			group => "root",
-			content => "[mysqld]\nbind-address = $mysql_bindaddress\n",
-			notify => Service["mysql"],
-		}
-	}
 	file { "/etc/mysql/conf.d/binary-logging.cnf":
 		mode => 644,
 		owner => "root",
