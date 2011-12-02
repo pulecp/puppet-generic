@@ -85,7 +85,7 @@ class mysql::server {
   define grant($user, $db, $password=false, $hostname="localhost", $permissions="all") {
     if $password {
       exec { "grant_${user}_${db}_${hostname}":
-        unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e 'ON ${db}\.\*' -e 'ON \*\.\*'",
+        unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON \`${db}\`\.\*\" -e \"ON \*\.\*\"",
         command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' identified by '${password}';\"",
         require => $db ? {
           "*"     => Service["mysql"],
@@ -94,7 +94,7 @@ class mysql::server {
       }
     } else {
       exec { "grant_${user}_${db}_${hostname}":
-        unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e 'ON ${db}\.\*' -e 'ON \*\.\*'",
+        unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e 'ON \`${db}\`\.\*' -e 'ON \*\.\*'",
         command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}';\"",
         require => $db ? {
           "*"     => Service["mysql"],
