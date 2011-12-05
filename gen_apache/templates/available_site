@@ -4,7 +4,11 @@
 </VirtualHost>
 <% end -%>
 <% if real_address6 and real_address6 != real_address -%>
+<% if real_address6 == "*" -%>
+<VirtualHost <%= real_address6 %>:<%= real_port %>>
+<% else -%>
 <VirtualHost [<%= real_address6 %>]:<%= real_port %>>
+<% end -%>
   Include /etc/apache2/vhost-additions/<%= full_name %>/
 </VirtualHost>
 <% end -%>
