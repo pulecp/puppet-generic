@@ -715,6 +715,20 @@ class gen_base::mc {
   }
 }
 
+# Class: gen_base::mysql-client
+#
+# Actions:
+#  Install mysql-client
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::mysql-client {
+  kpackage { "mysql-client":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::munin-libvirt-plugins
 #
 # Actions:
