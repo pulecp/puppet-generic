@@ -20,7 +20,7 @@ else
 	ADDR="$HOST2"
 fi
 
-fgrep -v "$HOSTNAME" /etc/hosts > /etc/hosts.new
+egrep -v "\b$HOSTNAME\b" /etc/hosts > /etc/hosts.new
 echo "$ADDR $HOSTNAME" >> /etc/hosts.new
 if ! cmp -s /etc/hosts /etc/hosts.new
 then
