@@ -715,7 +715,7 @@ class gen_base::mc {
   }
 }
 
-# Class: gen_base::mysql-client
+# Class: gen_base::mysql_client
 #
 # Actions:
 #  Install mysql-client
@@ -723,7 +723,7 @@ class gen_base::mc {
 # Depends:
 #  gen_puppet
 #
-class gen_base::mysql-client {
+class gen_base::mysql_client {
   kpackage { "mysql-client":
     ensure => latest;
   }
