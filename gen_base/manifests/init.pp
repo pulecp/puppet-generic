@@ -312,6 +312,20 @@ class gen_base::libcups2 {
   }
 }
 
+# Class: gen_base::libcupsimage2
+#
+# Actions:
+#  Install libcupsimage2
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libcupsimage2 {
+  kpackage { "libcupsimage2":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libdate-calc-perl
 #
 # Actions:
