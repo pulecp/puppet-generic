@@ -137,7 +137,6 @@ class gen_base::echoping {
 #
 class gen_base::facter {
   kpackage { "facter":
-    ensure => latest,
     notify => Exec["reload-puppet"];
   }
 }
