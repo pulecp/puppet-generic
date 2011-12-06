@@ -298,6 +298,20 @@ class gen_base::libcommons-logging-java {
   }
 }
 
+# Class: gen_base::libcups2
+#
+# Actions:
+#  Install libcups2
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libcups2 {
+  kpackage { "libcups2":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libdate-calc-perl
 #
 # Actions:
