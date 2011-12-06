@@ -63,8 +63,11 @@ class gen_apt {
 #  gen_puppet
 #
 define gen_apt::preference($package=false, $repo=false, $version=false, $prio="999") {
-  $use_repo = $repo ? {
-    false   => "${lsbdistcodename}-backports",
+  $use_repo = $version ? {
+    false   => $repo ? {
+      false   => "${lsbdistcodename}-backports",
+      default => $repo,
+    },
     default => $repo,
   }
   $sanitized_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
