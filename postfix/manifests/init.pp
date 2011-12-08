@@ -3,35 +3,35 @@
 # Class: postfix
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class postfix {
-	kpackage { "postfix":; }
+  kpackage { "postfix":; }
 
-	service { "postfix":
-		enable     => true,
-		hasrestart => true,
-		pattern    => "/usr/lib/postfix/master",
-		require    => Package["postfix"];
-	}
+  service { "postfix":
+    enable     => true,
+    hasrestart => true,
+    pattern    => "/usr/lib/postfix/master",
+    require    => Package["postfix"];
+  }
 
-	kfile {
-		"/etc/postfix/main.cf":
-			content => template("postfix/main.cf"),
-			notify  => Service["postfix"];
-		"/var/spool/postfix/dovecot":
-			ensure  => directory,
-			owner   => "postfix",
-			group   => "mail",
-			require => Package["postfix"];
-	}
+  kfile {
+    "/etc/postfix/main.cf":
+      content => template("postfix/main.cf"),
+      notify  => Service["postfix"];
+    "/var/spool/postfix/dovecot":
+      ensure  => directory,
+      owner   => "postfix",
+      group   => "mail",
+      require => Package["postfix"];
+  }
 
-	exec { "newaliases":
-		refreshonly => true,
-		path        => "/usr/bin";
-	}
+  exec { "newaliases":
+    refreshonly => true,
+    path        => "/usr/bin";
+  }
 }
