@@ -22,6 +22,7 @@ class postfix {
   kfile {
     "/etc/postfix/main.cf":
       content => template("postfix/main.cf"),
+      require => Package["postfix"],
       notify  => Service["postfix"];
     "/var/spool/postfix/dovecot":
       ensure  => directory,
