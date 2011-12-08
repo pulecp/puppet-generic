@@ -1066,6 +1066,20 @@ class gen_base::ruby_stomp {
   }
 }
 
+# Class: gen_base::telnet_ssl
+#
+# Actions:
+#  Install telnet-ssl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::telnet_ssl {
+  kpackage { "telnet-ssl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::unzip
 #
 # Actions:
