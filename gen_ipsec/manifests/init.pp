@@ -66,9 +66,9 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 #    Remote endpoint of the ipsec tunnel
 #  peer_asn1dn
 #    Peer's ASN.1 DN (Everything after "Subject: " in output of openssl x509 -text)
-#  local_cidr
+#  localnet
 #    (List of) local networks (e.g. ["10.1.2.0/24","10.1.4.0/23"])
-#  remote_cidr
+#  remotenet
 #    (List of) remote networks
 #  cert
 #    Path to certificate file (optional)
@@ -78,7 +78,7 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 # Depends:
 #  gen_puppet
 #
-define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn, $local_cidr, $remote_cidr, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key") {
+define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn, $localnet, $remotenet, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key") {
   concat::fragment { "ipsec-tools.conf_fragment_$name":
     target  => "/etc/ipsec-tools.conf",
     order   => 10,
