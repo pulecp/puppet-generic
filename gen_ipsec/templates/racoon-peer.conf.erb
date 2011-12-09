@@ -1,0 +1,27 @@
+remote <%= peer_ip %> {
+	exchange_mode main;
+	certificate_type x509 "certs/<%= hostname %>.pem" "private/<%= hostname %>.key";
+	verify_cert on;
+	my_identifier asn1dn;
+	peers_identifier asn1dn "<%= peer_asn1dn %>";
+	ca_type x509 "/etc/ssl/cacert.pem";
+
+	proposal {
+		encryption_algorithm aes 256;
+		hash_algorithm sha1;
+		authentication_method rsasig;
+		dh_group 5;
+	}
+}
+
+<% localnet.each do |local| -%>
+<% remotenet.each do |remote| -%>
+sainfo address <%= local %> any address <%= remote %> any {
+	pfs_group 5;
+	encryption_algorithm aes 256;
+	authentication_algorithm hmac_sha1;
+	compression_algorithm deflate;
+}
+
+<% end -%>
+<% end -%>
