@@ -39,32 +39,45 @@ class gen_glassfish {
 #   What the domain should be, needed for the service.. should be running or stopped
 #   There is some discussion as to what absent should do (because the domain could be on a shared storage medium).
 #
-#  autostart
-#   Should this domain be started when the system boots (make it true when ensure is running)
-#
 # Depends:
 #  gen_puppet
 #  gen_glassfish
 #
-define gen_glassfish::domain ($portbase, $ensure='running'){
+define gen_glassfish::domain ($portbase, $ensure="running"){
 
-  exec { "Create glassfish domain ${name}":
-    command => "/opt/glassfish/bin/asadmin create-domain --nopassword=true --portbase ${portbase} ${name} ",
-    creates => "/opt/glassfish/domains/${name}",
-    user    => 'glassfish',
-    group   => 'glassfish',
-    require => Package['glassfish'];
+  if $ensure != "absent" {
+    exec { "Create glassfish domain ${name}":
+      command => "/opt/glassfish/bin/asadmin create-domain --nopassword=true --portbase ${portbase} ${name} ",
+      creates => "/opt/glassfish/domains/${name}",
+      user    => 'glassfish',
+      group   => 'glassfish',
+      require => Package['glassfish'];
+      }
+
+    service { "glassfish-${name}":
+      ensure  => $ensure ? {
+        "stopped" => stopped,
+        "running" => running,
+        default   => "",
+      },
+      hasrestart => true,
+      require => File["/etc/init.d/glassfish-${name}"];
+    }
+  } else {
+    kfile { "/opt/glassfish/domains/${name}":
+      ensure  => absent,
+      recurse => true,
+      force   => true;
+    }
   }
 
   kfile { "/etc/init.d/glassfish-${name}":
-    ensure  => present,
+    ensure  => $ensure ? {
+      "absent" => absent,
+      default => present,
+    },
     mode    => 755,
     content => template('gen_glassfish/init'),
     require => Exec["Create glassfish domain ${name}"];
-  }
-
-  service { "glassfish-${name}":
-    ensure  => $ensure,
-    require => File["/etc/init.d/glassfish-${name}"];
   }
 }
