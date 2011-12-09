@@ -4,22 +4,22 @@ remote <%= peer_ip %> {
 	verify_cert on;
 	my_identifier asn1dn;
 	peers_identifier asn1dn "<%= peer_asn1dn %>";
-	ca_type x509 "/etc/ssl/cacert.pem";
+	ca_type x509 "<%= cafile %>";
 
 	proposal {
-		encryption_algorithm aes 256;
-		hash_algorithm sha1;
+		encryption_algorithm <%= phase1_enc %>;
+		hash_algorithm <%= phase1_hash %>;
 		authentication_method rsasig;
-		dh_group 5;
+		dh_group <%= phase1_dh %>;
 	}
 }
 
 <% localnet.each do |local| -%>
 <% remotenet.each do |remote| -%>
 sainfo address <%= local %> any address <%= remote %> any {
-	pfs_group 5;
-	encryption_algorithm aes 256;
-	authentication_algorithm hmac_sha1;
+	pfs_group <%= phase2_dh %>;
+	encryption_algorithm <%= phase2_enc %>;
+	authentication_algorithm <%= phase2_auth %>;
 	compression_algorithm deflate;
 }
 

@@ -76,11 +76,25 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 #    Path to certificate file (optional)
 #  key
 #    Path to private key file (optional)
+#  cafile
+#    Path to CA certificate (optional)
+#  phase1_enc
+#    Phase 1 encryption algorithm (optional)
+#  phase1_hash
+#    Phase 1 hash algorithm (optional)
+#  phase1_dh
+#    Phase 1 Diffie-Hellman group (optional)
+#  phase2_dh
+#    Phase 2 Diffie-Hellman group (optional)
+#  phase2_enc
+#    Phase 2 encryption algorithm (optional)
+#  phase2_auth
+#    Phase 2 authentication method (optional)
 #
 # Depends:
 #  gen_puppet
 #
-define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn, $localnet, $remotenet, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key") {
+define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn, $localnet, $remotenet, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1") {
   concat::fragment { "ipsec-tools.conf_fragment_$name":
     target  => "/etc/ipsec-tools.conf",
     order   => "10",
