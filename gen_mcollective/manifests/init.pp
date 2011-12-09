@@ -62,7 +62,7 @@ class gen_mcollective::client {
   Concat::Add_content <<| target == "/etc/mcollective/client.cfg" |>>
 
   @@kfile { "/etc/mcollective/ssl/clients/${fqdn}.pem":
-    content => regsubst($puppetpubpem,";","\n"),
+    content => regsubst($puppetpubpem,";","\n","G"),
     tag     => "mcollective_client_pubkey",
     require => Package["mcollective"],
     notify  => Service["mcollective"];
