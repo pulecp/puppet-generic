@@ -7,9 +7,9 @@
 #
 # Parameters:
 #  listen
-#    The IP address(es) that racoon listens on
+#    The IP address(es) that racoon listens on (default all)
 #  ssl_path
-#    The default path to ssl certificates
+#    The default path to ssl certificates (default /etc/ssl)
 #
 # Depends:
 #  gen_puppet
@@ -30,12 +30,10 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
   }
 
   $itc = "/etc/ipsec-tools.conf"
-  
-  concat { 
-    $itc:
-      mode    => 744,
-      notify  => Service["setkey"],
-      require => Package["ipsec-tools"];
+  concat { $itc:
+    mode    => 744,
+    notify  => Service["setkey"],
+    require => Package["ipsec-tools"];
   }
 
   concat::fragment { "ipsec-tools.conf_header":
