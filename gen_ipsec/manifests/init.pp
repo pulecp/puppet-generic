@@ -38,7 +38,7 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 
   concat::fragment { "ipsec-tools.conf_header":
     target => $itc,
-    order  => 1,
+    order  => "01",
     source => "gen_ipsec/ipsec-tools.conf_header";
   }
 
@@ -49,7 +49,8 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
       notify  => Service["racoon"],
       require => Package["racoon"];
     "/etc/racoon/peers.d":
-      ensure  => directory;
+      ensure  => directory,
+      require => Package["racoon"];
   }
 
 }
@@ -58,6 +59,7 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 #
 # Actions:
 #  Configure an ipsec peer
+#  A key and certificate need to be created in advance.
 #
 # Parameters:
 #  local_ip
@@ -81,7 +83,7 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn, $localnet, $remotenet, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key") {
   concat::fragment { "ipsec-tools.conf_fragment_$name":
     target  => "/etc/ipsec-tools.conf",
-    order   => 10,
+    order   => "10",
     content => template("gen_ipsec/ipsec-tools.conf_fragment.erb");
   }
 

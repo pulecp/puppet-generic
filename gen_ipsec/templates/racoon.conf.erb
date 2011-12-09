@@ -18,14 +18,14 @@
 #
 
 path certificate "<%= ssl_path %>";
-path include "/etc/racoon/peers.d";
+path include "/etc/racoon";
 
 <% if listen -%>
 listen {
 <% listen.each do |ip| -%>
 	isakmp <%= ip %> [500];
-<% end %->
+<% end -%>
 }
-<% end %->
+<% end -%>
 
 include "peers.d/*.conf";
