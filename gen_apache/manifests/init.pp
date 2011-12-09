@@ -186,14 +186,6 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
           target => "/etc/ssl/private/${wildcard}.key";
       }
     }
-
-    if $redirect_non_ssl {
-      gen_apache::forward_vhost { $real_name:
-        ensure      => $ensure,
-        forward     => "https://${real_name}",
-        serveralias => $serveralias;
-      }
-    }
   }
 }
 

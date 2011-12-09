@@ -214,7 +214,14 @@ class apache {
                 mode => 755,
                 require => File["/etc/apache2/vhost-additions"],
         }
-   }
+
+    if $template =~ /.*ssl.*/ {
+      kbp_monitoring::site { "${name} non-SSL":
+        statuscode => 301,
+        response   => "https://${name}";
+      }
+    }
+  }
 }
 
 class apache::headers {
