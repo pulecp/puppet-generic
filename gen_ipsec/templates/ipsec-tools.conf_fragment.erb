@@ -1,0 +1,10 @@
+<% local_cidr.each do |local| -%>
+<% remote_cidr.each do |remote| -%>
+spdadd <%= local %> <%= remote %> any -P out ipsec
+	esp/tunnel/<%= local_ip %>-<%= peer_ip %>/unique;
+
+spdadd <%= remote %> <%= local %> any -P in ipsec
+	esp/tunnel/<%= peer_ip %>-<%= local_ip %>/unique;
+
+<% end -%>
+<% end -%>
