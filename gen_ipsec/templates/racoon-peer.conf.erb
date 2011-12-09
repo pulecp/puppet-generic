@@ -1,15 +1,17 @@
 remote <%= peer_ip %> {
 	exchange_mode main;
+<% if authmethod == "rsasig" -%>
 	certificate_type x509 "certs/<%= fqdn %>.pem" "private/<%= fqdn %>.key";
 	verify_cert on;
 	my_identifier asn1dn;
 	peers_identifier asn1dn "<%= peer_asn1dn %>";
+	verify_identifier on;
 	ca_type x509 "<%= cafile %>";
-
+<% end %>
 	proposal {
 		encryption_algorithm <%= phase1_enc %>;
 		hash_algorithm <%= phase1_hash %>;
-		authentication_method rsasig;
+		authentication_method <%= my_authmethod %>;
 		dh_group <%= phase1_dh %>;
 	}
 }

@@ -29,15 +29,21 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
       require   => Package["racoon"];
   }
 
-  $itc = "/etc/ipsec-tools.conf"
-  concat { $itc:
-    mode    => 744,
-    notify  => Service["setkey"],
-    require => Package["ipsec-tools"];
+  
+  concat { 
+    "/etc/ipsec-tools.conf":
+      mode    => 744,
+      notify  => Service["setkey"],
+      require => Package["ipsec-tools"];
+    "/etc/racoon/psk.txt":
+      mode    => 600,
+      force   => true,
+      notify  => Service["racoon"],
+      require => Package["racoon"];
   }
 
   concat::fragment { "ipsec-tools.conf_header":
-    target => $itc,
+    target => "/etc/ipsec-tools.conf",
     order  => "01",
     source => "gen_ipsec/ipsec-tools.conf_header";
   }
@@ -72,6 +78,10 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 #    (List of) local networks (e.g. ["10.1.2.0/24","10.1.4.0/23"])
 #  remotenet
 #    (List of) remote networks
+#  authmethod
+#    Phase 1 authentication method. Can be "rsasig" (default) or "psk"/"pre_shared_key"
+#  psk
+#    In case of authmethod=psk: the pre-shared key to be used
 #  cert
 #    Path to certificate file (optional)
 #  key
@@ -94,11 +104,36 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 # Depends:
 #  gen_puppet
 #
-define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn, $localnet, $remotenet, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1") {
-  concat::fragment { "ipsec-tools.conf_fragment_$name":
-    target  => "/etc/ipsec-tools.conf",
-    order   => "10",
-    content => template("gen_ipsec/ipsec-tools.conf_fragment.erb");
+define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn, $localnet, $remotenet, $authmethod="rsasig", $psk=false, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1") {
+  if $authmethod in ["rsasig", "pre_shared_key"] {
+    $my_authmethod = $authmethod
+  }
+  elsif $authmethod == "psk" {
+    $my_authmethod = "pre_shared_key"
+  }
+  else {
+    fail("Gen_ipsec::peer[$name]: authmethod should be \"rsasig\", \"pre_shared_key\" or \"psk\".")
+  }
+
+  if $my_authmethod == "pre_shared_key" {
+    if $psk {
+      concat::fragment {
+        "psk_fragment_$name":
+          target  => "/etc/racoon/psk.txt",
+          order   => "10",
+          content => "$peer_ip $psk\n";
+      }
+    }
+    else {
+      fail("authmethod set to psk, but no pre-shared key given!")
+    }
+  }
+
+  concat::fragment { 
+    "ipsec-tools.conf_fragment_$name":
+      target  => "/etc/ipsec-tools.conf",
+      order   => "10",
+      content => template("gen_ipsec/ipsec-tools.conf_fragment.erb");
   }
 
   file { "/etc/racoon/peers.d/$name.conf":

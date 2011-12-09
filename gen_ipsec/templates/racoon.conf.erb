@@ -18,6 +18,7 @@
 #
 
 path certificate "<%= ssl_path %>";
+path pre_shared_key "/etc/racoon/psk.txt";
 path include "/etc/racoon";
 
 <% if listen -%>
