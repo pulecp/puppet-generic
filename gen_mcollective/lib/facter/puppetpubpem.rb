@@ -8,6 +8,6 @@ Facter.add("puppetpubpem") do
 				value = f.read
 			}
 		end
-		value
+		value.gsub!(/\n/, ";")
 	end
 end
