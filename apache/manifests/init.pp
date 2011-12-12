@@ -188,37 +188,28 @@ class apache {
         require => Package["apache2"],
    }
 
-   # Use a site template for adding the websites, this is for easy adding
-   # of new files, with or without Tomcat.
-   define site_config ($address = "*:80", $serveralias = false,
-                       $scriptalias = false, $documentroot = "/var/www",
-                       $tomcatinstance = "", $proxy_port = "",
-                       $djangoproject = "", $djangoprojectpath = "",
-                       $ssl_ipaddress = "*", $ssl_ip6address = "", $template = "apache/sites-available/simple.erb", $intermediate=false) {
-        $domain = $name
-        file { "/etc/apache2/sites-available/$name":
-                ensure => file,
-                owner => root,
-                group => root,
-                mode => 644,
-                backup => false,
-                content => template($template),
-                require => Package["apache2"],
-                notify => Exec["reload-apache2"],
-        }
+  # Use a site template for adding the websites, this is for easy adding
+  # of new files, with or without Tomcat.
+  define site_config ($address="*:80", $serveralias=false, $scriptalias=false, $documentroot="/var/www", $tomcatinstance="", $proxy_port="",
+      $djangoproject="", $djangoprojectpath="", $ssl_ipaddress="*", $ssl_ip6address="", $template="apache/sites-available/simple.erb", $intermediate=false) {
+    $domain = $name
+    kfile { "/etc/apache2/sites-available/$name":
+      content => template($template),
+      require => Package["apache2"],
+      notify  => Exec["reload-apache2"];
+    }
 
-        file { "/etc/apache2/vhost-additions/$name":
-                ensure => directory,
-                owner => root,
-                group => root,
-                mode => 755,
-                require => File["/etc/apache2/vhost-additions"],
-        }
+    kfile { "/etc/apache2/vhost-additions/$name":
+      ensure  => directory,
+      require => File["/etc/apache2/vhost-additions"];
+    }
 
     if $template =~ /.*ssl.*/ {
-      kbp_monitoring::site { "${name} non-SSL":
-        statuscode => 301,
-        response   => "https://${name}";
+      kbp_monitoring::site { "${name}_non_SSL":
+        service_description => "Vhost ${name} non SSL",
+        host_name           => $name,
+        statuscode          => 301,
+        response            => "https://${name}";
       }
     }
   }
