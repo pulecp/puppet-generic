@@ -194,7 +194,6 @@ class apache {
       $djangoproject="", $djangoprojectpath="", $ssl_ipaddress="*", $ssl_ip6address="", $template="apache/sites-available/simple.erb", $intermediate=false) {
     $domain = $name
     kfile { "/etc/apache2/sites-available/$name":
-      backup  => false,
       content => template($template),
       require => Package["apache2"],
       notify  => Exec["reload-apache2"];
