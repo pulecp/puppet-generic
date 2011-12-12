@@ -1,22 +1,3 @@
-#
-# NOTE: This file will not be used if you use racoon-tool(8) to manage your
-# IPsec connections. racoon-tool will process racoon-tool.conf(5) and
-# generate a configuration (/var/lib/racoon/racoon.conf) and use it, instead
-# of this file.
-#
-# Simple racoon.conf
-# 
-#
-# Please look in /usr/share/doc/racoon/examples for
-# examples that come with the source.
-#
-# Please read racoon.conf(5) for details, and alsoread setkey(8).
-#
-#
-# Also read the Linux IPSEC Howto up at 
-# http://www.ipsec-howto.org/t1.html 
-#
-
 path certificate "<%= ssl_path %>";
 path pre_shared_key "/etc/racoon/psk.txt";
 path include "/etc/racoon";

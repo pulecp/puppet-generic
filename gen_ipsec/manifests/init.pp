@@ -15,22 +15,19 @@
 #  gen_puppet
 #
 class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
-  kpackage {
-    ["ipsec-tools","racoon"]:;
-  }
-
-  service {
+  kservice {
     "setkey":
-      require   => Package["ipsec-tools"];
+      ensure    => false,
+      hasstatus => false,
+      package   => "ipsec-tools",
+      pensure   => latest;
     "racoon":
-      ensure    => running,
       hasstatus => false,
       pattern   => "/usr/sbin/racoon",
-      require   => Package["racoon"];
+      pensure   => latest;
   }
 
-  
-  concat { 
+  concat {
     "/etc/ipsec-tools.conf":
       mode    => 744,
       notify  => Service["setkey"],
@@ -50,7 +47,6 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 
   kfile {
     "/etc/racoon/racoon.conf":
-      ensure  => present,
       content => template("gen_ipsec/racoon.conf.erb"),
       notify  => Service["racoon"],
       require => Package["racoon"];
@@ -58,7 +54,6 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
       ensure  => directory,
       require => Package["racoon"];
   }
-
 }
 
 # Define: gen_ipsec::peer
@@ -105,39 +100,30 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 #  gen_puppet
 #
 define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn, $localnet, $remotenet, $authmethod="rsasig", $psk=false, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1") {
-  if $authmethod in ["rsasig", "pre_shared_key"] {
-    $my_authmethod = $authmethod
-  }
-  elsif $authmethod == "psk" {
-    $my_authmethod = "pre_shared_key"
-  }
-  else {
-    fail("Gen_ipsec::peer[$name]: authmethod should be \"rsasig\", \"pre_shared_key\" or \"psk\".")
+  $my_authmethod = $authmethod ? {
+    /(rsasig|pre_shared_key)/ => $authmethod,
+    "psk"                     => "pre_shared_key",
+    default                   => fail("Gen_ipsec::peer[${name}]: authmethod should be \"rsasig\", \"pre_shared_key\" or \"psk\"."),
   }
 
   if $my_authmethod == "pre_shared_key" {
     if $psk {
-      concat::fragment {
-        "psk_fragment_$name":
-          target  => "/etc/racoon/psk.txt",
-          order   => "10",
-          content => "$peer_ip $psk\n";
+      concat::fragment { "psk_fragment_$name":
+        target  => "/etc/racoon/psk.txt",
+        content => "$peer_ip $psk\n";
       }
     }
     else {
-      fail("authmethod set to psk, but no pre-shared key given!")
+      fail("Gen_ipsec::peer[${name}]: authmethod set to psk, but no pre-shared key given!")
     }
   }
 
-  concat::fragment { 
-    "ipsec-tools.conf_fragment_$name":
-      target  => "/etc/ipsec-tools.conf",
-      order   => "10",
-      content => template("gen_ipsec/ipsec-tools.conf_fragment.erb");
+  concat::fragment { "ipsec-tools.conf_fragment_$name":
+    target  => "/etc/ipsec-tools.conf",
+    content => template("gen_ipsec/ipsec-tools.conf_fragment.erb");
   }
 
-  file { "/etc/racoon/peers.d/$name.conf":
-    ensure  => present,
+  kfile { "/etc/racoon/peers.d/$name.conf":
     content => template("gen_ipsec/racoon-peer.conf.erb"),
     require => [ Package["racoon"], File["/etc/racoon/peers.d"] ],
     notify  => Service["racoon"];
