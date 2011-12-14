@@ -127,6 +127,7 @@ virsh define /dev/stdin <<EOF
 $DISK_CONFIG
     <interface type='bridge'>
       <source bridge='$BRIDGE_DEV'/>
+      <target dev="${NAME}_eth0"/>
       <model type='virtio'/>
     </interface>
     <input type='mouse' bus='ps2'/>
