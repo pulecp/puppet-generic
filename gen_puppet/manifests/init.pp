@@ -3,6 +3,7 @@
 import "concat.pp"
 import "ekfile.pp"
 import "kaugeas.pp"
+import "kcron.pp"
 import "kfile.pp"
 import "kpackage.pp"
 import "kservice.pp"
