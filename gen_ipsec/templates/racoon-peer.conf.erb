@@ -1,7 +1,7 @@
 remote <%= peer_ip %> {
 	exchange_mode main;
 <% if authmethod == "rsasig" -%>
-	certificate_type x509 "certs/<%= fqdn %>.pem" "private/<%= fqdn %>.key";
+	certificate_type x509 "<%= cert %>" "<%= key %>";
 	verify_cert on;
 	my_identifier asn1dn;
 	peers_identifier asn1dn "<%= peer_asn1dn %>";
