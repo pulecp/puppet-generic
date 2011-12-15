@@ -30,7 +30,7 @@ class gen_icinga::server {
 
   kpackage { "icinga-doc":; }
 
-  kservice { ["icinga","icinga-idoutils":; }
+  kservice { ["icinga","icinga-idoutils"]:; }
 
   kfile {
     "/var/lib/icinga/rw":
