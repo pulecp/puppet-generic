@@ -30,11 +30,7 @@ class gen_icinga::server {
 
   kpackage { "icinga-doc":; }
 
-  kservice { "icinga":
-    ensure     => running,
-    hasrestart => true,
-    hasstatus  => true,
-  }
+  kservice { ["icinga","icinga-idoutils":; }
 
   kfile {
     "/var/lib/icinga/rw":
