@@ -33,7 +33,7 @@ class gen_icinga::server {
   kservice {
     "icinga":;
     "ido2db":
-      pname => "icinga-idoutils;
+      pname => "icinga-idoutils";
   }
 
   kfile {
