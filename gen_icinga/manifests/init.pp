@@ -32,7 +32,7 @@ class gen_icinga::server {
 
   kservice {
     "ido2db":
-      pname   => "icinga-idoutils";
+      package => "icinga-idoutils";
     "icinga":
       require => Kservice["ido2db"];
   }
