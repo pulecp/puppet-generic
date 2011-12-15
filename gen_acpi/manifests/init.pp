@@ -12,4 +12,8 @@ class gen_acpi {
   kservice { "acpid":
     package => "acpi-support-base";
   }
+
+  kpackage { "acpid":
+    ensure => latest;
+  }
 }
