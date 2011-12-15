@@ -31,9 +31,10 @@ class gen_icinga::server {
   kpackage { "icinga-doc":; }
 
   kservice {
-    "icinga":;
     "ido2db":
-      pname => "icinga-idoutils";
+      pname   => "icinga-idoutils";
+    "icinga":
+      require => Kservice["ido2db"];
   }
 
   kfile {
