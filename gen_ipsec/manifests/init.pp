@@ -67,6 +67,8 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 #    Local endpoint of the ipsec tunnel
 #  peer_ip
 #    Remote endpoint of the ipsec tunnel
+#  exchange_mode
+#    Phase 1 exchange mode (optional, default "main")
 #  peer_asn1dn
 #    Peer's ASN.1 DN (Everything after "Subject: " in output of openssl x509 -text)
 #  localnet
@@ -99,7 +101,7 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 # Depends:
 #  gen_puppet
 #
-define gen_ipsec::peer ($local_ip, $peer_ip, $peer_asn1dn=false, $localnet, $remotenet, $authmethod="rsasig", $psk=false, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1") {
+define gen_ipsec::peer ($local_ip, $peer_ip, $exchange_mode="main", $peer_asn1dn=false, $localnet, $remotenet, $authmethod="rsasig", $psk=false, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1") {
   $my_authmethod = $authmethod ? {
     /(rsasig|pre_shared_key)/ => $authmethod,
     "psk"                     => "pre_shared_key",
