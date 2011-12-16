@@ -169,11 +169,11 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 
     if $wildcard {
       $real_cert = $cert ? {
-        false   => "${real_name}.pem",
+        false   => "${wildcard}.pem",
         default => $cert,
       }
       $real_key = $key ? {
-        false   => "${real_name}.key",
+        false   => "${wildcard}.key",
         default => $key,
       }
 
