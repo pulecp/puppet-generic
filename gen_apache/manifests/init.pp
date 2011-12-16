@@ -162,11 +162,6 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   }
 
   if $key or $cert or $intermediate or $wildcard or $ssl {
-    kfile { "/etc/apache2/vhost-additions/${full_name}/ssl":
-      content => template("gen_apache/vhost-additions/ssl"),
-      notify  => Exec["reload-apache2"];
-    }
-
     if $wildcard {
       $real_cert = $cert ? {
         false   => "${wildcard}.pem",
@@ -190,6 +185,11 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
           target => "/etc/ssl/private/${wildcard}.key";
         }
       }
+    }
+
+    kfile { "/etc/apache2/vhost-additions/${full_name}/ssl":
+      content => template("gen_apache/vhost-additions/ssl"),
+      notify  => Exec["reload-apache2"];
     }
   }
 }
