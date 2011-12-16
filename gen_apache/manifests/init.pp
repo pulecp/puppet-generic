@@ -162,15 +162,19 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   }
 
   if $key or $cert or $intermediate or $wildcard or $ssl {
-    if $wildcard {
-      $real_cert = $cert ? {
-        false   => "${wildcard}.pem",
-        default => $cert,
-      }
-      $real_key = $key ? {
-        false   => "${wildcard}.key",
-        default => $key,
-      }
+    $real_cert = $cert ? {
+      false   => $wildcard ? {
+        false   => "${real_name}.pem",
+        default => "${wildcard}.pem",
+      },
+      default => $cert,
+    }
+    $real_key = $key ? {
+      false   => $wildcard ? {
+        false   => "${real_name}.key",
+        default => "${wildcard}.key",
+      },
+      default => $cert,
     }
 
     kfile { "/etc/apache2/vhost-additions/${full_name}/ssl":
