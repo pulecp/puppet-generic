@@ -171,20 +171,6 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
         false   => "${wildcard}.key",
         default => $key,
       }
-
-      if ! defined(Kfile["/etc/ssl/certs/${real_cert}"]) {
-        kfile { "/etc/ssl/certs/${real_cert}":
-          ensure => link,
-          target => "/etc/ssl/certs/${wildcard}.pem";
-        }
-      }
-
-      if ! defined(Kfile["/etc/ssl/private/${real_key}"]) {
-        kfile { "/etc/ssl/private/${real_key}":
-          ensure => link,
-          target => "/etc/ssl/private/${wildcard}.key";
-        }
-      }
     }
 
     kfile { "/etc/apache2/vhost-additions/${full_name}/ssl":
