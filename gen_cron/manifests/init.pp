@@ -9,5 +9,8 @@
 #  gen_puppet
 #
 class gen_cron {
-  kservice { "cron":; }
+  kservice { "cron":
+    hasstatus => false,
+    pattern   => "/usr/sbin/cron"; 
+  }
 }
