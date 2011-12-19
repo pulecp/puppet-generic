@@ -16,6 +16,7 @@ remote <%= peer_ip %> {
 	}
 }
 
+<% if encap == "tunnel" -%>
 <% localnet.each do |local| -%>
 <% remotenet.each do |remote| -%>
 sainfo address <%= local %> any address <%= remote %> any {
@@ -26,4 +27,12 @@ sainfo address <%= local %> any address <%= remote %> any {
 }
 
 <% end -%>
+<% end -%>
+<% else -%>
+sainfo address <%= local_ip %> any address <%= peer_ip %> any {
+	pfs_group <%= phase2_dh %>;
+	encryption_algorithm <%= phase2_enc %>;
+	authentication_algorithm <%= phase2_auth %>;
+	compression_algorithm deflate;
+}
 <% end -%>

@@ -1,10 +1,17 @@
+<% if encap == "tunnel" -%>
 <% localnet.each do |local| -%>
 <% remotenet.each do |remote| -%>
 spdadd <%= local %> <%= remote %> any -P out ipsec
 	esp/tunnel/<%= local_ip %>-<%= peer_ip %>/unique;
-
 spdadd <%= remote %> <%= local %> any -P in ipsec
 	esp/tunnel/<%= peer_ip %>-<%= local_ip %>/unique;
 
 <% end -%>
+<% end -%>
+<% else -%>
+spdadd <%= local_ip %> <%= peer_ip %> any -P out ipsec
+	esp/transport//unique;
+spdadd <%= peer_ip %> <%= local_ip %> any -P in ipsec
+	esp/transport//unique;
+
 <% end -%>

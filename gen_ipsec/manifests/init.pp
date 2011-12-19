@@ -67,14 +67,16 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 #    Local endpoint of the ipsec tunnel
 #  peer_ip
 #    Remote endpoint of the ipsec tunnel
+# encap
+#    Encapsulation mode. Must be "tunnel" (default) or "transport"
 #  exchange_mode
 #    Phase 1 exchange mode (optional, default "main")
 #  peer_asn1dn
 #    Peer's ASN.1 DN (Everything after "Subject: " in output of openssl x509 -text)
 #  localnet
-#    (List of) local networks (e.g. ["10.1.2.0/24","10.1.4.0/23"])
+#    For tunnel mode: (list of) local networks (e.g. ["10.1.2.0/24","10.1.4.0/23"])
 #  remotenet
-#    (List of) remote networks
+#    For tunnel mode: (list of) remote networks
 #  authmethod
 #    Phase 1 authentication method. Can be "rsasig" (default) or "psk"/"pre_shared_key"
 #  psk
@@ -101,11 +103,21 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 # Depends:
 #  gen_puppet
 #
-define gen_ipsec::peer ($local_ip, $peer_ip, $exchange_mode="main", $peer_asn1dn=false, $localnet, $remotenet, $authmethod="rsasig", $psk=false, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1") {
+define gen_ipsec::peer ($local_ip, $peer_ip, $encap="tunnel", $exchange_mode="main", $peer_asn1dn=false, $localnet=false, $remotenet=false, $authmethod="rsasig", $psk=false, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1") {
+  $resname = "Gen_ipsec::peer[${name}]"
   $my_authmethod = $authmethod ? {
     /(rsasig|pre_shared_key)/ => $authmethod,
     "psk"                     => "pre_shared_key",
-    default                   => fail("Gen_ipsec::peer[${name}]: authmethod should be \"rsasig\", \"pre_shared_key\" or \"psk\"."),
+    default                   => fail("${resname}: authmethod should be \"rsasig\", \"pre_shared_key\" or \"psk\"."),
+  }
+
+  if ! ($encap  in ["tunnel","transport"]) {
+    fail("${resname}: encap must be \"tunnel\" or \"transport\"")
+  }
+
+  if $encap == "tunnel" {
+    if ! $localnet { fail("${resname}: encap_mode is \"tunnel\" and localnet not set!") }
+    if ! $remotenet { fail("${resname}: encap_mode is \"tunnel\" and remotenet not set!") }
   }
 
   if $my_authmethod == "pre_shared_key" {
@@ -116,13 +128,13 @@ define gen_ipsec::peer ($local_ip, $peer_ip, $exchange_mode="main", $peer_asn1dn
       }
     }
     else {
-      fail("Gen_ipsec::peer[${name}]: authmethod set to psk, but no pre-shared key given!")
+      fail("${resname}: authmethod set to psk, but no pre-shared key given!")
     }
   }
 
   if $my_authmethod == "rsasig" {
     if ! $peer_asn1dn {
-      fail("Gen_ipsec::peer[${name}]: authmethod set to rsasig, but no peer_asn1dn given!")
+      fail("${resname}: authmethod set to rsasig, but no peer_asn1dn given!")
     }
   }
 
