@@ -118,6 +118,12 @@ define gen_ipsec::peer ($local_ip, $peer_ip, $encap="tunnel", $exchange_mode="ma
   if $encap == "tunnel" {
     if ! $localnet { fail("${resname}: encap_mode is \"tunnel\" and localnet not set!") }
     if ! $remotenet { fail("${resname}: encap_mode is \"tunnel\" and remotenet not set!") }
+    $my_localnet = $localnet
+    $my_remotenet = $remotenet
+  }
+  else {
+    $my_localnet = $local_ip
+    $my_remotenet = $peer_ip
   }
 
   if $my_authmethod == "pre_shared_key" {
