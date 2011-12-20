@@ -97,7 +97,13 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 
   if $create_documentroot {
     kfile { $documentroot:
-      ensure => directory;
+      ensure => directory,
+      notify => Exec["initialize_${documentroot}"];
+    }
+
+    exec { "initialize_${documentroot}":
+      command     => "/usr/bin/touch ${documentroot}/index.htm",
+      refreshonly => true;
     }
   }
 
