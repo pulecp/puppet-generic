@@ -15,9 +15,8 @@ class offsitebackup::common {
     $line = "command=\"rdiff-backup --server --restrict $backupdir\",no-pty,no-port-forwarding,no-agent-forwarding,no-X11-forwarding ssh-rsa $key Backup key for $name"
 
     line { "add-key-${name}":
-      ensure  => "present",
       file    => "${backuproot}/.ssh/authorized_keys",
-      line    => $line,
+      content => $line,
       require => [User[$user], File["${backuproot}/.ssh"]],
     }
   }
