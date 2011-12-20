@@ -102,6 +102,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
     }
 
     exec { "initialize_${documentroot}":
+      unless      => "/bin/sh -c \"/usr/bin/test -f ${documentroot}/*\"",
       command     => "/usr/bin/touch ${documentroot}/index.htm",
       refreshonly => true;
     }
