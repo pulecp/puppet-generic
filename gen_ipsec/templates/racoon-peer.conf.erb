@@ -16,8 +16,8 @@ remote <%= peer_ip %> {
 	}
 }
 
-<% localnet.each do |local| -%>
-<% remotenet.each do |remote| -%>
+<% my_localnet.each do |local| -%>
+<% my_remotenet.each do |remote| -%>
 sainfo address <%= local %> any address <%= remote %> any {
 	pfs_group <%= phase2_dh %>;
 	encryption_algorithm <%= phase2_enc %>;
