@@ -279,7 +279,7 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
 #  Undocumented
 #  gen_puppet
 #
-define concat($mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=false, $testpms=[]) {
+define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=false, $testpms=[]) {
   require concat::setup
 
   if $servername in $testpms {
@@ -303,9 +303,16 @@ define concat($mode=0644, $owner="root", $group="root", $warn=false, $force=fals
 
   file {
     $fragdir:
-      ensure => directory;
+      force  => true,
+      ensure => $ensure ? {
+        "present" => "directory",
+        default   => "absent",
+      };
     "${fragdir}/fragments":
-      ensure  => directory,
+      ensure  => $ensure ? {
+        "present" => "directory",
+        default   => "absent",
+      },
       recurse => true,
       purge   => $purge,
       force   => true,
@@ -316,24 +323,34 @@ define concat($mode=0644, $owner="root", $group="root", $warn=false, $force=fals
       },
       notify  => Exec["concat_${name}"];
     "${fragdir}/fragments.concat":
-      ensure  => present;
+      force   => true,
+      ensure  => $ensure;
     $name:
       owner    => $owner,
       group    => $group,
       checksum => "md5",
       mode     => $mode,
-      ensure   => present,
+      ensure   => $ensure,
       alias    => "concat_${name}";
   }
 
-  exec { "concat_${name}":
-    user      => "root",
-    group     => $group,
-    alias     => "concat_${fragdir}",
-    unless    => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
-    command   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
-    notify    => File[$name],
-    subscribe => File[$fragdir],
-    require   => [File["/usr/local/bin/concatfragments.sh","${fragdir}/fragments","${fragdir}/fragments.concat"]];
+  if $ensure == "present" {
+    exec { "concat_${name}":
+      user      => "root",
+      group     => $group,
+      alias     => "concat_${fragdir}",
+      unless    => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
+      command   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
+      notify    => File[$name],
+      subscribe => File[$fragdir],
+      require   => [File["/usr/local/bin/concatfragments.sh","${fragdir}/fragments","${fragdir}/fragments.concat"]];
+    }
+  } else {
+    # Although this could be done via a selector in the command parameter in the exec above, this reads easier.
+    # The exec is needed due to dependencies.
+    exec { "concat_${name}":
+      alias   => "concat_${fragdir}",
+      command => "/bin/true",
+    }
   }
 }
