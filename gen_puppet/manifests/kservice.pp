@@ -68,4 +68,24 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
       refreshonly => true;
     }
   }
+
+  if $hasrestart {
+    if $lsbmajdistrelease < 6 {
+      exec { "restart-${name}":
+        command     => "/etc/init.d/${name} restart",
+        refreshonly => true;
+      }
+    } else {
+      exec { "restart-${name}":
+        command     => "/usr/sbin/service ${name} restart",
+        refreshonly => true;
+      }
+    }
+  } else {
+    exec { "restart-${name}":
+      command     => "/bin/true",
+      notify      => Service[$name],
+      refreshonly => true;
+    }
+  }
 }
