@@ -30,7 +30,7 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
   concat {
     "/etc/ipsec-tools.conf":
       mode    => 744,
-      notify  => Service["setkey"],
+      notify  => Exec["restart-setkey"],
       require => Package["ipsec-tools"];
     "/etc/racoon/psk.txt":
       mode    => 600,
