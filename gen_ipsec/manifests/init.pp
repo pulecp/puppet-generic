@@ -17,7 +17,7 @@
 class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
   kservice {
     "setkey":
-      ensure    => undef,
+      ensure    => "undef",
       hasstatus => false,
       package   => "ipsec-tools",
       pensure   => latest;
