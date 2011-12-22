@@ -3,8 +3,10 @@
 # Define: kservice
 #
 # Parameters:
+#  hasreload
+#    Defines if the service has a reload option, can be set to the command to use for reloads
 #  hasrestart
-#    Defines if the service has a restart option
+#    Defines if the service has a restart option, can be set to the command to use for restarts
 #  hasstatus
 #    Defines if the service has a status option
 #  ensure
@@ -36,7 +38,10 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
       "undef" => undef,
       default => $ensure,
     },
-    hasrestart => $hasrestart,
+    hasrestart => $hasrestart ? {
+      true    => true,
+      default => false,
+    },
     hasstatus  => $pattern ? {
       false   => $hasstatus,
       default => false,
@@ -52,12 +57,18 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
   if $hasreload {
     if $lsbmajdistrelease < 6 {
       exec { "reload-${name}":
-        command     => "/etc/init.d/${name} reload",
+        command     => $hasreload ? {
+          true    => "/etc/init.d/${name} reload",
+          default => $hasreload,
+        },
         refreshonly => true;
       }
     } else {
       exec { "reload-${name}":
-        command     => "/usr/sbin/service ${name} reload",
+        command     => $hasreload ? {
+          true    => "/usr/sbin/service ${name} reload",
+          default => $hasreload,
+        },
         refreshonly => true;
       }
     }
@@ -72,12 +83,18 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
   if $hasrestart {
     if $lsbmajdistrelease < 6 {
       exec { "restart-${name}":
-        command     => "/etc/init.d/${name} restart",
+        command     => $hasrestart ? {
+          true    => "/etc/init.d/${name} restart",
+          default => $hasrestart,
+        },
         refreshonly => true;
       }
     } else {
       exec { "restart-${name}":
-        command     => "/usr/sbin/service ${name} restart",
+        command     => $hasrestart ? {
+          true    => "/usr/sbin/service ${name} restart",
+          default => $hasrestart,
+        },
         refreshonly => true;
       }
     }
