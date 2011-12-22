@@ -1136,6 +1136,20 @@ class gen_base::wget {
   }
 }
 
+# Class: gen_base::wondershaper
+#
+# Actions:
+#  Install wondershaper
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::wondershaper {
+  kpackage { "wondershaper":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::xvfb
 #
 # Actions:
