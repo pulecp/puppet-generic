@@ -17,7 +17,7 @@
 class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
   kservice {
     "setkey":
-      ensure    => false,
+      ensure    => undef,
       hasstatus => false,
       package   => "ipsec-tools",
       pensure   => latest;
@@ -30,7 +30,7 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
   concat {
     "/etc/ipsec-tools.conf":
       mode    => 744,
-      notify  => Exec["restart-setkey"],
+      notify  => Service["setkey"],
       require => Package["ipsec-tools"];
     "/etc/racoon/psk.txt":
       mode    => 600,
