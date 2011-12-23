@@ -1,5 +1,8 @@
 remote <%= peer_ip %> {
 	exchange_mode <%= exchange_mode %>;
+<% if proposal_check -%>
+	proposal_check <%= proposal_check %>;
+<% end -%>
 <% if authmethod == "rsasig" -%>
 	certificate_type x509 "<%= cert %>" "<%= key %>";
 	verify_cert on;
