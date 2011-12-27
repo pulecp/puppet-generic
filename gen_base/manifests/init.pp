@@ -141,6 +141,20 @@ class gen_base::facter {
   }
 }
 
+# Class: gen_base::ifenslave-2_6
+#
+# Actions:
+#  Install ifenslave-2_6
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ifenslave-2_6 {
+  kpackage { "ifenslave-2.6":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::imagemagick
 #
 # Actions:
@@ -1118,6 +1132,20 @@ class gen_base::vim {
 #
 class gen_base::vim-addon-manager {
   kpackage { "vim-addon-manager":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::vlan
+#
+# Actions:
+#  Install vlan
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::vlan {
+  kpackage { "vlan":
     ensure => latest;
   }
 }
