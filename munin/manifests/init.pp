@@ -48,7 +48,7 @@ class munin::client {
       }
     }
 
-    kpackage { "munin-plugins-extra":
+    kpackage { ["munin-plugins-extra", "munin-plugins-kumina"]:
       ensure => latest;
     }
   }
