@@ -26,7 +26,11 @@ class postfix($relayhost=false, $myhostname=$fqdn, $mynetworks="127.0.0.0/8 [::1
     "secondary" => false,
   }
 
-  kpackage { "postfix":; }
+  kpackage {
+    "postfix":;
+    "nullmailer":
+      ensure => absent;
+  }
 
   service { "postfix":
     enable     => true,
