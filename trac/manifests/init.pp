@@ -55,7 +55,7 @@ class trac::etch {
 #	Undocumented
 #	gen_puppet
 #
-class trac {
+class trac($mail_relay=false) {
 	include "trac::$lsbdistcodename"
 
 	package { ["trac", "enscript", "sqlite3", "python-setuptools"]:

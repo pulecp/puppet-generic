@@ -25,44 +25,37 @@
 # Example:
 #
 # line { "linkedin":
-#	ensure  => "present",
-#	file    => "/home/tim/my-social-networks",
-#	content => "LinkedIn http://nl.linkedin.com/in/timstoop",
+#  ensure  => "present",
+#  file    => "/home/tim/my-social-networks",
+#  content => "LinkedIn http://nl.linkedin.com/in/timstoop",
 # }
 #
 
 # Define: line
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
-define line (
-	$ensure = "present", $file, $content = false) {
-
-	if ! $content {
-		$content = $name
-	}
-
-	case $ensure {
-		default: {
-			fail("Unknown ensure value: ${ensure}.")
-		}
-		present: {
-			exec { "line $name":
-				command => "/bin/echo '${content}' >> '${file}'",
-				unless  => "/bin/grep -Fx '${content}' '${file}'";
-			}
-		}
-		absent: {
-			exec { "line $name":
-				command => "/usr/bin/perl -ni -e 'print unless /^\\Q${content}\\E\$/' '${file}'",
-				onlyif  => "/bin/grep -Fx '${content}' '${file}'";
-			}
-		}
-	}
+define line ($ensure="present", $file, $content=$name) {
+  case $ensure {
+    "present": {
+      exec { "line ${name}":
+        command => "/bin/echo '${content}' >> '${file}'",
+        unless  => "/bin/grep -Fx '${content}' '${file}'";
+      }
+    }
+    "absent": {
+      exec { "line ${name}":
+        command => "/usr/bin/perl -ni -e 'print unless /^\\Q${content}\\E\$/' '${file}'",
+        onlyif  => "/bin/grep -Fx '${content}' '${file}'";
+      }
+    }
+    default: {
+      fail("Unknown ensure value: ${ensure}.")
+    }
+  }
 }
-
