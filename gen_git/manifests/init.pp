@@ -15,9 +15,12 @@ class gen_git {
     $git_pkg = "git-core"
   }
 
-  kpackage { "${git_pkg}":
-    alias  => "git",
-    ensure => latest;
+  kpackage {
+    "${git_pkg}":
+      alias  => "git",
+      ensure => latest;
+    "tig":
+      ensure => latest;
   }
 }
 
