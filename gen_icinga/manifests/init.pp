@@ -421,12 +421,15 @@ define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $mo
 define gen_icinga::configdir($ensure="present",$base="/etc/icinga/config") {
   if $::monitoring == "true" {
     @@ekfile { "${base}/${name};${fqdn}":
-      ensure => $ensure ? {
+      ensure  => $ensure ? {
         "present" => "directory",
         "absent"  => "absent",
         default   => "directory",
       },
-      tag    => "icinga_config";
+      purge   => true,
+      recurse => true,
+      force   => true,
+      tag     => "icinga_config";
     }
   } else {
     @@ekfile { "${base}/${name};${fqdn}":
