@@ -5,5 +5,9 @@ defaults
 	option		redispatch
 	option		dontlognull
 	option		tcp-smart-connect
+<% if forwardfor -%>
+	option		httpclose
+	option		forwardfor
+<% end -%>
 	balance		roundrobin
 	maxconn		200000

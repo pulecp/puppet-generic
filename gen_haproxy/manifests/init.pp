@@ -6,8 +6,12 @@
 #  failover
 #    Is this this haproxy in a failover setup?
 #    This needs to be true if something like pacemaker controls HAProxy (i.e. we don't want puppet to start it)
-#  customtag
+#  haproxy_tag
 #    The tag used when declaring gen_haproxy::site, so we can import the right config
+#  loglevel
+#    Loglevel
+#  forwardfor
+#    Add HTTP X-Forwarded-For header to backend request
 #
 # Actions:
 #  Installs HAProxy and fetches its configuration based on the tag
@@ -15,7 +19,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $loglevel="warning"){
+class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $loglevel="warning", $forwardfor=false) {
   # When haproxy is in a failover setup (e.g. in pacemaker/heartbeat), don't start or stop it from puppet.
   kservice { "haproxy":
     ensure     => $failover ? {
