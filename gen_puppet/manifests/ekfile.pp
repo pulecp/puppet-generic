@@ -27,15 +27,16 @@
 #    Undocumented
 #  ensure
 #    Undocumented
+#  backup
+#    Store a backup of the file in the filebucket.
 #
 # Actions:
 #  Undocumented
 #
 # Depends:
-#  Undocumented
 #  gen_puppet
 #
-define ekfile ($ensure="present", $source=false, $path=false, $target=false, $content=false, $owner="root", $group="root", $mode="644", $recurse=false, $force=false, $purge=false, $ignore=false) {
+define ekfile ($ensure="present", $source=false, $path=false, $target=false, $content=false, $owner="root", $group="root", $mode="644", $recurse=false, $force=false, $purge=false, $ignore=false, $backup=false) {
   $kfilename = regsubst($name,'^(.*);.*$','\1')
   if !defined(Kfile["${kfilename}"]) {
     kfile { "${kfilename}":
@@ -51,6 +52,7 @@ define ekfile ($ensure="present", $source=false, $path=false, $target=false, $co
       force   => $force,
       purge   => $purge,
       ignore  => $ignore,
+      backup  => $backup,
     }
   }
 }

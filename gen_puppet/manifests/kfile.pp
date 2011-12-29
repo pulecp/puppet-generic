@@ -27,15 +27,16 @@
 #    Undocumented
 #  ensure
 #    Undocumented
+#  backup
+#    Make a backup of the file in the filebucket
 #
 # Actions:
 #  Undocumented
 #
 # Depends:
-#  Undocumented
 #  gen_puppet
 #
-define kfile ($ensure="present", $content=false, $source=false, $path=false, $target=false, $owner="root",
+define kfile ($ensure="present", $content=false, $source=false, $path=false, $target=false, $owner="root", $backup=false,
       $group="root", $mode="0644", $recurse=false, $replace=true, $force=false, $purge=false, $ignore=false) {
   file { $name:
     ensure  => $ensure,
@@ -85,6 +86,7 @@ define kfile ($ensure="present", $content=false, $source=false, $path=false, $ta
       false   => undef,
       default => $purge,
     },
+    backup  => $backup,
     ignore  => $ignore ? {
       false   => undef,
       default => $ignore,
