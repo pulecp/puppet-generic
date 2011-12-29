@@ -429,7 +429,8 @@ define gen_icinga::configdir($ensure="present",$base="/etc/icinga/config") {
       purge   => true,
       recurse => true,
       force   => true,
-      tag     => "icinga_config";
+      tag     => "icinga_config",
+      notify  => Exec["reload-icinga"];
     }
   } else {
     @@ekfile { "${base}/${name};${fqdn}":
