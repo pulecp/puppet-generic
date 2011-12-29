@@ -36,7 +36,3 @@ smtpd_recipient_restrictions = permit_mynetworks,
 	reject_unknown_sender_domain,
 	reject_unauth_destination
 <% end -%>
-<% if catch_all -%>
-luser_relay = <%= catch_all %>
-local_recipient_maps =
-<% end -%>
