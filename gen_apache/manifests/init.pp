@@ -95,7 +95,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   $real_name = regsubst($full_name,'^(.*)_(.*)$','\1')
   $real_port = regsubst($full_name,'^(.*)_(.*)$','\2')
 
-  if $create_documentroot {
+  if $create_documentroot and ! defined(Kfile[$documentroot]) {
     kfile { $documentroot:
       ensure => directory,
       notify => Exec["initialize_${documentroot}"];
