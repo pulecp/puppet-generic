@@ -1,5 +1,5 @@
 def add_fact(code)
-  Facter.add("external_ip_address") { setcode { code } }
+  Facter.add("external_ipaddress") { setcode { code } }
 end
 
 # Do we have a fact called ec2_public_ipv4?
