@@ -20,6 +20,7 @@ class postfix($relayhost=false, $myhostname=$fqdn, $mynetworks="127.0.0.0/8 [::1
       false   => $mode,
       default => "${mode}, ${mydestination}",
     },
+  }
   $real_relayhost = $mode ? {
     false                     => $relayhost,
     /("primary"|"secondary")/ => false,
