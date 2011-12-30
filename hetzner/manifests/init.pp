@@ -27,26 +27,26 @@ class hetzner {
 #	gen_puppet
 #
 class hetzner::failover_ip {
-	kpackage { "python-simplejson":
-		ensure => latest,
-	}
+  kpackage { "python-simplejson":
+    ensure => latest,
+  }
 
-	kfile { "/usr/local/sbin/parse-hetzner-json.py":
-		source => "hetzner/parse-hetzner-json.py",
-		owner  => "root",
-		group  => "root",
-		mode   => 755,
-	}
+  kfile { "/usr/local/sbin/parse-hetzner-json.py":
+    source => "hetzner/parse-hetzner-json.py",
+    owner  => "root",
+    group  => "root",
+    mode   => 755,
+  }
 
-	kfile { "/usr/local/lib/hetzner":
-		ensure => directory,
-	}
+  kfile { "/usr/local/lib/hetzner":
+    ensure => directory,
+  }
 
-	kfile { "/usr/local/lib/hetzner/hetzner-failover-ip":
-		source => "hetzner/hetzner-failover-ip",
-		owner  => "root",
-		group  => "root",
-		mode   => 755,
-	}
+  kfile { "/usr/local/lib/hetzner/hetzner-failover-ip":
+    source => "hetzner/hetzner-failover-ip",
+    owner  => "root",
+    group  => "root",
+    mode   => 755,
+  }
 
 }

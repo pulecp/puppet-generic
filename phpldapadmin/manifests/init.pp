@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class phpldapadmin {
-	package { "phpldapadmin":
-		ensure => installed,
-	}
+  package { "phpldapadmin":
+    ensure => installed,
+  }
 }

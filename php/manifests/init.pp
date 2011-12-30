@@ -22,8 +22,8 @@ class php::common {
 #	gen_puppet
 #
 class php::php5::common {
-	$phpversion = 5
-	include php::common
+  $phpversion = 5
+  include php::common
 }
 
 # Class: php::php5::modphp
@@ -36,11 +36,11 @@ class php::php5::common {
 #	gen_puppet
 #
 class php::php5::modphp {
-	include php::php5::common
+  include php::php5::common
 
-	package { "libapache2-mod-php5":
-		ensure => installed,
-	}
+  package { "libapache2-mod-php5":
+    ensure => installed,
+  }
 }
 
 # Class: php::php5::cgi
@@ -53,11 +53,11 @@ class php::php5::modphp {
 #	gen_puppet
 #
 class php::php5::cgi {
-	include php::php5::common
+  include php::php5::common
 
-	package { "php5-cgi":
-		ensure => installed,
-	}
+  package { "php5-cgi":
+    ensure => installed,
+  }
 }
 
 # Class: php::php5::cli
@@ -70,11 +70,11 @@ class php::php5::cgi {
 #	gen_puppet
 #
 class php::php5::cli {
-	include php::php5::common
+  include php::php5::common
 
-	package { "php5-cgi":
-		ensure => installed,
-	}
+  package { "php5-cgi":
+    ensure => installed,
+  }
 }
 
 # Class: php::php4::common
@@ -87,8 +87,8 @@ class php::php5::cli {
 #	gen_puppet
 #
 class php::php4::common {
-	$phpversion = 4
-	include php::common
+  $phpversion = 4
+  include php::common
 }
 
 # Class: php::php4::modphp
@@ -101,11 +101,11 @@ class php::php4::common {
 #	gen_puppet
 #
 class php::php4::modphp {
-	include php::php4::common
+  include php::php4::common
 
-	package { "libapache2-mod-php4":
-		ensure => installed,
-	}
+  package { "libapache2-mod-php4":
+    ensure => installed,
+  }
 }
 
 # Class: php::php4::cgi
@@ -118,11 +118,11 @@ class php::php4::modphp {
 #	gen_puppet
 #
 class php::php4::cgi {
-	include php::php4::common
+  include php::php4::common
 
-	package { "php4-cgi":
-		ensure => installed,
-	}
+  package { "php4-cgi":
+    ensure => installed,
+  }
 }
 
 # Class: php::php4::cli
@@ -135,9 +135,9 @@ class php::php4::cgi {
 #	gen_puppet
 #
 class php::php4::cli {
-	include php::php4::common
+  include php::php4::common
 
-	package { "php4-cli":
-		ensure => installed,
-	}
+  package { "php4-cli":
+    ensure => installed,
+  }
 }

@@ -76,22 +76,22 @@ class apache {
       }
    }
 
-	# Mitigation for CVE-2011-3192, can be removed when patched
-	# TODO remove this puppet resource after september first
-	include apache::headers
-	kfile { "/etc/apache2/conf.d/cve-2011-3192.conf":
-		ensure  => absent,
-		content => "# Drop the Range header when more than 5 ranges.\n# CVE-2011-3192\nSetEnvIf Range (,.*?){5,} bad-range=1\nRequestHeader unset Range env=bad-range\n# optional logging.\nCustomLog /var/log/apache2/range-CVE-2011-3192.log common env=bad-range",
-		notify  => Exec["reload-apache2"];
-	}
+  # Mitigation for CVE-2011-3192, can be removed when patched
+  # TODO remove this puppet resource after september first
+  include apache::headers
+  kfile { "/etc/apache2/conf.d/cve-2011-3192.conf":
+    ensure  => absent,
+    content => "# Drop the Range header when more than 5 ranges.\n# CVE-2011-3192\nSetEnvIf Range (,.*?){5,} bad-range=1\nRequestHeader unset Range env=bad-range\n# optional logging.\nCustomLog /var/log/apache2/range-CVE-2011-3192.log common env=bad-range",
+    notify  => Exec["reload-apache2"];
+  }
 
 
    # Let's make sure we've got apache2 installed
    kpackage {
-	"apache2":
-		ensure => installed;
-	"libapr1":
-		ensure => latest;
+  "apache2":
+    ensure => installed;
+  "libapr1":
+    ensure => latest;
    }
 
    # We want to make sure that Apache2 is running.
@@ -110,11 +110,11 @@ class apache {
         refreshonly => true,
    }
 
-	exec { "force-reload-apache2":
-		command     => "/etc/init.d/apache2 force-reload",
-		refreshonly => true,
-		require     => Exec["reload-apache2"];
-	}
+  exec { "force-reload-apache2":
+    command     => "/etc/init.d/apache2 force-reload",
+    refreshonly => true,
+    require     => Exec["reload-apache2"];
+  }
 
    file { "/etc/apache2/conf.d":
       recurse => true,
@@ -155,13 +155,13 @@ class apache {
 
    define apache_ports {
    	if $name != "" {
-		line { "open apache port ${name}":
-			content => "Listen $name",
-			file    => "/etc/apache2/ports.conf",
-			notify  => Exec["reload-apache2"],
-			require => Package["apache2"],
-		}
-	}
+    line { "open apache port ${name}":
+      content => "Listen $name",
+      file    => "/etc/apache2/ports.conf",
+      notify  => Exec["reload-apache2"],
+      require => Package["apache2"],
+    }
+  }
    }
 
    apache_ports { $apache_ports:; }
@@ -170,9 +170,9 @@ class apache {
    # This can be removed when the new apache module is finished.
    line { "remove faulty line from apache ports":
    	content => "Listen ",
-	ensure  => absent,
-	file    => "/etc/apache2/ports.conf",
-	require => Package["apache2"],
+  ensure  => absent,
+  file    => "/etc/apache2/ports.conf",
+  require => Package["apache2"],
    }
 
    # A directory where we can put extra configuration statements for sites.
@@ -216,5 +216,5 @@ class apache {
 }
 
 class apache::headers {
-	apache::module { "headers":; }
+  apache::module { "headers":; }
 }

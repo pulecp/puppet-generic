@@ -10,15 +10,15 @@
 #	gen_puppet
 #
 class sysklogd::common {
-	package { "sysklogd":
-		ensure => installed,
-	}
+  package { "sysklogd":
+    ensure => installed,
+  }
 
-	service { "sysklogd":
-		subscribe => File["/etc/syslog.conf"],
-		ensure => running,
-		pattern => "/sbin/syslogd",
-	}
+  service { "sysklogd":
+    subscribe => File["/etc/syslog.conf"],
+    ensure => running,
+    pattern => "/sbin/syslogd",
+  }
 }
 
 # Class: sysklogd::client
@@ -31,14 +31,14 @@ class sysklogd::common {
 #	gen_puppet
 #
 class sysklogd::client {
-	include sysklogd::common
+  include sysklogd::common
 
-	file { "/etc/syslog.conf":
-		content => template("sysklogd/client/syslog.conf"),
-		require => Package["sysklogd"],
-		owner => "root",
-		group => "root",
-	}
+  file { "/etc/syslog.conf":
+    content => template("sysklogd/client/syslog.conf"),
+    require => Package["sysklogd"],
+    owner => "root",
+    group => "root",
+  }
 }
 
 # Class: sysklogd::server
@@ -51,12 +51,12 @@ class sysklogd::client {
 #	gen_puppet
 #
 class sysklogd::server {
-	include sysklogd::common
+  include sysklogd::common
 
-	file { "/etc/default/syslogd":
-		source => "puppet://puppet/sysklogd/server/default/syslogd",
-		require => Package["sysklogd"],
-		owner => "root",
-		group => "root",
-	}
+  file { "/etc/default/syslogd":
+    source => "puppet://puppet/sysklogd/server/default/syslogd",
+    require => Package["sysklogd"],
+    owner => "root",
+    group => "root",
+  }
 }

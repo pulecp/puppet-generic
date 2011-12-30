@@ -10,14 +10,14 @@
 #	gen_puppet
 #
 class rsyslog::common {
-	package { "rsyslog":
-		ensure => installed,
-	}
+  package { "rsyslog":
+    ensure => installed,
+  }
 
-	service { "rsyslog":
-		enable => true,
-		require => Package["rsyslog"],
-	}
+  service { "rsyslog":
+    enable => true,
+    require => Package["rsyslog"],
+  }
 }
 
 # Class: rsyslog::client
@@ -30,13 +30,13 @@ class rsyslog::common {
 #	gen_puppet
 #
 class rsyslog::client {
-	include rsyslog::common
+  include rsyslog::common
 
-	kfile { "/etc/rsyslog.d/remote-logging-client.conf":
-		content => template("rsyslog/client/remote-logging-client.conf"),
-		require => Package["rsyslog"],
-		notify => Service["rsyslog"],
-	}
+  kfile { "/etc/rsyslog.d/remote-logging-client.conf":
+    content => template("rsyslog/client/remote-logging-client.conf"),
+    require => Package["rsyslog"],
+    notify => Service["rsyslog"],
+  }
 }
 
 # Class: rsyslog::server
@@ -49,13 +49,13 @@ class rsyslog::client {
 #	gen_puppet
 #
 class rsyslog::server {
-	include rsyslog::common
+  include rsyslog::common
 
-	kfile { "/etc/rsyslog.d/remote-logging-server.conf":
-		source => "rsyslog/server/remote-logging-server.conf",
-		require => Package["rsyslog"],
-		notify => Service["rsyslog"],
-	}
+  kfile { "/etc/rsyslog.d/remote-logging-server.conf":
+    source => "rsyslog/server/remote-logging-server.conf",
+    require => Package["rsyslog"],
+    notify => Service["rsyslog"],
+  }
 }
 
 # Class: rsyslog::mysql
@@ -68,13 +68,13 @@ class rsyslog::server {
 #	gen_puppet
 #
 class rsyslog::mysql {
-	package { "rsyslog-mysql":
-		ensure => installed;
-	}
+  package { "rsyslog-mysql":
+    ensure => installed;
+  }
 
-	kfile { "/etc/rsyslog.d/mysql.conf":
-		source  => "rsyslog/server/mysql.conf",
-		require => Package["rsyslog-mysql"],
-		notify  => Service["rsyslog"];
-	}
+  kfile { "/etc/rsyslog.d/mysql.conf":
+    source  => "rsyslog/server/mysql.conf",
+    require => Package["rsyslog-mysql"],
+    notify  => Service["rsyslog"];
+  }
 }

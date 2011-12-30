@@ -10,17 +10,17 @@
 #	gen_puppet
 #
 class radvd::server {
-	kpackage { "radvd":
-		ensure => latest;
-	}
+  kpackage { "radvd":
+    ensure => latest;
+  }
 
-	service { "radvd":
-		subscribe => File["/etc/radvd.conf"],
-		require => File["/etc/radvd.conf"],
-		ensure => running;
-	}
+  service { "radvd":
+    subscribe => File["/etc/radvd.conf"],
+    require => File["/etc/radvd.conf"],
+    ensure => running;
+  }
 
-	kfile { "/etc/radvd.conf":
-		require => Package["radvd"];
-	}
+  kfile { "/etc/radvd.conf":
+    require => Package["radvd"];
+  }
 }

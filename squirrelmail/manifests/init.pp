@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class squirrelmail {
-	package { ["squirrelmail", "squirrelmail-locales"]:
-		ensure => installed,
-	}
+  package { ["squirrelmail", "squirrelmail-locales"]:
+    ensure => installed,
+  }
 }

@@ -10,12 +10,12 @@
 #	gen_puppet
 #
 class postgrey {
-	package { "postgrey":
-		ensure => installed;
-	}
+  package { "postgrey":
+    ensure => installed;
+  }
 
-	service { "postgrey":
-		require => Package["postgrey"],
-		enable => true;
-	}
+  service { "postgrey":
+    require => Package["postgrey"],
+    enable => true;
+  }
 }

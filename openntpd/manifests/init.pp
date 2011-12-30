@@ -10,18 +10,18 @@
 #	gen_puppet
 #
 class openntpd::common {
-	package { "openntpd":
-		ensure => installed,
-	}
+  package { "openntpd":
+    ensure => installed,
+  }
 
-	service { "openntpd":
-		hasrestart => true,
-		ensure => running,
-		hasstatus => $lsbdistcodename ? {
-			"lenny" => false,
-			default => true,
-		},
-		pattern => "/usr/sbin/ntpd",
-		require => Package["openntpd"],
-	}
+  service { "openntpd":
+    hasrestart => true,
+    ensure => running,
+    hasstatus => $lsbdistcodename ? {
+      "lenny" => false,
+      default => true,
+    },
+    pattern => "/usr/sbin/ntpd",
+    require => Package["openntpd"],
+  }
 }

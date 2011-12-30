@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class lvm {
-	package { ["lvm2", "dmsetup"]:
-		ensure => installed,
-	}
+  package { ["lvm2", "dmsetup"]:
+    ensure => installed,
+  }
 }

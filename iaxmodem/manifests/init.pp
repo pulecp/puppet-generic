@@ -10,18 +10,18 @@
 #	gen_puppet
 #
 class iaxmodem {
-	package {
-		"iaxmodem":
-			ensure => present;
-	}
+  package {
+    "iaxmodem":
+      ensure => present;
+  }
 
-	service {
-		"iaxmodem":
-			require   => Package["iaxmodem"],
-			ensure    => running,
-			hasstatus => $lsbdistcodename ? {
-				"lenny" => false,
-				default => undef,
-			};
-	}
+  service {
+    "iaxmodem":
+      require   => Package["iaxmodem"],
+      ensure    => running,
+      hasstatus => $lsbdistcodename ? {
+        "lenny" => false,
+        default => undef,
+      };
+  }
 }

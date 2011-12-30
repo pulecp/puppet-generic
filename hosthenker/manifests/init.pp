@@ -15,8 +15,8 @@
 #	gen_puppet
 #
 class hosthenker {
-	kfile { "/usr/bin/hosthenker":
-		source => "hosthenker/hosthenker.sh",
-		mode   => 755;
-	}
+  kfile { "/usr/bin/hosthenker":
+    source => "hosthenker/hosthenker.sh",
+    mode   => 755;
+  }
 }

@@ -23,25 +23,25 @@
 #	gen_puppet
 #
 class sphinxsearch::server {
-	# Install needed package.
-	package {
-		"sphinxsearch":
-			ensure => present;
-	}
+  # Install needed package.
+  package {
+    "sphinxsearch":
+      ensure => present;
+  }
 
-	# Run Sphinxsearch searchd daemon.
-	service {
-		"sphinxsearch":
-			ensure    => running,
-			pattern   => "/usr/bin/searchd",
-			hasstatus => false;
-	}
+  # Run Sphinxsearch searchd daemon.
+  service {
+    "sphinxsearch":
+      ensure    => running,
+      pattern   => "/usr/bin/searchd",
+      hasstatus => false;
+  }
 
-	# The config file was added in Squeeze
-	if $lsbmajdistrelease > 5 {
-		kfile { "/etc/default/sphinxsearch":
-			source => "sphinxsearch/default/sphinxsearch",
-			notify => Service["sphinxsearch"],
-		}
-	}
+  # The config file was added in Squeeze
+  if $lsbmajdistrelease > 5 {
+    kfile { "/etc/default/sphinxsearch":
+      source => "sphinxsearch/default/sphinxsearch",
+      notify => Service["sphinxsearch"],
+    }
+  }
 }
