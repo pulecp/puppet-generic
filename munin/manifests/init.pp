@@ -79,11 +79,6 @@ class munin::client {
     group => "staff";
   }
 
-  kfile { "/usr/local/etc/munin":
-    ensure => directory,
-    group => "staff",
-  }
-
   # This has only been tested on squeeze
   if versioncmp($lsbdistrelease, "6") >= 0 {
     # This makes sure the plugins directory only contains files we've actually deployed
@@ -99,7 +94,7 @@ class munin::client {
 
   # Configs needed for JMX monitoring. Not needed everywhere, but roll out
   # nonetheless.
-  kfile { "/usr/local/etc/munin/plugins":
+  kfile { "/etc/munin/jmx_config":
     recurse => true,
     source  => "munin/client/configs",
     group   => "staff",
