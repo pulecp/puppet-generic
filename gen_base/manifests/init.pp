@@ -71,6 +71,20 @@ class gen_base::base-files {
   }
 }
 
+# Class: gen_base::bridge-utils
+#
+# Actions:
+#  Install bridge-utils
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::bridge-utils {
+  kpackage { "bridge-utils":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::bsdtar
 #
 # Actions:
