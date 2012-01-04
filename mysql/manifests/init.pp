@@ -83,6 +83,13 @@ class mysql::server {
   }
 
   define grant($user, $db, $password=false, $hostname="localhost", $permissions="all") {
+    if !defined(Exec["create MySQL user ${user} from ${hostname}"]) {
+      mysql::user { "${user}_${hostname}":
+        user     => $user,
+        password => $password,
+        hostname => $hostname;
+      }
+    }
     if $password {
       exec { "grant_${user}_${db}_${hostname}":
         unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON \`${db}\`\.\*\" -e \"ON \*\.\*\"",
