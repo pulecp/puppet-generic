@@ -57,3 +57,10 @@ class postfix($relayhost=false, $myhostname=$fqdn, $mynetworks="127.0.0.0/8 [::1
     path        => "/usr/bin";
   }
 }
+
+define postfix::alias {
+  line { $name:
+    file   => "/etc/aliases",
+    notify => Exec["newaliases"];
+  }
+}
