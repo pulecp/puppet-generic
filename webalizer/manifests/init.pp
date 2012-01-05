@@ -10,15 +10,10 @@
 #	gen_puppet
 #
 class webalizer {
-  package { "webalizer":
-    ensure => present,
-  }
+  kpackage { "webalizer":; }
 
-  file { "/etc/cron.daily/webalizer":
-    owner => "root",
-    group => "root",
-    mode => 755,
-    source => "puppet://puppet/webalizer/cron.daily/webalizer",
-    require => Package["webalizer"],
+  kfile { "/etc/cron.daily/webalizer":
+    mode    => 755,
+    source  => "webalizer/cron.daily/webalizer";
   }
 }
