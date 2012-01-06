@@ -58,8 +58,9 @@ class postfix($relayhost=false, $myhostname=$fqdn, $mynetworks="127.0.0.0/8 [::1
   }
 }
 
-define postfix::alias {
+define postfix::alias($ensure="present") {
   line { $name:
+    ensure => $ensure,
     file   => "/etc/aliases",
     notify => Exec["newaliases"];
   }
