@@ -11,15 +11,12 @@
 #
 class asterisk::server {
   package {
-    "asterisk":
-      ensure => present;
     "asterisk-sounds-extra":
       ensure => present;
   }
 
-  service {
+  kservice {
     "asterisk":
-      require => Package["asterisk"],
       ensure => running;
   }
 
