@@ -23,8 +23,9 @@ class hylafax::server {
     "hylafax":
       require   => Package["hylafax-server"],
       hasstatus => $lsbdistcodename ? {
-        "lenny" => false,
-        default => undef,
+        "lenny"    => false,
+        "squeeze"  => false,
+        default    => undef,
       },
       pattern   => "hfaxd",
       ensure    => running;
