@@ -83,7 +83,7 @@ class mysql::server {
   }
 
   define grant($user, $db, $password=false, $hostname="localhost", $permissions="all") {
-    if !defined(Exec["create MySQL user ${user} from ${hostname}"]) {
+    if !defined(Exec["create MySQL user ${user} from ${hostname}"]) and !defined(Mysql::User["${user}_${hostname}"]) {
       mysql::user { "${user}_${hostname}":
         user     => $user,
         password => $password,
