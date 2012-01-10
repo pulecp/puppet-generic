@@ -186,13 +186,13 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
   }
 
   if $context_xml_content == false {
-    kaugeas {
-      "Context path and docBase for ${name}":
-        file    => "/srv/tomcat/conf/Catalina/localhost/${name}.xml",
-        lens    => "Xml.lns",
-        changes => ["set Context/#attribute/path '${urlpath}'",
-                    "set Context/#attribute/docBase '${war}'"],
-        notify  => Service["tomcat6"],
+    kaugeas { "Context path and docBase for ${name}":
+      file    => "/srv/tomcat/conf/Catalina/localhost/${name}.xml",
+      lens    => "Xml.lns",
+      changes => ["set Context/#attribute/path '${urlpath}'",
+                  "set Context/#attribute/docBase '${war}'"],
+      notify  => Service["tomcat6"],
+      require => Kfile["/srv/tomcat/conf/Catalina/localhost/${name}.xml"];
     }
   } else {
     notify { "The context_xml_content parameter is deprecated. Please remove asap.":; }
@@ -236,12 +236,12 @@ define gen_tomcat::additional_context_setting($value, $context = false, $setting
     $real_name = regsubst($name, '.*: (.*)', '\1')
   }
 
-  kaugeas {
-    "Context setting ${real_name} for ${real_context}":
-      file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
-      lens    => "Xml.lns",
-      changes => "set Context/#attribute/${real_name} '${value}'",
-      notify  => Service["tomcat6"],
+  kaugeas { "Context setting ${real_name} for ${real_context}":
+    file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
+    lens    => "Xml.lns",
+    changes => "set Context/#attribute/${real_name} '${value}'",
+    notify  => Service["tomcat6"],
+    require => Kfile["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
   }
 }
 
@@ -277,14 +277,14 @@ define gen_tomcat::environment ($var_type, $value, $context = false, $var_name =
     $real_name = regsubst($name, '.*: (.*)', '\1')
   }
 
-  kaugeas {
-    "Context setting ${real_name} for ${real_context}":
-      file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
-      lens    => "Xml.lns",
-      changes => ["set Context/Environment[#attribute/name='${real_name}']/#attribute/name '${real_name}'",
-                  "set Context/Environment[#attribute/name='${real_name}']/#attribute/value '${value}'",
-                  "set Context/Environment[#attribute/name='${real_name}']/#attribute/type '${var_type}'"],
-      notify  => Service["tomcat6"],
+  kaugeas { "Context setting ${real_name} for ${real_context}":
+    file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
+    lens    => "Xml.lns",
+    changes => ["set Context/Environment[#attribute/name='${real_name}']/#attribute/name '${real_name}'",
+                "set Context/Environment[#attribute/name='${real_name}']/#attribute/value '${value}'",
+                "set Context/Environment[#attribute/name='${real_name}']/#attribute/type '${var_type}'"],
+    notify  => Service["tomcat6"],
+    require => Kfile["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
   }
 }
 
@@ -318,13 +318,13 @@ define gen_tomcat::valve($allow, $context = false, $classname = false) {
     $real_name = regsubst($name, '.*: (.*)', '\1')
   }
 
-  kaugeas {
-    "Context valve ${real_name} for ${real_context}":
-      file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
-      lens    => "Xml.lns",
-      changes => ["set Context/Valve[#attribute/className='${real_name}']/#attribute/className '${real_name}'",
-                  "set Context/Valve[#attribute/className='${real_name}']/#attribute/allow '${allow}'"],
-      notify  => Service["tomcat6"],
+  kaugeas { "Context valve ${real_name} for ${real_context}":
+    file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
+    lens    => "Xml.lns",
+    changes => ["set Context/Valve[#attribute/className='${real_name}']/#attribute/className '${real_name}'",
+                "set Context/Valve[#attribute/className='${real_name}']/#attribute/allow '${allow}'"],
+    notify  => Service["tomcat6"],
+    require => Kfile["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
   }
 }
 
@@ -366,20 +366,20 @@ define gen_tomcat::datasource($username, $password, $url, $context = false, $max
     $real_name = regsubst($name, '.*: (.*)', '\1')
   }
 
-  kaugeas {
-    "Context datasource resource ${real_name} for ${real_context}":
-      file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
-      lens    => "Xml.lns",
-      changes => ["set Context/Resource[#attribute/name='${real_name}']/#attribute/name '${real_name}'",
-                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/auth 'Container'",
-                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/type 'javax.sql.DataSource'",
-                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/driverClassName 'com.mysql.jdbc.Driver'",
-                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/username '${username}'",
-                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/password '${password}'",
-                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/url '${url}'",
-                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/maxActive '${max_active}'",
-                  "set Context/Resource[#attribute/name='${real_name}']/#attribute/maxIdle '${max_idle}'"],
-      notify  => Service["tomcat6"],
+  kaugeas { "Context datasource resource ${real_name} for ${real_context}":
+    file    => "/srv/tomcat/conf/Catalina/localhost/${real_context}.xml",
+    lens    => "Xml.lns",
+    changes => ["set Context/Resource[#attribute/name='${real_name}']/#attribute/name '${real_name}'",
+                "set Context/Resource[#attribute/name='${real_name}']/#attribute/auth 'Container'",
+                "set Context/Resource[#attribute/name='${real_name}']/#attribute/type 'javax.sql.DataSource'",
+                "set Context/Resource[#attribute/name='${real_name}']/#attribute/driverClassName 'com.mysql.jdbc.Driver'",
+                "set Context/Resource[#attribute/name='${real_name}']/#attribute/username '${username}'",
+                "set Context/Resource[#attribute/name='${real_name}']/#attribute/password '${password}'",
+                "set Context/Resource[#attribute/name='${real_name}']/#attribute/url '${url}'",
+                "set Context/Resource[#attribute/name='${real_name}']/#attribute/maxActive '${max_active}'",
+                "set Context/Resource[#attribute/name='${real_name}']/#attribute/maxIdle '${max_idle}'"],
+    notify  => Service["tomcat6"],
+    require => Kfile["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
   }
 }
 
