@@ -247,12 +247,6 @@ define gen_apache::rewrite_on {
 
 define gen_apache::vhost_addition($ensure="present", $content=false, $source=false) {
   $full_site_name = regsubst($name,'^(.*)/(.*)$','\1')
-  $site_name = regsubst($full_site_name,'^(.*)_(.*)$','\1')
-  if defined(Gen_apache::Site["$site_name"]) {
-    $require_name = $site_name
-  } else {
-    $require_name = $full_site_name
-  }
 
   kfile { "/etc/apache2/vhost-additions/${name}":
     ensure  => $ensure,
@@ -264,7 +258,7 @@ define gen_apache::vhost_addition($ensure="present", $content=false, $source=fal
       false   => undef,
       default => $source,
     },
-    require => Gen_apache::Site[$require_name],
+    require => Gen_apache::Site[$full_site_name],
     notify  => Exec["reload-apache2"];
   }
 }
