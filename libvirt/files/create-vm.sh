@@ -136,6 +136,10 @@ $DISK_CONFIG
       <model type='cirrus' vram='9216' heads='1'/>
     </video>
   </devices>
+  <qemu:commandline>
+     <qemu:arg value='-option-rom'/>
+     <qemu:arg value='/usr/share/kvm/pxe-virtio.bin'/>
+  </qemu:commandline>
 </domain>
 EOF
 
