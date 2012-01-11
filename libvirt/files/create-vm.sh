@@ -103,7 +103,7 @@ esac
 
 # Create the configuration for libvirt.
 virsh define /dev/stdin <<EOF
-<domain type='kvm'>
+<domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>$NAME</name>
   <description>Created on: $CREATED</description>
   <memory>$(($RAM_MB * 1024))</memory>
