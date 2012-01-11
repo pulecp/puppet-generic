@@ -523,7 +523,7 @@ class gen_base::libnet-ping-external-perl {
   }
 }
 
-# Class: gen_base::liblog4j1.2-java
+# Class: gen_base::liblog4j1_2-java
 #
 # Actions:
 #  Install liblog4j1.2-java
