@@ -939,6 +939,20 @@ class gen_base::php5-curl {
   }
 }
 
+# Class: gen_base::php5-gd
+#
+# Actions:
+#  Install php5-gd
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::php5-gd {
+  kpackage { "php5-gd":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::php5-mcrypt
 #
 # Actions:
