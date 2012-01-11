@@ -155,6 +155,20 @@ class gen_base::facter {
   }
 }
 
+# Class: gen_base::ia32-libs
+#
+# Actions:
+#  Install ia32-libs
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ia32-libs {
+  kpackage { "ia32-libs":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ifenslave-2_6
 #
 # Actions:
