@@ -220,8 +220,10 @@ class gen_base::jmxquery {
 #  gen_puppet
 #
 class gen_base::krb5 {
-  kpackage { ["libgssapi-krb5-2","libk5crypto3","libkrb5-3","libkrb5support0"]:
-    ensure => latest;
+  if $lsbmajdistrelease == 6 {
+    kpackage { ["libgssapi-krb5-2","libk5crypto3","libkrb5-3","libkrb5support0"]:
+      ensure => latest;
+    }
   }
 }
 
