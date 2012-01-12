@@ -181,7 +181,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
         false   => "${real_name}.key",
         default => "${wildcard}.key",
       },
-      default => $cert,
+      default => $key,
     }
 
     kfile { "/etc/apache2/vhost-additions/${full_name}/ssl":
