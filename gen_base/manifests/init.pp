@@ -840,6 +840,20 @@ class gen_base::linux-image ($version) {
   }
 }
 
+# Class: gen_base::mailgraph
+#
+# Actions:
+#  Install mailgraph
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::mailgraph {
+  kpackage { "mailgraph":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::mc
 #
 # Actions:
