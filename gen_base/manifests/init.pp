@@ -367,6 +367,20 @@ class gen_base::libapache2-mod-php5 {
   }
 }
 
+# Class: gen_base::libapache2-mod-wsgi
+#
+# Actions:
+#  Install libapache2-mod-wsgi
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libapache2-mod-wsgi {
+  kpackage { "libapache2-mod-wsgi":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libapr1
 #
 # Actions:
