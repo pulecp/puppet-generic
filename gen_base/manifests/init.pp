@@ -225,19 +225,59 @@ class gen_base::jmxquery {
   }
 }
 
-# Class: gen_base::krb5
+# Class: gen_base::libgssapi-krb5-2
 #
 # Actions:
-#  Install packages originating from krb5 source package
+#  Install libgssapi-krb5-2
 #
 # Depends:
 #  gen_puppet
 #
-class gen_base::krb5 {
-  if $lsbmajdistrelease == 6 {
-    kpackage { ["libgssapi-krb5-2","libk5crypto3","libkrb5-3","libkrb5support0"]:
-      ensure => latest;
-    }
+class gen_base::libgssapi-krb5-2 {
+  kpackage { "libgssapi-krb5-2":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libk5crypto3
+#
+# Actions:
+#  Install libk5crypto3
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libk5crypto3 {
+  kpackage { "libk5crypto3":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libkrb5-3
+#
+# Actions:
+#  Install libkrb5-3
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libkrb5-3 {
+  kpackage { "libkrb5-3":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libkrb5support0
+#
+# Actions:
+#  Install libkrb5support0
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libkrb5support0 {
+  kpackage { "libkrb5support0":
+    ensure => latest;
   }
 }
 
