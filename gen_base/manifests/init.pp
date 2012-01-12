@@ -1136,6 +1136,20 @@ class gen_base::python-libvirt {
   }
 }
 
+# Class: gen_base::python-mysqldb
+#
+# Actions:
+#  Install python-mysqldb
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-mysqldb {
+  kpackage { "python-mysqldb":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::rails
 #
 # Actions:
