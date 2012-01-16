@@ -46,10 +46,7 @@ class ksplice {
   }
 
   # The modified configuration file
-  kfile { "/etc/uptrack/uptrack.conf":
-    source  => "ksplice/uptrack.conf",
-    require => Package["uptrack"],
-  }
+  Kfile <<| title == "/etc/uptrack/uptrack.conf" |>>
 
   # Set directory permissions so Nagios can read status
   kfile { "/var/cache/uptrack":
