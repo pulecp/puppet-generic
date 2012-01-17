@@ -1220,6 +1220,20 @@ class gen_base::ruby_stomp {
   }
 }
 
+# Class: gen_base::t1lib
+#
+# Actions:
+#  Install t1lib
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::t1lib {
+  kpackage { "t1lib":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::telnet_ssl
 #
 # Actions:
