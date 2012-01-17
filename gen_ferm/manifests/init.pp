@@ -86,7 +86,7 @@ class gen_ferm {
 #    The priority of the rule, this can be used to set ordering on rules, defaults to 500
 #  exported
 #    Defines whether the rule should be exported
-#  customtag
+#  ferm_tag
 #    The tag to set on the exported file
 #
 # Actions:
@@ -97,7 +97,7 @@ class gen_ferm {
 #
 define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false,
     $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter,
-    $chain=INPUT, $ensure=present, $exported=false, $customtag=false, $fqdn=$fqdn, $ipaddress6=false) {
+    $chain=INPUT, $ensure=present, $exported=false, $ferm_tag=false, $fqdn=$fqdn, $ipaddress6=false) {
   $real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
   $sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
   $ip_proto = regsubst($name,'^(.*)_(v4?6?)$','\2')
@@ -134,7 +134,7 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
         chain     => $chain,
         ensure    => $ensure,
         exported  => $exported,
-        customtag => $customtag;
+        ferm_tag  => $ferm_tag;
       }
     } else {
       rule { ["${real_name}_v4","${real_name}_v6"]:
@@ -153,7 +153,7 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
         chain     => $chain,
         ensure    => $ensure,
         exported  => $exported,
-        customtag => $customtag;
+        ferm_tag  => $ferm_tag;
       }
     }
   } elsif ($ip_proto=="v4" and ! ($saddr_is_ip=="ipv6") and ! ($daddr_is_ip=="ipv6")) or ($ip_proto=="v6" and ! ($saddr_is_ip=="ipv4") and ! ($daddr_is_ip=="ipv4")) {
@@ -165,10 +165,10 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
         "v4" => template("gen_ferm/rule_v4"),
         "v6" => template("gen_ferm/rule_v6"),
       },
-      ensure    => $ensure,
-      exported  => $exported,
-      customtag => $customtag,
-      require   => Chain["${chain}_${ip_proto}"];
+      ensure   => $ensure,
+      exported => $exported,
+      ferm_tag => $ferm_tag,
+      require  => Chain["${chain}_${ip_proto}"];
     }
   }
 }
@@ -299,7 +299,7 @@ define gen_ferm::table() {
 #    The content to enter into the firewall
 #  exported
 #    Define whether the file should be exported
-#  customtag
+#  ferm_tag
 #    The tag to give to the exported file
 #
 # Actions:
@@ -308,12 +308,12 @@ define gen_ferm::table() {
 # Depends:
 #  gen_puppet
 #
-define gen_ferm::fermfile($content, $ensure=present, $exported=false, $customtag=false) {
+define gen_ferm::fermfile($content, $ensure=present, $exported=false, $ferm_tag=false) {
   concat::add_content { $name:
     content    => $content,
     target     => "/etc/ferm/ferm.conf",
     ensure     => $ensure,
     exported   => $exported,
-    contenttag => $customtag;
+    contenttag => $ferm_tag;
   }
 }
