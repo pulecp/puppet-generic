@@ -31,7 +31,7 @@ class ksplice {
   kpackage { "uptrack":
     ensure       => latest,
     responsefile => "/var/cache/debconf/ksplice.preseed",
-    require      => File["/var/cache/debconf/ksplice.preseed"],
+    require      => Kfile["/var/cache/debconf/ksplice.preseed"],
     notify       => Exec["initial uptrack run"];
   }
 
@@ -42,7 +42,7 @@ class ksplice {
   exec { "initial uptrack run":
     command     => "/usr/sbin/uptrack-upgrade -y; exit 0",
     refreshonly => true,
-    require     => File["/etc/uptrack/uptrack.conf"],
+    require     => Kfile["/etc/uptrack/uptrack.conf"],
   }
 
   # The modified configuration file
