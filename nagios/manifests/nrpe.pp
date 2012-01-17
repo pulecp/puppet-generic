@@ -30,6 +30,11 @@ class nagios::nrpe {
     require    => Package["nagios-nrpe-server"],
   }
 
+  # Make sure NRPE knows it's going to be run through inetd.
+  line { "INETD=1":
+    file => "/etc/default/nagios-nrpe-server";
+  }
+
   kpackage { "openbsd-inetd":; }
 
   service { "openbsd-inetd":
