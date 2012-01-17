@@ -759,6 +759,20 @@ class gen_base::libstomp_ruby {
   }
 }
 
+# Class: gen_base::libt1-5
+#
+# Actions:
+#  Install libt1-5
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libt1-5 {
+  kpackage { "libt1-5":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libtime-modules-perl
 #
 # Actions:
