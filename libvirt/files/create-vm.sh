@@ -85,12 +85,7 @@ test $VNC_SECRET = '-' || GRAPHICS_CONFIG="$GRAPHICS_CONFIG passwd='$VNC_SECRET'
 DD="dd of=/dev/$DISK_VOLGRP/$NAME-disk0 bs=1M"
 if test $DISK_IMAGE = '-'
 then
-	if test -f /var/lib/media/initial.raw
-	then
-		DISK_IMAGE=/var/lib/media/initial.raw
-	else
-		DISK_IMAGE=http://debian.kumina.nl/d-i/squeeze/kumihatch-kvm-initial.raw
-	fi
+	DISK_IMAGE=http://debian.kumina.nl/d-i/squeeze/kumihatch-kvm-initial.raw
 fi
 case $DISK_IMAGE in
 ftp://*|http://*|https://*)
