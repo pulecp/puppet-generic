@@ -17,7 +17,7 @@ class gen_drbd::common {
 }
 
 define gen_drbd($mastermaster=true, $time_out=false, $connect_int=false, $ping_int=false, $ping_timeout=false, $after_sb_0pri="discard-younger-primary",
-    $after_sb_1pri="discard-secondary", $after_sb_2pri="call-pri-lost-after-sb", $rate="5M", $verify_alg="md5") {
+    $after_sb_1pri="discard-secondary", $after_sb_2pri="call-pri-lost-after-sb", $rate="5M", $verify_alg="md5", $use_ipaddress=$external_ipaddress) {
   include gen_drbd::common
 
   if !defined(Kfile["/etc/drbd.d/global_common.conf"]) {
