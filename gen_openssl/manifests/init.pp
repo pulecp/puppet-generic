@@ -10,10 +10,7 @@
 #  gen_puppet
 #
 class gen_openssl::common {
-  kpackage { 
-    ["openssl","libssl0.9.8"]:
-      ensure => latest;
-  }
+  kpackage { ["openssl","libssl0.9.8"]:; }
 
   kfile { "/etc/ssl/certs":
     recurse  => true,
