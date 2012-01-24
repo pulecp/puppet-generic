@@ -10,7 +10,8 @@
 #	gen_puppet
 #
 class sysctl {
-  exec { "/sbin/sysctl -p /etc/sysctl.conf":
+  exec { "reload-sysctl":
+    command     => "/sbin/sysctl -p /etc/sysctl.conf",
     subscribe   => File["/etc/sysctl.conf"],
     refreshonly => true;
   }
