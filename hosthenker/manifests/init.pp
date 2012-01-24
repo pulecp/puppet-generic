@@ -16,7 +16,6 @@
 #
 class hosthenker {
   kfile { "/usr/bin/hosthenker":
-    source => "hosthenker/hosthenker.sh",
-    mode   => 755;
+    ensure => absent,
   }
 }
