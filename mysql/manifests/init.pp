@@ -90,7 +90,7 @@ class mysql::server {
         hostname => $hostname;
       }
     }
-    if !defined(Db[$db]) {
+    if !defined(Db[$db]) and $db != "*" {
       db { $db:; }
     }
     if $password {
