@@ -91,7 +91,6 @@ class mysql::server {
     }
     else {
       $real_user = $user
-      notify {"Mysql::Server::Grant[\"${title}\"]: please name resource '<user> on <db>' and remove \$user parameter.":; }
     }
     if !$db {
       $real_db = regsubst($title, '([a-zA-Z0-9_]+) +on +([a-zA-Z0-9_]+)', '\2')
@@ -101,7 +100,6 @@ class mysql::server {
     }
     else {
       $real_db = $db
-      notify {"Mysql::Server::Grant[\"${title}\"]: please name resource '<user> on <db>' and remove \$db parameter.":; }
     }
     if !defined(Exec["create MySQL user ${real_user} from ${hostname}"]) and !defined(Mysql::User["${real_user}_${hostname}"]) {
       mysql::user { "${real_user}_${hostname}":
