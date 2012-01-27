@@ -96,8 +96,8 @@ class mysql::server {
     if $password {
       exec { "grant_${user}_${db}_${hostname}":
         unless  => $grant_option ? {
-          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON '${db}'\.\*\" -e \"ON \*\.\*\"",
-          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON '${db}'\.\*\" -e \"ON \*\.\*\" | grep -q \"WITH GRANT OPTION\"",
+          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON '${db}'.*\" -e \"ON *.*\"",
+          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON '${db}'.*\" -e \"ON *.*\" | grep -q \"WITH GRANT OPTION\"",
         },
         command => $grant_option ? {
           false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' identified by '${password}';\"",
@@ -111,8 +111,8 @@ class mysql::server {
     } else {
       exec { "grant_${user}_${db}_${hostname}":
         unless  => $grant_option ? {
-          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON '${db}'\.\*\" -e \"ON \*\.\*\"",
-          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON '${db}'\.\*\" -e \"ON \*\.\*\" | grep -q \"WITH GRANT OPTION\"",
+          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON '${db}'.*\" -e \"ON *.*\"",
+          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON '${db}'.*\" -e \"ON *.*\" | grep -q \"WITH GRANT OPTION\"",
         },
         command => $grant_option ? {
           false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}';\"",
