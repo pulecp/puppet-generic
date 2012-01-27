@@ -25,9 +25,9 @@
 #  Undocumented
 #  gen_puppet
 #
-define kcron ($minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $command) {
+define kcron($mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $command) {
   kfile { "/etc/cron.d/$name":
-    content => "$minute $hour $mday $month $wday $user $command\n",
+    content => template("gen_puppet/kcron"),
     notify  => Exec["reload-cron"];
   }
 }
