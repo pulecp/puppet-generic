@@ -79,18 +79,15 @@ class munin::client {
     group => "staff";
   }
 
-  # This has only been tested on squeeze
-  if versioncmp($lsbdistrelease, "6") >= 0 {
-    # This makes sure the plugins directory only contains files we've actually deployed
-    kfile { "/etc/munin/plugins":
-      ensure  => directory,
-      purge   => true,
-      recurse => true,
-      force   => true,
-    }
-
-    include munin::client::default_plugins
+  # This makes sure the plugins directory only contains files we've actually deployed
+  kfile { "/etc/munin/plugins":
+    ensure  => directory,
+    purge   => true,
+    recurse => true,
+    force   => true,
   }
+
+  include munin::client::default_plugins
 
   # Configs needed for JMX monitoring. Not needed everywhere, but roll out
   # nonetheless.
@@ -150,6 +147,34 @@ class munin::server {
 #  munin::client::plugin
 #
 class munin::client::default_plugins {
+  include "munin::client::default_plugins::${lsbdistcodename}"
+
+  # Use the fact interfaces for setting up interfaces.
+  $ifs = split($interfaces, ",")
+  munin::client::setup_interface { $ifs:; }
+}
+
+class munin::client::default_plugins::lenny {
+  munin::client::plugin {
+    "df_inode":;
+    "vmstat":;
+    "load":;
+    "forks":;
+    "swap":;
+    "processes":;
+    "open_inodes":;
+    "irqstats":;
+    "iostat":;
+    "memory":;
+    "interrupts":;
+    "open_files":;
+    "entropy":;
+    "cpu":;
+    "df":;
+  }
+}
+
+class munin::client::default_plugins::squeeze {
   munin::client::plugin {
     "df_inode":;
     "vmstat":;
@@ -176,10 +201,6 @@ class munin::client::default_plugins {
     "uptime":;
     "users":;
   }
-
-  # Use the fact interfaces for setting up interfaces.
-  $ifs = split($interfaces, ",")
-  munin::client::setup_interface { $ifs:; }
 }
 
 # Define: munin::client::setup_interface
