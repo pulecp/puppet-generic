@@ -90,6 +90,9 @@ class mysql::server {
         hostname => $hostname;
       }
     }
+    if !defined(Db[$db]) {
+      db { $db:; }
+    }
     if $password {
       exec { "grant_${user}_${db}_${hostname}":
         unless  => $grant_option ? {
