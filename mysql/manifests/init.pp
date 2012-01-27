@@ -82,45 +82,65 @@ class mysql::server {
     }
   }
 
-  define grant($user, $db, $password=false, $hostname="localhost", $permissions="all", $grant_option=false) {
-    if !defined(Exec["create MySQL user ${user} from ${hostname}"]) and !defined(Mysql::User["${user}_${hostname}"]) {
-      mysql::user { "${user}_${hostname}":
-        user     => $user,
+  define grant($user=false, $db=false, $password=false, $hostname="localhost", $permissions="all", $grant_option=false) {
+    if !$user {
+      $real_user = regsubst($title, '([a-zA-Z0-9_]+) +on +([a-zA-Z0-9_]+)', '\1')
+      if ($real_user == $title) {
+        fail("Mysql::Server::Grant[\"${title}\"]: please name resource '<user> on <db>'")
+      }
+    }
+    else {
+      $real_user = $user
+      notify {"Mysql::Server::Grant[\"${title}\"]: please name resource '<user> on <db>' and remove \$user parameter.":; }
+    }
+    if !$db {
+      $real_db = regsubst($title, '([a-zA-Z0-9_]+) +on +([a-zA-Z0-9_]+)', '\2')
+      if ($real_db == $title) {
+        fail("Mysql::Server::Grant[\"${title}\"]: please name resource '<user> on <db>'")
+      }
+    }
+    else {
+      $real_db = $db
+      notify {"Mysql::Server::Grant[\"${title}\"]: please name resource '<user> on <db>' and remove \$db parameter.":; }
+    }
+    if !defined(Exec["create MySQL user ${real_user} from ${hostname}"]) and !defined(Mysql::User["${real_user}_${hostname}"]) {
+      mysql::user { "${real_user}_${hostname}":
+        user     => $real_user,
         password => $password,
         hostname => $hostname;
       }
     }
-    if !defined(Db[$db]) and $db != "*" {
-      db { $db:; }
+    if !defined(Db[$real_db]) and $real_db != "*" {
+      db { $real_db:; }
     }
     if $password {
-      exec { "grant_${user}_${db}_${hostname}":
+      exec { "grant_${real_user}_${real_db}_${hostname}":
         unless  => $grant_option ? {
-          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON '${db}'\.\*\" -e \"ON \*\.\*\"",
-          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON '${db}'\.\*\" -e \"ON \*\.\*\" | grep -q \"WITH GRANT OPTION\"",
+          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON '${real_db}'\.\*\" -e \"ON \*\.\*\"",
+          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON '${real_db}'\.\*\" -e \"ON \*\.\*\" | grep -q \"WITH GRANT OPTION\"",
         },
         command => $grant_option ? {
-          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' identified by '${password}';\"",
-          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' identified by '${password}' with grant option;\"",
+          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${real_db}.* to '${real_user}'@'${hostname}' identified by '${password}';\"",
+          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${real_db}.* to '${real_user}'@'${hostname}' identified by '${password}' with grant option;\"",
         },
-        require => $db ? {
+        require => $real_db ? {
           "*"     => Service["mysql"],
-          default => [Service["mysql"], Exec["create-${db}-db"]],
+          default => [Service["mysql"], Exec["create-${real_db}-db"]],
         };
       }
     } else {
-      exec { "grant_${user}_${db}_${hostname}":
+      exec { "grant_${real_user}_${real_db}_${hostname}":
         unless  => $grant_option ? {
-          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON '${db}'\.\*\" -e \"ON \*\.\*\"",
-          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON '${db}'\.\*\" -e \"ON \*\.\*\" | grep -q \"WITH GRANT OPTION\"",
+          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON '${real_db}'\.\*\" -e \"ON \*\.\*\"",
+          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON '${real_db}'\.\*\" -e \"ON \*\.\*\" | grep -q \"WITH GRANT OPTION\"",
         },
         command => $grant_option ? {
-          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}';\"",
-          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${db}.* to '${user}'@'${hostname}' with grant option;\"",
+          false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${real_db}.* to '${real_user}'@'${hostname}';\"",
+          true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${real_db}.* to '${real_user}'@'${hostname}' with grant option;\"",
         },
-        require => $db ? {
+        require => $real_db ? {
           "*"     => Service["mysql"],
-          default => [Service["mysql"], Exec["create-${db}-db"]],
+          default => [Service["mysql"], Exec["create-${real_db}-db"]],
         };
       }
     }
