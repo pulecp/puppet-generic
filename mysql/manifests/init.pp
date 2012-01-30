@@ -72,13 +72,17 @@ class mysql::server {
   }
 
   define db ($use_utf8=false) {
-    exec { "create-${name}-db":
-      unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf ${name}",
-      command => $use_utf8 ? { 
-        false   => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create database ${name};\"",
-        default => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create database ${name} CHARACTER SET utf8 COLLATE utf8_general_ci;\"",
-      },
-      require => Service["mysql"];
+    $db_name = regsubst($name,'^(.*) (.*?)$','\1')
+
+    if ! defined(Exec["create-${db_name}-db"]) {
+      exec { "create-${db_name}-db":
+        unless  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf ${db_name}",
+        command => $use_utf8 ? {
+          false   => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create database ${db_name};\"",
+          default => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"create database ${db_name} CHARACTER SET utf8 COLLATE utf8_general_ci;\"",
+        },
+        require => Service["mysql"];
+      }
     }
   }
 
