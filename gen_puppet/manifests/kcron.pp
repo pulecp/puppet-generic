@@ -27,6 +27,11 @@
 #  gen_puppet
 #
 define kcron($mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $pacemaker_resource=false, $command) {
+  # If the name contains an underscore or dot, cron won't use the file! So fail when that's the case.
+  if $name =~ /\./ or $name =~ /_/ {
+    fail("Kcron names cannot contain dots or underscores. Resource: ${name}")
+  }
+
   if $pacemaker_resource {
     # A cronjob on a host in failover, where we only want the active host
     # to run the cronjob
