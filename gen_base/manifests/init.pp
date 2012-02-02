@@ -815,6 +815,34 @@ class gen_base::libxenstore3_0 {
   }
 }
 
+# Class: gen_base::libxml2
+#
+# Actions:
+#  Install libxml2
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libxml2 {
+  kpackage { "libxml2":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libxml2_utils
+#
+# Actions:
+#  Install libxml2-utils
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libxml2_utils {
+  kpackage { "libxml2-utils":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::linux-base
 #
 # Actions:
