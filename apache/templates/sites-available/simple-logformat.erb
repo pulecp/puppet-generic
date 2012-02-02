@@ -13,7 +13,7 @@
     Allow from all
   </Directory>
 <% end -%>
-  CustomLog	/var/log/apache2/<%= domain %>-access.log combined-resptime
+  CustomLog	/var/log/apache2/<%= domain %>-access.log <% if logformat -%><%= logformat %><% else -%>combined-resptime<% end %>
   ErrorLog	/var/log/apache2/<%= domain %>-error.log
   DocumentRoot	<%= documentroot %>
   Include	/etc/apache2/vhost-additions/<%= domain %>/
