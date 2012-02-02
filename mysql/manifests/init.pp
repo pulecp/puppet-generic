@@ -72,7 +72,7 @@ class mysql::server {
   }
 
   define db ($use_utf8=false) {
-    $db_name = regsubst($name,'^(.*) (.*?)$','\1')
+    $db_name = regsubst($name,'^(.*?) (.*)$','\1')
 
     if ! defined(Exec["create-${db_name}-db"]) {
       exec { "create-${db_name}-db":
