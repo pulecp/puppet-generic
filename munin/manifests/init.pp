@@ -95,7 +95,8 @@ class munin::client {
     recurse => true,
     source  => "munin/client/configs",
     group   => "staff",
-    mode    => 755;
+    mode    => 755,
+    require => Package["munin-node"];
   }
 }
 
