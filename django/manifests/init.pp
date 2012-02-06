@@ -31,18 +31,16 @@ class django::wsgi {
   include django::common
   include apache
 
-  package { "libapache2-mod-wsgi":
-    ensure => installed,
-  }
+  kpackage { "libapache2-mod-wsgi":; }
 
   apache::module { "wsgi":
-    ensure => present,
+    ensure  => present,
     require => Package["libapache2-mod-wsgi"];
   }
 
   define site($wsgi_script=false, $wsgi_processes=2, $wsgi_threads=2,
         $wsgi_path="/", $documentroot="/var/www", $aliases=false,
-        $address="*", $ssl=false, $ensure="present") {
+        $address="*", $ssl=false, $ensure="present", $monitor=true) {
     if ($wsgi_script == false) {
       $script = "$documentroot/dispatch.wsgi"
     }
@@ -54,23 +52,21 @@ class django::wsgi {
     }
 
     apache::site_config { $name:
-      address => $address,
-      template => $template,
-      serveralias => $aliases,
-      documentroot => $documentroot,
+      address      => $address,
+      template     => $template,
+      serveralias  => $aliases,
+      documentroot => $documentroot;
     }
 
     kbp_apache::site { $name:
-      ensure => $ensure,
+      ensure  => $ensure,
+      monitor => $monitor;
     }
 
-    file { "/etc/apache2/vhost-additions/$name/django-wsgi.conf":
-      owner => "root",
-      group => "root",
-      mode => 644,
+    kfile { "/etc/apache2/vhost-additions/$name/django-wsgi.conf":
       content => template("django/apache/wsgi.erb"),
       require => Apache::Module["wsgi"],
-      notify => Exec["reload-apache2"],
+      notify  => Exec["reload-apache2"];
     }
   }
 }
