@@ -25,12 +25,26 @@ class mysql {
 #  Undocumented
 #  gen_puppet
 #
-class mysql::server {
+class mysql::server ($datadir=false) {
   include mysql
 
   case $lsbdistcodename {
     "lenny":   { $mysqlserver = "mysql-server-5.0" }
     "squeeze": { $mysqlserver = "mysql-server-5.1" }
+  }
+
+  if $datadir {
+    kfile {
+      $datadir:
+        ensure => directory,
+        mode   => 770,
+        owner  => false,
+        group  => false,
+        notify => Package[$mysqlserver];
+      "/etc/mysql/conf.d/datadir.cnf":
+        content => "[mysqld]\ndatadir = ${datadir}\n",
+        notify  => Package[$mysqlserver];
+    }
   }
 
   kpackage { $mysqlserver:
@@ -39,15 +53,20 @@ class mysql::server {
 
   service { "mysql":
     hasrestart => true,
-    hasstatus  => true;
+    hasstatus  => true,
+    require    => Package[$mysqlserver];
   }
 
   exec { "reload-mysql":
     command     => "/etc/init.d/mysql reload",
-    refreshonly => true;
+    refreshonly => true,
+    require     => Package[$mysqlserver];
   }
 
   kfile {
+    "/etc/mysql":
+      ensure  => directory,
+      notify  => Package[$mysqlserver];
     "/etc/mysql/my.cnf":
       content => template("mysql/my.cnf"),
       mode    => 0640,
@@ -55,7 +74,7 @@ class mysql::server {
     "/etc/mysql/conf.d":
       ensure  => directory,
       mode    => 0750,
-      require => Package["${mysqlserver}"];
+      notify  => Package["${mysqlserver}"];
     "/etc/mysql/conf.d/binary-logging.cnf":
       content => template("mysql/binary-logging.cnf"),
       notify  => Service["mysql"];

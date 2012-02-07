@@ -9,7 +9,7 @@
 #	Undocumented
 #	gen_puppet
 #
-class libvirt {
+class libvirt ($on_crash="destroy", $on_reboot="restart") {
   kpackage { ["libvirt-bin","libvirt-doc","netcat-openbsd"]:
     ensure => latest;
   }
@@ -26,9 +26,9 @@ class libvirt {
       require => Package["libvirt-bin"],
       notify  => Service["libvirt-bin"];
     "/usr/local/sbin/create-vm.sh":
-      source  => "libvirt/create-vm.sh",
-      group   => "staff",
-      mode    => 750,
-      require => Package["libvirt-bin"];
+      content  => template("libvirt/create-vm.sh"),
+      group    => "staff",
+      mode     => 750,
+      require  => Package["libvirt-bin"];
   }
 }
