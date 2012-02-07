@@ -89,11 +89,11 @@ define gen_mediawiki::site {
   }
 }
 
-define gen_mediawiki::extension ($sitepath, $extrapath="base/") {
+define gen_mediawiki::extension ($sitepath, $extrapath="base/", $linkname=$name) {
   include gen_mediawiki::extensionbase
 
   kfile { "${sitepath}/extensions/${name}":
     ensure => link,
-    target => "/usr/share/mediawiki-extensions/${extrapath}${name}";
+    target => "/usr/share/mediawiki-extensions/${extrapath}${linkname}";
   }
 }
