@@ -996,6 +996,20 @@ class gen_base::mc {
   }
 }
 
+# Class: gen_base::module_init_tools
+#
+# Actions:
+#  Install module-init-tools
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::module_init_tools {
+  kpackage { "module-init-tools":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::mysql_client
 #
 # Actions:
@@ -1389,6 +1403,20 @@ class gen_base::rsync {
 #
 class gen_base::ruby_stomp {
   kpackage { "ruby-stomp":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::smbclient
+#
+# Actions:
+#  Install smbclient
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::smbclient {
+  kpackage { "smbclient":
     ensure => latest;
   }
 }
