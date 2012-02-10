@@ -11,7 +11,7 @@
 #
 class rng-tools {
   kpackage { "rng-tools":
-    ensure => installed;
+    ensure => latest;
   }
 
   kfile { "/etc/default/rng-tools":
