@@ -1109,6 +1109,20 @@ class gen_base::openjdk-6-jre {
   }
 }
 
+# Class: gen_base::perl
+#
+# Actions:
+#  Install perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::perl {
+  kpackage { "perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::php-apc
 #
 # Actions:
