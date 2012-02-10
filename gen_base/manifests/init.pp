@@ -1251,6 +1251,20 @@ class gen_base::python-mysqldb {
   }
 }
 
+# Class: gen_base::python_pycurl
+#
+# Actions:
+#  Install python-pycurl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_pycurl {
+  kpackage { "python-pycurl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::rails
 #
 # Actions:
