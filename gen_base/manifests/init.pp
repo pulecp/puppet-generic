@@ -1020,7 +1020,7 @@ class gen_base::nagios-plugins-standard {
 #
 class gen_base::netpbm {
   kpackage { "netpbm":
-    ensure => installed;
+    ensure => latest;
   }
 }
 
@@ -1034,7 +1034,7 @@ class gen_base::netpbm {
 #
 class gen_base::nscd {
   kpackage { "nscd":
-    ensure => installed;
+    ensure => latest;
   }
 }
 
