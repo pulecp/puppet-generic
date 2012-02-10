@@ -1260,6 +1260,7 @@ class gen_base::python-mysqldb {
 #  gen_puppet
 #
 class gen_base::python_pycurl {
+  include gen_base::libcurl3_gnutls
   kpackage { "python-pycurl":
     ensure => latest;
   }
