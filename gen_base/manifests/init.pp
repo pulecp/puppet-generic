@@ -142,6 +142,20 @@ class gen_base::dnsutils {
   }
 }
 
+# Class: gen_base::dpkg
+#
+# Actions:
+#  Install dpkg
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::dpkg {
+  kpackage { "dpkg":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::echoping
 #
 # Actions:
@@ -165,7 +179,7 @@ class gen_base::echoping {
 #  gen_puppet
 #
 class gen_base::elinks {
-  include gen_base::gnutls26
+  include gen_base::libgnutls26
   kpackage { "elinks":
     ensure => latest;
   }
@@ -181,20 +195,6 @@ class gen_base::elinks {
 #
 class gen_base::facter {
   kpackage { "facter":
-    notify => Exec["reload-puppet"];
-  }
-}
-
-# Class: gen_base::gnutls26
-#
-# Actions:
-#  Install gnutls26
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::gnutls26 {
-  kpackage { "gnutls26":
     notify => Exec["reload-puppet"];
   }
 }
@@ -293,6 +293,20 @@ class gen_base::libcurl3 {
 #
 class gen_base::libcurl3_gnutls {
   kpackage { "libcurl3-gnutls":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libgnutls26
+#
+# Actions:
+#  Install libgnutls26
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libgnutls26 {
+  kpackage { "libgnutls26":
     ensure => latest;
   }
 }
