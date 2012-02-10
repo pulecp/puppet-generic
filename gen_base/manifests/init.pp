@@ -108,6 +108,7 @@ class gen_base::bsdtar {
 #  gen_puppet
 #
 class gen_base::curl {
+  include gen_base::libcurl3
   kpackage { "curl":
     ensure => latest;
   }
@@ -221,6 +222,34 @@ class gen_base::javascript-common {
 #
 class gen_base::jmxquery {
   kpackage { "jmxquery":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libcurl3
+#
+# Actions:
+#  Install libcurl3
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libcurl3 {
+  kpackage { "libcurl3":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libcurl3_gnutls
+#
+# Actions:
+#  Install libcurl3-gnutls
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libcurl3_gnutls {
+  kpackage { "libcurl3-gnutls":
     ensure => latest;
   }
 }
@@ -1187,7 +1216,23 @@ class gen_base::python-ipaddr {
 #
 class gen_base::python-libvirt {
   include gen_base::libxenstore3_0
+  include gen_base::python_libxml2
   kpackage { "python-libvirt":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python_libxml2
+#
+# Actions:
+#  Install python-libxml2
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_libxml2 {
+  include gen_base::libxml2
+  kpackage { "python-libxml2":
     ensure => latest;
   }
 }
