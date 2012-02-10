@@ -99,6 +99,20 @@ class gen_base::bsdtar {
   }
 }
 
+# Class: gen_base::bzip2
+#
+# Actions:
+#  Install bzip2
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::bzip2 {
+  kpackage { "bzip2":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::curl
 #
 # Actions:
@@ -1006,6 +1020,20 @@ class gen_base::nagios-plugins-standard {
 #
 class gen_base::netpbm {
   kpackage { "netpbm":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::nscd
+#
+# Actions:
+#  Install nscd
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::nscd {
+  kpackage { "nscd":
     ensure => installed;
   }
 }
