@@ -156,6 +156,21 @@ class gen_base::echoping {
   }
 }
 
+# Class: gen_base::elinks
+#
+# Actions:
+#  Install elinks
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::elinks {
+  include gen_base::gnutls26
+  kpackage { "elinks":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::facter
 #
 # Actions:
@@ -166,6 +181,20 @@ class gen_base::echoping {
 #
 class gen_base::facter {
   kpackage { "facter":
+    notify => Exec["reload-puppet"];
+  }
+}
+
+# Class: gen_base::gnutls26
+#
+# Actions:
+#  Install gnutls26
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::gnutls26 {
+  kpackage { "gnutls26":
     notify => Exec["reload-puppet"];
   }
 }
