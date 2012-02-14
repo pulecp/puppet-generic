@@ -1435,6 +1435,20 @@ class gen_base::smbclient {
   }
 }
 
+# Class: gen_base::sysstat
+#
+# Actions:
+#  Install sysstat
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::sysstat {
+  kpackage { "sysstat":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::telnet_ssl
 #
 # Actions:
