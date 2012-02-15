@@ -1062,6 +1062,7 @@ class gen_base::nagios-nrpe-plugin {
 #  gen_puppet
 #
 class gen_base::nagios-plugins-standard {
+  include gen_base::libxml2
   kpackage { "nagios-plugins-standard":
     ensure => latest;
   }

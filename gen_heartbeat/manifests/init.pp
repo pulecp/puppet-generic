@@ -10,6 +10,8 @@
 #
 class gen_heartbeat ($autojoin="none", $warntime=5, $deadtime=15, $initdead=60, $keepalive=2, $crm="respawn",
       $node_name=$hostname, $node_dev="eth0", $node_ip=$ipaddress_eth0, $heartbeat_tag="heartbeat_${environment}") {
+  include gen_base::libxml2
+  include gen_base::libxml2_utils
   kservice { "heartbeat":; }
 
   concat { "/etc/heartbeat/ha.cf":
