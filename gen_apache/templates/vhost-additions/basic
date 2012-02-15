@@ -1,7 +1,9 @@
 ServerAdmin support@kumina.nl
 ServerName  <%= real_name %>
 <% if serveralias -%>
-ServerAlias <%= serveralias.to_a.join(" ") %>
+<% serveralias.each do |sa| -%>
+ServerAlias <%= sa %>
+<% end -%>
 <% end -%>
 
 CustomLog    /var/log/apache2/<%= real_name %>-access.log combined
