@@ -85,6 +85,7 @@ class munin::client {
     purge   => true,
     recurse => true,
     force   => true,
+    require => Package["munin-node"];
   }
 
   include munin::client::default_plugins
