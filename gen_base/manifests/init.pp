@@ -747,6 +747,20 @@ class gen_base::libparallel-forkmanager-perl {
   }
 }
 
+# Class: gen_base::libpng12_0
+#
+# Actions:
+#  Install libpng12-0
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libpng12_0 {
+  kpackage { "libpng12-0":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libpq5
 #
 # Actions:
@@ -1217,6 +1231,7 @@ class gen_base::php5-curl {
 #  gen_puppet
 #
 class gen_base::php5-gd {
+  include gen_base::libpng12_0
   kpackage { "php5-gd":
     ensure => latest;
   }
