@@ -28,6 +28,34 @@ class gen_base::ant {
   }
 }
 
+# Class: gen_base::apache2_mpm_prefork
+#
+# Actions:
+#  Install apache2-mpm-prefork
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::apache2_mpm_prefork {
+  kpackage { "apache2-mpm-prefork":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::apache2_mpm_worker
+#
+# Actions:
+#  Install apache2-mpm-worker
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::apache2_mpm_worker {
+  kpackage { "apache2-mpm-worker":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libaugeas-ruby
 #
 # Actions:
@@ -1138,7 +1166,7 @@ class gen_base::perl {
   }
 }
 
-# Class: gen_base::php-apc
+# Class: gen_base::php_apc
 #
 # Actions:
 #  Install php-apc
@@ -1146,13 +1174,13 @@ class gen_base::perl {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php-apc {
+class gen_base::php_apc {
   kpackage { "php-apc":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php-pear
+# Class: gen_base::php_pear
 #
 # Actions:
 #  Install php-pear
@@ -1160,13 +1188,13 @@ class gen_base::php-apc {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php-pear {
+class gen_base::php_pear {
   kpackage { "php-pear":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php5-cgi
+# Class: gen_base::php5_cgi
 #
 # Actions:
 #  Install php5-cgi
@@ -1174,13 +1202,13 @@ class gen_base::php-pear {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php5-cgi {
+class gen_base::php5_cgi {
   kpackage { "php5-cgi":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php5-cli
+# Class: gen_base::php5_cli
 #
 # Actions:
 #  Install php5-cli
@@ -1188,13 +1216,13 @@ class gen_base::php5-cgi {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php5-cli {
+class gen_base::php5_cli {
   kpackage { "php5-cli":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php5-common
+# Class: gen_base::php5_common
 #
 # Actions:
 #  Install php5-common
@@ -1202,13 +1230,13 @@ class gen_base::php5-cli {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php5-common {
+class gen_base::php5_common {
   kpackage { "php5-common":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php5-curl
+# Class: gen_base::php5_curl
 #
 # Actions:
 #  Install php5-curl
@@ -1216,13 +1244,13 @@ class gen_base::php5-common {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php5-curl {
+class gen_base::php5_curl {
   kpackage { "php5-curl":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php5-gd
+# Class: gen_base::php5_gd
 #
 # Actions:
 #  Install php5-gd
@@ -1230,14 +1258,43 @@ class gen_base::php5-curl {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php5-gd {
+class gen_base::php5_gd {
   include gen_base::libpng12_0
   kpackage { "php5-gd":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php5-mcrypt
+# Class: gen_base::php5_imagick
+#
+# Actions:
+#  Install php5-imagick
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::php5_imagick {
+  include gen_base::imagemagick
+  kpackage { "php5-imagick":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::php5_ldap
+#
+# Actions:
+#  Install php5-ldap
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::php5_ldap {
+  kpackage { "php5-ldap":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::php5_mcrypt
 #
 # Actions:
 #  Install php5-mcrypt
@@ -1245,13 +1302,13 @@ class gen_base::php5-gd {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php5-mcrypt {
+class gen_base::php5_mcrypt {
   kpackage { "php5-mcrypt":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php5-mysql
+# Class: gen_base::php5_mysql
 #
 # Actions:
 #  Install php5-mysql
@@ -1259,13 +1316,13 @@ class gen_base::php5-mcrypt {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php5-mysql {
+class gen_base::php5_mysql {
   kpackage { "php5-mysql":
     ensure => latest;
   }
 }
 
-# Class: gen_base::php5-xdebug
+# Class: gen_base::php5_xdebug
 #
 # Actions:
 #  Install php5-xdebug
@@ -1273,7 +1330,7 @@ class gen_base::php5-mysql {
 # Depends:
 #  gen_puppet
 #
-class gen_base::php5-xdebug {
+class gen_base::php5_xdebug {
   kpackage { "php5-xdebug":
     ensure => latest;
   }
@@ -1451,6 +1508,20 @@ class gen_base::smbclient {
   }
 }
 
+# Class: gen_base::subversion
+#
+# Actions:
+#  Install subversion
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::subversion {
+  kpackage { "subversion":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::sysstat
 #
 # Actions:
@@ -1475,6 +1546,20 @@ class gen_base::sysstat {
 #
 class gen_base::telnet_ssl {
   kpackage { "telnet-ssl":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::unoconv
+#
+# Actions:
+#  Install unoconv
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::unoconv {
+  kpackage { "unoconv":
     ensure => latest;
   }
 }
