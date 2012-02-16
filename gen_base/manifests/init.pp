@@ -1024,16 +1024,16 @@ class gen_base::module_init_tools {
   }
 }
 
-# Class: gen_base::msttcorefonts
+# Class: gen_base::ttf_mscorefonts_installer
 #
 # Actions:
-#  Install msttcorefonts
+#  Install ttf-mscorefonts-installer
 #
 # Depends:
 #  gen_puppet
 #
-class gen_base::msttcorefonts {
-  kpackage { "msttcorefonts":
+class gen_base::ttf_mscorefonts_installer {
+  kpackage { "ttf-mscorefonts-installer":
     ensure => latest;
   }
 }
