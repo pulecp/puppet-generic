@@ -1024,6 +1024,20 @@ class gen_base::module_init_tools {
   }
 }
 
+# Class: gen_base::msttcorefonts
+#
+# Actions:
+#  Install msttcorefonts
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::msttcorefonts {
+  kpackage { "msttcorefonts":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::mysql_client
 #
 # Actions:
