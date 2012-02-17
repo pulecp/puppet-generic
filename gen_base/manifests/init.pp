@@ -1152,6 +1152,146 @@ class gen_base::nscd {
   }
 }
 
+# Class: gen_base::openoffice.org_base
+#
+# Actions:
+#  Install openoffice.org-base
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_base {
+  kpackage { "openoffice.org-base":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_calc
+#
+# Actions:
+#  Install openoffice.org-calc
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_calc {
+  kpackage { "openoffice.org-calc":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_emailmerge
+#
+# Actions:
+#  Install openoffice.org-emailmerge
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_emailmerge {
+  kpackage { "openoffice.org-emailmerge":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_filter-binfilter
+#
+# Actions:
+#  Install openoffice.org-filter-binfilter
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_filter-binfilter {
+  kpackage { "openoffice.org-filter-binfilter":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_filter-mobiledev
+#
+# Actions:
+#  Install openoffice.org-filter-mobiledev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_filter-mobiledev {
+  kpackage { "openoffice.org-filter-mobiledev":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_impress
+#
+# Actions:
+#  Install openoffice.org-impress
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_impress {
+  kpackage { "openoffice.org-impress":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_math
+#
+# Actions:
+#  Install openoffice.org-math
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_math {
+  kpackage { "openoffice.org-math":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_officebean
+#
+# Actions:
+#  Install openoffice.org-officebean
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_officebean {
+  kpackage { "openoffice.org-officebean":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_report-builder-bin
+#
+# Actions:
+#  Install openoffice.org-report-builder-bin
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_report-builder-bin {
+  kpackage { "openoffice.org-report-builder-bin":
+    ensure => installed;
+  }
+}
+
+# Class: gen_base::openoffice.org_writer
+#
+# Actions:
+#  Install openoffice.org-writer
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openoffice.org_writer {
+  kpackage { "openoffice.org-writer":
+    ensure => installed;
+  }
+}
+
 # Class: gen_base::openjdk-6-jre
 #
 # Actions:
