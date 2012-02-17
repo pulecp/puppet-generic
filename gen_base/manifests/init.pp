@@ -1152,7 +1152,7 @@ class gen_base::nscd {
   }
 }
 
-# Class: gen_base::openoffice.org_base
+# Class: gen_base::openoffice_org_baise
 #
 # Actions:
 #  Install openoffice.org-base
@@ -1160,13 +1160,13 @@ class gen_base::nscd {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_base {
+class gen_base::openoffice_org_base {
   kpackage { "openoffice.org-base":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_calc
+# Class: gen_base::openoffice_org_calc
 #
 # Actions:
 #  Install openoffice.org-calc
@@ -1174,13 +1174,13 @@ class gen_base::openoffice.org_base {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_calc {
+class gen_base::openoffice_org_calc {
   kpackage { "openoffice.org-calc":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_emailmerge
+# Class: gen_base::openoffice_org_emailmerge
 #
 # Actions:
 #  Install openoffice.org-emailmerge
@@ -1188,13 +1188,13 @@ class gen_base::openoffice.org_calc {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_emailmerge {
+class gen_base::openoffice_org_emailmerge {
   kpackage { "openoffice.org-emailmerge":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_filter-binfilter
+# Class: gen_base::openoffice_org_filter_binfilter
 #
 # Actions:
 #  Install openoffice.org-filter-binfilter
@@ -1202,27 +1202,27 @@ class gen_base::openoffice.org_emailmerge {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_filter-binfilter {
+class gen_base::openoffice_org_filter_binfilter {
   kpackage { "openoffice.org-filter-binfilter":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_filter-mobiledev
+# Class: gen_base::openoffice_org_filter_mobiledev
 #
 # Actions:
-#  Install openoffice.org-filter-mobiledev
+#  Install openoffice.org-filter_mobiledev
 #
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_filter-mobiledev {
+class gen_base::openoffice_org_filter_mobiledev {
   kpackage { "openoffice.org-filter-mobiledev":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_impress
+# Class: gen_base::openoffice_org_impress
 #
 # Actions:
 #  Install openoffice.org-impress
@@ -1230,13 +1230,13 @@ class gen_base::openoffice.org_filter-mobiledev {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_impress {
+class gen_base::openoffice_org_impress {
   kpackage { "openoffice.org-impress":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_math
+# Class: gen_base::openoffice_org_math
 #
 # Actions:
 #  Install openoffice.org-math
@@ -1244,13 +1244,13 @@ class gen_base::openoffice.org_impress {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_math {
+class gen_base::openoffice_org_math {
   kpackage { "openoffice.org-math":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_officebean
+# Class: gen_base::openoffice_org_officebean
 #
 # Actions:
 #  Install openoffice.org-officebean
@@ -1258,13 +1258,13 @@ class gen_base::openoffice.org_math {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_officebean {
+class gen_base::openoffice_org_officebean {
   kpackage { "openoffice.org-officebean":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_report-builder-bin
+# Class: gen_base::openoffice_org_report-builder-bin
 #
 # Actions:
 #  Install openoffice.org-report-builder-bin
@@ -1272,13 +1272,13 @@ class gen_base::openoffice.org_officebean {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_report-builder-bin {
+class gen_base::openoffice_org_report-builder-bin {
   kpackage { "openoffice.org-report-builder-bin":
     ensure => installed;
   }
 }
 
-# Class: gen_base::openoffice.org_writer
+# Class: gen_base::openoffice_org_writer
 #
 # Actions:
 #  Install openoffice.org-writer
@@ -1286,7 +1286,7 @@ class gen_base::openoffice.org_report-builder-bin {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice.org_writer {
+class gen_base::openoffice_org_writer {
   kpackage { "openoffice.org-writer":
     ensure => installed;
   }
