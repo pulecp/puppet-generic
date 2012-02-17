@@ -1264,7 +1264,7 @@ class gen_base::openoffice_org_officebean {
   }
 }
 
-# Class: gen_base::openoffice_org_report-builder-bin
+# Class: gen_base::openoffice_org_report-builder_bin
 #
 # Actions:
 #  Install openoffice.org-report-builder-bin
@@ -1272,7 +1272,7 @@ class gen_base::openoffice_org_officebean {
 # Depends:
 #  gen_puppet
 #
-class gen_base::openoffice_org_report-builder-bin {
+class gen_base::openoffice_org_report-builder_bin {
   kpackage { "openoffice.org-report-builder-bin":
     ensure => installed;
   }
