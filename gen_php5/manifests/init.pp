@@ -31,6 +31,7 @@ class gen_php5::modphp($http_type="apache") {
     }
   } else {
     fail("Unknown http server: $http_type")
+  }
 }
 
 # Class: gen_php5::cgi
@@ -61,7 +62,7 @@ class gen_php5::cgi {
 class gen_php5::cli {
   include gen_php5::common
 
-  kpackage { "php5-cgi":
+  kpackage { "php5-cli":
     ensure => latest,
   }
 }
