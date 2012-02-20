@@ -467,20 +467,6 @@ class gen_base::libapache2-mod-perl2 {
   }
 }
 
-# Class: gen_base::libapache2-mod-php5
-#
-# Actions:
-#  Install libapache2-mod-php5
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::libapache2-mod-php5 {
-  kpackage { "libapache2-mod-php5":
-    ensure => latest;
-  }
-}
-
 # Class: gen_base::libapache2-mod-wsgi
 #
 # Actions:
@@ -1316,90 +1302,6 @@ class gen_base::openjdk-6-jre {
 #
 class gen_base::perl {
   kpackage { "perl":
-    ensure => latest;
-  }
-}
-
-# Class: gen_base::php_apc
-#
-# Actions:
-#  Install php-apc
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::php_apc {
-  kpackage { "php-apc":
-    ensure => latest;
-  }
-}
-
-# Class: gen_base::php_pear
-#
-# Actions:
-#  Install php-pear
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::php_pear {
-  kpackage { "php-pear":
-    ensure => latest;
-  }
-}
-
-# Class: gen_base::php5_cgi
-#
-# Actions:
-#  Install php5-cgi
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::php5_cgi {
-  kpackage { "php5-cgi":
-    ensure => latest;
-  }
-}
-
-# Class: gen_base::php5_cli
-#
-# Actions:
-#  Install php5-cli
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::php5_cli {
-  kpackage { "php5-cli":
-    ensure => latest;
-  }
-}
-
-# Class: gen_base::php5_common
-#
-# Actions:
-#  Install php5-common
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::php5_common {
-  kpackage { "php5-common":
-    ensure => latest;
-  }
-}
-
-# Class: gen_base::php5_curl
-#
-# Actions:
-#  Install php5-curl
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::php5_curl {
-  kpackage { "php5-curl":
     ensure => latest;
   }
 }
