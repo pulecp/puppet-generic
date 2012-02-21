@@ -873,6 +873,20 @@ class gen_base::libssl-dev {
   }
 }
 
+# Class: gen_base::libstdcplusplus5
+#
+# Actions:
+#  Install libstdc++5
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libstdcplusplus5 {
+  kpackage { "libstdc++5":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libstomp_ruby
 #
 # Actions:
