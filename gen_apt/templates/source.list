@@ -1,2 +1,3 @@
 <% if comment %># <%= comment %><% end %>
-<%= sourcetype %>	<%= uri %>	<%= distribution %>	<%= components.to_a.join(" ") %>
+<% comp_a = []; comp_a << components ; comp_a.flatten! -%>
+<%= sourcetype %>	<%= uri %>	<%= distribution %>	<%= comp_a.join(" ") %>
