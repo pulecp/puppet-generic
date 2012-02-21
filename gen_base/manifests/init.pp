@@ -453,6 +453,20 @@ class gen_base::libapache2-mod-passenger {
   }
 }
 
+# Class: gen_base::libapache2_mod_php
+#
+# Actions:
+#  Install libapache2-mod-php
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libapache2_mod_php {
+  kpackage { "libapache2-mod-php":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libapache2-mod-perl2
 #
 # Actions:
