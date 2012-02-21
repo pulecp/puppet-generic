@@ -163,8 +163,10 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 
   if $make_default {
     gen_apache::forward_vhost { "default":
-      ensure  => $ensure,
-      forward => "http://${real_name}";
+      ensure      => $ensure,
+      teststring  => "%{REQUEST_URI}",
+      condpattern => "!^/server-status.*",
+      forward     => "http://${real_name}";
     }
   }
 
@@ -199,7 +201,7 @@ define gen_apache::module {
   }
 }
 
-define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $serveralias=false, $statuscode=301) {
+define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $serveralias=false, $statuscode=301, $condpattern=false, $teststring="%{HTTP_HOST}") {
   $full_name = "${name}_${port}"
 
   gen_apache::site { $full_name:
@@ -211,13 +213,18 @@ define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $servera
   gen_apache::redirect { $full_name:
     site         => $name,
     substitution => "${forward}\$1",
-    usecond      => false,
+    usecond      => $condpattern ? {
+      false   => false,
+      default => true,
+    },
+    teststring   => $teststring,
+    condpattern  => $condpattern,
     statuscode   => $statuscode;
   }
 }
 
 define gen_apache::redirect($site=$fqdn, $port=80, $usecond=true, $condpattern=false, $teststring="%{HTTP_HOST}", $pattern="^(.*)$", $substitution, $statuscode=301, $flags="R=${statuscode}") {
-  if $rewritecond and !$condpattern {
+  if $usecond and !$condpattern {
     fail { "A condpattern must be supplied if rewritecond is set to true (gen_apache::redirect ${name}).":; }
   }
 
