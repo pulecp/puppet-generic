@@ -1531,8 +1531,14 @@ class gen_base::python_pycurl {
 #  gen_puppet
 #
 class gen_base::qemu_utils {
-  kpackage { "qemu-image":
-    ensure => latest;
+  if $lsbdistcodename == "lenny" {
+    kpackage { "qemu-image":
+      ensure => latest;
+    }
+  } else {
+    kpackage { "qemu-utils":
+      ensure => latest;
+    }
   }
 }
 
