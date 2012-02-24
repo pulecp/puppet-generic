@@ -95,23 +95,26 @@ else
 fi
 test $VNC_SECRET = '-' || GRAPHICS_CONFIG="$GRAPHICS_CONFIG passwd='$VNC_SECRET'"
 
-# We want an initial installation PXE thingy.
-DD="dd of=/dev/$DISK_VOLGRP/$NAME-disk0 bs=1M"
-if test $DISK_IMAGE = '-'
+if ! test -d $DISK_VOLGRP
 then
-	DISK_IMAGE=http://debian.kumina.nl/d-i/squeeze/kumihatch-kvm-initial.raw
+	# We want an initial installation PXE thingy.
+	DD="dd of=/dev/$DISK_VOLGRP/$NAME-disk0 bs=1M"
+	if test $DISK_IMAGE = '-'
+	then
+		DISK_IMAGE=http://debian.kumina.nl/d-i/squeeze/kumihatch-kvm-initial.raw
+	fi
+	case $DISK_IMAGE in
+	ftp://*|http://*|https://*)
+		wget -O - $DISK_IMAGE | $DD
+		;;
+	*)
+		$DD if=$DISK_IMAGE
+		;;
+	esac
 fi
-case $DISK_IMAGE in
-ftp://*|http://*|https://*)
-	wget -O - $DISK_IMAGE | $DD
-	;;
-*)
-	$DD if=$DISK_IMAGE
-	;;
-esac
 
 # Create the configuration for libvirt.
-virsh define /dev/stdin <<EOF
+virsh define /dev/stdin << EOF
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>$NAME</name>
   <description>Created on: $CREATED</description>
