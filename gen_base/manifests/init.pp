@@ -1522,6 +1522,20 @@ class gen_base::python_pycurl {
   }
 }
 
+# Class: gen_base::qemu_utils
+#
+# Actions:
+#  Install qemu-utils
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::qemu_utils {
+  kpackage { "qemu-image":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::rails
 #
 # Actions:
