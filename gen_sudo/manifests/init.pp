@@ -17,6 +17,7 @@ class gen_sudo {
       mode    => 440,
       require => Package["sudo"];
     }
+
   } else { # Squeeze and newer
     kfile {
       "/etc/sudoers.d/":
@@ -68,11 +69,23 @@ define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $c
   if $lsbmajdistrelease > 5 { # Squeeze or newer
     kfile { "/etc/sudoers.d/${sanitized_name}":
       content => template("gen_sudo/sudo"),
-      mode    => 440;
+      mode    => 440,
+      notify  => Exec["check-sudoers-${sanitized_name}"];
+    }
+
+    exec { "check-sudoers-${sanitized_name}":
+      command     => "/bin/sh -c 'if /usr/sbin/visudo -c -f /etc/sudoers.d/${sanitized_name}; then exit 0; else /bin/rm -f /etc/sudoers.d/${sanitized_name}; exit 1; fi'",
+      refreshonly => true;
     }
   } else {
     gen_sudo::add_rule { "${sanitized_name}":
-      content => template("gen_sudo/sudo");
+      content => template("gen_sudo/sudo"),
+      notify  => Exec["check-sudoers-${sanitized_name}"];
+    }
+
+    exec { "check-sudoers-${sanitized_name}":
+      command     => "/bin/sh -c 'if /usr/sbin/visudo -c -f /var/lib/puppet/concat/_etc_sudoers/fragments/15__etc_sudoers_fragment_${sanitized_name}; then exit 0; else /bin/rm -f /var/lib/puppet/concat/_etc_sudoers/fragments/15__etc_sudoers_fragment_${sanitized_name}; exit 1; fi'",
+      refreshonly => true;
     }
   }
 }
