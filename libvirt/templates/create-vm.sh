@@ -28,7 +28,7 @@
 
 if test $# -ne 10
 then
-	echo "usage: $0 name nproc ram_mb disk_volgrp disk_gb [-|disk_splitsize] disk_image [-|vnc_port] [-|vnc_secret] bridge_dev" >&2
+	echo "usage: $0 name nproc ram_mb [disk_volgrp|img_dir] disk_gb [-|disk_splitsize] disk_image [-|vnc_port] [-|vnc_secret] bridge_dev" >&2
 	exit 1
 fi
 
@@ -57,16 +57,30 @@ do
 	else
 		SLICE=$DISK_GB
 	fi
-	lvcreate -L ${SLICE}G -n $NAME-disk$I $DISK_VOLGRP
-	DISKDEV_HOST="/dev/$DISK_VOLGRP/$NAME-disk$I"
 	DISKDEV_VM="vd`echo abcdefghijklmnopqrstuvwxyz | cut -b $(($I + 1))`"
-	DISK_CONFIG="$DISK_CONFIG
+	if test -d $DISK_VOLGRP
+	then
+		# Use qcow2
+		DISKDEV_HOST="$DISK_VOLGRP/$NAME-disk$I"
+		DISK_CONFIG="$DISK_CONFIG
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='$DISKDEV_HOST'/>
+      <target dev='$DISKDEV_VM' bus='virtio'/>
+    </disk>"
+		qemu-img create -f qcow2 $DISKDEV_HOST ${SLICE}G
+	else
+		# Use logical volume
+		DISKDEV_HOST="/dev/$DISK_VOLGRP/$NAME-disk$I"
+		DISK_CONFIG="$DISK_CONFIG
     <disk type='block' device='disk'>
       <source dev='$DISKDEV_HOST'/>
       <target dev='$DISKDEV_VM' bus='virtio'/>
       <alias name='virtio-disk0'/>
     </disk>"
-	dd if=/dev/zero of=$DISKDEV_HOST bs=1M count=1000
+		lvcreate -L ${SLICE}G -n $NAME-disk$I $DISK_VOLGRP
+		dd if=/dev/zero of=$DISKDEV_HOST bs=1M count=1000
+	fi
 
 	DISK_GB=$(($DISK_GB - $SLICE))
 	I=$(($I + 1))
