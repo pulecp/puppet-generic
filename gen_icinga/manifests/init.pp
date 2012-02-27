@@ -68,8 +68,6 @@ class gen_icinga::server {
 #    Set the arguments of the check, defaults to false
 #  conf_dir
 #    The config dir the service file will be placed in
-#  nrpe
-#    Defines whether the check is run throught nrpe, defaults to false
 #  ensure
 #    Standard ensure
 #  name
@@ -146,8 +144,7 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
     $obsess_over_service=false, $check_freshness=false, $freshness_threshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false,
     $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false,
     $check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false,
-    $max_check_attempts=false, $check_command=false, $arguments=false, $register=false, $nrpe=false, $ensure=present,
-    $proxy=false) {
+    $max_check_attempts=false, $check_command=false, $arguments=false, $register=false, $ensure=present, $proxy=false) {
   if $::monitoring == "true" {
     @@ekfile { "/etc/icinga/config/${conf_dir}/service_${name}.cfg;${::fqdn}":
       content => template("gen_icinga/service"),
