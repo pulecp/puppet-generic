@@ -1133,6 +1133,8 @@ class gen_base::nagios-nrpe-plugin {
 #
 class gen_base::nagios-plugins-standard {
   include gen_base::libxml2
+  include gen_base::libpq5
+
   kpackage { "nagios-plugins-standard":
     ensure => latest;
   }
