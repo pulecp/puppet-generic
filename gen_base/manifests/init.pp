@@ -1566,6 +1566,20 @@ class gen_base::realpath {
   }
 }
 
+# Class: gen_base::reprepro
+#
+# Actions:
+#  Install reprepro
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::reprepro {
+  kpackage { "reprepro":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::rsync
 #
 # Actions:
