@@ -111,7 +111,7 @@ class munin::client {
 #  gen_puppet
 #
 class munin::server {
-  package { ["munin"]:
+  kpackage { "munin":
     ensure => installed,
   }
 
