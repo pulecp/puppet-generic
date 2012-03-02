@@ -15,6 +15,15 @@
 #	gen_puppet
 #
 class hetzner {
+  include hetzner::failover_ip
+  include hetzner::update_dns
+
+  if defined(Kpackage["pacemaker"]) {
+    kfile { "/usr/lib/ocf/resource.d/kumina":
+      ensure  => directory,
+      require => Kpackage["pacemaker"],
+    }
+  }
 }
 
 # Class: hetzner::failover_ip
@@ -27,6 +36,8 @@ class hetzner {
 #	gen_puppet
 #
 class hetzner::failover_ip {
+  include hetzner
+
   kpackage { "python-simplejson":
     ensure => latest,
   }
@@ -49,4 +60,28 @@ class hetzner::failover_ip {
     mode   => 755,
   }
 
+  kfile { "/usr/lib/ocf/resource.d/kumina/hetzner-failover-ip":
+    ensure  => link,
+    target  => "/usr/local/lib/hetzner/hetzner-failover-ip",
+  }
+}
+
+# Class: hetzner::update_dns
+#
+# Actions:
+#  Add update_dns script to kumina ocf scripts directory
+#
+# Depends:
+#  hetzner
+#  gen_puppet
+#
+class hetzner::update_dns {
+  include hetzner
+
+  kfile { "/usr/lib/ocf/resource.d/kumina/update-dns":
+    source => "hetzner/update-dns",
+    owner  => "root",
+    group  => "root",
+    mode   => 755,
+  }
 }
