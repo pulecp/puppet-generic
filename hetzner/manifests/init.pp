@@ -60,9 +60,11 @@ class hetzner::failover_ip {
     mode   => 755,
   }
 
-  kfile { "/usr/lib/ocf/resource.d/kumina/hetzner-failover-ip":
-    ensure  => link,
-    target  => "/usr/local/lib/hetzner/hetzner-failover-ip",
+  if defined(Kpackage["pacemaker"]) {
+    kfile { "/usr/lib/ocf/resource.d/kumina/hetzner-failover-ip":
+      ensure  => link,
+      target  => "/usr/local/lib/hetzner/hetzner-failover-ip",
+    }
   }
 }
 
@@ -78,10 +80,12 @@ class hetzner::failover_ip {
 class hetzner::update_dns {
   include hetzner
 
-  kfile { "/usr/lib/ocf/resource.d/kumina/update-dns":
-    source => "hetzner/update-dns",
-    owner  => "root",
-    group  => "root",
-    mode   => 755,
+  if defined(Kpackage["pacemaker"]) {
+    kfile { "/usr/lib/ocf/resource.d/kumina/update-dns":
+      source => "hetzner/update-dns",
+      owner  => "root",
+      group  => "root",
+      mode   => 755,
+    }
   }
 }
