@@ -105,6 +105,12 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 #    The uri of the source
 #  key
 #    The key used for this repository, if defined.
+#  ssl
+#    If true turns on ssl
+#  user
+#    The username to use to connect to the source
+#  pass
+#    The password to use to connect to the source
 #
 # Actions:
 #  Adds a source entry in the apt config.
@@ -112,7 +118,7 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 # Depends:
 #  gen_puppet
 #
-define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $components=[], $ensure="present", $comment=false, $key=false) {
+define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $components=[], $ensure="present", $comment=false, $key=false, $ssl=false, $user=false, $pass=false) {
   kfile { "/etc/apt/sources.list.d/${name}.list":
     ensure  => $ensure,
     content => template("gen_apt/source.list"),

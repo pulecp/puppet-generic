@@ -1,3 +1,15 @@
 <% if comment %># <%= comment %><% end %>
 <% comp_a = []; comp_a << components ; comp_a.flatten! -%>
+<% if ssl -%>
+<% if user -%>
+<%= sourcetype %>	https://<%= user %>:<% pass %>@<%= uri %>	<%= distribution %>	<%= comp_a.join(" ") %>
+<% else -%>
+<%= sourcetype %>	https://<%= uri %>	<%= distribution %>	<%= comp_a.join(" ") %>
+<% end -%>
+<% else -%>
+<% if user -%>
+<%= sourcetype %>	http://<%= user %>:<% pass %>@<%= uri %>	<%= distribution %>	<%= comp_a.join(" ") %>
+<% else -%>
 <%= sourcetype %>	<%= uri %>	<%= distribution %>	<%= comp_a.join(" ") %>
+<% end -%>
+<% end -%>
