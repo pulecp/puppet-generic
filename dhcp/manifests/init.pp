@@ -38,7 +38,7 @@ class dhcp::server {
     }
 
     kfile { "/etc/dhcp/dhcpd.conf":
-      require => Kpackge["isc-dhcp-server"],
+      require => Kpackage["isc-dhcp-server"],
       source  => "dhcp/server/dhcpd.conf";
     }
   }
