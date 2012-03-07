@@ -23,8 +23,6 @@
 #    Undocumented
 #  group
 #    Undocumented
-#  ignore
-#    Undocumented
 #  ensure
 #    Undocumented
 #  backup
@@ -36,7 +34,7 @@
 # Depends:
 #  gen_puppet
 #
-define ekfile ($ensure="present", $source=false, $path=false, $target=false, $content=false, $owner="root", $group="root", $mode="644", $recurse=false, $force=false, $purge=false, $ignore=false, $backup=false) {
+define ekfile ($ensure="present", $source=false, $path=false, $target=false, $content=false, $owner="root", $group="root", $mode="644", $recurse=false, $force=false, $purge=false, $backup=false) {
   $kfilename = regsubst($name,'^(.*);.*$','\1')
   if !defined(Kfile["${kfilename}"]) {
     kfile { "${kfilename}":
@@ -51,7 +49,6 @@ define ekfile ($ensure="present", $source=false, $path=false, $target=false, $co
       recurse => $recurse,
       force   => $force,
       purge   => $purge,
-      ignore  => $ignore,
       backup  => $backup,
     }
   }
