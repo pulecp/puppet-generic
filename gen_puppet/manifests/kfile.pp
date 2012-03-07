@@ -11,6 +11,8 @@
 #    Undocumented
 #  source
 #    Undocumented
+#  path
+#    Undocumented
 #  target
 #    Undocumented
 #  force
@@ -20,6 +22,8 @@
 #  purge
 #    Undocumented
 #  group
+#    Undocumented
+#  ignore
 #    Undocumented
 #  ensure
 #    Undocumented
@@ -32,8 +36,8 @@
 # Depends:
 #  gen_puppet
 #
-define kfile ($ensure="present", $content=false, $source=false, $target=false, $owner="root", $backup=false,
-      $group="root", $mode="0644", $recurse=false, $replace=true, $force=false, $purge=false) {
+define kfile ($ensure="present", $content=false, $source=false, $path=false, $target=false, $owner="root", $backup=false,
+      $group="root", $mode="0644", $recurse=false, $replace=true, $force=false, $purge=false, $ignore=false) {
   file { $name:
     ensure  => $ensure,
     content => $content ? {
@@ -44,9 +48,22 @@ define kfile ($ensure="present", $content=false, $source=false, $target=false, $
       false   => undef,
       default => "puppet:///modules/${source}",
     },
-    target  => $target,
-    owner   => $owner,
-    group   => $group,
+    path    => $path ? {
+      false   => undef,
+      default => $path,
+    },
+    target  => $target ? {
+      false   => undef,
+      default => $target,
+    },
+    owner   => $owner ? {
+      false   => undef,
+      default => $owner,
+    },
+    group   => $group ? {
+      false   => undef,
+      default => $group,
+    },
     mode    => $ensure ? {
       directory => $mode ? {
         false   => undef,
@@ -56,10 +73,23 @@ define kfile ($ensure="present", $content=false, $source=false, $target=false, $
       false     => undef,
       default   => $mode,
     },
-    recurse => $recurse,
+    recurse => $recurse ? {
+      false   => undef,
+      default => $recurse,
+    },
     replace => $replace,
-    force   => $force,
-    purge   => $purge,
-    backup  => $backup;
+    force   => $force ? {
+      false   => undef,
+      default => $force,
+    },
+    purge   => $purge ? {
+      false   => undef,
+      default => $purge,
+    },
+    backup  => $backup,
+    ignore  => $ignore ? {
+      false   => undef,
+      default => $ignore,
+    };
   }
 }
