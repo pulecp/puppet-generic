@@ -316,7 +316,6 @@ define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn
       recurse => true,
       purge   => $purge,
       force   => true,
-      ignore  => [".svn", ".git"],
       source  => $version ? {
         24      => "puppet:///concat/null",
         default => undef,
