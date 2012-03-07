@@ -14,9 +14,9 @@ class dhcp::server {
     kpackage { "dhcp3-server":; }
 
     service { "dhcp3-server":
-      subscribe => File["/etc/dhcp3/dhcpd.conf"],
+      subscribe  => File["/etc/dhcp3/dhcpd.conf"],
       hasrestart => true,
-      hasstatus => true;
+      hasstatus  => true;
     }
 
     Kpackage <| title == "dhcp3-common" |> {
@@ -31,13 +31,15 @@ class dhcp::server {
     kpackage { "isc-dhcp-server":; }
 
     service { "isc-dhcp-server":
-      subscribe => File["/etc/dhcp/dhcpd.conf"],
+      require    => Kpackage["isc-dhcp-server"],
+      subscribe  => Kfile["/etc/dhcp/dhcpd.conf"],
       hasrestart => true,
-      hasstatus => true,
+      hasstatus  => true,
     }
 
     kfile { "/etc/dhcp/dhcpd.conf":
-      source => "dhcp/server/dhcpd.conf";
+      require => Kpackge["isc-dhcp-server"],
+      source  => "dhcp/server/dhcpd.conf";
     }
   }
 }
