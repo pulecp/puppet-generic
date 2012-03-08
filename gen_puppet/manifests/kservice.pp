@@ -17,6 +17,8 @@
 #    If defined sets the package to install
 #  pensure
 #    The ensure for the kpackage
+#  srequire
+#    If the service start depends on something else, use this to set the require for service.
 #
 # Actions:
 #  Install a package, starts the service and creates a reload exec.
@@ -24,7 +26,7 @@
 # Depends:
 #  gen_puppet
 #
-define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present", $pattern=false) {
+define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present", $pattern=false, $srequire=false) {
   $package_name = $package ? {
     false   => $name,
     default => $package,
@@ -51,7 +53,10 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
       false   => undef,
       default => $pattern,
     },
-    require    => Kpackage[$package_name];
+    require    => $srequire ? {
+      false   => Kpackage[$package_name],
+      default => [Kpackage[$package_name],$srequire],
+    },
   }
 
   if $hasreload {
