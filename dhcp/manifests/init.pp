@@ -24,7 +24,7 @@ class dhcp::server {
     }
 
     kfile { "/etc/dhcp3/dhcpd.conf":
-      content => "dhcp/dhcpd.conf";
+      content => template("dhcp/dhcpd.conf");
     }
   }
   if versioncmp($lsbdistrelease, "6.0") >= 0 {
@@ -39,7 +39,7 @@ class dhcp::server {
 
     kfile { "/etc/dhcp/dhcpd.conf":
       require => Kpackage["isc-dhcp-server"],
-      content => "dhcp/dhcpd.conf";
+      content => template("dhcp/dhcpd.conf");
     }
   }
 }
