@@ -38,10 +38,10 @@ class gen_puppet::master ($servertype = 'passenger') {
   kfile {
     "/etc/puppet/fileserver.conf":
       require => Kpackage["puppet-common"],
-      source  => "gen_puppet/puppetmaster/fileserver.conf";
+      content => template("gen_puppet/puppetmaster/fileserver.conf");
     "/etc/puppet/auth.conf":
       require => Kpackage["puppet-common"],
-      source  => "gen_puppet/puppetmaster/auth.conf";
+      content => template("gen_puppet/puppetmaster/auth.conf");
   }
 }
 

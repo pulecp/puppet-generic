@@ -19,11 +19,8 @@ class varnish {
     require => Package["varnish"],
   }
 
-  file { "/etc/default/varnish":
-    owner => "root",
-    group => "root",
-    mode => 644,
-    source => "puppet://puppet/varnish/default/varnish",
-    notify => Service["varnish"],
+  kfile { "/etc/default/varnish":
+    content => template("varnish/default/varnish"),
+    notify  => Service["varnish"],
   }
 }

@@ -35,7 +35,7 @@ class samba::server {
   }
 
   kfile { "/etc/samba/smb.conf":
-    source => "samba/samba/smb.conf",
+    content => template("samba/samba/smb.conf"),
     require => Package["samba"];
   }
 }

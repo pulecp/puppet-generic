@@ -92,11 +92,11 @@ class concat::setup {
 
   kfile {
     "/usr/local/bin/concatfragments.sh":
-      mode   => 755,
-      source => "gen_puppet/concat/concatfragments.sh";
+      mode    => 755,
+      content => template("gen_puppet/concat/concatfragments.sh");
     $concatdir:
-      ensure => directory,
-      mode   => 755;
+      ensure  => directory,
+      mode    => 755;
   }
 }
 
@@ -105,7 +105,6 @@ class concat::setup {
 # OPTIONS:
 #   - target    The file that these fragments belong to
 #   - content   If present puts the content into the file
-#   - source    If content was not specified, use the source
 #   - order     By default all files gets a 10_ prefix in the directory
 #               you can set it to anything else using this to influence the
 #               order of the content in the file
@@ -114,8 +113,6 @@ class concat::setup {
 #
 # Parameters:
 #  content
-#    Undocumented
-#  source
 #    Undocumented
 #  order
 #    Undocumented
@@ -131,7 +128,7 @@ class concat::setup {
 #  Undocumented
 #  gen_puppet
 #
-define concat::fragment($target, $content=false, $source=false, $order=10, $ensure = "present", $exported=false, $contenttag=false) {
+define concat::fragment($target, $content=false, $order=10, $ensure = "present", $exported=false, $contenttag=false) {
   $safe_target_name = regsubst($target, '/', '_', 'G')
   $safe_name        = regsubst($name, '/', '_', 'G')
   $concatdir        = $concat::setup::concatdir
@@ -145,24 +142,12 @@ define concat::fragment($target, $content=false, $source=false, $order=10, $ensu
     }
   }
 
-  # if content is passed, use that, else if source is passed use that
-  # if neither passed, but $ensure is in symlink form, make a symlink
+  # if content is passed, use that, else if $ensure is in symlink form, make a symlink
   case $content {
     false: {
-      case $source {
-        false: {
-          case $ensure {
-            "", "absent", "present", "file", "directory": {
-              crit("No content or source specified")
-            }
-          }
-        }
-        default: {
-          if $export {
-            Ekfile { source => $source }
-          } else {
-            Kfile { source => $source }
-          }
+      case $ensure {
+        "", "absent", "present", "file", "directory": {
+          crit("No content specified")
         }
       }
     }
@@ -317,10 +302,6 @@ define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn
       purge   => $purge,
       force   => true,
       ignore  => [".svn", ".git"],
-      source  => $version ? {
-        24      => "puppet:///concat/null",
-        default => undef,
-      },
       notify  => Exec["concat_${name}"];
     "${fragdir}/fragments.concat":
       force   => true,

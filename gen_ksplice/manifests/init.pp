@@ -25,7 +25,7 @@ class ksplice {
 
   # Preseed the ksplice package
   kfile { "/var/cache/debconf/ksplice.preseed":
-    source => "ksplice/ksplice.preseed";
+    content => template("ksplice/ksplice.preseed");
   }
 
   # Install the ksplice package
@@ -51,7 +51,7 @@ class ksplice {
 
   # The modified configuration file
   kfile { "/etc/uptrack/uptrack.conf":
-    source  => "ksplice/uptrack.conf",
+    content => template("ksplice/uptrack.conf"),
     require => Package["uptrack"],
   }
 

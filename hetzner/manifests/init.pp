@@ -43,10 +43,8 @@ class hetzner::failover_ip {
   }
 
   kfile { "/usr/local/sbin/parse-hetzner-json.py":
-    source => "hetzner/parse-hetzner-json.py",
-    owner  => "root",
-    group  => "root",
-    mode   => 755,
+    content => template("hetzner/parse-hetzner-json.py"),
+    mode    => 755,
   }
 
   kfile { "/usr/local/lib/hetzner":
@@ -54,10 +52,8 @@ class hetzner::failover_ip {
   }
 
   kfile { "/usr/local/lib/hetzner/hetzner-failover-ip":
-    source => "hetzner/hetzner-failover-ip",
-    owner  => "root",
-    group  => "root",
-    mode   => 755,
+    content => template("hetzner/hetzner-failover-ip"),
+    mode    => 755,
   }
 
   if defined(Kpackage["pacemaker"]) {
@@ -82,10 +78,8 @@ class hetzner::update_dns {
 
   if defined(Kpackage["pacemaker"]) {
     kfile { "/usr/lib/ocf/resource.d/kumina/update-dns":
-      source => "hetzner/update-dns",
-      owner  => "root",
-      group  => "root",
-      mode   => 755,
+      content => template("hetzner/update-dns"),
+      mode    => 755,
     }
   }
 }
