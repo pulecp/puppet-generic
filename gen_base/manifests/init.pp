@@ -269,6 +269,20 @@ class gen_base::imagemagick {
   }
 }
 
+# Class: gen_base::ipaddress_ruby
+#
+# Actions:
+#  Install ipaddress-ruby
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ipaddress_ruby {
+  kpackage { "ipaddress-ruby":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::javascript-common
 #
 # Actions:
