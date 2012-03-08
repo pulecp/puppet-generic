@@ -9,7 +9,9 @@
 #  gen_puppet
 #
 class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
-  kservice { "rabbitmq-server":; }
+  kservice { "rabbitmq-server":
+    srequire => Concat["/etc/rabbitmq/rabbitmq.config"],
+  }
 
   gen_apt::source { "rabbitmq":
     uri          => "http://www.rabbitmq.com/debian",
