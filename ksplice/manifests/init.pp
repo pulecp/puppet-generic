@@ -24,7 +24,7 @@ class ksplice {
 
   # Preseed the ksplice package
   kfile { "/var/cache/debconf/ksplice.preseed":
-    source => "ksplice/ksplice.preseed";
+    content => template("ksplice/ksplice.preseed");
   }
 
   # Install the ksplice package
