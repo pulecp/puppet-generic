@@ -1622,6 +1622,20 @@ class gen_base::ruby_stomp {
   }
 }
 
+# Class: gen_base::sharutils
+#
+# Actions:
+#  Install sharutils
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::sharutils {
+  kpackage { "sharutils":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::smbclient
 #
 # Actions:
