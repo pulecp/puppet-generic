@@ -39,9 +39,9 @@ class sphinxsearch::server {
 
   # The config file was added in Squeeze
   if $lsbmajdistrelease > 5 {
-    kfile { "/etc/default/sphinxsearch":
-      source => "sphinxsearch/default/sphinxsearch",
-      notify => Service["sphinxsearch"],
+    file { "/etc/default/sphinxsearch":
+      content => template("sphinxsearch/sphinxsearch"),
+      notify  => Service["sphinxsearch"],
     }
   }
 }

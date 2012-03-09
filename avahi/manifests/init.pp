@@ -18,7 +18,7 @@ class avahi::daemon {
     subscribe => File["/etc/avahi/avahi-daemon.conf"];
   }
 
-  kfile { "/etc/avahi/avahi-daemon.conf":
+  file { "/etc/avahi/avahi-daemon.conf":
     require => Package["avahi-daemon"];
   }
 }

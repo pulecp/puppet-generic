@@ -63,7 +63,7 @@ class django::wsgi {
       monitor => $monitor;
     }
 
-    kfile { "/etc/apache2/vhost-additions/$name/django-wsgi.conf":
+    file { "/etc/apache2/vhost-additions/$name/django-wsgi.conf":
       content => template("django/apache/wsgi.erb"),
       require => Apache::Module["wsgi"],
       notify  => Exec["reload-apache2"];

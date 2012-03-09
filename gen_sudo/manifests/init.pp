@@ -19,7 +19,7 @@ class gen_sudo {
     }
 
   } else { # Squeeze and newer
-    kfile {
+    file {
       "/etc/sudoers.d/":
         ensure  => directory,
         recurse => true,
@@ -67,7 +67,7 @@ define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $c
   }
 
   if $lsbmajdistrelease > 5 { # Squeeze or newer
-    kfile { "/etc/sudoers.d/${sanitized_name}":
+    file { "/etc/sudoers.d/${sanitized_name}":
       content => template("gen_sudo/sudo"),
       mode    => 440,
       notify  => Exec["check-sudoers-${sanitized_name}"];

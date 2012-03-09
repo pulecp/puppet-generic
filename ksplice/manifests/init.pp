@@ -23,7 +23,7 @@ class ksplice {
   }
 
   # Preseed the ksplice package
-  kfile { "/var/cache/debconf/ksplice.preseed":
+  file { "/var/cache/debconf/ksplice.preseed":
     content => template("ksplice/ksplice.preseed");
   }
 
@@ -31,7 +31,7 @@ class ksplice {
   kpackage { "uptrack":
     ensure       => latest,
     responsefile => "/var/cache/debconf/ksplice.preseed",
-    require      => Kfile["/var/cache/debconf/ksplice.preseed"],
+    require      => File["/var/cache/debconf/ksplice.preseed"],
     notify       => Exec["initial uptrack run"];
   }
 
@@ -42,14 +42,14 @@ class ksplice {
   exec { "initial uptrack run":
     command     => "/usr/sbin/uptrack-upgrade -y; exit 0",
     refreshonly => true,
-    require     => Kfile["/etc/uptrack/uptrack.conf"],
+    require     => File["/etc/uptrack/uptrack.conf"],
   }
 
   # The modified configuration file
-  Kfile <<| title == "/etc/uptrack/uptrack.conf" |>>
+  File <<| title == "/etc/uptrack/uptrack.conf" |>>
 
   # Set directory permissions so Nagios can read status
-  kfile { "/var/cache/uptrack":
+  file { "/var/cache/uptrack":
     require => Package["uptrack"];
   }
 }

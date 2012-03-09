@@ -12,7 +12,7 @@ class gen_mcollective::server {
   include gen_mcollective::common
 
   kservice { "mcollective":
-    require => Kfile["/etc/default/mcollective"];
+    require => File["/etc/default/mcollective"];
   }
 
   concat { "/etc/mcollective/server.cfg":
@@ -28,12 +28,12 @@ class gen_mcollective::server {
 
   Concat::Add_content <<| target == "/etc/mcollective/server.cfg" |>>
 
-  kfile { "/etc/default/mcollective":
+  file { "/etc/default/mcollective":
     content => "RUN=yes",
     notify  => Service["mcollective"];
   }
 
-  Kfile <<| tag == "mcollective_client_pubkey" |>>
+  File <<| tag == "mcollective_client_pubkey" |>>
 }
 
 # Class: gen_mcollective::client
@@ -61,7 +61,7 @@ class gen_mcollective::client {
 
   Concat::Add_content <<| target == "/etc/mcollective/client.cfg" |>>
 
-  @@kfile { "/etc/mcollective/ssl/clients/${fqdn}.pem":
+  @@file { "/etc/mcollective/ssl/clients/${fqdn}.pem":
     content => regsubst($puppetpubpem,";","\n","G"),
     tag     => "mcollective_client_pubkey",
     require => Package["mcollective"],
@@ -80,8 +80,8 @@ class gen_mcollective::client {
 class gen_mcollective::common {
   kpackage { "mcollective-common":; }
 
-  kfile { "/usr/share/mcollective/plugins/mcollective/security/aes_security.rb":
-    source  => "gen_mcollective/aes_security.rb",
+  file { "/usr/share/mcollective/plugins/mcollective/security/aes_security.rb":
+    content => template("gen_mcollective/aes_security.rb"),
     require => Package["mcollective-common"],
     notify  => Service["mcollective"];
   }

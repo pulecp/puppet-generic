@@ -20,11 +20,11 @@ class libvirt ($on_crash="destroy", $on_reboot="restart") {
     require    => Package["libvirt-bin"];
   }
 
-  kfile {
+  file {
     "/etc/libvirt/libvirtd.conf":
-      source  => "libvirt/libvirt/libvirtd.conf",
-      require => Package["libvirt-bin"],
-      notify  => Service["libvirt-bin"];
+      content  => template("libvirt/libvirtd.conf"),
+      require  => Package["libvirt-bin"],
+      notify   => Service["libvirt-bin"];
     "/usr/local/sbin/create-vm.sh":
       content  => template("libvirt/create-vm.sh"),
       group    => "staff",

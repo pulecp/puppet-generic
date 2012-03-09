@@ -42,7 +42,7 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 
   kservice { "tomcat6":
     hasreload => false,
-    require   => Kfile["/srv/tomcat"];
+    require   => File["/srv/tomcat"];
   }
 
   # This sets the header and footer for the tomcat-users.xml file.
@@ -61,10 +61,10 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 
   # Create the actual tomcat-users.xml file
   concat { "/srv/tomcat/conf/tomcat-users.xml":
-    require => Kfile["/srv/tomcat/conf"];
+    require => File["/srv/tomcat/conf"];
   }
 
-  kfile {
+  file {
     "/srv/tomcat":
       ensure  => directory;
     ["/srv/tomcat/webapps",
@@ -173,7 +173,7 @@ class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
 #  gen_tomcat
 #
 define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=false, $root_app=false, $tomcat_tag="tomcat_${environment}") {
-  kfile { "/srv/tomcat/conf/Catalina/localhost/${name}.xml":
+  file { "/srv/tomcat/conf/Catalina/localhost/${name}.xml":
     content => $context_xml_content ? {
       false   => "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Context path=\"${urlpath}\" docBase=\"${war}\">${extra_opts}</Context>",
       default => $context_xml_content
@@ -182,7 +182,7 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
       false   => false,
       default => true
     },
-    require => [Kpackage["tomcat6"], Kfile["/srv/tomcat/conf"]];
+    require => [Kpackage["tomcat6"], File["/srv/tomcat/conf"]];
   }
 
   if $context_xml_content == false {
@@ -192,16 +192,16 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
       changes => ["set Context/#attribute/path '${urlpath}'",
                   "set Context/#attribute/docBase '${war}'"],
       notify  => Service["tomcat6"],
-      require => Kfile["/srv/tomcat/conf/Catalina/localhost/${name}.xml"];
+      require => File["/srv/tomcat/conf/Catalina/localhost/${name}.xml"];
     }
   } else {
     notify { "The context_xml_content parameter is deprecated. Please remove asap.":; }
   }
 
   if $root_app {
-    kfile { "/srv/tomcat/webapps/ROOT/index.jsp":
+    file { "/srv/tomcat/webapps/ROOT/index.jsp":
       content => "<% response.sendRedirect(\"${name}\"); %>",
-      require => Kfile["/srv/tomcat/webapps/ROOT"];
+      require => File["/srv/tomcat/webapps/ROOT"];
     }
   }
 }
@@ -241,7 +241,7 @@ define gen_tomcat::additional_context_setting($value, $context = false, $setting
     lens    => "Xml.lns",
     changes => "set Context/#attribute/${real_name} '${value}'",
     notify  => Service["tomcat6"],
-    require => Kfile["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
+    require => File["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
   }
 }
 
@@ -284,7 +284,7 @@ define gen_tomcat::environment ($var_type, $value, $context = false, $var_name =
                 "set Context/Environment[#attribute/name='${real_name}']/#attribute/value '${value}'",
                 "set Context/Environment[#attribute/name='${real_name}']/#attribute/type '${var_type}'"],
     notify  => Service["tomcat6"],
-    require => Kfile["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
+    require => File["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
   }
 }
 
@@ -324,7 +324,7 @@ define gen_tomcat::valve($allow, $context = false, $classname = false) {
     changes => ["set Context/Valve[#attribute/className='${real_name}']/#attribute/className '${real_name}'",
                 "set Context/Valve[#attribute/className='${real_name}']/#attribute/allow '${allow}'"],
     notify  => Service["tomcat6"],
-    require => Kfile["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
+    require => File["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
   }
 }
 
@@ -379,7 +379,7 @@ define gen_tomcat::datasource($username, $password, $url, $context = false, $max
                 "set Context/Resource[#attribute/name='${real_name}']/#attribute/maxActive '${max_active}'",
                 "set Context/Resource[#attribute/name='${real_name}']/#attribute/maxIdle '${max_idle}'"],
     notify  => Service["tomcat6"],
-    require => Kfile["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
+    require => File["/srv/tomcat/conf/Catalina/localhost/${real_context}.xml"];
   }
 }
 
@@ -412,7 +412,7 @@ define gen_tomcat::user ($username=$name, $password, $role, $tomcat_tag="tomcat_
     order      => 15,
     exported   => true,
     contenttag => "${tomcat_tag}_user",
-    require    => [Gen_tomcat::Role[$role], Kfile["/srv/tomcat/conf"]];
+    require    => [Gen_tomcat::Role[$role], File["/srv/tomcat/conf"]];
   }
 }
 

@@ -45,7 +45,7 @@ class localbackup::client {
     ensure => latest;
   }
 
-  kfile { "/backup":
+  file { "/backup":
     ensure => directory;
   }
 

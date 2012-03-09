@@ -43,24 +43,24 @@ class nagios::server {
     require => Package["nagios3"],
   }
 
-  kfile {
+  file {
     "/etc/default/nagios3":
-      source => "nagios/default/nagios3",
+      content => template("nagios/default/nagios3"),
       require => Package["nagios3"];
     "/etc/nagios3/send_sms.cfg":
       group => "nagios",
       mode => 640,
-      source => "nagios/send_sms/send_sms.cfg",
+      content => template("nagios/send_sms/send_sms.cfg"),
       require => Package["nagios3"];
     "/usr/local/bin/send_sms":
       group => "nagios",
       mode => 755,
-      source => "nagios/send_sms/send_sms",
+      content => template("nagios/send_sms/send_sms"),
       require => [File["/etc/nagios3/send_sms.cfg"], Package["curl"]];
   }
 
   # Allow external commands to be submitted through the web interface
-  kfile {
+  file {
     "/var/lib/nagios3":
       mode  => 710,
       owner => 'nagios',
@@ -91,9 +91,9 @@ class nagios::server::plugins {
     require => File["/usr/local/lib/nagios/plugins/check_weak_ssh_host_key"],
   }
 
-  kfile {
+  file {
     "/usr/local/lib/nagios/plugins/check_weak_ssh_host_key":
-      source => "nagios/plugins/check_weak_ssh_host_key",
+      content => template("nagios/plugins/check_weak_ssh_host_key"),
       group => "staff",
       mode => 755,
       require => [File["/usr/local/bin/dowkd.pl"],
@@ -105,7 +105,7 @@ class nagios::server::plugins {
       require => Package["nagios-nrpe-server"],
       mode => 775;
     "/usr/local/bin/dowkd.pl":
-      source => "nagios/bin/dowkd.pl",
+      content => template("nagios/bin/dowkd.pl"),
       mode => 755;
   }
 
@@ -114,16 +114,16 @@ class nagios::server::plugins {
     require => File["/usr/local/lib/nagios/plugins/check_disk_smb_fixed"];
   }
 
-  kfile { "/usr/local/lib/nagios/plugins/check_disk_smb_fixed":
-    source => "nagios/plugins/check_disk_smb_fixed",
+  file { "/usr/local/lib/nagios/plugins/check_disk_smb_fixed":
+    content => template("nagios/plugins/check_disk_smb_fixed"),
     group => "staff",
     mode => 755,
     require => File["/usr/local/lib/nagios/plugins"];
   }
 
   # This one is a reversed age check. Warns when a file is young.
-  kfile { "/usr/local/lib/nagios/plugins/check_file_age_reversed":
-    source => "nagios/plugins/check_file_age_reversed",
+  file { "/usr/local/lib/nagios/plugins/check_file_age_reversed":
+    content => template("nagios/plugins/check_file_age_reversed"),
     group => "staff",
     mode => 755,
     require => File["/usr/local/lib/nagios/plugins"];

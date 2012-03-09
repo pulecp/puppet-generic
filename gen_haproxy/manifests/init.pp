@@ -29,7 +29,7 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
   }
 
   # Yes, we would like to be able to start the service.....
-  kfile { "/etc/default/haproxy":
+  file { "/etc/default/haproxy":
     content => "ENABLED=1\n",
     require => Package["haproxy"];
   }

@@ -19,7 +19,7 @@ class arpwatch {
     subscribe => File["/etc/default/arpwatch"];
   }
 
-  kfile { "/etc/default/arpwatch":
+  file { "/etc/default/arpwatch":
     require => Package["arpwatch"];
   }
 }

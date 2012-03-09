@@ -34,12 +34,12 @@ class mysql::server ($datadir=false) {
   }
 
   if $datadir {
-    kfile {
+    file {
       $datadir:
         ensure => directory,
         mode   => 770,
-        owner  => false,
-        group  => false,
+        owner  => "mysql",
+        group  => "mysql",
         notify => Package[$mysqlserver];
       "/etc/mysql/conf.d/datadir.cnf":
         content => "[mysqld]\ndatadir = ${datadir}\n",
@@ -63,7 +63,7 @@ class mysql::server ($datadir=false) {
     require     => Package[$mysqlserver];
   }
 
-  kfile {
+  file {
     "/etc/mysql":
       ensure  => directory,
       notify  => Package[$mysqlserver];
@@ -84,7 +84,7 @@ class mysql::server ($datadir=false) {
   }
 
   if ($mysql_serverid) {
-    kfile { "/etc/mysql/conf.d/server-id.cnf":
+    file { "/etc/mysql/conf.d/server-id.cnf":
       content => "[mysqld]\nserver-id = $mysql_serverid\n",
       notify  => Service["mysql"];
     }
@@ -182,13 +182,13 @@ class mysql::server ($datadir=false) {
 #  gen_puppet
 #
 class mysql::slave inherits mysql::server {
-  kfile {
+  file {
     "/etc/mysql/conf.d/slave.cnf":
       content => template("mysql/slave.cnf"),
       notify  => Service["mysql"];
     # Modified init script which waits for temporary tables to close.
     "/etc/init.d/mysql":
-      source  => "puppet://puppet/mysql/init.d/mysql",
+      content  => template("mysql/init.d/mysql"),
       mode    => 755,
       require => Package["$mysqlserver"];
   }
@@ -209,18 +209,18 @@ class mysql::slave::delayed inherits mysql::slave {
     require => File["/etc/init.d/mk-slave-delay"],
   }
 
-  kfile {
+  file {
     "/etc/mysql/conf.d/slave-delayed.cnf":
-      source  => "puppet://puppet/mysql/mysql/slave-delayed.cnf",
+      content => template("mysql/mysql/slave-delayed.cnf"),
       notify  => Service["mysql"];
     "/etc/default/mk-slave-delay":
       content => template("mysql/default/mk-slave-delay");
     "/etc/init.d/mk-slave-delay":
       mode    => 755,
-      source  => "puppet://puppet/mysql/init.d/mk-slave-delay",
+      content => template("mysql/init.d/mk-slave-delay"),
       require => [File["/etc/default/mk-slave-delay"],Package["maatkit"]];
     "/etc/logrotate.d/mk-slave-delay":
-      source  => "puppet://puppet/mysql/logrotate.d/mk-slave-delay",
+      content => template("mysql/logrotate.d/mk-slave-delay"),
       require => Package["maatkit"];
   }
 

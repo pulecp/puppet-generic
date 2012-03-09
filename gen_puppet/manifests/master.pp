@@ -18,24 +18,24 @@ class gen_puppet::master ($servertype = 'passenger') {
   kpackage {
     "puppetmaster":
       ensure  => latest,
-      require => Kfile["/etc/default/puppetmaster"];
+      require => File["/etc/default/puppetmaster"];
   }
 
   # Keep in mind this only counts for the default puppetmaster,
   # not for any additional puppetmasters!
-  kfile { "/etc/default/puppetmaster":
+  file { "/etc/default/puppetmaster":
     content => template('gen_puppet/master/default/puppetmaster'),
   }
 
   # These are needed for customer puppetmaster config when run
   # via passenger.
-  kfile { ["/usr/local/share/puppet","/usr/local/share/puppet/rack"]:
+  file { ["/usr/local/share/puppet","/usr/local/share/puppet/rack"]:
     ensure  => directory;
   }
 
   # Default config applicable for most puppetmasters. Assumes we
   # have a separate caserver
-  kfile {
+  file {
     "/etc/puppet/fileserver.conf":
       require => Kpackage["puppet-common"],
       content => template("gen_puppet/puppetmaster/fileserver.conf");
@@ -91,7 +91,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
   $rackdir = "${rackroot}/${pname}"
 
   # Create the rack directories.
-  kfile { ["${rackdir}","${rackdir}/public","${rackdir}/tmp"]:
+  file { ["${rackdir}","${rackdir}/public","${rackdir}/tmp"]:
     ensure => 'directory',
   }
 
@@ -134,7 +134,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
   }
 
   # If we don't have a customer-specific CA file, fail
-  if ! defined(Kfile["${ssldir}/ca/ca_crt.pem"]) {
+  if ! defined(File["${ssldir}/ca/ca_crt.pem"]) {
     fail("DANGER Will Robinson! DANGER You need to deploy a CA certificate at ${ssldir}/ca/ca_cert.pem via puppet.")
   }
 
@@ -324,8 +324,8 @@ define gen_puppet::master::environment ($configfile = "/etc/puppet/puppet.conf",
 #  gen_puppet
 #
 define gen_puppet::master::check_dir_existence ($path, $ensure, $owner = "root", $group = "root", $mode = 644) {
-  if ! defined(Kfile[$path]) {
-    kfile { $path:
+  if ! defined(File[$path]) {
+    file { $path:
       ensure => $ensure,
       owner  => $owner,
       group  => $group,

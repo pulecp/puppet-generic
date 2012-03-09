@@ -20,13 +20,13 @@ class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
   }
 
   if $ssl_cert {
-    kfile {
+    file {
       "/etc/rabbitmq/rabbitmq.key":
-        source => $ssl_key,
-        notify => Service["rabbitmq-server"];
+        content => $ssl_key,
+        notify  => Service["rabbitmq-server"];
       "/etc/rabbitmq/rabbitmq.pem":
-        source => $ssl_cert,
-        notify => Service["rabbitmq-server"];
+        content => $ssl_cert,
+        notify  => Service["rabbitmq-server"];
     }
 
     concat::add_content { "/etc/rabbitmq/rabbitmq.config":

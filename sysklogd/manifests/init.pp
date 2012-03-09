@@ -54,7 +54,7 @@ class sysklogd::server {
   include sysklogd::common
 
   file { "/etc/default/syslogd":
-    source => "puppet://puppet/sysklogd/server/default/syslogd",
+    content => template("sysklogd/server/default/syslogd"),
     require => Package["sysklogd"],
     owner => "root",
     group => "root",

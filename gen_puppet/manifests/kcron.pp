@@ -35,7 +35,7 @@ define kcron($mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday
   if $pacemaker_resource {
     # A cronjob on a host in failover, where we only want the active host
     # to run the cronjob
-    kfile { "/etc/cron.d/$name":
+    file { "/etc/cron.d/$name":
       content => template("gen_puppet/kcron-pacemaker"),
       require => Kbp_sudo::Rule["Allow ${user} to check crm_resource ${pacemaker_resource}"],
       notify  => Exec["reload-cron"];
@@ -52,7 +52,7 @@ define kcron($mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday
     }
   } else {
     # A simple cronjob
-    kfile { "/etc/cron.d/$name":
+    file { "/etc/cron.d/$name":
       content => template("gen_puppet/kcron"),
       notify  => Exec["reload-cron"];
     }

@@ -12,8 +12,8 @@
 class webalizer {
   kpackage { "webalizer":; }
 
-  kfile { "/etc/cron.daily/webalizer":
+  file { "/etc/cron.daily/webalizer":
     mode    => 755,
-    source  => "webalizer/cron.daily/webalizer";
+    content => template("webalizer/webalizer");
   }
 }

@@ -19,7 +19,7 @@ class varnish {
     require => Package["varnish"],
   }
 
-  kfile { "/etc/default/varnish":
+  file { "/etc/default/varnish":
     content => template("varnish/default/varnish"),
     notify  => Service["varnish"],
   }

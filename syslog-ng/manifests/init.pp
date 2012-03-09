@@ -55,7 +55,7 @@ class syslog-ng::server {
   include syslog-ng::common
 
   file { "/etc/syslog-ng/syslog-ng.conf":
-    source => "puppet://puppet/syslog-ng/server/syslog-ng.conf",
+    content => template("syslog-ng/server/syslog-ng.conf"),
     mode => 644,
     owner => "root",
     group => "root",

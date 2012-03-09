@@ -79,7 +79,7 @@ class apache {
   # Mitigation for CVE-2011-3192, can be removed when patched
   # TODO remove this puppet resource after september first
   include apache::headers
-  kfile { "/etc/apache2/conf.d/cve-2011-3192.conf":
+  file { "/etc/apache2/conf.d/cve-2011-3192.conf":
     ensure  => absent,
     content => "# Drop the Range header when more than 5 ranges.\n# CVE-2011-3192\nSetEnvIf Range (,.*?){5,} bad-range=1\nRequestHeader unset Range env=bad-range\n# optional logging.\nCustomLog /var/log/apache2/range-CVE-2011-3192.log common env=bad-range",
     notify  => Exec["reload-apache2"];
@@ -145,7 +145,7 @@ class apache {
       require => Package["apache2"],
    }
 
-   kfile { "/etc/apache2/ports.conf":
+   file { "/etc/apache2/ports.conf":
       owner   => root,
       group   => root,
       mode    => 644,
@@ -193,13 +193,13 @@ class apache {
   define site_config ($address="*:80", $serveralias=false, $scriptalias=false, $documentroot="/var/www", $tomcatinstance="", $proxy_port="",
       $djangoproject="", $djangoprojectpath="", $ssl_ipaddress="*", $ssl_ip6address="", $template="apache/sites-available/simple.erb", $intermediate=false) {
     $domain = $name
-    kfile { "/etc/apache2/sites-available/$name":
+    file { "/etc/apache2/sites-available/$name":
       content => template($template),
       require => Package["apache2"],
       notify  => Exec["reload-apache2"];
     }
 
-    kfile { "/etc/apache2/vhost-additions/$name":
+    file { "/etc/apache2/vhost-additions/$name":
       ensure  => directory,
       require => File["/etc/apache2/vhost-additions"];
     }

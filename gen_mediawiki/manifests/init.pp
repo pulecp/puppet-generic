@@ -15,7 +15,7 @@ define gen_mediawiki::site {
 
   # This is fairly a hack, so we can setup multiple mediawiki installations
   # using the Debian package. Upgrades will probably fail, though.
-  kfile {
+  file {
     "${name}/api.php":
       ensure => link,
       target => "/usr/share/mediawiki/api.php";
@@ -72,7 +72,7 @@ define gen_mediawiki::site {
       target => "/var/lib/mediawiki/config/index.php5";
   }
 
-  kfile {
+  file {
     ["${name}/config","${name}/images"]:
       ensure => directory,
       owner  => "www-data",
@@ -84,7 +84,7 @@ define gen_mediawiki::site {
 
   # These config files are created by the installation procedure, we
   # need to make sure they are writable.
-  kfile { ["${name}/AdminSettings.php","${name}/LocalSettings.php"]:
+  file { ["${name}/AdminSettings.php","${name}/LocalSettings.php"]:
     owner => "www-data";
   }
 }
@@ -92,7 +92,7 @@ define gen_mediawiki::site {
 define gen_mediawiki::extension ($sitepath, $extrapath="base/", $linkname=$name) {
   include gen_mediawiki::extensionbase
 
-  kfile { "${sitepath}/extensions/${name}":
+  file { "${sitepath}/extensions/${name}":
     ensure => link,
     target => "/usr/share/mediawiki-extensions/${extrapath}${linkname}";
   }

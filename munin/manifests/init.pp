@@ -17,18 +17,18 @@ class munin::client {
       $plugin_path = "$script_path/$name"
     }
 
-    kfile { "/etc/munin/plugins/$name":
+    file { "/etc/munin/plugins/$name":
       ensure => $ensure ? {
         'present' => $plugin_path,
         'absent' => 'absent',
       },
       notify => Service["munin-node"],
-      require => [Package["munin-node"], File["/usr/local/share/munin/plugins"]],
+      require => Package["munin-node"],
     }
   }
 
   define plugin::config($content, $section=false, $ensure='present') {
-    kfile { "/etc/munin/plugin-conf.d/$name":
+    file { "/etc/munin/plugin-conf.d/$name":
       ensure => $ensure,
       content => $section ? {
         false => "[${name}]\n${content}\n",
@@ -53,16 +53,8 @@ class munin::client {
     }
   }
 
-  # Extra plugins
-  kfile { "/usr/local/share/munin/plugins":
-    recurse => true,
-    source => "munin/client/plugins",
-    group => "staff",
-    mode => 755;
-  }
-
   # Munin node configuration
-  kfile { "/etc/munin/munin-node.conf":
+  file { "/etc/munin/munin-node.conf":
     content => template("munin/client/munin-node.conf"),
     require => Package["munin-node"],
   }
@@ -74,13 +66,13 @@ class munin::client {
     ensure => running,
   }
 
-  kfile {  "/usr/local/share/munin":
+  file {  "/usr/local/share/munin":
     ensure => directory,
     group => "staff";
   }
 
   # This makes sure the plugins directory only contains files we've actually deployed
-  kfile { "/etc/munin/plugins":
+  file { "/etc/munin/plugins":
     ensure  => directory,
     purge   => true,
     recurse => true,
@@ -89,16 +81,6 @@ class munin::client {
   }
 
   include munin::client::default_plugins
-
-  # Configs needed for JMX monitoring. Not needed everywhere, but roll out
-  # nonetheless.
-  kfile { "/etc/munin/jmx_config":
-    recurse => true,
-    source  => "munin/client/configs",
-    group   => "staff",
-    mode    => 755,
-    require => Package["munin-node"];
-  }
 }
 
 # Class: munin::server
@@ -115,8 +97,8 @@ class munin::server {
     ensure => installed,
   }
 
-  kfile { "/etc/munin/munin.conf":
-    source => "munin/server/munin.conf",
+  file { "/etc/munin/munin.conf":
+    content => template("munin/server/munin.conf"),
     require => Package["munin"],
   }
 
@@ -125,7 +107,7 @@ class munin::server {
     ensure => installed,
   }
 
-  kfile {
+  file {
     "/var/log/munin":
       ensure => directory,
       owner => "munin",
@@ -135,7 +117,7 @@ class munin::server {
       group => "www-data",
       mode  => 660;
     "/etc/logrotate.d/munin":
-      source => "munin/server/logrotate.d/munin";
+      content => template("munin/server/logrotate.d/munin");
   }
 }
 

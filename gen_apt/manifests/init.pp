@@ -16,12 +16,12 @@ class gen_apt {
       mode => 440;
     }
   } else {
-    kfile { "/etc/apt/preferences":
+    file { "/etc/apt/preferences":
       ensure => absent;
     }
   }
 
-  kfile {
+  file {
     # Putting files in a directory is much easier to manage with
     # Puppet than modifying /etc/apt/sources.lists.
     "/etc/apt/sources.list":
@@ -79,7 +79,7 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
       notify  => Exec["/usr/bin/apt-get update"];
     }
   } else {
-    kfile { "/etc/apt/preferences.d/${sanitized_name}":
+    file { "/etc/apt/preferences.d/${sanitized_name}":
       content => template("gen_apt/preference"),
       notify  => Exec["/usr/bin/apt-get update"];
     }
@@ -119,7 +119,7 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
 #  gen_puppet
 #
 define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $components=[], $ensure="present", $comment=false, $key=false, $ssl=false, $user=false, $pass=false) {
-  kfile { "/etc/apt/sources.list.d/${name}.list":
+  file { "/etc/apt/sources.list.d/${name}.list":
     ensure  => $ensure,
     content => template("gen_apt/source.list"),
     require => $key ? {
@@ -140,21 +140,21 @@ define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $compone
 # Parameters:
 #  name
 #    The key to import.
-#  source
-#    Where to find key on the puppetmaster.
+#  content
+#    The key.
 #
 # Depends:
 #  gen_puppet
 #
-define gen_apt::key ($source) {
+define gen_apt::key ($content) {
   exec { "/usr/bin/apt-key add /etc/apt/keys/${name}":
     unless  => "/usr/bin/apt-key list | grep -q ${name}",
     require => File["/etc/apt/keys/${name}"],
     notify  => Exec["/usr/bin/apt-get update"];
   }
 
-  kfile { "/etc/apt/keys/${name}":
-    source => $source;
+  file { "/etc/apt/keys/${name}":
+    content => $content;
   }
 }
 
@@ -205,7 +205,7 @@ define gen_apt::cron_apt::config ($mailto, $mailon, $apt_options="", $apt_hostna
     default => $apt_hostname,
   }
 
-  kfile { $configfile:
+  file { $configfile:
     content => template("gen_apt/cron_apt_configfile"),
     require => Kpackage["cron-apt"];
   }
@@ -215,6 +215,6 @@ define gen_apt::cron_apt::config ($mailto, $mailon, $apt_options="", $apt_hostna
   concat::add_content { $safe_configfile:
     target  => "/etc/cron.d/cron-apt",
     content => template("gen_apt/cron_apt_cron"),
-    require => Kfile[$configfile];
+    require => File[$configfile];
   }
 }

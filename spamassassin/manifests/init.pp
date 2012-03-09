@@ -12,7 +12,7 @@
 class spamassassin {
   kpackage { ["spamassassin","libmail-spf-perl", "libmail-dkim-perl"]:; }
 
-  kfile { "/etc/default/spamassassin":
-    source => "spamassassin/default/spamassassin";
+  file { "/etc/default/spamassassin":
+    content => template("spamassassin/spamassassin");
   }
 }

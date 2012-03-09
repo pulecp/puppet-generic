@@ -90,7 +90,7 @@ class concat::setup {
   $majorversion = regsubst($puppetversion, '^[0-9]+[.]([0-9]+)[.][0-9]+$', '\1')
   $sort         = "/usr/bin/sort"
 
-  kfile {
+  file {
     "/usr/local/bin/concatfragments.sh":
       mode    => 755,
       content => template("gen_puppet/concat/concatfragments.sh");
@@ -155,7 +155,7 @@ define concat::fragment($target, $content=false, $order=10, $ensure = "present",
       if $export {
         Ekfile{ content => $content }
       } else {
-        Kfile{ content => $content }
+        File{ content => $content }
       }
     }
   }
@@ -167,7 +167,7 @@ define concat::fragment($target, $content=false, $order=10, $ensure = "present",
       tag    => $contenttag;
     }
   } else {
-    kfile { "${fragdir}/fragments/${order}_${safe_name}":
+    file { "${fragdir}/fragments/${order}_${safe_name}":
       ensure => $ensure,
       notify => Exec["concat_${target}"];
     }

@@ -12,7 +12,7 @@
 class gen_openssl::common {
   kpackage { ["openssl","libssl0.9.8"]:; }
 
-  kfile { "/etc/ssl/certs":
+  file { "/etc/ssl/certs":
     recurse  => true,
     require  => Package["openssl"];
   }
@@ -30,7 +30,7 @@ class gen_openssl::common {
 class gen_openssl::ca {
   include gen_openssl::common
 
-  kfile {
+  file {
     "/etc/ssl/newcerts":
       ensure  => directory,
       mode    => 750,
@@ -40,7 +40,7 @@ class gen_openssl::ca {
       mode    => 750,
       require => Kpackage["openssl"];
     "/etc/ssl/Makefile":
-      source  => "gen_openssl/Makefile",
+      content => template("gen_openssl/Makefile"),
       require => Kpackage["openssl"];
   }
 }

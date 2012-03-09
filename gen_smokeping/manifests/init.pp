@@ -78,7 +78,7 @@ define gen_smokeping::environment($owner, $contact, $cgiurl, $mailhost=false, $s
       hasrestart => true,
       hasstatus  => true,
       enable     => true,
-      subscribe  => [Kfile["/etc/smokeping/config.d/pathnames"],Concat["/etc/smokeping/config.d/Probes"],Gen_smokeping::Config["config"]];
+      subscribe  => [File["/etc/smokeping/config.d/pathnames"],Concat["/etc/smokeping/config.d/Probes"],Gen_smokeping::Config["config"]];
     }
 
     concat { "/etc/smokeping/config.d/Targets":
@@ -99,7 +99,7 @@ define gen_smokeping::environment($owner, $contact, $cgiurl, $mailhost=false, $s
         require => Package["smokeping"];
     }
   } else {
-    kfile {
+    file {
       "/etc/smokeping/config.d/${name}":
         ensure  => directory,
         require => Package["smokeping"];
@@ -133,12 +133,12 @@ define gen_smokeping::environment($owner, $contact, $cgiurl, $mailhost=false, $s
       hasrestart => true,
       hasstatus  => true,
       enable     => true,
-      require    => Kfile["/etc/init.d/${initname}"],
+      require    => File["/etc/init.d/${initname}"],
       subscribe  => [Concat["/etc/smokeping/config.d/Probes"],Gen_smokeping::Config["config_${name}","General_${name}","pathnames_${name}"]];
     }
 
     concat { "/etc/smokeping/config.d/${name}/Targets":
-      require => Kfile["/etc/smokeping/config.d/${name}"],
+      require => File["/etc/smokeping/config.d/${name}"],
       notify  => Service[$initname];
     }
 
@@ -301,12 +301,12 @@ define gen_smokeping::config ($content, $subdir=false, $initname) {
   $filename = regsubst($name,'^(.*?)_.*$','\1')
 
   if $subdir {
-    kfile { "/etc/smokeping/config.d/$subdir/${filename}":
+    file { "/etc/smokeping/config.d/$subdir/${filename}":
       content => $content,
       notify  => Service[$initname];
     }
   } else {
-    kfile { "/etc/smokeping/config.d/${filename}":
+    file { "/etc/smokeping/config.d/${filename}":
       content => $content,
       notify  => Service[$initname];
     }

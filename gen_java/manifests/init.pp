@@ -4,7 +4,7 @@ class gen_java::sun_java6_jdk {
 
   kpackage { "sun-java6-jdk":
     responsefile => "/tmp/sunlicense.preseed",
-    require => File['/tmp/sunlicense.preseed'];
+    require => File["/tmp/sunlicense.preseed"];
   }
 }
 
@@ -14,34 +14,35 @@ class gen_java::sun_java6_jdk {
 #  Install strong crypto libraries for java
 #
 class gen_java::sun_java6_jre_crypto_policy {
-  kfile {
+  file {
     "/usr/lib/jvm/java-6-sun/jre/lib/security/US_export_policy.jar":
-      source  => "gen_java/jce/US_export_policy.jar",
+      source  => "puppet:///modules/gen_java/jce/US_export_policy.jar",
       require => Package["sun-java6-jre"];
     "/usr/lib/jvm/java-6-sun/jre/lib/security/local_policy.jar":
-      source => "gen_java/jce/local_policy.jar",
+      source  => "puppet:///modules/gen_java/jce/local_policy.jar",
       require => Package["sun-java6-jre"];
   }
 }
 
 class gen_java::sun_java6_jre {
-  kfile { '/tmp/sunlicense.preseed':
-    source => 'gen_java/preseed';
+  file { "/tmp/sunlicense.preseed":
+    content => template("gen_java/preseed");
   }
 
   kpackage { "sun-java6-jre":
     responsefile => "/tmp/sunlicense.preseed",
-    require => File['/tmp/sunlicense.preseed'];
+    require => File["/tmp/sunlicense.preseed"];
   }
 }
 
 class gen_java::oracle_java7_jdk {
   include gen_java::oracle_java7_jre
-  kpackage{ "oracle-java7-jdk":; }
+
+  kpackage { "oracle-java7-jdk":; }
 }
 
 class gen_java::oracle_java7_jre {
-  kpackage{ "oracle-java7-jre":; }
+  kpackage { "oracle-java7-jre":; }
 }
 
 # Class: gen_java::oracle_java7_jre_crypto_policy
@@ -50,12 +51,12 @@ class gen_java::oracle_java7_jre {
 #  Install strong crypto libraries for java
 #
 class gen_java::oracle_java7_jre_crypto_policy {
-  kfile {
+  file {
     "/usr/lib/jvm/java-7-oracle/jre/lib/security/US_export_policy.jar":
       source  => "gen_java/jce7/US_export_policy.jar",
       require => Package["oracle-java7-jre"];
     "/usr/lib/jvm/java-7-oracle/jre/lib/security/local_policy.jar":
-      source => "gen_java/jce7/local_policy.jar",
+      source  => "gen_java/jce7/local_policy.jar",
       require => Package["oracle-java7-jre"];
   }
 }

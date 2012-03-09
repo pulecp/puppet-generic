@@ -38,13 +38,22 @@
 #
 define ekfile ($ensure="present", $source=false, $path=false, $target=false, $content=false, $owner="root", $group="root", $mode="644", $recurse=false, $force=false, $purge=false, $ignore=false, $backup=false) {
   $kfilename = regsubst($name,'^(.*);.*$','\1')
-  if !defined(Kfile["${kfilename}"]) {
-    kfile { "${kfilename}":
+  if !defined(File["${kfilename}"]) {
+    file { "${kfilename}":
       ensure  => $ensure,
-      source  => $source,
-      path    => $path,
+      source  => $source ? {
+        false   => undef,
+        default => $source,
+      },
+      path    => $path ? {
+        false   => undef,
+        default => $path,
+      },
       target  => $target,
-      content => $content,
+      content => $content ? {
+        false   => undef,
+        default => $content,
+      },
       owner   => $owner,
       group   => $group,
       mode    => $mode,

@@ -21,18 +21,18 @@ class dovecot::common {
       require => Package["dovecot-common"],
   }
 
-  kfile {
+  file {
     "/etc/dovecot/dovecot.conf":
-      source => "dovecot/dovecot/dovecot.conf",
+      content => template("dovecot/dovecot.conf"),
       require => Package["dovecot-common"],
       notify => Service["dovecot"];
     "/etc/dovecot/dovecot-ldap.conf":
-      source => "dovecot/dovecot/dovecot-ldap.conf",
+      content => template("dovecot/dovecot-ldap.conf"),
       mode => 600,
       require => Package["dovecot-common"],
       notify => Service["dovecot"];
     "/etc/dovecot/dovecot-sql.conf":
-      source => "dovecot/dovecot/dovecot-sql.conf",
+      content => template("dovecot/dovecot-sql.conf"),
       mode => 600,
       require => Package["dovecot-common"],
       notify => Service["dovecot"];

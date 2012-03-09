@@ -15,7 +15,7 @@
 #	gen_puppet
 #
 class hosthenker {
-  kfile { "/usr/bin/hosthenker":
+  file { "/usr/bin/hosthenker":
     ensure => absent,
   }
 }

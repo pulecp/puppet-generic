@@ -4,7 +4,6 @@ import "concat.pp"
 import "ekfile.pp"
 import "kaugeas.pp"
 import "kcron.pp"
-import "kfile.pp"
 import "kpackage.pp"
 import "kservice.pp"
 import "line.pp"
@@ -13,6 +12,12 @@ import "setfacl.pp"
 # Actual puppet modules
 import "queue.pp"
 import "master.pp"
+
+File {
+  owner => "root",
+  group => "root",
+  mode  => 644,
+}
 
 # Class: gen_puppet
 #

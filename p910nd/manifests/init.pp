@@ -24,7 +24,7 @@ class p910nd::server {
       subscribe => File["/etc/default/p910nd"];
   }
 
-  kfile {
+  file {
     "/etc/default/p910nd":
       require => Package["p910nd"];
   }

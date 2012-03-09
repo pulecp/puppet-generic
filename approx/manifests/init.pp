@@ -22,8 +22,8 @@ class approx {
     subscribe => File["/etc/approx/approx.conf"],
   }
 
-  kfile { "/etc/approx/approx.conf":
-    source => "approx/approx.conf",
+  file { "/etc/approx/approx.conf":
+    content => template("approx/approx.conf"),
     require => Package["approx"];
   }
 }

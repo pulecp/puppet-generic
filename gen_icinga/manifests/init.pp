@@ -35,7 +35,7 @@ class gen_icinga::server {
       require => Kservice["ido2db"];
   }
 
-  kfile {
+  file {
     "/var/lib/icinga/rw":
       ensure  => directory,
       owner   => "nagios",
@@ -47,12 +47,12 @@ class gen_icinga::server {
       group   => "www-data",
       mode    => 660;
     "/etc/icinga/send_sms.cfg":
-      source  => "gen_icinga/server/send_sms.cfg",
+      content => template("gen_icinga/server/send_sms.cfg"),
       group   => "nagios",
       mode    => 640,
       require => Package["icinga"];
     "/usr/local/bin/send_sms":
-      source  => "gen_icinga/server/send_sms",
+      content => template("gen_icinga/server/send_sms"),
       group   => "nagios",
       mode    => 755,
       require => [File["/etc/icinga/send_sms.cfg"], Package["curl"]];

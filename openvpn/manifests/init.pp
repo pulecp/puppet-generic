@@ -25,9 +25,9 @@ class openvpn::common {
 class openvpn::server {
   include openvpn::common
 
-  kfile {
+  file {
     "/etc/openvpn/server.conf":
-      source => "openvpn/server.conf",
+      content => template("openvpn/server.conf"),
       require => [Package["openvpn"], File["/var/lib/openvpn"]];
     "/var/lib/openvpn":
       ensure => "directory",
@@ -57,8 +57,8 @@ class openvpn::server {
 class openvpn::client {
   include openvpn::common
 
-  kfile { "/etc/openvpn/client.conf":
-    source => "openvpn/client.conf",
+  file { "/etc/openvpn/client.conf":
+    content => template("openvpn/client.conf"),
     require => Package["openvpn"],
   }
 }

@@ -20,8 +20,8 @@ define gen_drbd($mastermaster=true, $time_out=false, $connect_int=false, $ping_i
     $after_sb_1pri="discard-secondary", $after_sb_2pri="call-pri-lost-after-sb", $rate="5M", $verify_alg="md5", $use_ipaddress=$external_ipaddress) {
   include gen_drbd::common
 
-  if !defined(Kfile["/etc/drbd.d/global_common.conf"]) {
-    kfile { "/etc/drbd.d/global_common.conf":
+  if !defined(File["/etc/drbd.d/global_common.conf"]) {
+    file { "/etc/drbd.d/global_common.conf":
       content => template("gen_drbd/global_common.conf"),
       require => Package["drbd8-utils"],
       notify  => Service["drbd"];

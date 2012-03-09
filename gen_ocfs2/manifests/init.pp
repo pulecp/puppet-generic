@@ -16,7 +16,7 @@ class gen_ocfs2 {
     require => File["/etc/ocfs2/cluster.conf","/etc/default/o2cb"];
   }
 
-  kfile {
+  file {
     "/etc/ocfs2":
       ensure  => directory;
     "/etc/default/o2cb":

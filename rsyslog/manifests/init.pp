@@ -32,7 +32,7 @@ class rsyslog::common {
 class rsyslog::client {
   include rsyslog::common
 
-  kfile { "/etc/rsyslog.d/remote-logging-client.conf":
+  file { "/etc/rsyslog.d/remote-logging-client.conf":
     content => template("rsyslog/client/remote-logging-client.conf"),
     require => Package["rsyslog"],
     notify => Service["rsyslog"],
@@ -51,8 +51,8 @@ class rsyslog::client {
 class rsyslog::server {
   include rsyslog::common
 
-  kfile { "/etc/rsyslog.d/remote-logging-server.conf":
-    source => "rsyslog/server/remote-logging-server.conf",
+  file { "/etc/rsyslog.d/remote-logging-server.conf":
+    content => template("rsyslog/server/remote-logging-server.conf"),
     require => Package["rsyslog"],
     notify => Service["rsyslog"],
   }
@@ -72,8 +72,8 @@ class rsyslog::mysql {
     ensure => installed;
   }
 
-  kfile { "/etc/rsyslog.d/mysql.conf":
-    source  => "rsyslog/server/mysql.conf",
+  file { "/etc/rsyslog.d/mysql.conf":
+    content => template("rsyslog/server/mysql.conf"),
     require => Package["rsyslog-mysql"],
     notify  => Service["rsyslog"];
   }

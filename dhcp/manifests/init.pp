@@ -23,7 +23,7 @@ class dhcp::server {
       ensure => latest,
     }
 
-    kfile { "/etc/dhcp3/dhcpd.conf":
+    file { "/etc/dhcp3/dhcpd.conf":
       content => template("dhcp/dhcpd.conf");
     }
   }
@@ -32,12 +32,12 @@ class dhcp::server {
 
     service { "isc-dhcp-server":
       require    => Kpackage["isc-dhcp-server"],
-      subscribe  => Kfile["/etc/dhcp/dhcpd.conf"],
+      subscribe  => File["/etc/dhcp/dhcpd.conf"],
       hasrestart => true,
       hasstatus  => true,
     }
 
-    kfile { "/etc/dhcp/dhcpd.conf":
+    file { "/etc/dhcp/dhcpd.conf":
       require => Kpackage["isc-dhcp-server"],
       content => template("dhcp/dhcpd.conf");
     }

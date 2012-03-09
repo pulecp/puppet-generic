@@ -64,14 +64,14 @@ define gen_glassfish::domain ($portbase, $ensure="running"){
       require => File["/etc/init.d/glassfish-${name}"];
     }
   } else {
-    kfile { "/opt/glassfish/domains/${name}":
+    file { "/opt/glassfish/domains/${name}":
       ensure  => absent,
       recurse => true,
       force   => true;
     }
   }
 
-  kfile { "/etc/init.d/glassfish-${name}":
+  file { "/etc/init.d/glassfish-${name}":
     ensure  => $ensure ? {
       "absent" => absent,
       default => present,

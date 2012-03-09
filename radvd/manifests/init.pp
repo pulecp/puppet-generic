@@ -20,7 +20,7 @@ class radvd::server {
     ensure => running;
   }
 
-  kfile { "/etc/radvd.conf":
+  file { "/etc/radvd.conf":
     require => Package["radvd"];
   }
 }

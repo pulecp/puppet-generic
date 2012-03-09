@@ -54,13 +54,13 @@ define gen_puppet::queue::runner ($configfile = false) {
   }
 
   # The additional initscript
-  kfile { "/etc/init.d/${scriptname}":
+  file { "/etc/init.d/${scriptname}":
     content => template("gen_puppet/queue/initscript"),
     mode    => 755,
     require => Kpackage["puppetmaster-common"],
   }
 
-  kfile { "/etc/default/${scriptname}":
+  file { "/etc/default/${scriptname}":
     content => template("gen_puppet/queue/default"),
     require => Kpackage["puppetmaster-common"],
   }
@@ -69,6 +69,6 @@ define gen_puppet::queue::runner ($configfile = false) {
   service { $scriptname:
     hasstatus => true,
     ensure    => running,
-    require   => [Kpackage["puppetmaster-common"],Kfile["/etc/init.d/${scriptname}","/etc/default/${scriptname}"]];
+    require   => [Kpackage["puppetmaster-common"],File["/etc/init.d/${scriptname}","/etc/default/${scriptname}"]];
   }
 }

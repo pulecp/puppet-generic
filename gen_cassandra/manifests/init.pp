@@ -15,7 +15,7 @@
 #
 class gen_cassandra ($branch = "07x") {
   gen_apt::key { "8D77295D":
-    source => "gen_cassandra/8D77295D",
+    content => template("gen_cassandra/8D77295D"),
   }
 
   gen_apt::source { "cassandra":

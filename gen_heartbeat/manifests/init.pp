@@ -33,7 +33,7 @@ class gen_heartbeat ($autojoin="none", $warntime=5, $deadtime=15, $initdead=60, 
   Concat::Add_content <<| tag == $heartbeat_tag |>>
 
   # We don't use auth-keys, as the port is firewalled and only open to the other hosts(s) in the cluster(done in kbp_heartbeat)
-  kfile { "/etc/ha.d/authkeys":
+  file { "/etc/ha.d/authkeys":
     content => "auth 1\n1 crc",
     mode    => 600,
     require => Package["heartbeat"];

@@ -20,7 +20,7 @@ class thttpd {
   }
 
   file { "/etc/thttpd/thttpd.conf":
-    source => "puppet://puppet/thttpd/thttpd.conf",
+    content => template("thttpd/thttpd.conf"),
     owner => "root",
     group => "root",
     mode => 644,

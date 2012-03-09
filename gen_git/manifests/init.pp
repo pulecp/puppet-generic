@@ -37,7 +37,7 @@ class gen_git::listchanges::install {
     ensure => latest;
   }
 
-  kfile {
+  file {
     "/etc/gitlistchanges.conf":
       content => "includedir:/etc/gitlistchanges.conf.d\n";
     "/etc/gitlistchanges.conf.d":
@@ -69,7 +69,7 @@ class gen_git::listchanges::install {
 #  gen_git
 #  gen_puppet
 #
-define gen_git::repo ($branch = "master", $origin = false, $bare = false, $post_update_src = false) {
+define gen_git::repo ($branch = "master", $origin = false, $bare = false, $post_update_content = template("gen_git/post-update")) {
   include gen_git
 
   # I thought about adding an option to automatically clone a remote
@@ -88,11 +88,8 @@ define gen_git::repo ($branch = "master", $origin = false, $bare = false, $post_
         require => Exec["/usr/bin/git init -q --shared=group ${name}"];
     }
     # This is the hook that makes sure we always have the latest version checked out.
-    kfile { "${name}/.git/hooks/post-update":
-      source  => $post_update_src ? {
-        false   => "gen_git/post-update",
-        default => $post_update_src,
-      },
+    file { "${name}/.git/hooks/post-update":
+      content => $post_update_content,
       mode    => 755,
       require => Exec["/usr/bin/git init -q --shared=group ${name}"];
     }
@@ -101,10 +98,10 @@ define gen_git::repo ($branch = "master", $origin = false, $bare = false, $post_
       creates => "${name}",
       require => Package["git"];
     }
-    # Install a post-update hook if we supply a source
-    if $post_update_src {
-      kfile { "${name}/hooks/post-update":
-        source  => $post_update_src,
+    # Install a post-update hook if we supply the content
+    if $post_update_content {
+      file { "${name}/hooks/post-update":
+        content => $post_update_content,
         mode    => 755,
         require => Exec["/usr/bin/git init --bare -q --shared=group ${name}"];
       }
@@ -168,7 +165,7 @@ define gen_git::listchanges ($to, $repo=false, $from=false, $branch=false, $sinc
   }
   $the_repo_safe = regsubst($the_repo, '/', '_', "G")
 
-  kfile { "/etc/gitlistchanges.conf.d/${the_repo_safe}-${to}":
+  file { "/etc/gitlistchanges.conf.d/${the_repo_safe}-${to}":
     content => template("gen_git/listchanges/repoconfig.erb");
   }
 }

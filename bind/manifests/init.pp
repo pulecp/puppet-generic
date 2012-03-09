@@ -14,25 +14,25 @@ class bind {
     ensure => installed,
   }
 
-  kfile {
+  file {
     "/etc/bind/named.conf":
       require => Package["bind9"];
     "/etc/bind/named.conf.options":
-      source => "bind/named.conf.options",
+      content => template("bind/named.conf.options"),
       require => Package["bind9"];
     "/etc/bind/named.conf.local":
-      source => "bind/named.conf.local",
+      content => template("bind/named.conf.local"),
       require => Package["bind9"];
     "/etc/bind/zones":
       ensure  => directory,
       group   => "bind",
       require => Package["bind9"];
     "/etc/bind/create_zones_conf":
-      source => "bind/create_zones_conf",
+      content => template("bind/create_zones_conf"),
       mode => 755,
       require => Package["bind9"];
     "/etc/bind/Makefile":
-      source => "bind/Makefile",
+      content => template("bind/Makefile"),
       require => Package["bind9"];
   }
 
@@ -55,7 +55,7 @@ class bind {
   }
 
   define zone_alias ($target) {
-    kfile { "/etc/bind/zones/$name":
+    file { "/etc/bind/zones/$name":
       ensure => link,
       target => "/etc/bind/zones/$target",
       notify => Exec["update-zone-conf"],
@@ -63,11 +63,11 @@ class bind {
     }
   }
 
-  define zone ($source, $aliases=false) {
-    kfile { "/etc/bind/zones/$name":
+  define zone ($content, $aliases=false) {
+    file { "/etc/bind/zones/$name":
       owner => root,
       group => root,
-      source => $source,
+      content => $content,
       notify => Exec["update-zone-conf"],
     }
 

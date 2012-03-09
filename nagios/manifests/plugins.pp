@@ -14,7 +14,7 @@ class nagios::plugins {
     ensure => installed;
   }
 
-  kfile {
+  file {
     "/usr/local/lib/nagios":
       ensure => directory,
       group  => "staff",

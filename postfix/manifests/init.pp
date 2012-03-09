@@ -40,7 +40,7 @@ class postfix($relayhost=false, $myhostname=$fqdn, $mynetworks="127.0.0.0/8 [::1
     subscribe  => File["/etc/ssl/certs"];
   }
 
-  kfile {
+  file {
     "/etc/postfix/main.cf":
       content => template("postfix/main.cf"),
       require => Package["postfix"],

@@ -13,7 +13,7 @@ class gen_logrotate {
     ensure => latest,
   }
 
-  kfile { "/etc/logrotate.d/":
+  file { "/etc/logrotate.d/":
     ensure => directory,
   }
 }
@@ -42,7 +42,7 @@ class gen_logrotate {
 define gen_logrotate::rotate ($logs, $options=["weekly","compress","rotate 7","missingok"], $prerotate=false, $postrotate=false) {
   include gen_logrotate
 
-  kfile { "/etc/logrotate.d/${name}":
+  file { "/etc/logrotate.d/${name}":
     content => template("gen_logrotate/logrotate.erb");
   }
 }

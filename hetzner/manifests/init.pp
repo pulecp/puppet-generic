@@ -19,7 +19,7 @@ class hetzner {
   include hetzner::update_dns
 
   if defined(Kpackage["pacemaker"]) {
-    kfile { "/usr/lib/ocf/resource.d/kumina":
+    file { "/usr/lib/ocf/resource.d/kumina":
       ensure  => directory,
       require => Kpackage["pacemaker"],
     }
@@ -42,22 +42,22 @@ class hetzner::failover_ip {
     ensure => latest,
   }
 
-  kfile { "/usr/local/sbin/parse-hetzner-json.py":
+  file { "/usr/local/sbin/parse-hetzner-json.py":
     content => template("hetzner/parse-hetzner-json.py"),
     mode    => 755,
   }
 
-  kfile { "/usr/local/lib/hetzner":
+  file { "/usr/local/lib/hetzner":
     ensure => directory,
   }
 
-  kfile { "/usr/local/lib/hetzner/hetzner-failover-ip":
+  file { "/usr/local/lib/hetzner/hetzner-failover-ip":
     content => template("hetzner/hetzner-failover-ip"),
     mode    => 755,
   }
 
   if defined(Kpackage["pacemaker"]) {
-    kfile { "/usr/lib/ocf/resource.d/kumina/hetzner-failover-ip":
+    file { "/usr/lib/ocf/resource.d/kumina/hetzner-failover-ip":
       ensure  => link,
       target  => "/usr/local/lib/hetzner/hetzner-failover-ip",
     }
@@ -77,7 +77,7 @@ class hetzner::update_dns {
   include hetzner
 
   if defined(Kpackage["pacemaker"]) {
-    kfile { "/usr/lib/ocf/resource.d/kumina/update-dns":
+    file { "/usr/lib/ocf/resource.d/kumina/update-dns":
       content => template("hetzner/update-dns"),
       mode    => 755,
     }

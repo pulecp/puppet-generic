@@ -72,7 +72,7 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $failover=false, $need_gssd="
 
   # The lock daemon is a kernel internal thingy, we need to actually set the kernel module options.
   if $lock_port {
-    kfile { "/etc/modprobe.d/lock":
+    file { "/etc/modprobe.d/lock":
       content => "options lockd nlm_udpport=${lock_port} nlm_tcpport=${lock_port}\n";
     }
   }
@@ -83,7 +83,7 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $failover=false, $need_gssd="
     require => Kpackage["nfs-kernel-server"];
   }
 
-  kfile {
+  file {
     "/etc/default/nfs-common":
       content => template("gen_nfs/nfs-common"),
       notify  => Service["nfs-common"];
@@ -116,15 +116,12 @@ define gen_nfs::mount($source, $options="wsize=1024,rsize=1024") {
     dump     => 0,
     pass     => 0,
     remounts => false,
-    require  => [Kpackage["nfs-common"], Kfile[$name]];
+    require  => [Kpackage["nfs-common"], File[$name]];
   }
 
-  if ! defined(Kfile[$name]) {
-    kfile { $name:
-      ensure => directory,
-      owner  => false,
-      group  => false,
-      mode   => false;
+  if ! defined(File[$name]) {
+    file { $name:
+      ensure => directory;
     }
   }
 }

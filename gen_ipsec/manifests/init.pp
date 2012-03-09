@@ -40,12 +40,12 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
   }
 
   concat::fragment { "ipsec-tools.conf_header":
-    target => "/etc/ipsec-tools.conf",
-    order  => "01",
-    source => "gen_ipsec/ipsec-tools.conf_header";
+    target  => "/etc/ipsec-tools.conf",
+    order   => "01",
+    content => template("gen_ipsec/ipsec-tools.conf_header");
   }
 
-  kfile {
+  file {
     "/etc/racoon/racoon.conf":
       content => template("gen_ipsec/racoon.conf.erb"),
       notify  => Service["racoon"],
@@ -153,7 +153,7 @@ define gen_ipsec::peer ($local_ip, $peer_ip, $encap="tunnel", $exchange_mode="ma
     content => template("gen_ipsec/ipsec-tools.conf_fragment.erb");
   }
 
-  kfile { "/etc/racoon/peers.d/$name.conf":
+  file { "/etc/racoon/peers.d/$name.conf":
     content => template("gen_ipsec/racoon-peer.conf.erb"),
     require => [ Package["racoon"], File["/etc/racoon/peers.d"] ],
     notify  => Service["racoon"];

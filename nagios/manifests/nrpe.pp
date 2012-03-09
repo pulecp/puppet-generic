@@ -13,7 +13,7 @@ class nagios::nrpe {
   include nagios::nrpe::plugins
 
   define check($command) {
-    kfile { "/etc/nagios/nrpe.d/$name.cfg":
+    file { "/etc/nagios/nrpe.d/$name.cfg":
       content => "command[check_$name]=$command\n",
       require => File["/etc/nagios/nrpe.d"],
     }
@@ -100,9 +100,9 @@ class nagios::nrpe {
     require => Exec["update-inetd-enable-nrpe"],
   }
 
-  kfile {
+  file {
     "/etc/nagios/nrpe.cfg":
-      source => "nagios/nrpe/${lsbdistcodename}/nrpe.cfg",
+      content => template("nagios/nrpe/${lsbdistcodename}/nrpe.cfg"),
       require => Package["nagios-nrpe-server"];
     "/etc/nagios/nrpe.d":
       ensure  => directory,

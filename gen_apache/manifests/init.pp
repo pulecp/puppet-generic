@@ -20,7 +20,7 @@ class gen_apache {
     require     => Exec["reload-apache2"];
   }
 
-  kfile {
+  file {
     "/etc/apache2/vhost-additions":
       ensure  => directory,
       purge   => true,
@@ -95,8 +95,8 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   $real_name = regsubst($full_name,'^(.*)_(.*)$','\1')
   $real_port = regsubst($full_name,'^(.*)_(.*)$','\2')
 
-  if $create_documentroot and ! defined(Kfile[$documentroot]) {
-    kfile { $documentroot:
+  if $create_documentroot and ! defined(File[$documentroot]) {
+    file { $documentroot:
       ensure => directory,
       notify => Exec["initialize_${documentroot}"];
     }
@@ -108,7 +108,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
     }
   }
 
-  kfile {
+  file {
     "/etc/apache2/sites-available/${full_name}":
       ensure  => $ensure,
       content => template("gen_apache/available_site"),
@@ -128,13 +128,13 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   case $ensure {
     "present": {
       if $real_name == "default" {
-        kfile { "/etc/apache2/sites-enabled/000_${full_name}":
+        file { "/etc/apache2/sites-enabled/000_${full_name}":
           ensure => link,
           target => "/etc/apache2/sites-available/${full_name}",
           notify => Exec["reload-apache2"];
         }
       } else {
-        kfile { "/etc/apache2/sites-enabled/${full_name}":
+        file { "/etc/apache2/sites-enabled/${full_name}":
           ensure => link,
           target => "/etc/apache2/sites-available/${full_name}",
           notify => Exec["reload-apache2"];
@@ -154,7 +154,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
       }
     }
     "absent": {
-      kfile { "/etc/apache2/sites-enabled/${full_name}":
+      file { "/etc/apache2/sites-enabled/${full_name}":
         ensure => absent,
         notify => Exec["reload-apache2"];
       }
@@ -186,7 +186,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
       default => $key,
     }
 
-    kfile { "/etc/apache2/vhost-additions/${full_name}/ssl":
+    file { "/etc/apache2/vhost-additions/${full_name}/ssl":
       content => template("gen_apache/vhost-additions/ssl"),
       notify  => Exec["reload-apache2"];
     }
@@ -252,19 +252,12 @@ define gen_apache::rewrite_on {
   }
 }
 
-define gen_apache::vhost_addition($ensure="present", $content=false, $source=false) {
+define gen_apache::vhost_addition($ensure="present", $content=false) {
   $full_site_name = regsubst($name,'^(.*)/(.*)$','\1')
 
-  kfile { "/etc/apache2/vhost-additions/${name}":
+  file { "/etc/apache2/vhost-additions/${name}":
     ensure  => $ensure,
-    content => $content ? {
-      false   => undef,
-      default => $content,
-    },
-    source  => $source ? {
-      false   => undef,
-      default => $source,
-    },
+    content => $content,
     require => Gen_apache::Site[$full_site_name],
     notify  => Exec["reload-apache2"];
   }

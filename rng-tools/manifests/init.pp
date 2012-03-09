@@ -14,10 +14,10 @@ class rng-tools {
     ensure => latest;
   }
 
-  kfile { "/etc/default/rng-tools":
-    source  => "rng-tools/default/rng-tools",
-    notify  => Service["rng-tools"],
-    require => Package["rng-tools"];
+  file { "/etc/default/rng-tools":
+    content  => template("rng-tools/rng-tools"),
+    notify   => Service["rng-tools"],
+    require  => Package["rng-tools"];
   }
 
   service { "rng-tools":
