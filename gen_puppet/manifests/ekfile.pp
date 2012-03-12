@@ -49,7 +49,10 @@ define ekfile ($ensure="present", $source=false, $path=false, $target=false, $co
         false   => undef,
         default => $path,
       },
-      target  => $target,
+      target  => $target ? {
+        false   => undef,
+        default => $target,
+      },
       content => $content ? {
         false   => undef,
         default => $content,
@@ -60,7 +63,10 @@ define ekfile ($ensure="present", $source=false, $path=false, $target=false, $co
       recurse => $recurse,
       force   => $force,
       purge   => $purge,
-      ignore  => $ignore,
+      ignore  => $ignore ? {
+        false   => undef,
+        default => $ignore,
+      },
       backup  => $backup,
     }
   }
