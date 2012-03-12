@@ -41,7 +41,7 @@ class powerdns::common {
 
   file {
     "/etc/powerdns/pdns.conf":
-      content => template("powerdns/powerdns/pdns.conf.erb"),
+      content => template("powerdns/pdns.conf.erb"),
       owner => "root",
       group => "root",
       mode => 640,
