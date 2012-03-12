@@ -12,6 +12,11 @@ class gen_pmacct {
   kservice { "pmacct":
     hasstatus => false,
   }
+
+  # We do not use the default config from the package. Remove it to avoid mistakes.
+  file { "/etc/pmacct/pmacctd.conf":
+    ensure => absent,
+  }
 }
 
 # Define: gen_pmacct::config
