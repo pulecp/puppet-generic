@@ -257,7 +257,10 @@ define gen_apache::vhost_addition($ensure="present", $content=false) {
 
   file { "/etc/apache2/vhost-additions/${name}":
     ensure  => $ensure,
-    content => $content,
+    content => $content ? {
+      false   => undef,
+      default => $content,
+    },
     require => Gen_apache::Site[$full_site_name],
     notify  => Exec["reload-apache2"];
   }
