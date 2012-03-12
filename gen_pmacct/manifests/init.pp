@@ -9,7 +9,9 @@
 #  gen_puppet
 #
 class gen_pmacct {
-  kservice { "pmacct":; }
+  kservice { "pmacct":
+    hasstatus => false,
+  }
 }
 
 # Define: gen_pmacct::config
