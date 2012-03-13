@@ -205,7 +205,7 @@ class apache {
     }
 
     if $template =~ /.*ssl.*/ {
-      kbp_monitoring::site { "${name}_non_SSL":
+      kbp_icinga::site { "${name}_non_SSL":
         service_description => "Vhost ${name} non SSL",
         host_name           => $name,
         statuscode          => 301,
