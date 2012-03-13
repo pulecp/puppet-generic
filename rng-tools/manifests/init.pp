@@ -11,19 +11,24 @@
 #
 class rng-tools {
   kpackage { "rng-tools":
-    ensure => latest;
+    ensure => $lsbmajdistrelease ? {
+      5       => latest,
+      default => absent,
+    };
   }
 
-  file { "/etc/default/rng-tools":
-    content  => template("rng-tools/rng-tools"),
-    notify   => Service["rng-tools"],
-    require  => Package["rng-tools"];
-  }
+  if $::lsbmajdistrelease <= 5 {
+    file { "/etc/default/rng-tools":
+      content  => template("rng-tools/rng-tools"),
+      notify   => Service["rng-tools"],
+      require  => Package["rng-tools"];
+    }
 
-  service { "rng-tools":
-    ensure    => running,
-    pattern   => "/usr/sbin/rngd",
-    hasstatus => false,
-    require   => File["/etc/default/rng-tools"];
+    service { "rng-tools":
+      ensure    => running,
+      pattern   => "/usr/sbin/rngd",
+      hasstatus => false,
+      require   => File["/etc/default/rng-tools"];
+    }
   }
 }
