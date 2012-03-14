@@ -122,7 +122,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
       path    => $logdir,
       ensure  => directory,
       owner   => "puppet",
-      mode    => 755,
+      mode    => 750,
       require => Kpackage["puppet-common"];
     "${ssldir}/ca for ${name}":
       path    => "${ssldir}/ca",
