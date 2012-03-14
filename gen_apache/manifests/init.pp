@@ -193,11 +193,22 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   }
 }
 
-define gen_apache::module {
-  exec { "/usr/sbin/a2enmod ${name}":
-    unless  => "/bin/sh -c '[ -L /etc/apache2/mods-enabled/${name}.load ] && [ /etc/apache2/mods-enabled/${name}.load -ef /etc/apache2/mods-available/${name}.load ]'",
-    require => Package["apache2"],
-    notify  => Exec["force-reload-apache2"];
+define gen_apache::module ($ensure = "enable") {
+  if $ensure == "enable" {
+    exec { "/usr/sbin/a2enmod ${name}":
+      unless  => "/bin/sh -c '[ -L /etc/apache2/mods-enabled/${name}.load ] && [ /etc/apache2/mods-enabled/${name}.load -ef /etc/apache2/mods-available/${name}.load ]'",
+      require => Package["apache2"],
+      notify  => Exec["force-reload-apache2"];
+    }
+  } else {
+    # Bit of a hack, but better than a lot of nested ifs, I think
+    if $ensure != "disable" { fail("The ensure parameter need to be 'enable' or 'disable', not '${ensure}'.") }
+
+    exec { "/usr/sbin/a2dismod ${name}":
+      onlyif  => "/bin/sh -c '[ -L /etc/apache2/mods-enabled/${name}.load ] && [ /etc/apache2/mods-enabled/${name}.load -ef /etc/apache2/mods-available/${name}.load ]'",
+      require => Package["apache2"],
+      notify  => Exec["force-reload-apache2"];
+    }
   }
 }
 
