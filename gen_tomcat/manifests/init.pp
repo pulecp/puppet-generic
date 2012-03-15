@@ -182,6 +182,9 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
       false   => false,
       default => true
     },
+    owner   => "tomcat6",
+    group   => "tomcat6",
+    mode    => "664",
     require => [Kpackage["tomcat6"], File["/srv/tomcat/conf"]];
   }
 
