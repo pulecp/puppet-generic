@@ -1154,6 +1154,20 @@ class gen_base::nagios-plugins-standard {
   }
 }
 
+# Class: gen_base::nano
+#
+# Actions:
+#  Install nano
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::nano {
+  kpackage { "nano":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::netpbm
 #
 # Actions:
