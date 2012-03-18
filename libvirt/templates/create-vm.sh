@@ -68,7 +68,7 @@ do
       <source file='$DISKDEV_HOST'/>
       <target dev='$DISKDEV_VM' bus='virtio'/>
     </disk>"
-		qemu-img create -f qcow2 $DISKDEV_HOST ${SLICE}G
+		qemu-img create -f qcow2 -o cluster_size=2M,preallocation=metadata $DISKDEV_HOST ${SLICE}G
 	else
 		# Use logical volume
 		DISKDEV_HOST="/dev/$DISK_VOLGRP/$NAME-disk$I"
