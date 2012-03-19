@@ -194,6 +194,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
 }
 
 define gen_apache::module ($ensure = "enable") {
+  include gen_apache
   if $ensure == "enable" {
     exec { "/usr/sbin/a2enmod ${name}":
       unless  => "/bin/sh -c '[ -L /etc/apache2/mods-enabled/${name}.load ] && [ /etc/apache2/mods-enabled/${name}.load -ef /etc/apache2/mods-available/${name}.load ]'",
