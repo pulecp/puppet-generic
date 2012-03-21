@@ -32,6 +32,11 @@ define kcron($mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday
     fail("Kcron names cannot contain dots or underscores. Resource: ${name}")
   }
 
+  # Notify when there's not mailto defined, since this usually is not what you want
+  if ! $mailto {
+    notify { "No mailto set for Kcron['${name}']. Are you sure you want that?":; }
+  }
+
   if $pacemaker_resource {
     # A cronjob on a host in failover, where we only want the active host
     # to run the cronjob
