@@ -115,3 +115,17 @@ class gen_php5::curl {
     ensure => latest,
   }
 }
+
+# Class: gen_php5::smarty
+#
+# Actions:
+#  Install smarty extensions for PHP5.
+#
+# Depends:
+#  gen_puppet
+#
+class gen_php5::smarty {
+  kpackage { "smarty":
+    ensure => latest,
+  }
+}
