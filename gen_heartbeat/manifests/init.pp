@@ -15,8 +15,7 @@ class gen_heartbeat ($autojoin="none", $warntime=5, $deadtime=15, $initdead=60, 
   kservice { "heartbeat":; }
 
   concat { "/etc/heartbeat/ha.cf":
-    require => Package["heartbeat"],
-    notify  => Service["heartbeat"];
+    require => Package["heartbeat"];
   }
 
   concat::add_content { "default heartbeat config":
