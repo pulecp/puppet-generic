@@ -9,5 +9,5 @@
 #  gen_puppet
 #
 class gen_solr {
-  kservice { "solr-tomcat":; }
+  kpackage { "solr-common":; }
 }
