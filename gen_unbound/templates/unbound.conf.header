@@ -1,0 +1,10 @@
+server:
+	# verbosity number, 0 is least verbose. 1 is default.
+	verbosity: 1
+
+	# Listen on all interfaces
+	interface: 0.0.0.0
+	interface: ::0
+
+	# Auto update the root key
+	auto-trust-anchor-file: "/etc/unbound/root.key"
