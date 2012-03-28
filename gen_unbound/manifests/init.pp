@@ -12,20 +12,18 @@ class gen_unbound {
   kservice { "unbound":
     hasstatus => false,
     hasreload => false,
-    require   => Exec["Install DNS root key for unbound"];
+    require   => [Exec["Install DNS root key for unbound"], Concat["/etc/unbound/unbound.conf"]];
   }
 
-  exec { "Install DNS root key for unbound":
-    command     => "/usr/sbin/unbound-anchor",
-    refreshonly => true,
-    creates     => "/etc/unbound/root.key",
-    require     => Kpackage["unbound-anchor"];
-  }
-
-  exec { "check-unbound.conf":
-    command     => "/usr/sbin/unbound-checkconf",
-    refreshonly => true,
-    notify      => Exec["reload-unbound"];
+  exec {
+    "Install DNS root key for unbound":
+      command     => "/usr/sbin/unbound-anchor",
+      creates     => "/etc/unbound/root.key",
+      require     => Kpackage["unbound-anchor"];
+    "check-unbound.conf":
+      command     => "/usr/sbin/unbound-checkconf",
+      refreshonly => true,
+      notify      => Exec["reload-unbound"];
   }
 
   concat { "/etc/unbound/unbound.conf":
