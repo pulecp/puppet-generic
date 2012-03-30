@@ -227,6 +227,20 @@ class gen_base::facter {
   }
 }
 
+# Class: gen_base::genisoimage
+#
+# Actions:
+#  Install genisoimage
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::genisoimage {
+  kpackage { "genisoimage":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ia32-libs
 #
 # Actions:
