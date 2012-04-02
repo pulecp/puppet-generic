@@ -57,6 +57,14 @@ class mysql::server ($datadir=false) {
     require    => Package[$mysqlserver];
   }
 
+  user { "mysql":
+    require => Package[$mysqlserver];
+  }
+
+  group { "mysql":
+    require => Package[$mysqlserver];
+  }
+
   exec { "reload-mysql":
     command     => "/etc/init.d/mysql reload",
     refreshonly => true,
