@@ -39,8 +39,7 @@ class mysql::server ($datadir=false) {
         ensure => directory,
         mode   => 770,
         owner  => "mysql",
-        group  => "mysql",
-        notify => Package[$mysqlserver];
+        group  => "mysql";
       "/etc/mysql/conf.d/datadir.cnf":
         content => "[mysqld]\ndatadir = ${datadir}\n",
         notify  => Package[$mysqlserver];
