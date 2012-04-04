@@ -452,6 +452,21 @@ class gen_base::libapache2-mod-auth-mysql {
   }
 }
 
+# Class: gen_base::libapache2-mod-fastcgi
+#
+# Actions:
+#  Install libapache2-mod-fastcgi
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libapache2-mod-fastcgi {
+  kpackage { "libapache2-mod-fastcgi":
+    ensure => latest,
+    notify => Exec["reload-apache2"];
+  }
+}
+
 # Class: gen_base::libapache2-mod-fcgid
 #
 # Actions:
