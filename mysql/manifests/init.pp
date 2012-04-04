@@ -34,6 +34,11 @@ class mysql::server ($datadir=false) {
   }
 
   if $datadir {
+    exec { "Create datadir before we install MySQL, if needed":
+      command => "/bin/mkdir -p ${datadir}",
+      creates => $datadir,
+    }
+
     file {
       $datadir:
         ensure => directory,
@@ -47,7 +52,11 @@ class mysql::server ($datadir=false) {
   }
 
   kpackage { $mysqlserver:
-    alias => "mysql-server";
+    require => $datadir ? {
+      false   => undef,
+      default => Exec["Create datadir before we install MySQL, if needed"],
+    },
+    alias   => "mysql-server";
   }
 
   service { "mysql":
