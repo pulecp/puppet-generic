@@ -129,3 +129,33 @@ class gen_php5::smarty {
     ensure => latest,
   }
 }
+
+# Define: gen_php5::common::config
+#
+# Actions:
+#  Settings for PHP5, globally.
+#
+# Depends:
+#  gen_puppet
+#
+define gen_php5::common::config (value, variable=false) {
+  if ! defined(File["/etc/php5/conf.d/set-via-puppet.ini"]) {
+    file { "/etc/php5/conf.d/set-via-puppet.ini":
+      require => Package["php5-common"],
+      content => "[PHP]\n",
+      replace => false,
+    }
+  }
+
+  if ! $variable {
+    $real_var = $name
+  } else {
+    $real_var = $variable
+  }
+
+  line { "PHP5 setting ${real_var}":
+    file    => "/etc/php5/conf.d/set-via-puppet.ini",
+    content => "${real_var} = ${value}\n",
+    require => File["/etc/php5/conf.d/set-via-puppet.ini"],
+  }
+}
