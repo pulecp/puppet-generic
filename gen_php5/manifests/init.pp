@@ -153,9 +153,10 @@ define gen_php5::common::config (value, variable=false) {
     $real_var = $variable
   }
 
-  line { "PHP5 setting ${real_var}":
+  kaugeas { "PHP5 setting ${real_var}":
     file    => "/etc/php5/conf.d/set-via-puppet.ini",
-    content => "${real_var} = ${value}\n",
     require => File["/etc/php5/conf.d/set-via-puppet.ini"],
+    lens    => "PHP.lns",
+    changes => "set PHP/${real_var} '${value}'"
   }
 }
