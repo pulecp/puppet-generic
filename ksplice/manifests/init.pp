@@ -53,3 +53,13 @@ class ksplice {
     require => Package["uptrack"];
   }
 }
+
+define ksplice::proxy ($proxy) {
+  kaugeas { $name:
+    file    => '/etc/uptrack/uptrack.conf',
+    # Puppet.lns is somesort of wildcard Ini lens :/
+    lens    => 'Puppet.lns',
+    changes => "set Network/https_proxy ${proxy}",
+    require => File['/etc/uptrack/uptrack.conf'];
+  }
+}
