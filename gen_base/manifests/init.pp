@@ -1403,6 +1403,7 @@ class gen_base::perl {
 #
 class gen_base::php5_gd {
   include gen_base::libpng12_0
+
   kpackage { "php5-gd":
     ensure => latest;
   }
@@ -1418,6 +1419,7 @@ class gen_base::php5_gd {
 #
 class gen_base::php5_imagick {
   include gen_base::imagemagick
+
   kpackage { "php5-imagick":
     ensure => latest;
   }
@@ -1465,6 +1467,34 @@ class gen_base::php5_mysql {
   }
 }
 
+# Class: gen_base::php5_recode
+#
+# Actions:
+#  Install php5-recode
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::php5_recode {
+  kpackage { "php5-recode":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::php5_sqlite
+#
+# Actions:
+#  Install php5-sqlite
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::php5_sqlite {
+  kpackage { "php5-sqlite":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::php5_xdebug
 #
 # Actions:
@@ -1475,6 +1505,20 @@ class gen_base::php5_mysql {
 #
 class gen_base::php5_xdebug {
   kpackage { "php5-xdebug":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::php_pear
+#
+# Actions:
+#  Install php-pear
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::php_pear {
+  kpackage { "php-pear":
     ensure => latest;
   }
 }
@@ -1503,6 +1547,20 @@ class gen_base::python-argparse {
 #
 class gen_base::python-dnspython {
   kpackage { "python-dnspython":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python_imaging
+#
+# Actions:
+#  Install python-imaging
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_imaging {
+  kpackage { "python-imaging":
     ensure => latest;
   }
 }
