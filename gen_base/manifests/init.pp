@@ -1581,6 +1581,34 @@ class gen_base::python_pycurl {
   }
 }
 
+# Class: gen_base::python_pypdf
+#
+# Actions:
+#  Install python-pypdf
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_pypdf {
+  kpackage { "python-pypdf":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python_reportlab
+#
+# Actions:
+#  Install python-reportlab
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_reportlab {
+  kpackage { "python-reportlab":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::qemu_utils
 #
 # Actions:
