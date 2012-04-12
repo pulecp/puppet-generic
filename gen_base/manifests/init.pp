@@ -1531,7 +1531,7 @@ class gen_base::php_pear {
 # Depends:
 #  gen_puppet
 #
-class gen_base::pstotext
+class gen_base::pstotext {
   kpackage { "pstotext":
     ensure => latest;
   }
