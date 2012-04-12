@@ -32,7 +32,8 @@ class gen_ferm {
 
   mod {
     "INVALID":
-      value => "INVALID";
+      value  => "INVALID",
+      action => "REJECT";
     "ESTABLISHED":
       value  => "(ESTABLISHED RELATED)",
       action => "ACCEPT";
