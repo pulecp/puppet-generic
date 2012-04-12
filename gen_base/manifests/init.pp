@@ -1523,6 +1523,20 @@ class gen_base::php_pear {
   }
 }
 
+# Class: gen_base::pstotext
+#
+# Actions:
+#  Install pstotext
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::pstotext
+  kpackage { "pstotext":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-argparse
 #
 # Actions:
