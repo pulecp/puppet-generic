@@ -271,6 +271,7 @@ define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn
     $purge = $purge_on_testpm
   } else {
     $purge = $purge_on_pm
+    notify { "Purge is ${purge}.":; }
   }
   $safe_name = regsubst($name, '/', '_', 'G')
   $concatdir = $concat::setup::concatdir
