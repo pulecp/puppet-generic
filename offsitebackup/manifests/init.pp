@@ -72,6 +72,8 @@ class offsitebackup::client($backup_server, $backup_home="/backup/${environment}
     ensure => latest;
   }
 
+  Sshkey <<| title == $backup_server |>>
+
   @@offsitebackup::common::backupkey { "$fqdn":
     backupserver => $backup_server,
     backuproot => $backup_home,
