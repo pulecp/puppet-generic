@@ -269,10 +269,10 @@ define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn
 
   if $settings::port != '8140' {
     $purge = $purge_on_testpm
-    notify { "Server port: ${settings::port}":; }
+    notify { "${name}: Server port: ${settings::serverport}":; }
   } else {
     $purge = $purge_on_pm
-    notify { "Purge is ${purge}.":; }
+    notify { "${name}: Purge is ${purge}.":; }
   }
   $safe_name = regsubst($name, '/', '_', 'G')
   $concatdir = $concat::setup::concatdir
