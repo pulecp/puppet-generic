@@ -31,6 +31,6 @@ define setfacl ($dir, $acl, $make_default = false) {
   exec { "Set acls '${acl}' on ${dir}":
     command => "/usr/bin/setfacl -R -m ${acl} ${dir}",
     unless  => "/usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^${acl}'",
-    require => [File[$dir], Kpackage["acl"]];
+    require => Kpackage["acl"];
   }
 }
