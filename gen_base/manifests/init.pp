@@ -362,6 +362,8 @@ class gen_base::libcurl3_gnutls {
 #  gen_puppet
 #
 class gen_base::libgnutls26 {
+  include gen_base::libtasn1_3
+
   kpackage { "libgnutls26":
     ensure => latest;
   }
@@ -954,6 +956,20 @@ class gen_base::libstomp_ruby {
 #
 class gen_base::libt1-5 {
   kpackage { "libt1-5":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libtasn1_3
+#
+# Actions:
+#  Install libtasn1-3
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libtasn1_3 {
+  kpackage { "libtasn1-3":
     ensure => latest;
   }
 }
