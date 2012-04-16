@@ -1670,6 +1670,20 @@ class gen_base::python-mysqldb {
   }
 }
 
+# Class: gen_base::python_psycopg2
+#
+# Actions:
+#  Install python-psycopg2
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_psycopg2 {
+  kpackage { "python-psycopg2":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_pycurl
 #
 # Actions:
