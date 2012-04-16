@@ -278,6 +278,8 @@ class gen_base::ifenslave-2_6 {
 #  gen_puppet
 #
 class gen_base::imagemagick {
+  include gen_base::libtiff4
+
   kpackage { "imagemagick":
     ensure => latest;
   }
@@ -970,6 +972,20 @@ class gen_base::libt1-5 {
 #
 class gen_base::libtasn1_3 {
   kpackage { "libtasn1-3":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libtiff4
+#
+# Actions:
+#  Install libtiff4
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libtiff4 {
+  kpackage { "libtiff4":
     ensure => latest;
   }
 }
