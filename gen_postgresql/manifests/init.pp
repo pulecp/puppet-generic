@@ -68,32 +68,30 @@ class gen_postgresql::server ($datadir=false, $version="8.4") {
     refreshonly => true,
     require     => Kpackage["postgresql-server"];
   }
+}
 
-  define db ($use_utf8=false) {
-  }
+define gen_postgresql::server::db ($use_utf8=false, $owner=false) {
+  if ! ($name in split($psql_dbs,';')) {
+    # Encoding set to utf8
+    if $use_utf8 { $enc = "-E UTF-8" } else { $enc = "" }
 
-  define grant($user=false, $db=false, $password=false, $hostname="localhost", $permissions="all", $grant_option=false) {
+    # Set the owner, if applicable
+    if $owner { $use_owner = "-O ${owner}" } else { $use_owner = "" }
+
+    exec { "Create db ${name} in PostgreSQL":
+      command => "/usr/bin/sudo -u postgres /usr/bin/createdb ${enc} ${use_owner} ${name} 'Created by puppet.'",
+      require => $owner ? {
+        false   => undef,
+        default => Gen_postgresql::Server::User[$owner],
+      };
+    }
   }
 }
 
-
-# Class: postgresql::munin
-#
-# Actions:
-#  Undocumented
-#
-# Depends:
-#  Undocumented
-#  gen_puppet
-#
-class postgresql::munin {
-  #munin::client::plugin { ["postgresql_bytes","postgresql_innodb","postgresql_queries","postgresql_slowqueries","postgresql_threads"]:; }
+define gen_postgresql::server::user (password) {
+  if ! ($name in split($psql_users,';')) {
+    exec { "Create user ${name} in PostgreSQL":
+      command => "/usr/bin/sudo -u postgres /usr/bin/psql -c \"CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;\"",
+    }
+  }
 }
-
-# Class: postgresql::backport_pinning
-#
-# Action:
-#  Setup pinning in apt for PostgreSQL from backports, if needed.
-#
-# Depends:
-#  gen_apt
