@@ -184,6 +184,20 @@ class gen_base::dpkg {
   }
 }
 
+# Class: gen_base::ec2-api-tools
+#
+# Actions:
+#  Install ec2-api-tools
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ec2-api-tools {
+  kpackage { "ec2-api-tools":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::echoping
 #
 # Actions:
