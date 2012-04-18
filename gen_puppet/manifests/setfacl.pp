@@ -28,15 +28,26 @@ define setfacl ($dir=false, $acl, $make_default = false) {
       fail("Can't make a default ACL if you have already specified default: in the acl. Please fix this.")
     }
 
-    setfacl { "Set default ${acl} for ${real_dir}":
-      dir => $real_dir,
-      acl => "default:${acl}",
+    exec {
+      "Set default acls '${acl}' on ${real_dir}":
+        command => "/usr/bin/setfacl -R -m default:${acl} ${real_dir}",
+        unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:${acl}'",
+        require => Kpackage["acl"];
+      "Set default acls '${acl}' on ${real_dir} (mask)":
+        command => "/usr/bin/setfacl -R -m default:mask:rwx ${real_dir}",
+        unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:mask:rwx'",
+        require => Kpackage["acl"];
     }
   }
 
-  exec { "Set acls '${acl}' on ${real_dir}":
-    command => "/usr/bin/setfacl -R -m ${acl} ${real_dir}",
-    unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^${acl}'",
-    require => Kpackage["acl"];
+  exec {
+    "Set acls '${acl}' on ${real_dir}":
+      command => "/usr/bin/setfacl -R -m ${acl} ${real_dir}",
+      unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^${acl}'",
+      require => Kpackage["acl"];
+    "Set acls '${acl}' on ${real_dir} (mask)":
+      command => "/usr/bin/setfacl -R -m mask:rwx ${real_dir}",
+      unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^mask:rwx'",
+      require => Kpackage["acl"];
   }
 }
