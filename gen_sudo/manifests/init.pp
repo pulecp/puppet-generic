@@ -75,6 +75,7 @@ define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $c
 
     exec { "check-sudoers-${sanitized_name}":
       command     => "/bin/sh -c 'if /usr/sbin/visudo -c -f /etc/sudoers.d/${sanitized_name}; then exit 0; else /bin/rm -f /etc/sudoers.d/${sanitized_name}; exit 1; fi'",
+      require     => Package["sudo"],
       refreshonly => true;
     }
   } else {
