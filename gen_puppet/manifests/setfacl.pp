@@ -3,19 +3,19 @@
 # Define: setfacl
 #
 # Parameters:
-#	make_default
-#		Undocumented
-#	acl
-#		Undocumented
-#	dir
-#		Undocumented
+#  make_default
+#    Undocumented
+#  acl
+#    Undocumented
+#  dir
+#    Undocumented
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 define setfacl ($dir=false, $acl, $make_default = false) {
   $real_dir = $dir ? {
