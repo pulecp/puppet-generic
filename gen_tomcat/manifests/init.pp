@@ -108,16 +108,47 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 #  gen_tomcat
 #
 class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
-  kpackage { "tomcat6-admin":; }
+  kpackage { "tomcat6-admin":
+    notify => Exec["remove-tomcatmanagerxml"];
+  }
+
+  # This is a workaround for a bug in Augeas' xml lens that causes it to fail
+  # on XML <elements/> like this one (<elements></elements> is fine);
+  # The "tomcat6-admin" package includes files with this faulty XML tag.
+  exec { "remove-tomcatmanagerxml":
+    command     => "/bin/rm -f /etc/tomcat6/Catalina/localhost/manager.xml /etc/tomcat6/Catalina/localhost/host-manager.xml",
+    refreshonly => true,
+    notify      => [File["/etc/tomcat6/Catalina/localhost/manager.xml"],File["/etc/tomcat6/Catalina/localhost/host-manager.xml"]],
+    require     => Package["tomcat6-admin"];
+  }
+
+  file {
+    "/etc/tomcat6/Catalina/localhost/manager.xml":
+      content => template("gen_tomcat/manager.xml"),
+      replace => false,
+      owner   => "tomcat6",
+      group   => "tomcat6",
+      mode    => 0664,
+      require => Package["tomcat6-admin"],
+      notify  => Gen_tomcat::Context["manager"];
+    "/etc/tomcat6/Catalina/localhost/host-manager.xml":
+      content => template("gen_tomcat/host-manager.xml"),
+      replace => false,
+      owner   => "tomcat6",
+      group   => "tomcat6",
+      mode    => 0664,
+      require => Package["tomcat6-admin"],
+      notify  => Gen_tomcat::Context["host-manager"];
+  }
 
   gen_tomcat::context {
     "manager":
       war     => "/usr/share/tomcat6-admin/manager",
-      require => Package["tomcat6-admin"],
+      require => Kpackage["tomcat6-admin"],
       urlpath => "/manager";
     "host-manager":
       war     => "/usr/share/tomcat6-admin/host-manager",
-      require => Package["tomcat6-admin"],
+      require => Kpackage["tomcat6-admin"],
       urlpath => "/host-manager";
   }
 
