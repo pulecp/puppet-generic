@@ -35,7 +35,7 @@ define setfacl ($dir=false, $acl, $make_default = false) {
         require => Kpackage["acl"];
       "Set default acls '${acl}' on ${real_dir} (mask)":
         command => "/usr/bin/setfacl -R -m default:mask:rwx ${real_dir}",
-        unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:mask:rwx'",
+        unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:mask::rwx'",
         require => Kpackage["acl"];
     }
   }
@@ -47,7 +47,7 @@ define setfacl ($dir=false, $acl, $make_default = false) {
       require => Kpackage["acl"];
     "Set acls '${acl}' on ${real_dir} (mask)":
       command => "/usr/bin/setfacl -R -m mask:rwx ${real_dir}",
-      unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^mask:rwx'",
+      unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^mask::rwx'",
       require => Kpackage["acl"];
   }
 }
