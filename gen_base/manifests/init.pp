@@ -1684,16 +1684,16 @@ class gen_base::python_libxml2 {
   }
 }
 
-# Class: gen_base::python_lxm
+# Class: gen_base::python_lxml
 #
 # Actions:
-#  Install python-lxm
+#  Install python-lxml
 #
 # Depends:
 #  gen_puppet
 #
-class gen_base::python_lxm {
-  kpackage { "python-lxm":
+class gen_base::python_lxml {
+  kpackage { "python-lxml":
     ensure => latest;
   }
 }
