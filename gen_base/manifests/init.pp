@@ -399,6 +399,20 @@ class gen_base::libgssapi-krb5-2 {
   }
 }
 
+# Class: gen_base::libjs_jquery
+#
+# Actions:
+#  Install libjs-jquery
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libjs_jquery {
+  kpackage { "libjs-jquery":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libk5crypto3
 #
 # Actions:
