@@ -1597,6 +1597,20 @@ class gen_base::python-argparse {
   }
 }
 
+# Class: gen_base::python_dev
+#
+# Actions:
+#  Install python-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_dev {
+  kpackage { "python-dev":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-dnspython
 #
 # Actions:
@@ -1670,6 +1684,20 @@ class gen_base::python_libxml2 {
   }
 }
 
+# Class: gen_base::python_lxm
+#
+# Actions:
+#  Install python-lxm
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_lxm {
+  kpackage { "python-lxm":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-mysqldb
 #
 # Actions:
@@ -1737,6 +1765,20 @@ class gen_base::python_pypdf {
 #
 class gen_base::python_reportlab {
   kpackage { "python-reportlab":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python_virtualenv
+#
+# Actions:
+#  Install python-virtualenv
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_virtualenv {
+  kpackage { "python-virtualenv":
     ensure => latest;
   }
 }
