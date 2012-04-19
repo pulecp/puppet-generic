@@ -2048,3 +2048,18 @@ class gen_base::xvfb {
     ensure => latest;
   }
 }
+
+# Class: gen_base::zip
+#
+# Actions:
+#  Install zip
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::zip {
+  kpackage { "zip":
+    ensure => latest;
+  }
+}
+
