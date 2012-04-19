@@ -17,7 +17,7 @@
 #  Undocumented
 #  gen_puppet
 #
-define setfacl ($dir=false, $acl, $make_default = false, $recurse = true) {
+define setfacl ($dir=false, $acl, $make_default = false, $recurse = true, $mask = "rwx") {
   $real_dir = $dir ? {
     false   => $name,
     default => $dir,
@@ -39,8 +39,8 @@ define setfacl ($dir=false, $acl, $make_default = false, $recurse = true) {
         unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:${acl}'",
         require => Kpackage["acl"];
       "Set default acls '${acl}' on ${real_dir} (mask)":
-        command => "/usr/bin/setfacl ${real_r} -m default:mask:rwx ${real_dir}",
-        unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:mask::rwx'",
+        command => "/usr/bin/setfacl ${real_r} -n -m default:mask:${mask} ${real_dir}",
+        unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:mask::${mask}'",
         require => Kpackage["acl"];
     }
   }
@@ -51,8 +51,8 @@ define setfacl ($dir=false, $acl, $make_default = false, $recurse = true) {
       unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^${acl}'",
       require => Kpackage["acl"];
     "Set acls '${acl}' on ${real_dir} (mask)":
-      command => "/usr/bin/setfacl ${real_r} -m mask:rwx ${real_dir}",
-      unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^mask::rwx'",
+      command => "/usr/bin/setfacl ${real_r} -n -m mask:${mask} ${real_dir}",
+      unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^mask::${mask}'",
       require => Kpackage["acl"];
   }
 }
