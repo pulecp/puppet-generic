@@ -4,7 +4,6 @@ import "concat.pp"
 import "ekfile.pp"
 import "kaugeas.pp"
 import "kcron.pp"
-import "kpackage.pp"
 import "kservice.pp"
 import "line.pp"
 import "setfacl.pp"
@@ -17,6 +16,10 @@ File {
   owner => "root",
   group => "root",
   mode  => 644,
+}
+
+Package {
+  require => Exec["/usr/bin/apt-get update"],
 }
 
 # Class: gen_puppet
@@ -34,7 +37,7 @@ class gen_puppet {
   include gen_base::augeas
   include gen_base::facter
 
-  kpackage {
+  package {
     ["checkpuppet","puppet-common"]:
       ensure => latest;
     "puppet":
@@ -46,7 +49,7 @@ class gen_puppet {
     command     => "/usr/bin/touch /etc/puppet/reloadpuppetd",
     creates     => "/etc/puppet/reloadpuppetd",
     refreshonly => true,
-    require     => Kpackage["puppet-common","checkpuppet"],
+    require     => Package["puppet-common","checkpuppet"],
   }
 
   # Workaround for http://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/
@@ -73,7 +76,7 @@ class gen_puppet::puppet_conf {
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
-    require => Kpackage["puppet-common"],
+    require => Package["puppet-common"],
     notify  => Exec["reload-puppet"],
   }
 

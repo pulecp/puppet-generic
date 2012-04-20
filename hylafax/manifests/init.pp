@@ -15,7 +15,7 @@ class hylafax::server {
   include gen_base::libcups2
   include gen_base::libcupsimage2
 
-  kpackage { "hylafax-server":
+  package { "hylafax-server":
     ensure => latest,
   }
 

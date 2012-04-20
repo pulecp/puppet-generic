@@ -2,7 +2,7 @@ class gen_java::sun_java6_jdk {
 
   include gen_java::sun_java6_jre
 
-  kpackage { "sun-java6-jdk":
+  package { "sun-java6-jdk":
     responsefile => "/tmp/sunlicense.preseed",
     require => File["/tmp/sunlicense.preseed"];
   }
@@ -29,7 +29,7 @@ class gen_java::sun_java6_jre {
     content => template("gen_java/preseed");
   }
 
-  kpackage { "sun-java6-jre":
+  package { "sun-java6-jre":
     responsefile => "/tmp/sunlicense.preseed",
     require => File["/tmp/sunlicense.preseed"];
   }
@@ -38,11 +38,11 @@ class gen_java::sun_java6_jre {
 class gen_java::oracle_java7_jdk {
   include gen_java::oracle_java7_jre
 
-  kpackage { "oracle-java7-jdk":; }
+  package { "oracle-java7-jdk":; }
 }
 
 class gen_java::oracle_java7_jre {
-  kpackage { "oracle-java7-jre":; }
+  package { "oracle-java7-jre":; }
 }
 
 # Class: gen_java::oracle_java7_jre_crypto_policy

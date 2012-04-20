@@ -15,9 +15,9 @@ class gen_puppet::queue {
   #include gen_base::libstomp_ruby
   include gen_base::ruby_stomp
 
-  kpackage { "puppetmaster-common":
+  package { "puppetmaster-common":
     ensure  => latest,
-    require => Kpackage["libstomp-ruby","libactiverecord-ruby1.8"],
+    require => Package["libstomp-ruby","libactiverecord-ruby1.8"],
   }
 }
 
@@ -57,18 +57,18 @@ define gen_puppet::queue::runner ($configfile = false) {
   file { "/etc/init.d/${scriptname}":
     content => template("gen_puppet/queue/initscript"),
     mode    => 755,
-    require => Kpackage["puppetmaster-common"],
+    require => Package["puppetmaster-common"],
   }
 
   file { "/etc/default/${scriptname}":
     content => template("gen_puppet/queue/default"),
-    require => Kpackage["puppetmaster-common"],
+    require => Package["puppetmaster-common"],
   }
 
   # The service
   service { $scriptname:
     hasstatus => true,
     ensure    => running,
-    require   => [Kpackage["puppetmaster-common"],File["/etc/init.d/${scriptname}","/etc/default/${scriptname}"]];
+    require   => [Package["puppetmaster-common"],File["/etc/init.d/${scriptname}","/etc/default/${scriptname}"]];
   }
 }

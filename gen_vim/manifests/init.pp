@@ -49,7 +49,7 @@ define gen_vim::addon ($package=false) {
     default => $package,
   }
 
-  kpackage { $the_package:
+  package { $the_package:
     ensure => latest;
   }
 

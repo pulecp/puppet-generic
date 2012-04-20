@@ -87,7 +87,7 @@ class apache {
 
 
    # Let's make sure we've got apache2 installed
-   kpackage {
+   package {
   "apache2":
     ensure => installed;
   "libapr1":

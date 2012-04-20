@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class p910nd::server {
-  kpackage { "p910nd":; }
+  package { "p910nd":; }
 
   service {
     "p910nd":

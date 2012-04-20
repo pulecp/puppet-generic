@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class webalizer {
-  kpackage { "webalizer":; }
+  package { "webalizer":; }
 
   file { "/etc/cron.daily/webalizer":
     mode    => 755,

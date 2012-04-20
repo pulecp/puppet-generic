@@ -167,7 +167,7 @@ define gen_apt::key ($content) {
 #  gen_puppet
 #
 class gen_apt::cron_apt {
-  kpackage { "cron-apt":
+  package { "cron-apt":
     ensure => latest;
   }
 
@@ -207,7 +207,7 @@ define gen_apt::cron_apt::config ($mailto, $mailon, $apt_options="", $apt_hostna
 
   file { $configfile:
     content => template("gen_apt/cron_apt_configfile"),
-    require => Kpackage["cron-apt"];
+    require => Package["cron-apt"];
   }
 
   $safe_configfile = regsubst($configfile, '/', '_')

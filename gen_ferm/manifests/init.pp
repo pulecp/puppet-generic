@@ -15,14 +15,14 @@ class gen_ferm {
   kservice { "ferm":
     hasstatus => false,
     ensure    => false,
-    require   => Kpackage["libnet-dns-perl"],
+    require   => Package["libnet-dns-perl"],
     pensure   => latest;
   }
 
   concat { "/etc/ferm/ferm.conf":
     group            => "adm",
     notify           => Exec["reload-ferm"],
-    require          => Kpackage["ferm"];
+    require          => Package["ferm"];
   }
 
   rule { "Accept local traffic":

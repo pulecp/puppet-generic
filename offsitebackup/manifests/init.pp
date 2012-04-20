@@ -68,7 +68,7 @@ class offsitebackup::common {
 class offsitebackup::client($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B") {
   include gen_base::backup-scripts
 
-  kpackage { ["offsite-backup"]:
+  package { ["offsite-backup"]:
     ensure => latest;
   }
 

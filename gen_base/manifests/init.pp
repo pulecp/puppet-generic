@@ -9,7 +9,7 @@
 #  gen_puppet
 #
 class gen_base::abswrap {
-  kpackage { "abswrap":
+  package { "abswrap":
     ensure => latest;
   }
 }
@@ -23,7 +23,7 @@ class gen_base::abswrap {
 #  gen_puppet
 #
 class gen_base::ant {
-  kpackage { "ant":
+  package { "ant":
     ensure => latest;
   }
 }
@@ -37,7 +37,7 @@ class gen_base::ant {
 #  gen_puppet
 #
 class gen_base::apache2_mpm_prefork {
-  kpackage { "apache2-mpm-prefork":
+  package { "apache2-mpm-prefork":
     ensure => latest;
   }
 }
@@ -51,7 +51,7 @@ class gen_base::apache2_mpm_prefork {
 #  gen_puppet
 #
 class gen_base::apache2_mpm_worker {
-  kpackage { "apache2-mpm-worker":
+  package { "apache2-mpm-worker":
     ensure => latest;
   }
 }
@@ -65,7 +65,7 @@ class gen_base::apache2_mpm_worker {
 #  gen_puppet
 #
 class gen_base::augeas {
-  kpackage { ["libaugeas-ruby", "augeas-lenses","libaugeas-ruby1.8","libaugeas0","augeas-tools"]:
+  package { ["libaugeas-ruby", "augeas-lenses","libaugeas-ruby1.8","libaugeas0","augeas-tools"]:
     ensure => latest,
     notify => Exec["reload-puppet"];
   }
@@ -80,7 +80,7 @@ class gen_base::augeas {
 #  gen_puppet
 #
 class gen_base::backup-scripts {
-  kpackage { "backup-scripts":
+  package { "backup-scripts":
     ensure => latest;
   }
 }
@@ -94,7 +94,7 @@ class gen_base::backup-scripts {
 #  gen_puppet
 #
 class gen_base::base-files {
-  kpackage { "base-files":
+  package { "base-files":
     ensure => latest;
   }
 }
@@ -108,7 +108,7 @@ class gen_base::base-files {
 #  gen_puppet
 #
 class gen_base::bridge-utils {
-  kpackage { "bridge-utils":
+  package { "bridge-utils":
     ensure => latest;
   }
 }
@@ -122,7 +122,7 @@ class gen_base::bridge-utils {
 #  gen_puppet
 #
 class gen_base::bsdtar {
-  kpackage { "bsdtar":
+  package { "bsdtar":
     ensure => latest;
   }
 }
@@ -136,7 +136,7 @@ class gen_base::bsdtar {
 #  gen_puppet
 #
 class gen_base::bzip2 {
-  kpackage { "bzip2":
+  package { "bzip2":
     ensure => latest;
   }
 }
@@ -151,7 +151,7 @@ class gen_base::bzip2 {
 #
 class gen_base::curl {
   include gen_base::libcurl3
-  kpackage { "curl":
+  package { "curl":
     ensure => latest;
   }
 }
@@ -165,7 +165,7 @@ class gen_base::curl {
 #  gen_puppet
 #
 class gen_base::dnsutils {
-  kpackage { "dnsutils":
+  package { "dnsutils":
     ensure => latest;
   }
 }
@@ -179,7 +179,7 @@ class gen_base::dnsutils {
 #  gen_puppet
 #
 class gen_base::dpkg {
-  kpackage { "dpkg":
+  package { "dpkg":
     ensure => latest;
   }
 }
@@ -193,7 +193,7 @@ class gen_base::dpkg {
 #  gen_puppet
 #
 class gen_base::ec2-api-tools {
-  kpackage { "ec2-api-tools":
+  package { "ec2-api-tools":
     ensure => latest;
   }
 }
@@ -207,7 +207,7 @@ class gen_base::ec2-api-tools {
 #  gen_puppet
 #
 class gen_base::echoping {
-  kpackage { "echoping":
+  package { "echoping":
     ensure => latest;
   }
 }
@@ -222,7 +222,7 @@ class gen_base::echoping {
 #
 class gen_base::elinks {
   include gen_base::libgnutls26
-  kpackage { "elinks":
+  package { "elinks":
     ensure => latest;
   }
 }
@@ -236,7 +236,7 @@ class gen_base::elinks {
 #  gen_puppet
 #
 class gen_base::facter {
-  kpackage { "facter":
+  package { "facter":
     notify => Exec["reload-puppet"];
   }
 }
@@ -250,7 +250,7 @@ class gen_base::facter {
 #  gen_puppet
 #
 class gen_base::genisoimage {
-  kpackage { "genisoimage":
+  package { "genisoimage":
     ensure => latest;
   }
 }
@@ -264,7 +264,7 @@ class gen_base::genisoimage {
 #  gen_puppet
 #
 class gen_base::ia32-libs {
-  kpackage { "ia32-libs":
+  package { "ia32-libs":
     ensure => latest;
   }
 }
@@ -278,7 +278,7 @@ class gen_base::ia32-libs {
 #  gen_puppet
 #
 class gen_base::ifenslave-2_6 {
-  kpackage { "ifenslave-2.6":
+  package { "ifenslave-2.6":
     ensure => latest;
   }
 }
@@ -294,7 +294,7 @@ class gen_base::ifenslave-2_6 {
 class gen_base::imagemagick {
   include gen_base::libtiff4
 
-  kpackage { "imagemagick":
+  package { "imagemagick":
     ensure => latest;
   }
 }
@@ -308,7 +308,7 @@ class gen_base::imagemagick {
 #  gen_puppet
 #
 class gen_base::ipaddress_ruby {
-  kpackage { "ipaddress-ruby":
+  package { "ipaddress-ruby":
     ensure => latest;
   }
 }
@@ -322,7 +322,7 @@ class gen_base::ipaddress_ruby {
 #  gen_puppet
 #
 class gen_base::javascript-common {
-  kpackage { "javascript-common":
+  package { "javascript-common":
     ensure => latest;
   }
 }
@@ -336,7 +336,7 @@ class gen_base::javascript-common {
 #  gen_puppet
 #
 class gen_base::jmxquery {
-  kpackage { "jmxquery":
+  package { "jmxquery":
     ensure => latest;
   }
 }
@@ -350,7 +350,7 @@ class gen_base::jmxquery {
 #  gen_puppet
 #
 class gen_base::libcurl3 {
-  kpackage { "libcurl3":
+  package { "libcurl3":
     ensure => latest;
   }
 }
@@ -364,7 +364,7 @@ class gen_base::libcurl3 {
 #  gen_puppet
 #
 class gen_base::libcurl3_gnutls {
-  kpackage { "libcurl3-gnutls":
+  package { "libcurl3-gnutls":
     ensure => latest;
   }
 }
@@ -380,7 +380,7 @@ class gen_base::libcurl3_gnutls {
 class gen_base::libgnutls26 {
   include gen_base::libtasn1_3
 
-  kpackage { "libgnutls26":
+  package { "libgnutls26":
     ensure => latest;
   }
 }
@@ -394,7 +394,7 @@ class gen_base::libgnutls26 {
 #  gen_puppet
 #
 class gen_base::libgssapi-krb5-2 {
-  kpackage { "libgssapi-krb5-2":
+  package { "libgssapi-krb5-2":
     ensure => latest;
   }
 }
@@ -422,7 +422,7 @@ class gen_base::libjs_jquery {
 #  gen_puppet
 #
 class gen_base::libk5crypto3 {
-  kpackage { "libk5crypto3":
+  package { "libk5crypto3":
     ensure => latest;
   }
 }
@@ -436,7 +436,7 @@ class gen_base::libk5crypto3 {
 #  gen_puppet
 #
 class gen_base::libkrb5-3 {
-  kpackage { "libkrb5-3":
+  package { "libkrb5-3":
     ensure => latest;
   }
 }
@@ -450,7 +450,7 @@ class gen_base::libkrb5-3 {
 #  gen_puppet
 #
 class gen_base::libkrb5support0 {
-  kpackage { "libkrb5support0":
+  package { "libkrb5support0":
     ensure => latest;
   }
 }
@@ -464,7 +464,7 @@ class gen_base::libkrb5support0 {
 #  gen_puppet
 #
 class gen_base::libactiverecord_ruby18 {
-  kpackage { "libactiverecord-ruby1.8":
+  package { "libactiverecord-ruby1.8":
     ensure => latest;
   }
 }
@@ -478,7 +478,7 @@ class gen_base::libactiverecord_ruby18 {
 #  gen_puppet
 #
 class gen_base::libapache2-mod-auth-mysql {
-  kpackage { "libapache2-mod-auth-mysql":
+  package { "libapache2-mod-auth-mysql":
     ensure => latest,
     notify => Exec["reload-apache2"];
   }
@@ -493,7 +493,7 @@ class gen_base::libapache2-mod-auth-mysql {
 #  gen_puppet
 #
 class gen_base::libapache2-mod-fastcgi {
-  kpackage { "libapache2-mod-fastcgi":
+  package { "libapache2-mod-fastcgi":
     ensure => latest,
     notify => Exec["reload-apache2"];
   }
@@ -508,7 +508,7 @@ class gen_base::libapache2-mod-fastcgi {
 #  gen_puppet
 #
 class gen_base::libapache2-mod-fcgid {
-  kpackage { "libapache2-mod-fcgid":
+  package { "libapache2-mod-fcgid":
     ensure => latest,
     notify => Exec["reload-apache2"];
   }
@@ -523,7 +523,7 @@ class gen_base::libapache2-mod-fcgid {
 #  gen_puppet
 #
 class gen_base::libapache2-mod-passenger {
-  kpackage { "libapache2-mod-passenger":
+  package { "libapache2-mod-passenger":
     ensure => latest;
   }
 }
@@ -537,7 +537,7 @@ class gen_base::libapache2-mod-passenger {
 #  gen_puppet
 #
 class gen_base::libapache2_mod_php5 {
-  kpackage { "libapache2-mod-php5":
+  package { "libapache2-mod-php5":
     ensure => latest;
   }
 }
@@ -551,7 +551,7 @@ class gen_base::libapache2_mod_php5 {
 #  gen_puppet
 #
 class gen_base::libapache2-mod-perl2 {
-  kpackage { "libapache2-mod-perl2":
+  package { "libapache2-mod-perl2":
     ensure => latest;
   }
 }
@@ -565,7 +565,7 @@ class gen_base::libapache2-mod-perl2 {
 #  gen_puppet
 #
 class gen_base::libapache2-mod-wsgi {
-  kpackage { "libapache2-mod-wsgi":
+  package { "libapache2-mod-wsgi":
     ensure => latest;
   }
 }
@@ -579,7 +579,7 @@ class gen_base::libapache2-mod-wsgi {
 #  gen_puppet
 #
 class gen_base::libapr1 {
-  kpackage { "libapr1":
+  package { "libapr1":
     ensure => latest;
   }
 }
@@ -593,7 +593,7 @@ class gen_base::libapr1 {
 #  gen_puppet
 #
 class gen_base::libcommons-logging-java {
-  kpackage { "libcommons-logging-java":
+  package { "libcommons-logging-java":
     ensure => latest;
   }
 }
@@ -607,7 +607,7 @@ class gen_base::libcommons-logging-java {
 #  gen_puppet
 #
 class gen_base::libcups2 {
-  kpackage { "libcups2":
+  package { "libcups2":
     ensure => latest;
   }
 }
@@ -621,7 +621,7 @@ class gen_base::libcups2 {
 #  gen_puppet
 #
 class gen_base::libcupsimage2 {
-  kpackage { "libcupsimage2":
+  package { "libcupsimage2":
     ensure => latest;
   }
 }
@@ -635,7 +635,7 @@ class gen_base::libcupsimage2 {
 #  gen_puppet
 #
 class gen_base::libdate-calc-perl {
-  kpackage { "libdate-calc-perl":
+  package { "libdate-calc-perl":
     ensure => latest;
   }
 }
@@ -649,7 +649,7 @@ class gen_base::libdate-calc-perl {
 #  gen_puppet
 #
 class gen_base::libdate-manip-perl {
-  kpackage { "libdate-manip-perl":
+  package { "libdate-manip-perl":
     ensure => latest;
   }
 }
@@ -663,7 +663,7 @@ class gen_base::libdate-manip-perl {
 #  gen_puppet
 #
 class gen_base::libdbi-perl {
-  kpackage { "libdbi-perl":
+  package { "libdbi-perl":
     ensure => latest;
   }
 }
@@ -677,7 +677,7 @@ class gen_base::libdbi-perl {
 #  gen_puppet
 #
 class gen_base::libfreetype6 {
-  kpackage { "libfreetype6":
+  package { "libfreetype6":
     ensure => latest;
   }
 }
@@ -691,7 +691,7 @@ class gen_base::libfreetype6 {
 #  gen_puppet
 #
 class gen_base::libio-socket-inet6-perl {
-  kpackage { "libio-socket-inet6-perl":
+  package { "libio-socket-inet6-perl":
     ensure => latest;
   }
 }
@@ -705,7 +705,7 @@ class gen_base::libio-socket-inet6-perl {
 #  gen_puppet
 #
 class gen_base::libmozjs2d {
-  kpackage { "libmozjs2d":
+  package { "libmozjs2d":
     ensure => latest;
   }
 }
@@ -719,7 +719,7 @@ class gen_base::libmozjs2d {
 #  gen_puppet
 #
 class gen_base::libmysql-ruby {
-  kpackage { "libmysql-ruby":
+  package { "libmysql-ruby":
     ensure => latest;
   }
 }
@@ -733,7 +733,7 @@ class gen_base::libmysql-ruby {
 #  gen_puppet
 #
 class gen_base::libnet_dns_perl {
-  kpackage { "libnet-dns-perl":
+  package { "libnet-dns-perl":
     ensure => latest;
   }
 }
@@ -747,7 +747,7 @@ class gen_base::libnet_dns_perl {
 #  gen_puppet
 #
 class gen_base::libnet-ip-perl {
-  kpackage { "libnet-ip-perl":
+  package { "libnet-ip-perl":
     ensure => latest;
   }
 }
@@ -761,7 +761,7 @@ class gen_base::libnet-ip-perl {
 #  gen_puppet
 #
 class gen_base::libnet-ping-external-perl {
-  kpackage { "libnet-ping-external-perl":
+  package { "libnet-ping-external-perl":
     ensure => latest;
   }
 }
@@ -775,7 +775,7 @@ class gen_base::libnet-ping-external-perl {
 #  gen_puppet
 #
 class gen_base::liblog4j1_2-java {
-  kpackage { "liblog4j1.2-java":
+  package { "liblog4j1.2-java":
     ensure => latest;
   }
 }
@@ -789,7 +789,7 @@ class gen_base::liblog4j1_2-java {
 #  gen_puppet
 #
 class gen_base::libmailtools-perl {
-  kpackage { "libmailtools-perl":
+  package { "libmailtools-perl":
     ensure => latest;
   }
 }
@@ -803,7 +803,7 @@ class gen_base::libmailtools-perl {
 #  gen_puppet
 #
 class gen_base::libpam-modules {
-  kpackage { "libpam-modules":
+  package { "libpam-modules":
     ensure => latest;
   }
 }
@@ -817,7 +817,7 @@ class gen_base::libpam-modules {
 #  gen_puppet
 #
 class gen_base::libpam-runtime {
-  kpackage { "libpam-runtime":
+  package { "libpam-runtime":
     ensure => latest;
   }
 }
@@ -831,7 +831,7 @@ class gen_base::libpam-runtime {
 #  gen_puppet
 #
 class gen_base::libpam0g {
-  kpackage { "libpam0g":
+  package { "libpam0g":
     ensure => latest;
   }
 }
@@ -845,7 +845,7 @@ class gen_base::libpam0g {
 #  gen_puppet
 #
 class gen_base::libparallel-forkmanager-perl {
-  kpackage { "libparallel-forkmanager-perl":
+  package { "libparallel-forkmanager-perl":
     ensure => latest;
   }
 }
@@ -859,7 +859,7 @@ class gen_base::libparallel-forkmanager-perl {
 #  gen_puppet
 #
 class gen_base::libpng12_0 {
-  kpackage { "libpng12-0":
+  package { "libpng12-0":
     ensure => latest;
   }
 }
@@ -873,7 +873,7 @@ class gen_base::libpng12_0 {
 #  gen_puppet
 #
 class gen_base::libpq5 {
-  kpackage { "libpq5":
+  package { "libpq5":
     ensure => latest;
   }
 }
@@ -887,7 +887,7 @@ class gen_base::libpq5 {
 #  gen_puppet
 #
 class gen_base::libreadline5-dev {
-  kpackage { "libreadline5-dev":
+  package { "libreadline5-dev":
     ensure => latest;
   }
 }
@@ -901,7 +901,7 @@ class gen_base::libreadline5-dev {
 #  gen_puppet
 #
 class gen_base::libsnmp-perl {
-  kpackage { "libsnmp-perl":
+  package { "libsnmp-perl":
     ensure => latest;
   }
 }
@@ -915,7 +915,7 @@ class gen_base::libsnmp-perl {
 #  gen_puppet
 #
 class gen_base::libsocket6-perl {
-  kpackage { "libsocket6-perl":
+  package { "libsocket6-perl":
     ensure => latest;
   }
 }
@@ -929,7 +929,7 @@ class gen_base::libsocket6-perl {
 #  gen_puppet
 #
 class gen_base::libspreadsheet-parseexcel-perl {
-  kpackage { "libspreadsheet-parseexcel-perl":
+  package { "libspreadsheet-parseexcel-perl":
     ensure => latest;
   }
 }
@@ -943,7 +943,7 @@ class gen_base::libspreadsheet-parseexcel-perl {
 #  gen_puppet
 #
 class gen_base::libssl-dev {
-  kpackage { "libssl-dev":
+  package { "libssl-dev":
     ensure => latest;
   }
 }
@@ -957,7 +957,7 @@ class gen_base::libssl-dev {
 #  gen_puppet
 #
 class gen_base::libstdcplusplus5 {
-  kpackage { "libstdc++5":
+  package { "libstdc++5":
     ensure => latest;
   }
 }
@@ -971,7 +971,7 @@ class gen_base::libstdcplusplus5 {
 #  gen_puppet
 #
 class gen_base::libstomp_ruby {
-  kpackage { "libstomp-ruby":
+  package { "libstomp-ruby":
     ensure => latest;
   }
 }
@@ -985,7 +985,7 @@ class gen_base::libstomp_ruby {
 #  gen_puppet
 #
 class gen_base::libt1-5 {
-  kpackage { "libt1-5":
+  package { "libt1-5":
     ensure => latest;
   }
 }
@@ -999,7 +999,7 @@ class gen_base::libt1-5 {
 #  gen_puppet
 #
 class gen_base::libtasn1_3 {
-  kpackage { "libtasn1-3":
+  package { "libtasn1-3":
     ensure => latest;
   }
 }
@@ -1013,7 +1013,7 @@ class gen_base::libtasn1_3 {
 #  gen_puppet
 #
 class gen_base::libtiff4 {
-  kpackage { "libtiff4":
+  package { "libtiff4":
     ensure => latest;
   }
 }
@@ -1027,7 +1027,7 @@ class gen_base::libtiff4 {
 #  gen_puppet
 #
 class gen_base::libtime-modules-perl {
-  kpackage { "libtime-modules-perl":
+  package { "libtime-modules-perl":
     ensure => latest;
   }
 }
@@ -1041,7 +1041,7 @@ class gen_base::libtime-modules-perl {
 #  gen_puppet
 #
 class gen_base::libwww-perl {
-  kpackage { "libwww-perl":
+  package { "libwww-perl":
     ensure => latest;
   }
 }
@@ -1055,7 +1055,7 @@ class gen_base::libwww-perl {
 #  gen_puppet
 #
 class gen_base::libxenstore3_0 {
-  kpackage { "libxenstore3.0":
+  package { "libxenstore3.0":
     ensure => latest;
   }
 }
@@ -1069,7 +1069,7 @@ class gen_base::libxenstore3_0 {
 #  gen_puppet
 #
 class gen_base::libxml2 {
-  kpackage { "libxml2":
+  package { "libxml2":
     ensure => latest;
   }
 }
@@ -1083,7 +1083,7 @@ class gen_base::libxml2 {
 #  gen_puppet
 #
 class gen_base::libxml2_utils {
-  kpackage { "libxml2-utils":
+  package { "libxml2-utils":
     ensure => latest;
   }
 }
@@ -1097,7 +1097,7 @@ class gen_base::libxml2_utils {
 #  gen_puppet
 #
 class gen_base::linux-base {
-  kpackage { "linux-base":
+  package { "linux-base":
     ensure => latest;
   }
 }
@@ -1115,13 +1115,13 @@ class gen_base::linux-base {
 #  gen_puppet
 #
 class gen_base::linux-image ($version) {
-  kpackage { "linux-image-${version}":
+  package { "linux-image-${version}":
     ensure => latest;
   }
 
   # Also install the normal lenny kernel if we're not running the backports kernel already
   if ($lsbdistcodename == "lenny") and ($kernelrelease != "2.6.26-2-amd64") {
-    kpackage { "linux-image-2.6.26-2-amd64":
+    package { "linux-image-2.6.26-2-amd64":
       ensure => latest;
     }
   }
@@ -1136,7 +1136,7 @@ class gen_base::linux-image ($version) {
 #  gen_puppet
 #
 class gen_base::mailgraph {
-  kpackage { "mailgraph":
+  package { "mailgraph":
     ensure => latest;
   }
 }
@@ -1150,7 +1150,7 @@ class gen_base::mailgraph {
 #  gen_puppet
 #
 class gen_base::mc {
-  kpackage { "mc":
+  package { "mc":
     ensure => latest;
   }
 }
@@ -1164,7 +1164,7 @@ class gen_base::mc {
 #  gen_puppet
 #
 class gen_base::module_init_tools {
-  kpackage { "module-init-tools":
+  package { "module-init-tools":
     ensure => latest;
   }
 }
@@ -1178,7 +1178,7 @@ class gen_base::module_init_tools {
 #  gen_puppet
 #
 class gen_base::ttf_mscorefonts_installer {
-  kpackage { "ttf-mscorefonts-installer":
+  package { "ttf-mscorefonts-installer":
     ensure => latest;
   }
 }
@@ -1192,7 +1192,7 @@ class gen_base::ttf_mscorefonts_installer {
 #  gen_puppet
 #
 class gen_base::mysql_client {
-  kpackage { "mysql-client":
+  package { "mysql-client":
     ensure => latest;
   }
 }
@@ -1207,7 +1207,7 @@ class gen_base::mysql_client {
 #
 class gen_base::munin-libvirt-plugins {
   include gen_base::python-libvirt
-  kpackage { "munin-libvirt-plugins":
+  package { "munin-libvirt-plugins":
     ensure => latest;
   }
 }
@@ -1221,7 +1221,7 @@ class gen_base::munin-libvirt-plugins {
 #  gen_puppet
 #
 class gen_base::nagios-nrpe-plugin {
-  kpackage { "nagios-nrpe-plugin":
+  package { "nagios-nrpe-plugin":
     ensure => latest;
   }
 }
@@ -1238,7 +1238,7 @@ class gen_base::nagios-plugins-standard {
   include gen_base::libxml2
   include gen_base::libpq5
 
-  kpackage { "nagios-plugins-standard":
+  package { "nagios-plugins-standard":
     ensure => latest;
   }
 }
@@ -1252,7 +1252,7 @@ class gen_base::nagios-plugins-standard {
 #  gen_puppet
 #
 class gen_base::nano {
-  kpackage { "nano":
+  package { "nano":
     ensure => latest;
   }
 }
@@ -1266,7 +1266,7 @@ class gen_base::nano {
 #  gen_puppet
 #
 class gen_base::netpbm {
-  kpackage { "netpbm":
+  package { "netpbm":
     ensure => latest;
   }
 }
@@ -1280,7 +1280,7 @@ class gen_base::netpbm {
 #  gen_puppet
 #
 class gen_base::nscd {
-  kpackage { "nscd":
+  package { "nscd":
     ensure => latest;
   }
 }
@@ -1294,7 +1294,7 @@ class gen_base::nscd {
 #  gen_puppet
 #
 class gen_base::openoffice_org_base {
-  kpackage { "openoffice.org-base":
+  package { "openoffice.org-base":
     ensure => installed;
   }
 }
@@ -1308,7 +1308,7 @@ class gen_base::openoffice_org_base {
 #  gen_puppet
 #
 class gen_base::openoffice_org_calc {
-  kpackage { "openoffice.org-calc":
+  package { "openoffice.org-calc":
     ensure => installed;
   }
 }
@@ -1322,7 +1322,7 @@ class gen_base::openoffice_org_calc {
 #  gen_puppet
 #
 class gen_base::openoffice_org_emailmerge {
-  kpackage { "openoffice.org-emailmerge":
+  package { "openoffice.org-emailmerge":
     ensure => installed;
   }
 }
@@ -1336,7 +1336,7 @@ class gen_base::openoffice_org_emailmerge {
 #  gen_puppet
 #
 class gen_base::openoffice_org_filter_binfilter {
-  kpackage { "openoffice.org-filter-binfilter":
+  package { "openoffice.org-filter-binfilter":
     ensure => installed;
   }
 }
@@ -1350,7 +1350,7 @@ class gen_base::openoffice_org_filter_binfilter {
 #  gen_puppet
 #
 class gen_base::openoffice_org_filter_mobiledev {
-  kpackage { "openoffice.org-filter-mobiledev":
+  package { "openoffice.org-filter-mobiledev":
     ensure => installed;
   }
 }
@@ -1364,7 +1364,7 @@ class gen_base::openoffice_org_filter_mobiledev {
 #  gen_puppet
 #
 class gen_base::openoffice_org_impress {
-  kpackage { "openoffice.org-impress":
+  package { "openoffice.org-impress":
     ensure => installed;
   }
 }
@@ -1378,7 +1378,7 @@ class gen_base::openoffice_org_impress {
 #  gen_puppet
 #
 class gen_base::openoffice_org_math {
-  kpackage { "openoffice.org-math":
+  package { "openoffice.org-math":
     ensure => installed;
   }
 }
@@ -1392,7 +1392,7 @@ class gen_base::openoffice_org_math {
 #  gen_puppet
 #
 class gen_base::openoffice_org_officebean {
-  kpackage { "openoffice.org-officebean":
+  package { "openoffice.org-officebean":
     ensure => installed;
   }
 }
@@ -1406,7 +1406,7 @@ class gen_base::openoffice_org_officebean {
 #  gen_puppet
 #
 class gen_base::openoffice_org_report_builder_bin {
-  kpackage { "openoffice.org-report-builder-bin":
+  package { "openoffice.org-report-builder-bin":
     ensure => installed;
   }
 }
@@ -1420,7 +1420,7 @@ class gen_base::openoffice_org_report_builder_bin {
 #  gen_puppet
 #
 class gen_base::openoffice_org_writer {
-  kpackage { "openoffice.org-writer":
+  package { "openoffice.org-writer":
     ensure => installed;
   }
 }
@@ -1434,7 +1434,7 @@ class gen_base::openoffice_org_writer {
 #  gen_puppet
 #
 class gen_base::openjdk-6-jre {
-  kpackage { "openjdk-6-jre":
+  package { "openjdk-6-jre":
     ensure => installed;
   }
 }
@@ -1448,7 +1448,7 @@ class gen_base::openjdk-6-jre {
 #  gen_puppet
 #
 class gen_base::perl {
-  kpackage { "perl":
+  package { "perl":
     ensure => latest;
   }
 }
@@ -1464,7 +1464,7 @@ class gen_base::perl {
 class gen_base::php5_gd {
   include gen_base::libpng12_0
 
-  kpackage { "php5-gd":
+  package { "php5-gd":
     ensure => latest;
   }
 }
@@ -1480,7 +1480,7 @@ class gen_base::php5_gd {
 class gen_base::php5_imagick {
   include gen_base::imagemagick
 
-  kpackage { "php5-imagick":
+  package { "php5-imagick":
     ensure => latest;
   }
 }
@@ -1494,7 +1494,7 @@ class gen_base::php5_imagick {
 #  gen_puppet
 #
 class gen_base::php5_ldap {
-  kpackage { "php5-ldap":
+  package { "php5-ldap":
     ensure => latest;
   }
 }
@@ -1508,7 +1508,7 @@ class gen_base::php5_ldap {
 #  gen_puppet
 #
 class gen_base::php5_mcrypt {
-  kpackage { "php5-mcrypt":
+  package { "php5-mcrypt":
     ensure => latest;
   }
 }
@@ -1522,7 +1522,7 @@ class gen_base::php5_mcrypt {
 #  gen_puppet
 #
 class gen_base::php5_mysql {
-  kpackage { "php5-mysql":
+  package { "php5-mysql":
     ensure => latest;
   }
 }
@@ -1536,7 +1536,7 @@ class gen_base::php5_mysql {
 #  gen_puppet
 #
 class gen_base::php5_recode {
-  kpackage { "php5-recode":
+  package { "php5-recode":
     ensure => latest;
   }
 }
@@ -1550,7 +1550,7 @@ class gen_base::php5_recode {
 #  gen_puppet
 #
 class gen_base::php5_sqlite {
-  kpackage { "php5-sqlite":
+  package { "php5-sqlite":
     ensure => latest;
   }
 }
@@ -1564,7 +1564,7 @@ class gen_base::php5_sqlite {
 #  gen_puppet
 #
 class gen_base::php5_xdebug {
-  kpackage { "php5-xdebug":
+  package { "php5-xdebug":
     ensure => latest;
   }
 }
@@ -1578,7 +1578,7 @@ class gen_base::php5_xdebug {
 #  gen_puppet
 #
 class gen_base::php_pear {
-  kpackage { "php-pear":
+  package { "php-pear":
     ensure => latest;
   }
 }
@@ -1592,7 +1592,7 @@ class gen_base::php_pear {
 #  gen_puppet
 #
 class gen_base::pstotext {
-  kpackage { "pstotext":
+  package { "pstotext":
     ensure => latest;
   }
 }
@@ -1606,7 +1606,7 @@ class gen_base::pstotext {
 #  gen_puppet
 #
 class gen_base::python-argparse {
-  kpackage { "python-argparse":
+  package { "python-argparse":
     ensure => latest;
   }
 }
@@ -1620,7 +1620,7 @@ class gen_base::python-argparse {
 #  gen_puppet
 #
 class gen_base::python_dev {
-  kpackage { "python-dev":
+  package { "python-dev":
     ensure => latest;
   }
 }
@@ -1634,7 +1634,7 @@ class gen_base::python_dev {
 #  gen_puppet
 #
 class gen_base::python-dnspython {
-  kpackage { "python-dnspython":
+  package { "python-dnspython":
     ensure => latest;
   }
 }
@@ -1648,7 +1648,7 @@ class gen_base::python-dnspython {
 #  gen_puppet
 #
 class gen_base::python_imaging {
-  kpackage { "python-imaging":
+  package { "python-imaging":
     ensure => latest;
   }
 }
@@ -1662,7 +1662,7 @@ class gen_base::python_imaging {
 #  gen_puppet
 #
 class gen_base::python-ipaddr {
-  kpackage { "python-ipaddr":
+  package { "python-ipaddr":
     ensure => latest;
   }
 }
@@ -1678,7 +1678,7 @@ class gen_base::python-ipaddr {
 class gen_base::python-libvirt {
   include gen_base::libxenstore3_0
   include gen_base::python_libxml2
-  kpackage { "python-libvirt":
+  package { "python-libvirt":
     ensure => latest;
   }
 }
@@ -1693,7 +1693,7 @@ class gen_base::python-libvirt {
 #
 class gen_base::python_libxml2 {
   include gen_base::libxml2
-  kpackage { "python-libxml2":
+  package { "python-libxml2":
     ensure => latest;
   }
 }
@@ -1707,7 +1707,7 @@ class gen_base::python_libxml2 {
 #  gen_puppet
 #
 class gen_base::python_lxml {
-  kpackage { "python-lxml":
+  package { "python-lxml":
     ensure => latest;
   }
 }
@@ -1721,7 +1721,7 @@ class gen_base::python_lxml {
 #  gen_puppet
 #
 class gen_base::python-mysqldb {
-  kpackage { "python-mysqldb":
+  package { "python-mysqldb":
     ensure => latest;
   }
 }
@@ -1735,7 +1735,7 @@ class gen_base::python-mysqldb {
 #  gen_puppet
 #
 class gen_base::python_psycopg2 {
-  kpackage { "python-psycopg2":
+  package { "python-psycopg2":
     ensure => latest;
   }
 }
@@ -1750,7 +1750,7 @@ class gen_base::python_psycopg2 {
 #
 class gen_base::python_pycurl {
   include gen_base::libcurl3_gnutls
-  kpackage { "python-pycurl":
+  package { "python-pycurl":
     ensure => latest;
   }
 }
@@ -1764,7 +1764,7 @@ class gen_base::python_pycurl {
 #  gen_puppet
 #
 class gen_base::python_pypdf {
-  kpackage { "python-pypdf":
+  package { "python-pypdf":
     ensure => latest;
   }
 }
@@ -1778,7 +1778,7 @@ class gen_base::python_pypdf {
 #  gen_puppet
 #
 class gen_base::python_reportlab {
-  kpackage { "python-reportlab":
+  package { "python-reportlab":
     ensure => latest;
   }
 }
@@ -1792,7 +1792,7 @@ class gen_base::python_reportlab {
 #  gen_puppet
 #
 class gen_base::python_virtualenv {
-  kpackage { "python-virtualenv":
+  package { "python-virtualenv":
     ensure => latest;
   }
 }
@@ -1806,7 +1806,7 @@ class gen_base::python_virtualenv {
 #  gen_puppet
 #
 class gen_base::qemu_utils {
-  kpackage { "qemu-utils":
+  package { "qemu-utils":
     ensure => latest;
   }
 }
@@ -1820,7 +1820,7 @@ class gen_base::qemu_utils {
 #  gen_puppet
 #
 class gen_base::rails {
-  kpackage { "rails":
+  package { "rails":
     ensure => latest;
   }
 }
@@ -1834,7 +1834,7 @@ class gen_base::rails {
 #  gen_puppet
 #
 class gen_base::realpath {
-  kpackage { "realpath":
+  package { "realpath":
     ensure => latest;
   }
 }
@@ -1848,7 +1848,7 @@ class gen_base::realpath {
 #  gen_puppet
 #
 class gen_base::reprepro {
-  kpackage { "reprepro":
+  package { "reprepro":
     ensure => latest;
   }
 }
@@ -1862,7 +1862,7 @@ class gen_base::reprepro {
 #  gen_puppet
 #
 class gen_base::rsync {
-  kpackage { "rsync":
+  package { "rsync":
     ensure => latest;
   }
 }
@@ -1876,7 +1876,7 @@ class gen_base::rsync {
 #  gen_puppet
 #
 class gen_base::ruby_stomp {
-  kpackage { "ruby-stomp":
+  package { "ruby-stomp":
     ensure => latest;
   }
 }
@@ -1890,7 +1890,7 @@ class gen_base::ruby_stomp {
 #  gen_puppet
 #
 class gen_base::sharutils {
-  kpackage { "sharutils":
+  package { "sharutils":
     ensure => latest;
   }
 }
@@ -1904,7 +1904,7 @@ class gen_base::sharutils {
 #  gen_puppet
 #
 class gen_base::smbclient {
-  kpackage { "smbclient":
+  package { "smbclient":
     ensure => latest;
   }
 }
@@ -1918,7 +1918,7 @@ class gen_base::smbclient {
 #  gen_puppet
 #
 class gen_base::subversion {
-  kpackage { "subversion":
+  package { "subversion":
     ensure => latest;
   }
 }
@@ -1932,7 +1932,7 @@ class gen_base::subversion {
 #  gen_puppet
 #
 class gen_base::sysstat {
-  kpackage { "sysstat":
+  package { "sysstat":
     ensure => latest;
   }
 }
@@ -1946,7 +1946,7 @@ class gen_base::sysstat {
 #  gen_puppet
 #
 class gen_base::telnet_ssl {
-  kpackage { "telnet-ssl":
+  package { "telnet-ssl":
     ensure => latest;
   }
 }
@@ -1960,7 +1960,7 @@ class gen_base::telnet_ssl {
 #  gen_puppet
 #
 class gen_base::unoconv {
-  kpackage { "unoconv":
+  package { "unoconv":
     ensure => latest;
   }
 }
@@ -1974,7 +1974,7 @@ class gen_base::unoconv {
 #  gen_puppet
 #
 class gen_base::unzip {
-  kpackage { "unzip":
+  package { "unzip":
     ensure => latest;
   }
 }
@@ -1988,7 +1988,7 @@ class gen_base::unzip {
 #  gen_puppet
 #
 class gen_base::vim {
-  kpackage { "vim":
+  package { "vim":
     ensure => latest;
   }
 }
@@ -2002,7 +2002,7 @@ class gen_base::vim {
 #  gen_puppet
 #
 class gen_base::vim-addon-manager {
-  kpackage { "vim-addon-manager":
+  package { "vim-addon-manager":
     ensure => latest;
   }
 }
@@ -2016,7 +2016,7 @@ class gen_base::vim-addon-manager {
 #  gen_puppet
 #
 class gen_base::vlan {
-  kpackage { "vlan":
+  package { "vlan":
     ensure => latest;
   }
 }
@@ -2030,7 +2030,7 @@ class gen_base::vlan {
 #  gen_puppet
 #
 class gen_base::wget {
-  kpackage { "wget":
+  package { "wget":
     ensure => latest;
   }
 }
@@ -2044,7 +2044,7 @@ class gen_base::wget {
 #  gen_puppet
 #
 class gen_base::wondershaper {
-  kpackage { "wondershaper":
+  package { "wondershaper":
     ensure => latest;
   }
 }
@@ -2058,7 +2058,7 @@ class gen_base::wondershaper {
 #  gen_puppet
 #
 class gen_base::xvfb {
-  kpackage { "xvfb":
+  package { "xvfb":
     ensure => latest;
   }
 }

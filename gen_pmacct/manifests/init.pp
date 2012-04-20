@@ -42,13 +42,13 @@ define gen_pmacct::config ($aggregates, $plugins, $sql_host, $sql_db, $sql_user,
 
   file { "/etc/pmacct/pmacctd.${name}.conf":
     content => template("gen_pmacct/pmacct.conf"),
-    require => Kpackage["pmacct"],
+    require => Package["pmacct"],
     notify  => Service["pmacct"],
   }
 
   exec { "/bin/sed -i 's/^\\(INTERFACES=\".*\\)\"$/\1 ${name}\"/' /etc/default/pmacct":
     unless  => "/bin/sh -c '. /etc/default/pmacct; for i in \$INTERFACES; do if test \$i = ${name}; then exit 0; fi; done; exit 1'",
-    require => Kpackage["pmacct"],
+    require => Package["pmacct"],
     notify  => Service["pmacct"],
   }
 }

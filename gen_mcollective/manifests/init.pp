@@ -47,7 +47,7 @@ class gen_mcollective::server {
 class gen_mcollective::client {
   include gen_mcollective::common
 
-  kpackage { "mcollective-client":; }
+  package { "mcollective-client":; }
 
   concat { "/etc/mcollective/client.cfg":
     mode    => 600,
@@ -78,7 +78,7 @@ class gen_mcollective::client {
 #  gen_puppet
 #
 class gen_mcollective::common {
-  kpackage { "mcollective-common":; }
+  package { "mcollective-common":; }
 
   file { "/usr/share/mcollective/plugins/mcollective/security/aes_security.rb":
     content => template("gen_mcollective/aes_security.rb"),

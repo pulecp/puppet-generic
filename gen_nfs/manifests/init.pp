@@ -15,7 +15,7 @@ class gen_nfs {
     "portmap":
       hasstatus => false,
       pattern   => "/sbin/portmap",
-      require   => Kpackage["nfs-common"];
+      require   => Package["nfs-common"];
   }
 }
 
@@ -80,7 +80,7 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $failover=false, $need_gssd="
   # The mountd service is controlled by nfs-kernel-server, but that status command doesn't check it.
   exec { "/etc/init.d/nfs-kernel-server restart":
     unless  => "/bin/pidof rpc.mountd",
-    require => Kpackage["nfs-kernel-server"];
+    require => Package["nfs-kernel-server"];
   }
 
   file {
@@ -116,7 +116,7 @@ define gen_nfs::mount($source, $options="wsize=1024,rsize=1024") {
     dump     => 0,
     pass     => 0,
     remounts => false,
-    require  => [Kpackage["nfs-common"], File[$name]];
+    require  => [Package["nfs-common"], File[$name]];
   }
 
   if ! defined(File[$name]) {

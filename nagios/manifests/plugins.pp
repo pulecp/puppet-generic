@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class nagios::plugins {
-  kpackage { "nagios-plugins-basic":
+  package { "nagios-plugins-basic":
     ensure => installed;
   }
 

@@ -9,5 +9,5 @@
 #  gen_puppet
 #
 class gen_solr {
-  kpackage { "solr-common":; }
+  package { "solr-common":; }
 }

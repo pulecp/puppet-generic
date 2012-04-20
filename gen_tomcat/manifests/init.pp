@@ -74,26 +74,26 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
       owner   => "tomcat6",
       group   => "tomcat6",
       mode    => 775,
-      require => Kpackage["tomcat6"];
+      require => Package["tomcat6"];
     "/srv/tomcat/conf":
       ensure  => link,
       target  => "/etc/tomcat6",
-      require => Kpackage["tomcat6"];
+      require => Package["tomcat6"];
     "/srv/tomcat/logs":
       ensure  => link,
       target  => "/var/log/tomcat6",
-      require => Kpackage["tomcat6"];
+      require => Package["tomcat6"];
     "/srv/tomcat/work":
       ensure  => link,
       target  => "/var/cache/tomcat6",
-      require => Kpackage["tomcat6"];
+      require => Package["tomcat6"];
     "/etc/default/tomcat6":
       content => template("gen_tomcat/default"),
-      require => Kpackage["tomcat6"],
+      require => Package["tomcat6"],
       notify  => Service["tomcat6"];
     "/etc/tomcat6/server.xml":
       content => template("gen_tomcat/server.xml"),
-      require => Kpackage["tomcat6"];
+      require => Package["tomcat6"];
   }
 }
 
@@ -108,7 +108,7 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 #  gen_tomcat
 #
 class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
-  kpackage { "tomcat6-admin":
+  package { "tomcat6-admin":
     notify => Exec["remove-tomcatmanagerxml"];
   }
 
@@ -144,11 +144,11 @@ class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
   gen_tomcat::context {
     "manager":
       war     => "/usr/share/tomcat6-admin/manager",
-      require => Kpackage["tomcat6-admin"],
+      require => Package["tomcat6-admin"],
       urlpath => "/manager";
     "host-manager":
       war     => "/usr/share/tomcat6-admin/host-manager",
-      require => Kpackage["tomcat6-admin"],
+      require => Package["tomcat6-admin"],
       urlpath => "/host-manager";
   }
 
@@ -216,7 +216,7 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
     owner   => "tomcat6",
     group   => "tomcat6",
     mode    => "664",
-    require => [Kpackage["tomcat6"], File["/srv/tomcat/conf"]];
+    require => [Package["tomcat6"], File["/srv/tomcat/conf"]];
   }
 
   if $context_xml_content == false {

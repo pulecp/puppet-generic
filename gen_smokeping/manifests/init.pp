@@ -14,7 +14,7 @@ class gen_smokeping::server {
   include gen_base::libsocket6-perl
   include gen_base::libio-socket-inet6-perl
 
-  kpackage { "smokeping":; }
+  package { "smokeping":; }
 
   concat { "/etc/smokeping/config.d/Probes":; }
 

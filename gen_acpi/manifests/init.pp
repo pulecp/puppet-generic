@@ -13,7 +13,7 @@ class gen_acpi {
     package => "acpi-support-base";
   }
 
-  kpackage { "acpid":
+  package { "acpid":
     ensure => latest;
   }
 }

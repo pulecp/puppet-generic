@@ -9,7 +9,7 @@
 #  gen_puppet
 #
 class gen_s3fs {
-  kpackage { "s3fs":
+  package { "s3fs":
     ensure => latest,
   }
 }

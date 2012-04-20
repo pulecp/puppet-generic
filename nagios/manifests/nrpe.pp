@@ -19,7 +19,7 @@ class nagios::nrpe {
     }
   }
 
-  kpackage { "nagios-nrpe-server":; }
+  package { "nagios-nrpe-server":; }
 
   # We're starting NRPE from inetd, to allow it to use tcpwrappers for
   # access control.
@@ -36,7 +36,7 @@ class nagios::nrpe {
     require => Package["nagios-nrpe-server"];
   }
 
-  kpackage { "openbsd-inetd":; }
+  package { "openbsd-inetd":; }
 
   service { "openbsd-inetd":
     ensure    => running,
@@ -125,7 +125,7 @@ class nagios::nrpe::plugins {
   include nagios::plugins
 
 
-  kpackage { "nagios-plugins-kumina":
+  package { "nagios-plugins-kumina":
     ensure => latest;
   }
 }

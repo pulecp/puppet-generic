@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class openvpn::common {
-  kpackage { "openvpn":; }
+  package { "openvpn":; }
 }
 
 # Class: openvpn::server

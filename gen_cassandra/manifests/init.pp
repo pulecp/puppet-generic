@@ -27,7 +27,7 @@ class gen_cassandra ($branch = "07x") {
     key          => "8D77295D",
   }
 
-  kpackage { "cassandra":
+  package { "cassandra":
     ensure => installed,
   }
 }

@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class radvd::server {
-  kpackage { "radvd":
+  package { "radvd":
     ensure => latest;
   }
 

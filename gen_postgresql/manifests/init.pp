@@ -41,10 +41,10 @@ class gen_postgresql::server ($datadir=false, $version="8.4") {
     }
   }
 
-  kpackage { "postgresql-${version}":
+  package { "postgresql-${version}":
     require => $datadir ? {
-      false   => Kpackage["libpq5"],
-      default => [Kpackage["libpq5"],Exec["Create datadir before we install MySQL, if needed"]],
+      false   => Package["libpq5"],
+      default => [Package["libpq5"],Exec["Create datadir before we install MySQL, if needed"]],
     },
     alias   => "postgresql-server";
   }
@@ -52,21 +52,21 @@ class gen_postgresql::server ($datadir=false, $version="8.4") {
   service { "postgresql":
     hasrestart => true,
     hasstatus  => true,
-    require    => Kpackage["postgresql-server"];
+    require    => Package["postgresql-server"];
   }
 
   user { "postgres":
-    require => Kpackage["postgresql-server"];
+    require => Package["postgresql-server"];
   }
 
   group { "postgres":
-    require => Kpackage["postgresql-server"];
+    require => Package["postgresql-server"];
   }
 
   exec { "reload-postgresql":
     command     => "/etc/init.d/postgresql reload",
     refreshonly => true,
-    require     => Kpackage["postgresql-server"];
+    require     => Package["postgresql-server"];
   }
 }
 

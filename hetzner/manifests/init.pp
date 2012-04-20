@@ -18,10 +18,10 @@ class hetzner {
   include hetzner::failover_ip
   include hetzner::update_dns
 
-  if defined(Kpackage["pacemaker"]) {
+  if defined(Package["pacemaker"]) {
     file { "/usr/lib/ocf/resource.d/kumina":
       ensure  => directory,
-      require => Kpackage["pacemaker"],
+      require => Package["pacemaker"],
     }
   }
 }
@@ -38,7 +38,7 @@ class hetzner {
 class hetzner::failover_ip {
   include hetzner
 
-  kpackage { "python-simplejson":
+  package { "python-simplejson":
     ensure => latest,
   }
 
@@ -56,7 +56,7 @@ class hetzner::failover_ip {
     mode    => 755,
   }
 
-  if defined(Kpackage["pacemaker"]) {
+  if defined(Package["pacemaker"]) {
     file { "/usr/lib/ocf/resource.d/kumina/hetzner-failover-ip":
       ensure  => link,
       target  => "/usr/local/lib/hetzner/hetzner-failover-ip",
@@ -76,7 +76,7 @@ class hetzner::failover_ip {
 class hetzner::update_dns {
   include hetzner
 
-  if defined(Kpackage["pacemaker"]) {
+  if defined(Package["pacemaker"]) {
     file { "/usr/lib/ocf/resource.d/kumina/update-dns":
       content => template("hetzner/update-dns"),
       mode    => 755,

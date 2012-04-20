@@ -28,7 +28,7 @@ class ksplice {
   }
 
   # Install the ksplice package
-  kpackage { "uptrack":
+  package { "uptrack":
     ensure       => latest,
     responsefile => "/var/cache/debconf/ksplice.preseed",
     require      => File["/var/cache/debconf/ksplice.preseed"],
@@ -36,7 +36,7 @@ class ksplice {
   }
 
   # Install the ksplice additional apps (includes nagios plugins)
-  kpackage { "python-ksplice-uptrack":; }
+  package { "python-ksplice-uptrack":; }
 
   # Run the script when it's first installed
   exec { "initial uptrack run":

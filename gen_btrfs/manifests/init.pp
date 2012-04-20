@@ -9,7 +9,7 @@
 #  gen_puppet
 #
 class gen_btrfs {
-  kpackage { "btrfs-tools":
+  package { "btrfs-tools":
     ensure => latest,
   }
 }

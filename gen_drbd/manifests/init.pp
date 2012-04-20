@@ -1,5 +1,5 @@
 class gen_drbd::common {
-  kpackage { "drbd8-utils":; }
+  package { "drbd8-utils":; }
 
   exec { "drbd-remove-symlinks":
     onlyif  => "/usr/bin/test -f /etc/rc2.d/S70drbd",

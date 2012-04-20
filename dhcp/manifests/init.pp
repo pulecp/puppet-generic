@@ -11,7 +11,7 @@
 #
 class dhcp::server {
   if versioncmp($lsbdistrelease, "6.0") < 0 {
-    kpackage { "dhcp3-server":; }
+    package { "dhcp3-server":; }
 
     service { "dhcp3-server":
       subscribe  => File["/etc/dhcp3/dhcpd.conf"],
@@ -19,7 +19,7 @@ class dhcp::server {
       hasstatus  => true;
     }
 
-    Kpackage <| title == "dhcp3-common" |> {
+    Package <| title == "dhcp3-common" |> {
       ensure => latest,
     }
 
@@ -28,17 +28,17 @@ class dhcp::server {
     }
   }
   if versioncmp($lsbdistrelease, "6.0") >= 0 {
-    kpackage { "isc-dhcp-server":; }
+    package { "isc-dhcp-server":; }
 
     service { "isc-dhcp-server":
-      require    => Kpackage["isc-dhcp-server"],
+      require    => Package["isc-dhcp-server"],
       subscribe  => File["/etc/dhcp/dhcpd.conf"],
       hasrestart => true,
       hasstatus  => true,
     }
 
     file { "/etc/dhcp/dhcpd.conf":
-      require => Kpackage["isc-dhcp-server"],
+      require => Package["isc-dhcp-server"],
       content => template("dhcp/dhcpd.conf");
     }
   }

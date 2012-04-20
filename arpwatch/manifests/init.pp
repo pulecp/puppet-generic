@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class arpwatch {
-  kpackage { "arpwatch":; }
+  package { "arpwatch":; }
 
   service { "arpwatch":
     ensure    => running,

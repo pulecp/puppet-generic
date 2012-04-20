@@ -9,7 +9,7 @@
 #  gen_puppet
 #
 class gen_logrotate {
-  kpackage { "logrotate":
+  package { "logrotate":
     ensure => latest,
   }
 

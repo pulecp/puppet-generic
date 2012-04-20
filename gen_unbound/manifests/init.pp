@@ -8,7 +8,7 @@
 #  gen_puppet
 #
 class gen_unbound {
-  kpackage { "unbound-anchor":; }
+  package { "unbound-anchor":; }
   kservice { "unbound":
     hasstatus => false,
     hasreload => false,
@@ -19,7 +19,7 @@ class gen_unbound {
     "Install DNS root key for unbound":
       command     => "/usr/sbin/unbound-anchor",
       creates     => "/etc/unbound/root.key",
-      require     => Kpackage["unbound-anchor"];
+      require     => Package["unbound-anchor"];
     "check-unbound.conf":
       command     => "/usr/sbin/unbound-checkconf",
       refreshonly => true,

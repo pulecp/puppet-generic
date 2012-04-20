@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class spamassassin {
-  kpackage { ["spamassassin","libmail-spf-perl", "libmail-dkim-perl"]:; }
+  package { ["spamassassin","libmail-spf-perl", "libmail-dkim-perl"]:; }
 
   file { "/etc/default/spamassassin":
     content => template("spamassassin/spamassassin");

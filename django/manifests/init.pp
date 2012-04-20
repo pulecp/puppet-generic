@@ -31,7 +31,7 @@ class django::wsgi {
   include django::common
   include apache
 
-  kpackage { "libapache2-mod-wsgi":; }
+  package { "libapache2-mod-wsgi":; }
 
   apache::module { "wsgi":
     ensure  => present,

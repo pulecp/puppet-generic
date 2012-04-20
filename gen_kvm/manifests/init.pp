@@ -14,5 +14,5 @@ class gen_kvm {
     gen_apt::preference { "qemu-kvm":; }
   }
 
-  kpackage { "qemu-kvm":; }
+  package { "qemu-kvm":; }
 }

@@ -16,7 +16,7 @@
 #  package
 #    If defined sets the package to install
 #  pensure
-#    The ensure for the kpackage
+#    The ensure for the package
 #  srequire
 #    If the service start depends on something else, use this to set the require for service.
 #
@@ -32,7 +32,7 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
     default => $package,
   }
 
-  kpackage { $package_name:
+  package { $package_name:
     ensure => $pensure; }
 
   service { $name:
@@ -54,8 +54,8 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
       default => $pattern,
     },
     require    => $srequire ? {
-      false   => Kpackage[$package_name],
-      default => [Kpackage[$package_name],$srequire],
+      false   => Package[$package_name],
+      default => [Package[$package_name],$srequire],
     },
   }
 

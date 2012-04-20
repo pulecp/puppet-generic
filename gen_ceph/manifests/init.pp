@@ -10,7 +10,7 @@
 #  gen_puppet
 #
 class gen_ceph {
-  kpackage { "ceph":
+  package { "ceph":
     ensure => latest,
   }
 }

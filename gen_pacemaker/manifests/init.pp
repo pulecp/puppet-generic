@@ -14,7 +14,7 @@
 #  gen_puppet
 #
 class gen_pacemaker ($customtag="pacemaker_${environment}"){
-  kpackage { "pacemaker":; }
+  package { "pacemaker":; }
 
   # These exported kfiles contain the fragments for /etc/heartbeat/cib.cfg
   Ekfile <<| tag == $customtag |>>
@@ -29,7 +29,7 @@ class gen_pacemaker ($customtag="pacemaker_${environment}"){
   exec { "reload cib.cfg":
     command     => "/usr/sbin/crm configure load update /etc/heartbeat/cib.cfg",
     refreshonly => true,
-    require     => [File["/etc/heartbeat/cib.cfg"],Kpackage["pacemaker"],Service["heartbeat"]];
+    require     => [File["/etc/heartbeat/cib.cfg"],Package["pacemaker"],Service["heartbeat"]];
   }
 
   # This piece of configuration is always the same for us.

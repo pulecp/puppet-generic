@@ -51,7 +51,7 @@ class mysql::server ($datadir=false) {
     }
   }
 
-  kpackage { $mysqlserver:
+  package { $mysqlserver:
     require => $datadir ? {
       false   => undef,
       default => Exec["Create datadir before we install MySQL, if needed"],
@@ -240,7 +240,7 @@ class mysql::slave::delayed inherits mysql::slave {
       require => Package["maatkit"];
   }
 
-  kpackage { "maatkit":; }
+  package { "maatkit":; }
 }
 
 # Class: mysql::munin
@@ -293,7 +293,7 @@ define mysql::user($user, $password=false, $hostname="localhost") {
 }
 
 class mysql::java {
-  kpackage { "libmysql-java":; }
+  package { "libmysql-java":; }
 }
 
 define mysql::server::permissions ($user, $db, $hostname="localhost", $permissions="all") {

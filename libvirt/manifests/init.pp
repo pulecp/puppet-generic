@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class libvirt ($on_crash="destroy", $on_reboot="restart") {
-  kpackage { ["libvirt-bin","libvirt-doc","netcat-openbsd"]:
+  package { ["libvirt-bin","libvirt-doc","netcat-openbsd"]:
     ensure => latest;
   }
 

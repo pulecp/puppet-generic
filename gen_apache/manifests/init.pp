@@ -67,7 +67,7 @@ class gen_apache::jk {
     require => Package['libapache2-mod-jk'];
   }
 
-  kpackage { 'libapache2-mod-jk':; }
+  package { 'libapache2-mod-jk':; }
 }
 
 define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address=false, $address6=false,

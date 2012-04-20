@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class ntp {
-  kpackage { "ntp":
+  package { "ntp":
     ensure => latest;
   }
 

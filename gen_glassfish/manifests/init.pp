@@ -11,7 +11,7 @@
 class gen_glassfish {
   include gen_java::sun_java6_jdk
 
-  kpackage { "glassfish":
+  package { "glassfish":
     require => Package['sun-java6-jdk'];
   }
 }

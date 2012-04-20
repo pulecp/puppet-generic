@@ -26,7 +26,7 @@ class gen_icinga::server {
   include gen_base::nagios-nrpe-plugin
   include gen_base::curl
 
-  kpackage { "icinga-doc":; }
+  package { "icinga-doc":; }
 
   kservice {
     "ido2db":

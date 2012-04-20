@@ -9,7 +9,7 @@
 #  gen_puppet
 #
 class gen_sudo {
-  kpackage { "sudo":; }
+  package { "sudo":; }
 
   # Setup /etc/sudoers for either .d inclusion or concatination
   if $lsbmajdistrelease < 6 { # Lenny and older

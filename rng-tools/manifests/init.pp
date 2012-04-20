@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class rng-tools {
-  kpackage { "rng-tools":
+  package { "rng-tools":
     ensure => $lsbmajdistrelease ? {
       5       => latest,
       default => absent,

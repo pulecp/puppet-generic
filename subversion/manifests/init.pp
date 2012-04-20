@@ -160,7 +160,7 @@ class subversion {
 }
 
 class subversion::client {
-  kpackage { "subversion":
+  package { "subversion":
     ensure => latest;
   }
 }

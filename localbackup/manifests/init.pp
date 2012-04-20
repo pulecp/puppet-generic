@@ -41,7 +41,7 @@ class localbackup::common {
 class localbackup::client {
   include gen_base::backup-scripts
 
-  kpackage { "local-backup":
+  package { "local-backup":
     ensure => latest;
   }
 

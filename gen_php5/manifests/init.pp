@@ -9,7 +9,7 @@
 #  gen_puppet
 #
 class gen_php5::common {
-  kpackage { "php5-common":
+  package { "php5-common":
     ensure => latest,
   }
 }
@@ -26,7 +26,7 @@ class gen_php5::modphp($http_type="apache") {
   include gen_php5::common
 
   if $http_type == "apache" {
-    kpackage { "libapache2-mod-php5":
+    package { "libapache2-mod-php5":
       ensure => latest,
     }
   } else {
@@ -46,7 +46,7 @@ class gen_php5::modphp($http_type="apache") {
 class gen_php5::cgi {
   include gen_php5::common
 
-  kpackage { "php5-cgi":
+  package { "php5-cgi":
     ensure => latest,
   }
 }
@@ -62,7 +62,7 @@ class gen_php5::cgi {
 class gen_php5::cli {
   include gen_php5::common
 
-  kpackage { "php5-cli":
+  package { "php5-cli":
     ensure => latest,
   }
 }
@@ -78,7 +78,7 @@ class gen_php5::cli {
 class gen_php5::apc {
   include gen_php5::common
 
-  kpackage { "php-apc":
+  package { "php-apc":
     ensure => latest,
   }
 }
@@ -94,7 +94,7 @@ class gen_php5::apc {
 class gen_php5::pear {
   include gen_php5::common
 
-  kpackage { "php-pear":
+  package { "php-pear":
     ensure => latest,
   }
 }
@@ -111,7 +111,7 @@ class gen_php5::curl {
   include gen_php5::common
   include gen_base::libcurl3
 
-  kpackage { "php5-curl":
+  package { "php5-curl":
     ensure => latest,
   }
 }
@@ -125,7 +125,7 @@ class gen_php5::curl {
 #  gen_puppet
 #
 class gen_php5::smarty {
-  kpackage { "smarty":
+  package { "smarty":
     ensure => latest,
   }
 }

@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class avahi::daemon {
-  kpackage { "avahi-daemon":; }
+  package { "avahi-daemon":; }
 
   service { "avahi-daemon":
     ensure => running,

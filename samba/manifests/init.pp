@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class samba::common {
-  kpackage { "samba-common":; }
+  package { "samba-common":; }
 }
 
 # Class: samba::server
@@ -25,7 +25,7 @@ class samba::common {
 class samba::server {
   include samba::common
 
-  kpackage { "samba":
+  package { "samba":
     require => Package["samba-common"];
   }
 

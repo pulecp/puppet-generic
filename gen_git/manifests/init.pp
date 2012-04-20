@@ -15,7 +15,7 @@ class gen_git {
     $git_pkg = "git-core"
   }
 
-  kpackage {
+  package {
     "${git_pkg}":
       alias  => "git",
       ensure => latest;
@@ -33,7 +33,7 @@ class gen_git {
 #  gen_puppet
 #
 class gen_git::listchanges::install {
-  kpackage { "gitlistchanges":
+  package { "gitlistchanges":
     ensure => latest;
   }
 

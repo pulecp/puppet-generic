@@ -39,7 +39,7 @@ class munin::client {
     }
   }
 
-  kpackage { "munin-node":; }
+  package { "munin-node":; }
 
   if versioncmp($lsbdistrelease,"5.0") >= 0 { # in Lenny and above we have the extra-plugins in a package
     if versioncmp($lsbdistrelease, "6") < 0 { # in lenny we want our own package
@@ -48,7 +48,7 @@ class munin::client {
       }
     }
 
-    kpackage { ["munin-plugins-extra", "munin-plugins-kumina"]:
+    package { ["munin-plugins-extra", "munin-plugins-kumina"]:
       ensure => latest;
     }
   }
@@ -93,7 +93,7 @@ class munin::client {
 #  gen_puppet
 #
 class munin::server {
-  kpackage { "munin":
+  package { "munin":
     ensure => installed,
   }
 

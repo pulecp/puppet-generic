@@ -10,7 +10,7 @@
 #	gen_puppet
 #
 class approx {
-  kpackage { "approx":; }
+  package { "approx":; }
 
   service  { "approx":
     ensure => running,

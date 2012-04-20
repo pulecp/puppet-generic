@@ -7,7 +7,7 @@
 #  gen_puppet
 #
 class gen_ocfs2 {
-  kpackage { "ocfs2console":
+  package { "ocfs2console":
     ensure => latest;
   }
 

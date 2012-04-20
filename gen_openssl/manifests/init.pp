@@ -10,7 +10,7 @@
 #  gen_puppet
 #
 class gen_openssl::common {
-  kpackage { ["openssl","libssl0.9.8"]:; }
+  package { ["openssl","libssl0.9.8"]:; }
 
   file { "/etc/ssl/certs":
     recurse  => true,
@@ -34,14 +34,14 @@ class gen_openssl::ca {
     "/etc/ssl/newcerts":
       ensure  => directory,
       mode    => 750,
-      require => Kpackage["openssl"];
+      require => Package["openssl"];
     "/etc/ssl/requests":
       ensure  => directory,
       mode    => 750,
-      require => Kpackage["openssl"];
+      require => Package["openssl"];
     "/etc/ssl/Makefile":
       content => template("gen_openssl/Makefile"),
-      require => Kpackage["openssl"];
+      require => Package["openssl"];
   }
 }
 
@@ -62,7 +62,7 @@ define gen_openssl::create_ca ($length = 4096) {
   exec { "create ca secret key ${name}":
     command  => "/usr/bin/openssl genrsa -out '${name}' ${length}",
     creates  => "${name}",
-    requires => Kpackage["openssl"],
+    requires => Package["openssl"],
   }
 }
 

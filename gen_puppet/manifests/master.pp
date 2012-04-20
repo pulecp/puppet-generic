@@ -15,7 +15,7 @@
 #
 class gen_puppet::master ($servertype = 'passenger') {
   # Install the packages
-  kpackage {
+  package {
     "puppetmaster":
       ensure  => latest,
       require => File["/etc/default/puppetmaster"];
@@ -37,10 +37,10 @@ class gen_puppet::master ($servertype = 'passenger') {
   # have a separate caserver
   file {
     "/etc/puppet/fileserver.conf":
-      require => Kpackage["puppet-common"],
+      require => Package["puppet-common"],
       content => template("gen_puppet/puppetmaster/fileserver.conf");
     "/etc/puppet/auth.conf":
-      require => Kpackage["puppet-common"],
+      require => Package["puppet-common"],
       content => template("gen_puppet/puppetmaster/auth.conf");
   }
 }
@@ -102,34 +102,34 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
       ensure  => directory,
       owner   => "puppet",
       group   => "puppet",
-      require => Kpackage["puppet-common"],
+      require => Package["puppet-common"],
       mode    => 0751;
     "${ssldir} for ${name}":
       path    => $ssldir,
       ensure  => directory,
       owner   => "puppet",
       group   => "puppet",
-      require => Kpackage["puppet-common"],
+      require => Package["puppet-common"],
       mode    => 0771;
     "${rundir} for ${name}":
       path    => $rundir,
       ensure  => directory,
       owner   => "puppet",
       group   => "puppet",
-      require => Kpackage["puppet-common"],
+      require => Package["puppet-common"],
       mode    => 1777;
     "${logdir} for ${name}":
       path    => $logdir,
       ensure  => directory,
       owner   => "puppet",
       mode    => 750,
-      require => Kpackage["puppet-common"];
+      require => Package["puppet-common"];
     "${ssldir}/ca for ${name}":
       path    => "${ssldir}/ca",
       ensure  => directory,
       owner   => "puppet",
       group   => "puppet",
-      require => Kpackage["puppet-common"],
+      require => Package["puppet-common"],
       mode    => 0770;
   }
 
@@ -182,7 +182,7 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
   } else {
     # Setup the default config file
     concat { $configfile:
-      require => Kpackage["puppet-common"],
+      require => Package["puppet-common"],
       mode    => 644,
     }
 
