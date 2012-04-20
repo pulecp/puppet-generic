@@ -2072,7 +2072,7 @@ class gen_base::xvfb {
 #  gen_puppet
 #
 class gen_base::zip {
-  kpackage { "zip":
+  package { "zip":
     ensure => latest;
   }
 }
