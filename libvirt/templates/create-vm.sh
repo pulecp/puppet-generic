@@ -123,6 +123,7 @@ virsh define /dev/stdin << EOF
   <vcpu>$NPROC</vcpu>
   <os>
     <type arch='x86_64' machine='pc-0.12'>hvm</type>
+    <boot dev='network'/>
     <boot dev='hd'/>
     <boot dev='cdrom'/>
   </os>
