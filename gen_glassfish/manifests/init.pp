@@ -8,11 +8,12 @@
 # Depends:
 #  gen_puppet
 #
-class gen_glassfish {
-  include gen_java::sun_java6_jdk
+class gen_glassfish ($java_version='oracle-java7-jdk'){
+  $java_classname = regsubst($java_version,'-', '_','G')
+  include "gen_java::${java_classname}"
 
   package { "glassfish":
-    require => Package['sun-java6-jdk'];
+    require => Package[$java_version];
   }
 }
 

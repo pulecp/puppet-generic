@@ -72,7 +72,7 @@ class gen_apache::jk {
 
 define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address=false, $address6=false,
     $port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false, $log_vhost=false,
-    $redirect_non_ssl=true) {
+    $redirect_non_ssl=true, $access_logformat="combined") {
   $temp_name = $port ? {
     false   => $name,
     default => "${name}_${port}",

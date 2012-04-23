@@ -408,7 +408,7 @@ class gen_base::libgssapi-krb5-2 {
 #  gen_puppet
 #
 class gen_base::libjs_jquery {
-  kpackage { "libjs-jquery":
+  package { "libjs-jquery":
     ensure => latest;
   }
 }
@@ -2072,7 +2072,7 @@ class gen_base::xvfb {
 #  gen_puppet
 #
 class gen_base::zip {
-  kpackage { "zip":
+  package { "zip":
     ensure => latest;
   }
 }

@@ -26,8 +26,8 @@ define kaugeas ($file, $lens, $changes, $onlyif=false, $force=false) {
     lens    => $lens,
     changes => $changes,
     onlyif  => $onlyif ? {
-      false => undef,
-      true  => $onlyif,
+      false   => undef,
+      default => $onlyif,
     },
     force   => $force;
   }
