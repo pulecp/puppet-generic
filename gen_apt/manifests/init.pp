@@ -9,6 +9,13 @@
 #  gen_puppet
 #
 class gen_apt {
+  # Ensure apt is setup before running apt-get update
+  Gen_apt::Preference <| |> -> Exec['/usr/bin/apt-get update']
+  Gen_apt::Source <| |> -> Exec['/usr/bin/apt-get update']
+  Gen_apt::Key <| |> -> Exec['/usr/bin/apt-get update']
+  # Ensure apt-get update has been run before installing any packages
+  Exec['/usr/bin/apt-get update'] -> Package <| |>
+
   if $lsbmajdistrelease < 6 {
     $preferences_file = "/etc/apt/preferences"
 
