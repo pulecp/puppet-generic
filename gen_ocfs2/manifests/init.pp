@@ -13,7 +13,7 @@ class gen_ocfs2 {
 
   kservice { "o2cb":
     package => "ocfs2-tools",
-    require => File["/etc/ocfs2/cluster.conf","/etc/default/o2cb"];
+    require => File["/etc/default/o2cb"];
   }
 
   file {
