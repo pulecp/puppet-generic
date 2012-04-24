@@ -19,7 +19,7 @@ File {
 }
 
 Package {
-  require => Exec["/usr/bin/apt-get update"],
+  require +> Exec["/usr/bin/apt-get update"],
 }
 
 # Class: gen_puppet
