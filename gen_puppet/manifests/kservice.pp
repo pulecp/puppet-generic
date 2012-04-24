@@ -26,14 +26,10 @@
 # Depends:
 #  gen_puppet
 #
-define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=false, $pensure="present", $pattern=false, $srequire=false) {
-  $package_name = $package ? {
-    false   => $name,
-    default => $package,
+define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=$name, $pensure="present", $pattern=false, $srequire=false) {
+  package { $package:
+    ensure => $pensure;
   }
-
-  package { $package_name:
-    ensure => $pensure; }
 
   service { $name:
     ensure     => $ensure ? {
@@ -54,9 +50,9 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
       default => $pattern,
     },
     require    => $srequire ? {
-      false   => Package[$package_name],
-      default => [Package[$package_name],$srequire],
-    },
+      false   => Package[$package],
+      default => [Package[$package],$srequire],
+    };
   }
 
   if $hasreload {
@@ -66,7 +62,8 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
           true    => "/etc/init.d/${name} reload",
           default => $hasreload,
         },
-        refreshonly => true;
+        refreshonly => true,
+        require     => Package[$package];
       }
     } else {
       exec { "reload-${name}":
@@ -74,14 +71,16 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
           true    => "/usr/sbin/service ${name} reload",
           default => $hasreload,
         },
-        refreshonly => true;
+        refreshonly => true,
+        require     => Package[$package];
       }
     }
   } else {
     exec { "reload-${name}":
       command     => "/bin/true",
       notify      => Service[$name],
-      refreshonly => true;
+      refreshonly => true,
+      require     => Package[$package];
     }
   }
 
@@ -92,7 +91,8 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
           true    => "/etc/init.d/${name} restart",
           default => $hasrestart,
         },
-        refreshonly => true;
+        refreshonly => true,
+        require     => Package[$package];
       }
     } else {
       exec { "restart-${name}":
@@ -100,14 +100,16 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
           true    => "/usr/sbin/service ${name} restart",
           default => $hasrestart,
         },
-        refreshonly => true;
+        refreshonly => true,
+        require     => Package[$package];
       }
     }
   } else {
     exec { "restart-${name}":
       command     => "/bin/true",
       notify      => Service[$name],
-      refreshonly => true;
+      refreshonly => true,
+      require     => Package[$package];
     }
   }
 }
