@@ -18,9 +18,9 @@ File {
   mode  => 644,
 }
 
-Package {
-  require => Exec["/usr/bin/apt-get update"],
-}
+#Package {
+#  require => Exec["/usr/bin/apt-get update"],
+#}
 
 # Class: gen_puppet
 #
