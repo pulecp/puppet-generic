@@ -17,15 +17,10 @@
 #  Undocumented
 #  gen_puppet
 #
-define setfacl ($dir=false, $acl, $make_default = false, $recurse = true, $mask = "rwx") {
-  $real_dir = $dir ? {
-    false   => $name,
-    default => $dir,
-  }
-
+define setfacl ($dir=$name, $acl, $make_default=false, $recurse=true, $mask='rwx') {
   $real_r = $recurse ? {
-    true    => "-R",
-    default => "",
+    true    => '-R',
+    default => '',
   }
 
   if $make_default {
@@ -34,25 +29,25 @@ define setfacl ($dir=false, $acl, $make_default = false, $recurse = true, $mask 
     }
 
     exec {
-      "Set default acls '${acl}' on ${real_dir}":
-        command => "/usr/bin/setfacl ${real_r} -m default:${acl} ${real_dir}",
-        unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:${acl}'",
+      "Set default acls '${acl}' on ${dir}":
+        command => "/usr/bin/setfacl ${real_r} -m default:${acl} ${dir}",
+        unless  => "/usr/bin/test ! -e $dir && /usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^default:${acl}'",
         require => Package["acl"];
-      "Set default acls '${acl}' on ${real_dir} (mask)":
-        command => "/usr/bin/setfacl ${real_r} -n -m default:mask:${mask} ${real_dir}",
-        unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^default:mask::${mask}'",
+      "Set default acls '${acl}' on ${dir} (mask)":
+        command => "/usr/bin/setfacl ${real_r} -n -m default:mask:${mask} ${dir}",
+        unless  => "/usr/bin/test ! -e $dir && /usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^default:mask::${mask}'",
         require => Package["acl"];
     }
   }
 
   exec {
-    "Set acls '${acl}' on ${real_dir}":
-      command => "/usr/bin/setfacl ${real_r} -m ${acl} ${real_dir}",
-      unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^${acl}'",
+    "Set acls '${acl}' on ${dir}":
+      command => "/usr/bin/setfacl ${real_r} -m ${acl} ${dir}",
+      unless  => "/usr/bin/test ! -e $dir && /usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^${acl}'",
       require => Package["acl"];
-    "Set acls '${acl}' on ${real_dir} (mask)":
-      command => "/usr/bin/setfacl ${real_r} -n -m mask:${mask} ${real_dir}",
-      unless  => "/usr/bin/getfacl --absolute-names ${real_dir} | /bin/grep '^mask::${mask}'",
+    "Set acls '${acl}' on ${dir} (mask)":
+      command => "/usr/bin/setfacl ${real_r} -n -m mask:${mask} ${dir}",
+      unless  => "/usr/bin/test ! -e $dir && /usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^mask::${mask}'",
       require => Package["acl"];
   }
 }
