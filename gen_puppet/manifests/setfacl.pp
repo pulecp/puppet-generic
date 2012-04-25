@@ -32,10 +32,12 @@ define setfacl ($dir=$name, $acl, $make_default=false, $recurse=true, $mask='rwx
       "Set default acls '${acl}' on ${dir}":
         command => "/usr/bin/setfacl ${real_r} -m default:${acl} ${dir}",
         unless  => "/usr/bin/test $(/usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^default:${acl}') -o ! -e ${dir}",
+        timeout => 0,
         require => Package["acl"];
       "Set default acls '${acl}' on ${dir} (mask)":
         command => "/usr/bin/setfacl ${real_r} -n -m default:mask:${mask} ${dir}",
         unless  => "/usr/bin/test $(${dir} && /usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^default:mask::${mask}') -o ! -e ${dir}",
+        timeout => 0,
         require => Package["acl"];
     }
   }
@@ -44,10 +46,12 @@ define setfacl ($dir=$name, $acl, $make_default=false, $recurse=true, $mask='rwx
     "Set acls '${acl}' on ${dir}":
       command => "/usr/bin/setfacl ${real_r} -m ${acl} ${dir}",
       unless  => "/usr/bin/test $(${dir} && /usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^${acl}') -o ! -e ${dir}",
+      timeout => 0,
       require => Package["acl"];
     "Set acls '${acl}' on ${dir} (mask)":
       command => "/usr/bin/setfacl ${real_r} -n -m mask:${mask} ${dir}",
       unless  => "/usr/bin/test $(${dir} && /usr/bin/getfacl --absolute-names ${dir} | /bin/grep '^mask::${mask}') -o ! -e ${dir}",
+      timeout => 0,
       require => Package["acl"];
   }
 }
