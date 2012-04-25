@@ -267,7 +267,7 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
 define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=false, $testpms=[]) {
   require concat::setup
 
-  if $settings::port != '8140' {
+  if $settings::masterport != '8140' {
     $purge = $purge_on_testpm
   } else {
     $purge = $purge_on_pm
