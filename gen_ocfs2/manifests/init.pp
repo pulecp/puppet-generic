@@ -7,10 +7,6 @@
 #  gen_puppet
 #
 class gen_ocfs2 {
-  package { "ocfs2console":
-    ensure => latest;
-  }
-
   kservice { "o2cb":
     package => "ocfs2-tools",
     require => File["/etc/default/o2cb"];
