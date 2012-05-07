@@ -242,6 +242,20 @@ class gen_base::facter {
   }
 }
 
+# Class: gen_base::file
+#
+# Actions:
+#  Install file
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::file {
+  package { "file":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::genisoimage
 #
 # Actions:
