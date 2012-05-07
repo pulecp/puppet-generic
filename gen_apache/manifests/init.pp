@@ -14,6 +14,11 @@ class gen_apache {
 
   kservice { "apache2":; }
 
+  # We can safely keep this up-to-date
+  package { "apache2-utils":
+    ensure => latest,
+  }
+
   exec { "force-reload-apache2":
     command     => "/etc/init.d/apache2 force-reload",
     refreshonly => true,
