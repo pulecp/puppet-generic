@@ -293,6 +293,8 @@ class gen_base::ifenslave-2_6 {
 #
 class gen_base::imagemagick {
   include gen_base::libtiff4
+  include gen_base::libmagickwand3
+  include gen_base::libmagickcore3
 
   package { "imagemagick":
     ensure => latest;
@@ -395,6 +397,34 @@ class gen_base::libgnutls26 {
 #
 class gen_base::libgssapi-krb5-2 {
   package { "libgssapi-krb5-2":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libmagickcore3
+#
+# Actions:
+#  Install libmagickcore3
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libmagickcore3 {
+  package { "libmagickcore3":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libmagickwand3
+#
+# Actions:
+#  Install libmagickwand3
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libmagickwand3 {
+  package { "libmagickwand3":
     ensure => latest;
   }
 }
