@@ -222,6 +222,7 @@ class gen_base::echoping {
 #
 class gen_base::elinks {
   include gen_base::libgnutls26
+  include gen_base::mozjs2d
   package { "elinks":
     ensure => latest;
   }
