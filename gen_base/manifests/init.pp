@@ -1214,6 +1214,20 @@ class gen_base::module_init_tools {
   }
 }
 
+# Class: gen_base::mozjs2d
+#
+# Actions:
+#  Install mozjs2d
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::mozjs2d {
+  package { "mozjs2d":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ttf_mscorefonts_installer
 #
 # Actions:
