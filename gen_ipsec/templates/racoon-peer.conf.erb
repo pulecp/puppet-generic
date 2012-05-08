@@ -3,6 +3,9 @@ remote <%= peer_ip %> {
 <% if proposal_check -%>
 	proposal_check <%= proposal_check %>;
 <% end -%>
+<% if phase1_lifetime_time -%>
+	lifetime time <%= phase1_lifetime_time %>;
+<% end -%>
 <% if authmethod == "rsasig" -%>
 	certificate_type x509 "<%= cert %>" "<%= key %>";
 	verify_cert on;
@@ -24,6 +27,12 @@ remote <%= peer_ip %> {
 sainfo address <%= local %> any address <%= remote %> any {
 <% if phase2_dh -%>
 	pfs_group <%= phase2_dh %>;
+<% end -%>
+<% if phase2_lifetime_time -%>
+	lifetime time <%= phase2_lifetime_time %>;
+<% end -%>
+<% if phase2_lifetime_byte -%>
+	lifetime byte <%= phase2_lifetime_byte %>;
 <% end -%>
 	encryption_algorithm <%= phase2_enc %>;
 	authentication_algorithm <%= phase2_auth %>;

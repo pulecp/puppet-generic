@@ -95,19 +95,25 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
 #    Phase 1 hash algorithm (optional)
 #  phase1_dh
 #    Phase 1 Diffie-Hellman group (optional)
+#  phase1_lifetime_time (optional)
+#    Phase 1 lifetime (time); can be sec, min or hour (e.g. "12 hour")
 #  phase2_dh
 #    Phase 2 Diffie-Hellman group (optional)
 #  phase2_enc
 #    Phase 2 encryption algorithm (optional)
 #  phase2_auth
 #    Phase 2 authentication method (optional)
+#  phase2_lifetime_time (optional)
+#    Phase 2 lifetime (time); can be sec, min or hour (e.g. "12 hour")
+#  phase2_lifetime_byte (optional)
+#    Phase 2 lifetime (byte); e.g. "4096 MB"
 #  policy_level
 #    Policy level (search for "level" in setkey(8)) (optional)
 #
 # Depends:
 #  gen_puppet
 #
-define gen_ipsec::peer ($local_ip, $peer_ip, $encap="tunnel", $exchange_mode="main", $proposal_check=false, $peer_asn1dn=false, $localnet=false, $remotenet=false, $authmethod="rsasig", $psk=false, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1", $policy_level="unique") {
+define gen_ipsec::peer ($local_ip, $peer_ip, $encap="tunnel", $exchange_mode="main", $proposal_check=false, $peer_asn1dn=false, $localnet=false, $remotenet=false, $authmethod="rsasig", $psk=false, $cert="certs/${fqdn}.pem", $key="private/${fqdn}.key", $cafile="cacert.pem", $phase1_enc="aes 256", $phase1_hash="sha1", $phase1_dh="5", $phase1_lifetime_time=false, $phase2_dh="5", $phase2_enc="aes 256", $phase2_auth="hmac_sha1", $phase2_lifetime_time=false, $phase2_lifetime_byte=false, $policy_level="unique") {
   $resname = "Gen_ipsec::peer[${name}]"
   $my_authmethod = $authmethod ? {
     /(rsasig|pre_shared_key)/ => $authmethod,
