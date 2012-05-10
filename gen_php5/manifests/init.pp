@@ -130,6 +130,20 @@ class gen_php5::smarty {
   }
 }
 
+# Class: gen_php5::xls
+#
+# Actions:
+#  Install xls extensions for PHP5.
+#
+# Depends:
+#  gen_puppet
+#
+class gen_php5::xls {
+  package { "php5-xls":
+    ensure => latest,
+  }
+}
+
 # Define: gen_php5::common::config
 #
 # Actions:
