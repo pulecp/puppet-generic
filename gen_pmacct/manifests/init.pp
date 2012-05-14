@@ -9,6 +9,8 @@
 #  gen_puppet
 #
 class gen_pmacct {
+  include gen_base::archive_pmacct_data
+
   kservice { "pmacct":
     hasstatus => false,
   }
@@ -16,6 +18,14 @@ class gen_pmacct {
   # We do not use the default config from the package. Remove it to avoid mistakes.
   file { "/etc/pmacct/pmacctd.conf":
     ensure => absent,
+  }
+
+  kcron { "pmacct-data-archive":
+    command => "/usr/bin/archive-pmacct-archive",
+    mailto  => "root",
+    hour    => "1",
+    minute  => fqdn_rand( 60 ),
+    mday    => "10",
   }
 }
 
