@@ -443,21 +443,18 @@ define gen_icinga::configdir($ensure="present",$base="/etc/icinga/config") {
 # Depends:
 #  gen_puppet
 #
-define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_name=false, $host_argument='-H $HOSTADDRESS$', $arguments=false, $nrpe=false, $time_out=30) {
-  if $::monitoring == "true" {
-    @@ekfile {
-      "/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}":
-        content => template("gen_icinga/command"),
-        notify  => Exec["reload-icinga"],
-        tag     => "icinga_config";
-      "/etc/icinga/config/${conf_dir}/command_proxy_${name}.cfg;${fqdn}":
-        content => template("gen_icinga/proxycommand"),
-        notify  => Exec["reload-icinga"],
-        tag     => "icinga_config";
+define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_name=false, $host_argument='-H $HOSTADDRESS$', $arguments=false, $nrpe=false, $time_out=30, $command_line=false, $proxy=false) {
+  if $proxy {
+    @@ekfile { "/etc/icinga/config/${conf_dir}/command_proxy_${name}.cfg;${fqdn}":
+      content => template("gen_icinga/proxycommand"),
+      notify  => Exec["reload-icinga"],
+      tag     => "icinga_config";
     }
   } else {
-    @@ekfile { ["/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}","/etc/icinga/config/${conf_dir}/command_proxy_${name}.cfg;${fqdn}"]:
-      ensure => absent;
+    @@ekfile { "/etc/icinga/config/${conf_dir}/command_${name}.cfg;${fqdn}":
+      content => template("gen_icinga/command"),
+      notify  => Exec["reload-icinga"],
+      tag     => "icinga_config";
     }
   }
 }
