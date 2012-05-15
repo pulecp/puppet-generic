@@ -336,7 +336,8 @@ define gen_icinga::contactgroup($cg_alias, $conf_dir="${environment}/${fqdn}") {
 #  gen_puppet
 #
 define gen_icinga::contact($c_alias, $contact_data=false, $notification_type=false, $conf_dir="${environment}/${fqdn}", $timeperiod="24x7", $contactgroups=false,
-    $host_notifications_enabled=1, $service_notifications_enabled=1, $ensure=present, $host_notification_options=false, $service_notification_options=false) {
+    $host_notifications_enabled=1, $service_notifications_enabled=1, $ensure=present, $host_notification_options=false, $service_notification_options=false,
+    $host_notification_period=false, $service_notification_period=false, $pager=false, $email=false, $service_notification_commands=false, $host_notification_commands=false) {
   @@ekfile { "/etc/icinga/config/${conf_dir}/contact_${name}.cfg;${fqdn}":
     ensure  => $ensure,
     content => template("gen_icinga/contact"),
