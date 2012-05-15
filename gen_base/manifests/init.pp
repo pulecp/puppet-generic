@@ -56,6 +56,20 @@ class gen_base::apache2_mpm_worker {
   }
 }
 
+# Class: gen_base::archive_pmacct_data
+#
+# Actions:
+#  Install archive-pmacct-data
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::archive_pmacct_data {
+  package { "archive-pmacct-data":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libaugeas-ruby
 #
 # Actions:
