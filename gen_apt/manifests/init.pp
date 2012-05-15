@@ -15,6 +15,7 @@ class gen_apt {
   Gen_apt::Key <| |> -> Exec['/usr/bin/apt-get update']
   # Ensure apt-get update has been run before installing any packages
   Exec['/usr/bin/apt-get update'] -> Package <| title != "apt-transport-https" |>
+  Package <| title == "apt-transport-https" |> -> Exec['/usr/bin/apt-get update']
 
   if $lsbmajdistrelease < 6 {
     $preferences_file = "/etc/apt/preferences"
