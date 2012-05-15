@@ -7,8 +7,8 @@ define contact {
 	host_notification_options     d,u,r
 	host_notification_period      <%= timeperiod %>
 	service_notification_period   <%= timeperiod %>
-	service_notification_commands notify-service-by-<%= real_notification_type %>
-	host_notification_commands    notify-host-by-<%= real_notification_type %><% if contactgroups %>
+	service_notification_commands notify-service-by-<%= notification_type %>
+	host_notification_commands    notify-host-by-<%= notification_type %><% if contactgroups %>
 	contactgroups                 <%= contactgroups %><% end %><% if contact_data %><% if notification_type=="sms" %>
 	pager                         <% else %>
 	email                         <% end %><%= contact_data %><% end %>
