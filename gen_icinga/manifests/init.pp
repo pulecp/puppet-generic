@@ -337,25 +337,11 @@ define gen_icinga::contactgroup($cg_alias, $conf_dir="${environment}/${fqdn}") {
 #
 define gen_icinga::contact($c_alias, $contact_data=false, $notification_type=false, $conf_dir="${environment}/${fqdn}", $timeperiod="24x7", $contactgroups=false,
     $host_notifications_enabled=1, $service_notifications_enabled=1, $ensure=present) {
-  $real_notification_type = $contact_data ? {
-    false   => "no-notify",
-    default => $notification_type ? {
-      false   => "email",
-      default => $notification_type,
-    },
-  }
-
-  if $::monitoring == "true" {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/contact_${name}.cfg;${fqdn}":
-      ensure  => $ensure,
-      content => template("gen_icinga/contact"),
-      notify  => Exec["reload-icinga"],
-      tag     => "icinga_config";
-    }
-  } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/contact_${name}.cfg;${fqdn}":
-      ensure  => absent;
-    }
+  @@ekfile { "/etc/icinga/config/${conf_dir}/contact_${name}.cfg;${fqdn}":
+    ensure  => $ensure,
+    content => template("gen_icinga/contact"),
+    notify  => Exec["reload-icinga"],
+    tag     => "icinga_config";
   }
 }
 
