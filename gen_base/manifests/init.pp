@@ -278,6 +278,8 @@ class gen_base::file {
 #  gen_puppet
 #
 class gen_base::funkload {
+  # dependency (missing in debian package)
+  include gen_base::python-setuptools
   package { "funkload":
     ensure => latest;
   }
@@ -1898,6 +1900,20 @@ class gen_base::python_pypdf {
 #
 class gen_base::python_reportlab {
   package { "python-reportlab":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python-setuptools
+#
+# Actions:
+#  Install python-setuptools
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-setuptools {
+  package { "python-setuptools":
     ensure => latest;
   }
 }
