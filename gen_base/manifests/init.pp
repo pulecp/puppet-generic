@@ -278,8 +278,10 @@ class gen_base::file {
 #  gen_puppet
 #
 class gen_base::funkload {
-  # dependency (missing in debian package)
+  # dependencies (missing in debian package)
   include gen_base::python-setuptools
+  include gen_base::python-docutils
+  include gen_base::tcpwatch-httpproxy
   package { "funkload":
     ensure => latest;
   }
@@ -1760,6 +1762,20 @@ class gen_base::python-dnspython {
   }
 }
 
+# Class: gen_base::python-docutils
+#
+# Actions:
+#  Install python-docutils
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-docutils {
+  package { "python-docutils":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_imaging
 #
 # Actions:
@@ -2068,6 +2084,20 @@ class gen_base::subversion {
 #
 class gen_base::sysstat {
   package { "sysstat":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::tcpwatch-httpproxy
+#
+# Actions:
+#  Install tcpwatch-httpproxy
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::tcpwatch-httpproxy {
+  package { "tcpwatch-httpproxy":
     ensure => latest;
   }
 }
