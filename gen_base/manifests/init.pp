@@ -269,6 +269,20 @@ class gen_base::file {
   }
 }
 
+# Class: gen_base::funkload
+#
+# Actions:
+#  Install funkload
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::funkload {
+  package { "funkload":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::genisoimage
 #
 # Actions:
