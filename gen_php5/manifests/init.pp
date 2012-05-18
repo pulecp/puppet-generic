@@ -99,6 +99,23 @@ class gen_php5::pear {
   }
 }
 
+# Class: gen_php5::pear
+#
+# Actions:
+#  Install PEAR for PHP5.
+#
+# Depends:
+#  gen_puppet
+#
+class gen_php5::mysql ($httpd_type="apache2"){
+  include gen_php5::common
+
+  package { "php5-mysql":
+    ensure => latest,
+    notify => Exec["reload-${httpd_type}"];
+  }
+}
+
 # Class: gen_php5::curl
 #
 # Actions:
