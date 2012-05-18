@@ -26,40 +26,48 @@
 # Depends:
 #  gen_puppet
 #
-define kcron($mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $pacemaker_resource=false, $command) {
+define kcron($ensure="present", $mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $pacemaker_resource=false, $command) {
   # If the name contains an underscore or dot, cron won't use the file! So fail when that's the case.
   if $name =~ /\./ or $name =~ /_/ {
     fail("Kcron names cannot contain dots or underscores. Resource: ${name}")
   }
 
-  # Notify when there's not mailto defined, since this usually is not what you want
-  if ! $mailto {
-    notify { "No mailto set for Kcron['${name}']. Are you sure you want that?":; }
-  }
-
-  if $pacemaker_resource {
-    # A cronjob on a host in failover, where we only want the active host
-    # to run the cronjob
-    file { "/etc/cron.d/$name":
-      content => template("gen_puppet/kcron-pacemaker"),
-      require => Kbp_sudo::Rule["Allow ${user} to check crm_resource ${pacemaker_resource}"],
-      notify  => Exec["reload-cron"];
+  if $ensure == "present" {
+    # Notify when there's not mailto defined, since this usually is not what you want
+    if ! $mailto {
+      notify { "No mailto set for Kcron['${name}']. Are you sure you want that?":; }
     }
 
-    # Also make sure the user that's running this can check pacemaker with sudo
-    if ! defined(Kbp_sudo::Rule["Allow ${user} to check crm_resource ${pacemaker_resource}"]) {
-      kbp_sudo::rule { "Allow ${user} to check crm_resource ${pacemaker_resource}":
-        entity            => $user,
-        command           => "/usr/sbin/crm_resource -r ${pacemaker_resource} -W",
-        as_user           => "root",
-        password_required => false;
+    if $pacemaker_resource {
+      # A cronjob on a host in failover, where we only want the active host
+      # to run the cronjob
+      file { "/etc/cron.d/${name}":
+        content => template("gen_puppet/kcron-pacemaker"),
+        require => Kbp_sudo::Rule["Allow ${user} to check crm_resource ${pacemaker_resource}"],
+        notify  => Exec["reload-cron"];
+      }
+
+      # Also make sure the user that's running this can check pacemaker with sudo
+      if ! defined(Kbp_sudo::Rule["Allow ${user} to check crm_resource ${pacemaker_resource}"]) {
+        kbp_sudo::rule { "Allow ${user} to check crm_resource ${pacemaker_resource}":
+          entity            => $user,
+          command           => "/usr/sbin/crm_resource -r ${pacemaker_resource} -W",
+          as_user           => "root",
+          password_required => false;
+        }
+      }
+    } else {
+      # A simple cronjob
+      file { "/etc/cron.d/${name}":
+        content => template("gen_puppet/kcron"),
+        notify  => Exec["reload-cron"];
       }
     }
   } else {
-    # A simple cronjob
-    file { "/etc/cron.d/$name":
-      content => template("gen_puppet/kcron"),
-      notify  => Exec["reload-cron"];
+    # Don't worry about the sudo rule, it will be cleaned automatically.
+    file { "/etc/cron.d/${name}":
+      ensure => absent,
+      notify => Exec["reload-cron"],
     }
   }
 }
