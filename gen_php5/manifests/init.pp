@@ -110,7 +110,7 @@ class gen_php5::pear {
 class gen_php5::mysql {
   include gen_php5::common
 
-  package { "php-mysql":
+  package { "php5-mysql":
     ensure => latest,
   }
 }
