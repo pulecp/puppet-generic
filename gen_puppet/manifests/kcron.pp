@@ -26,7 +26,7 @@
 # Depends:
 #  gen_puppet
 #
-define kcron($ensure="present", $mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $pacemaker_resource=false, $command) {
+define kcron($ensure="present", $mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $pacemaker_resource=false, $command=false) {
   # If the name contains an underscore or dot, cron won't use the file! So fail when that's the case.
   if $name =~ /\./ or $name =~ /_/ {
     fail("Kcron names cannot contain dots or underscores. Resource: ${name}")
@@ -36,6 +36,10 @@ define kcron($ensure="present", $mailto=false, $minute="*", $hour="*", $mday="*"
     # Notify when there's not mailto defined, since this usually is not what you want
     if ! $mailto {
       notify { "No mailto set for Kcron['${name}']. Are you sure you want that?":; }
+    }
+
+    if ! $command {
+      fail("Must pass command to Kcron[${name}]")
     }
 
     if $pacemaker_resource {
