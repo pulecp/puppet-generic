@@ -491,13 +491,13 @@ define gen_icinga::servercommand($conf_dir="${environment}/${fqdn}", $command_na
 #
 define gen_icinga::hostescalation($escalation_period, $contact_groups="${environment}/${fqdn}", $contacts=false, $conf_dir=false, $host_name=false, $hostgroup_name=false, $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
   if $::monitoring == "true" {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/host_escalation_${name}.cfg;${fqdn}":
+    @@ekfile { "/etc/icinga/config/${conf_dir}/hostescalation_${name}.cfg;${fqdn}":
       content => template("gen_icinga/hostescalation"),
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
     }
   } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/host_escalation_${name}.cfg;${fqdn}":
+    @@ekfile { "/etc/icinga/config/${conf_dir}/hostescalation_${name}.cfg;${fqdn}":
       ensure => absent;
     }
   }
@@ -539,13 +539,13 @@ define gen_icinga::hostescalation($escalation_period, $contact_groups="${environ
 #
 define gen_icinga::serviceescalation($escalation_period, $contact_groups=false, $contacts=false, $conf_dir="${environment}/${fqdn}", $host_name=false, $hostgroup_name=false, $servicegroup_name=false, $service_description="*", $escalation_options=false, $first_notification=1, $last_notification=0, $notification_interval=0) {
   if $::monitoring == "true" {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/service_escalation_${name}.cfg;${fqdn}":
+    @@ekfile { "/etc/icinga/config/${conf_dir}/serviceescalation_${name}.cfg;${fqdn}":
       content => template("gen_icinga/serviceescalation"),
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
     }
   } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/service_escalation_${name}.cfg;${fqdn}":
+    @@ekfile { "/etc/icinga/config/${conf_dir}/serviceescalation_${name}.cfg;${fqdn}":
       ensure => absent;
     }
   }
