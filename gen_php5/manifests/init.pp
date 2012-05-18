@@ -107,11 +107,12 @@ class gen_php5::pear {
 # Depends:
 #  gen_puppet
 #
-class gen_php5::mysql {
+class gen_php5::mysql ($httpd_type="apache2"){
   include gen_php5::common
 
   package { "php5-mysql":
     ensure => latest,
+    notify => Exec["reload-${httpd_type}"];
   }
 }
 
