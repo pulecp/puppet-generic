@@ -30,6 +30,7 @@ class gen_postgresql::server ($datadir=false, $version="8.4") {
     exec { "Create datadir before we install PostgreSQL, if needed":
       command => "/bin/mkdir -p ${datadir}",
       creates => $datadir,
+      require => Package["postgresql-server"],
     }
 
     file {
@@ -81,8 +82,8 @@ define gen_postgresql::server::db ($use_utf8=false, $owner=false) {
     exec { "Create db ${name} in PostgreSQL":
       command => "/usr/bin/sudo -u postgres /usr/bin/createdb ${enc} ${use_owner} ${name} 'Created by puppet.'",
       require => $owner ? {
-        false   => undef,
-        default => Gen_postgresql::Server::User[$owner],
+        false   => Package["postgresql-server"],
+        default => [Package["postgresql-server"],Gen_postgresql::Server::User[$owner]],
       };
     }
   }
@@ -92,6 +93,7 @@ define gen_postgresql::server::user (password) {
   if ! ($name in split($psql_users,';')) {
     exec { "Create user ${name} in PostgreSQL":
       command => "/usr/bin/sudo -u postgres /usr/bin/psql -c \"CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;\"",
+      require => Package["postgresql-server"],
     }
   }
 }
