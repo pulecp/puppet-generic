@@ -2116,6 +2116,20 @@ class gen_base::telnet_ssl {
   }
 }
 
+# Class: gen_base::ucarp
+#
+# Actions:
+#  Install ucarp
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ucarp {
+  package { "ucarp":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::unoconv
 #
 # Actions:
