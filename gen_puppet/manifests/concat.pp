@@ -330,8 +330,9 @@ define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn
     # Although this could be done via a selector in the command parameter in the exec above, this reads easier.
     # The exec is needed due to dependencies.
     exec { "concat_${name}":
-      alias   => "concat_${fragdir}",
-      command => "/bin/true",
+      alias       => "concat_${fragdir}",
+      refreshonly => true,
+      command     => "/bin/true",
     }
   }
 }
