@@ -34,22 +34,24 @@ class gen_puppet {
   include gen_base::facter
 
   package {
-    ["checkpuppet","puppet-common"]:
+    "puppet-common":
       ensure => latest;
     "puppet":
       ensure => latest,
       notify => Exec["reload-puppet"];
+    "checkpuppet":
+      ensure => purged;
   }
 
   exec { "reload-puppet":
-    command     => "/usr/bin/touch /etc/puppet/reloadpuppetd",
-    creates     => "/etc/puppet/reloadpuppetd",
+    command     => "/bin/true",
     refreshonly => true,
-    require     => Package["puppet-common","checkpuppet"],
+    require     => Package["puppet-common"],
   }
 
   # Workaround for http://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/
   cron { "Restart puppet every day.":
+    ensure  => absent,
     command => "/usr/bin/touch /etc/puppet/reloadpuppetd",
     hour    => 0,
     minute  => 0,
