@@ -65,5 +65,8 @@ define postfix::alias($ensure="present") {
       file   => "/etc/aliases",
       notify => Exec["newaliases"];
     }
+  } else {
+    # Not sure if this should ever happen, so notify-ing about it
+    notify { "Mailaliases cannot be deployed, due to no postfix being installed!":; }
   }
 }
