@@ -1,0 +1,12 @@
+# MySQL Configuration
+#
+# Launch gmysql backend
+launch=gmysql
+
+# gmysql parameters
+gmysql-host=<%= db_host %>
+gmysql-port=
+gmysql-dbname=<%= db_name %>
+gmysql-user=<%= db_user %>
+gmysql-password=<%= db_password %>
+gmysql-dnssec=yes
