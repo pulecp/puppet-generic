@@ -9,7 +9,7 @@
 #  Undocumented
 #  gen_puppet
 #
-class postfix($relayhost=false, $myhostname=$fqdn, $mynetworks="127.0.0.0/8 [::1]/128", $mydestination=false, $smtp_recipient=false, $mode=false) {
+class postfix($relayhost=false, $myhostname=$fqdn, $mynetworks="127.0.0.0/8 [::1]/128", $mydestination=false, $smtp_recipient=false, $mode=false, $always_bcc=false) {
   $real_smtp_recipient = $mode ? {
     false                 => $smtp_recipient,
     /(primary|secondary)/ => true,

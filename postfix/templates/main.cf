@@ -17,6 +17,9 @@ append_dot_mydomain = no
 myhostname = <%= myhostname %>
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
+<% if always_bcc -%>
+always_bcc = <%= always_bcc %>
+<% end -%>
 mydestination = <% if real_mydestination %><%= real_mydestination %>, <% end %><%= fqdn %>, <%= hostname %>, localhost.localdomain, localhost
 <% if real_relayhost -%>
 relayhost = <%= real_relayhost %>
