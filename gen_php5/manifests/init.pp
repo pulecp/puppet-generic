@@ -116,6 +116,23 @@ class gen_php5::mysql ($httpd_type="apache2"){
   }
 }
 
+# Class: gen_php5::gd
+#
+# Actions:
+#  Install GD for PHP5.
+#
+# Depends:
+#  gen_puppet
+#
+class gen_php5::gd ($httpd_type="apache2"){
+  include gen_php5::common
+
+  package { "php5-gd":
+    ensure => latest,
+    notify => Exec["reload-${httpd_type}"];
+  }
+}
+
 # Class: gen_php5::curl
 #
 # Actions:
