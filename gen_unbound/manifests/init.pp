@@ -12,7 +12,7 @@ class gen_unbound {
   kservice { "unbound":
     hasstatus => false,
     hasreload => false,
-    require   => Exec["Install DNS root key for unbound"];
+    require   => [Exec["Install DNS root key for unbound"], Concat["/etc/unbound/unbound.conf"]];
   }
 
   exec {
