@@ -36,7 +36,9 @@ class ksplice {
   }
 
   # Install the ksplice additional apps (includes nagios plugins)
-  package { "python-ksplice-uptrack":; }
+  package { "python-ksplice-uptrack":
+    ensure => latest,
+  }
 
   # Run the script when it's first installed
   exec { "initial uptrack run":
