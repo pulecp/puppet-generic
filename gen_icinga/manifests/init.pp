@@ -242,10 +242,6 @@ define gen_icinga::hostgroup($hg_alias, $conf_dir="${environment}/${fqdn}", $mem
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
     }
-  } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/hostgroup_${name}.cfg;${fqdn}":
-      ensure => absent;
-    }
   }
 }
 
@@ -270,10 +266,6 @@ define gen_icinga::servicegroup($sg_alias, $conf_dir="${environment}/${fqdn}") {
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
     }
-  } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/servicegroup_${name}.cfg;${fqdn}":
-      ensure => absent;
-    }
   }
 }
 
@@ -297,10 +289,6 @@ define gen_icinga::contactgroup($cg_alias, $conf_dir="${environment}/${fqdn}") {
       content => template("gen_icinga/contactgroup"),
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
-    }
-  } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/contactgroup_${name}.cfg;${fqdn}":
-      ensure => absent;
     }
   }
 }
@@ -373,10 +361,6 @@ define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $mo
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
     }
-  } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/timeperiod_${name}.cfg;${fqdn}":
-      ensure => absent;
-    }
   }
 }
 
@@ -405,10 +389,6 @@ define gen_icinga::configdir($ensure="present",$base="/etc/icinga/config") {
       force   => true,
       tag     => "icinga_config",
       notify  => Exec["reload-icinga"];
-    }
-  } else {
-    @@ekfile { "${base}/${name};${fqdn}":
-      ensure => absent;
     }
   }
 }
@@ -488,10 +468,6 @@ define gen_icinga::hostescalation($escalation_period, $contact_groups="${environ
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
     }
-  } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/hostescalation_${name}.cfg;${fqdn}":
-      ensure => absent;
-    }
   }
 }
 
@@ -536,10 +512,6 @@ define gen_icinga::serviceescalation($escalation_period, $contact_groups=false, 
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
     }
-  } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/serviceescalation_${name}.cfg;${fqdn}":
-      ensure => absent;
-    }
   }
 }
 
@@ -577,10 +549,6 @@ define gen_icinga::servicedependency($ensure="present", $dependent_service_descr
       content => template("gen_icinga/servicedependency"),
       notify  => Exec["reload-icinga"],
       tag     => "icinga_config";
-    }
-  } else {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/servicedependency_${name}.cfg;${fqdn}":
-      ensure => absent;
     }
   }
 }
