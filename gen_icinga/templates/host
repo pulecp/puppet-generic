@@ -11,8 +11,8 @@ define host {<% if use %>
 	flap_detection_enabled        <%= flap_detection_enabled %><% end %><% if process_perf_data %>
 	process_perf_data             <%= process_perf_data %><% end %><% if retain_status_information %>
 	retain_status_information     <%= retain_status_information %><% end %><% if retain_nonstatus_information %>
-	retain_nonstatus_information  <%= retain_nonstatus_information %><% end %><% if check_command %>
-	check_command                 <% if proxy %>proxy_<% end %><%= check_command %><% end %><% if proxy %>
+	retain_nonstatus_information  <%= retain_nonstatus_information %><% end %><% if base_check_command %>
+	check_command                 <% if proxy %>proxy_<% end %><%= base_check_command %><% end %><% if proxy %>
 	_PROXY                        <%= proxy %><% end %><% if check_interval %>
 	check_interval                <%= check_interval %><% end %><% if notification_period %>
 	notification_period           <%= notification_period %><% end %><% if notification_interval %>

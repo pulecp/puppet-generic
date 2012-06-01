@@ -26,8 +26,8 @@ define service {
 	use                          <%= use %><% end %><% if contact_groups %>
 	contact_groups               <%= contact_groups %><% end %><% if contacts %>
 	contacts                     <%= contacts %><% end %><% if max_check_attempts %>
-	max_check_attempts           <%= max_check_attempts %><% end %><% if check_command %>
-	check_command                <% if proxy %>proxy_<% end %><%= check_command %><% if arguments %>!<%= Array(arguments).join("!") %><% end %><% end %><% if proxy %>
+	max_check_attempts           <%= max_check_attempts %><% end %><% if base_check_command %>
+	check_command                <% if proxy %>proxy_<% end %><%= base_check_command %><% if arguments %>!<%= Array(arguments).join("!") %><% end %><% end %><% if proxy %>
 	_PROXY                       <%= proxy %><% end %><% if register %>
 	register                     <%= register %><% end %>
 }
