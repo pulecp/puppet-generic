@@ -8,11 +8,11 @@
 #  gen_puppet
 #
 class gen_unbound {
-  package { "unbound-anchor":; }
-  kservice { "unbound":
+  package { ["unbound-anchor", "unbound"]:; }
+
+  service { "unbound":
     hasstatus => false,
-    hasreload => false,
-    require   => [Exec["Install DNS root key for unbound"], Concat["/etc/unbound/unbound.conf"]];
+    require   => [Exec["Install DNS root key for unbound","check-unbound.conf"],Package["unbound"]];
   }
 
   exec {
@@ -23,7 +23,7 @@ class gen_unbound {
     "check-unbound.conf":
       command     => "/usr/sbin/unbound-checkconf",
       refreshonly => true,
-      notify      => Exec["reload-unbound"];
+      notify      => Service["unbound"];
   }
 
   concat { "/etc/unbound/unbound.conf":
