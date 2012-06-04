@@ -75,15 +75,17 @@ class gen_php5::cli {
 # Depends:
 #  gen_puppet
 #
-class gen_php5::apc {
+class gen_php5::apc ($shm_size = 64, $ttl = 3600) {
   include gen_php5::common
 
   package { "php-apc":
     ensure => latest,
   }
 
-  gen_php5::common::config { 'apc.mmap_file_mask':
-    value => '/apc.shm.XXXXXX',
+  gen_php5::common::config {
+    'apc.mmap_file_mask': value => '/apc.shm.XXXXXX';
+    'apc.shm_size':       value => "${shm_size}";
+    'apc.ttl':            value => "${ttl}";
   }
 }
 
