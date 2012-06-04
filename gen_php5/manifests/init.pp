@@ -83,7 +83,7 @@ class gen_php5::apc {
   }
 
   gen_php5::common::config { 'apc.mmap_file_mask':
-    value => '/tmp/apc.XXXXXX',
+    value => '/apc.shm.XXXXXX',
   }
 }
 
