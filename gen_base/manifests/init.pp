@@ -251,7 +251,7 @@ class gen_base::elinks {
 #
 class gen_base::facter {
   package { "facter":
-    notify => Exec["reload-puppet"];
+    ensure => latest;
   }
 }
 
