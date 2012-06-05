@@ -13,9 +13,10 @@ import "queue.pp"
 import "master.pp"
 
 File {
-  owner => "root",
-  group => "root",
-  mode  => 644,
+  owner  => "root",
+  group  => "root",
+  mode   => 644,
+  backup => false,
 }
 
 # Class: gen_puppet
