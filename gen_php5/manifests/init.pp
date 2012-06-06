@@ -87,6 +87,14 @@ class gen_php5::apc ($shm_size = 64, $ttl = 3600) {
     'apc.shm_size':       value => "${shm_size}";
     'apc.ttl':            value => "${ttl}";
   }
+
+  $shm_size_in_bytes = $shm_size * 1024 * 1024
+
+  line { "Increase shared mem setting in kernel":
+    file    => "/etc/sysctl.conf",
+    content => "kernel.shmmax=${shm_size_in_bytes}",
+    notify  => Exec["reload-sysctl"];
+  }
 }
 
 # Class: gen_php5::pear
