@@ -25,12 +25,12 @@ class gen_ferm {
     require          => Package["ferm"];
   }
 
-  rule { "Accept local traffic":
+  gen_ferm::rule { "Accept local traffic":
     interface => "lo",
     action    => "ACCEPT";
   }
 
-  mod {
+  gen_ferm::mod {
     "INVALID":
       value  => "INVALID",
       action => "REJECT";
@@ -39,17 +39,10 @@ class gen_ferm {
       action => "ACCEPT";
   }
 
-  @chain {
-    ["INPUT_v4","INPUT_v6","FORWARD_v4","FORWARD_v6"]:
-      policy => "DROP";
-    ["OUTPUT_v4","OUTPUT_v6"]:
-      policy => "ACCEPT";
-  }
-
   # Needs to exist even if empty
-  realize Chain["OUTPUT_v4","OUTPUT_v6"]
+  gen_ferm::chain { ['OUTPUT_filter_v4', 'OUTPUT_filter_v6']:; }
 
-  @table { ["filter_v4","filter_v6","mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
+  @gen_ferm::table { ["filter_v4","filter_v6","mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
 }
 
 # Define: gen_ferm::rule
@@ -159,8 +152,10 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
       }
     }
   } elsif ($ip_proto=="v4" and ! ($saddr_is_ip=="ipv6") and ! ($daddr_is_ip=="ipv6")) or ($ip_proto=="v6" and ! ($saddr_is_ip=="ipv4") and ! ($daddr_is_ip=="ipv4")) {
-    realize Table["${table}_${ip_proto}"]
-    realize Chain["${chain}_${ip_proto}"]
+    realize Gen_ferm::Table["${table}_${ip_proto}"]
+    if ! defined(Gen_ferm::Chain["${chain}_${table}_${ip_proto}"]) {
+      gen_ferm::chain { "${chain}_${table}_${ip_proto}":; }
+    }
 
     fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
       content   => $ip_proto ? {
@@ -170,7 +165,7 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
       ensure   => $ensure,
       exported => $exported,
       ferm_tag => $ferm_tag,
-      require  => Chain["${chain}_${ip_proto}"];
+      require  => Gen_ferm::Chain["${chain}_${table}_${ip_proto}"];
     }
   }
 }
@@ -216,12 +211,14 @@ define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $p
       action  => $action;
     }
   } else {
-    realize Table["${table}_${ip_proto}"]
-    realize Chain["${chain}_${ip_proto}"]
+    realize Gen_ferm::Table["${table}_${ip_proto}"]
+    if ! defined(Gen_ferm::Chain["${chain}_${table}_${ip_proto}"]) {
+      gen_ferm::chain { "${chain}_${table}_${ip_proto}":; }
+    }
 
     fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
       content => template("gen_ferm/mod"),
-      require => Chain["${chain}_${ip_proto}"];
+      require => Gen_ferm::Chain["${chain}_${table}_${ip_proto}"];
     }
   }
 }
@@ -242,25 +239,28 @@ define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $p
 # Depends:
 #  gen_puppet
 #
-define gen_ferm::chain($policy=false, $table=filter) {
+define gen_ferm::chain($policy=false) {
   include gen_ferm
 
-  $real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
-  $ip_proto  = regsubst($name,'^(.*)_(v4?6?)$','\2')
+  $real_name = regsubst($name,'^(.*)_(.*)_(v4?6?)$','\1')
+  $table     = regsubst($name,'^(.*)_(.*)_(v4?6?)$','\2')
+  $ip_proto  = regsubst($name,'^(.*)_(.*)_(v4?6?)$','\3')
+
+  realize Gen_ferm::Table["${table}_${ip_proto}"]
 
   fermfile {
     "${ip_proto}_${table}_${real_name}":
       content => "\tchain ${real_name} {",
-      require => Table["${table}_${ip_proto}"];
+      require => Gen_ferm::Table["${table}_${ip_proto}"];
     "${ip_proto}_${table}_${real_name}_zzzz":
       content => "\t}",
-      require => Table["${table}_${ip_proto}"];
+      require => Gen_ferm::Table["${table}_${ip_proto}"];
   }
 
   if $policy {
     fermfile { "${ip_proto}_${table}_${real_name}_0000":
       content => "\t\tpolicy ${policy};",
-      require => Table["${table}_${ip_proto}"];
+      require => Gen_ferm::Table["${table}_${ip_proto}"];
     }
   }
 }
