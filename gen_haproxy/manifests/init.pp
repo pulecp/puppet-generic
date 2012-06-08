@@ -88,6 +88,8 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 #    The URI to check if the backendserver is running
 #  httpcheck_port
 #    The port to check on whether the backendserver is running
+#  httpcheck_interval
+#    The interval in ms of the check
 #  servername
 #    The hostname(or made up name) for the backend server
 #  serverport
@@ -108,7 +110,7 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 # Depends:
 #  gen_puppet
 #
-define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $balance="static-rr", $serverip=$ipaddress_eth0, $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s",  $haproxy_tag="haproxy_${environment}") {
+define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $balance="static-rr", $serverip=$ipaddress_eth0, $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s",  $haproxy_tag="haproxy_${environment}") {
   if $httpcheck_port and ! $httpcheck_uri {
     fail("Please specify a uri to check when you add a port to check on")
   }
