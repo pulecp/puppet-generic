@@ -29,10 +29,10 @@ File {
 #  gen_puppet
 #
 class gen_puppet {
-# TODO For now, let's make this step optional
-#  include gen_puppet::puppet_conf
+  include gen_puppet::puppet_conf
   include gen_base::augeas
   include gen_base::facter
+  include gen_base::libisccc60
 
   package {
     "puppet-common":
@@ -48,15 +48,6 @@ class gen_puppet {
     command     => "/bin/true",
     refreshonly => true,
     require     => Package["puppet-common"],
-  }
-
-  # Workaround for http://www.mikeperham.com/2009/05/25/memory-hungry-ruby-daemons/
-  cron { "Restart puppet every day.":
-    ensure  => absent,
-    command => "/usr/bin/touch /etc/puppet/reloadpuppetd",
-    hour    => 0,
-    minute  => 0,
-    user    => "root",
   }
 }
 
