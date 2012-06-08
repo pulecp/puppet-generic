@@ -143,7 +143,6 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$h
     gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
       content => "\toption httplog";
     }
-  
   }
 
   if $cookie {
