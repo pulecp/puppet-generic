@@ -447,6 +447,20 @@ class gen_base::libgssapi-krb5-2 {
   }
 }
 
+# Class: gen_base::libisccc60
+#
+# Actions:
+#  Install libisccc60
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libisccc60 {
+  package { "libisccc60":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libmagickcore3
 #
 # Actions:
