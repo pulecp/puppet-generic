@@ -18,13 +18,21 @@ class gen_cassandra ($branch = "07x") {
     content => template("gen_cassandra/8D77295D"),
   }
 
+  # for the 10x branch
+  gen_apt::key { "2B5C1B00":
+    content => template("gen_cassandra/2B5C1B00"),
+  }
+
   gen_apt::source { "cassandra":
     comment      => "Cassandra repository.",
     sourcetype   => "deb",
     uri          => "http://www.apache.org/dist/cassandra/debian",
     distribution => $branch,
     components   => "main",
-    key          => "8D77295D",
+    key          => $branch ? {
+      "07x" => "8D77295D",
+      "10x" => "2B5C1B00",
+    };
   }
 
   package { "cassandra":
