@@ -21,7 +21,7 @@ class gen_pmacct {
   }
 
   kcron { "pmacct-data-archive":
-    command => "/usr/bin/archive-pmacct-archive",
+    command => "/usr/bin/archive-pmacct-data",
     mailto  => "root",
     hour    => "1",
     minute  => fqdn_rand( 60 ),
