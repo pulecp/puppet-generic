@@ -2130,6 +2130,20 @@ class gen_base::telnet_ssl {
   }
 }
 
+# Class: gen_base::telnet_ssl
+#
+# Actions:
+#  Install telnet-ssl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ttf_mscorefonts_installer {
+  package { 'ttf-mscorefonts-installer':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ucarp
 #
 # Actions:
