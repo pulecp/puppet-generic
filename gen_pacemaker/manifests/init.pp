@@ -147,7 +147,7 @@ define gen_pacemaker::master_slave ($primitive, $meta, $customtag="pacemaker_${e
 #    The metadata associated with this clone.
 #  $customtag:
 #    Set this to the appropriate cluster
-define gen_pacemaker::clone ($primitive, $meta, $customtag="pacemaker_${environment}") {
+define gen_pacemaker::clone ($primitive, $meta=false, $customtag="pacemaker_${environment}") {
   gen_pacemaker::cib_cfg { "ms_${name}":
     content   => template("gen_pacemaker/clone.erb"),
     customtag => $customtag,
