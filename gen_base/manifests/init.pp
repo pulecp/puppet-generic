@@ -1287,20 +1287,6 @@ class gen_base::mozjs2d {
   }
 }
 
-# Class: gen_base::ttf_mscorefonts_installer
-#
-# Actions:
-#  Install ttf-mscorefonts-installer
-#
-# Depends:
-#  gen_puppet
-#
-class gen_base::ttf_mscorefonts_installer {
-  package { "ttf-mscorefonts-installer":
-    ensure => latest;
-  }
-}
-
 # Class: gen_base::mysql_client
 #
 # Actions:
@@ -2133,7 +2119,7 @@ class gen_base::telnet_ssl {
 # Class: gen_base::telnet_ssl
 #
 # Actions:
-#  Install telnet-ssl
+#  Install ttf-mscorefonts-installer
 #
 # Depends:
 #  gen_puppet
