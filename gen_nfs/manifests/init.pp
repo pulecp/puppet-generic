@@ -11,8 +11,10 @@
 class gen_nfs {
   kservice {
     "nfs-common":
+      enable    => false,
       hasreload => false;
     "portmap":
+      enable    => false,
       hasstatus => false,
       pattern   => "/sbin/portmap",
       require   => Package["nfs-common"];
@@ -62,12 +64,29 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd
     $rpcnfsdpriority="0", $rpcsvcgssdopts="", $failover_ip=false) {
   include gen_nfs
 
-  kservice { "nfs-kernel-server":
-    ensure  => $failover_ip ? {
-      true  => undef,
-      false => "running",
-    },
-    pensure => "latest";
+  if $failover_ip {
+    kservice { "nfs-kernel-server":
+      enable  => false,
+      pensure => "latest";
+    }
+  } else {
+    kservice { "nfs-kernel-server":
+      enable  => true,
+      ensure  => "running",
+      pensure => "latest";
+    }
+
+    Service <| title == "nfs-common" |> {
+      enable => true,
+      ensure => "running",
+      notify => Service["nfs-kernel-server"],
+    }
+
+    Service <| title == "portmap" |> {
+      enable => true,
+      ensure => "running",
+      notify => Service["nfs-common"],
+    }
   }
 
   # The lock daemon is a kernel internal thingy, we need to actually set the kernel module options.
