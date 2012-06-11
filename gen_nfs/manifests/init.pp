@@ -57,14 +57,10 @@ class gen_nfs {
 # Depends:
 #  gen_puppet
 #
-class gen_nfs::server ($rpcmountdopts, $statdopts, $failover=false, $need_gssd="no", $need_idmapd="no", $need_statd="yes",
+class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd="no", $need_statd="yes",
     $need_svcgssd="no", $mountd_port=false, $incoming_port=false, $outgoing_port=false, $lock_port=false, $rpcnfsdcount="8",
-    $rpcnfsdpriority="0", $rpcsvcgssdopts="", $failover_ip=$failover) {
+    $rpcnfsdpriority="0", $rpcsvcgssdopts="", $failover_ip=false) {
   include gen_nfs
-
-  if $failover {
-    notify { "The failover option is deprecated! Please use failover_ip.":; }
-  }
 
   kservice { "nfs-kernel-server":
     ensure  => $failover_ip ? {
