@@ -138,6 +138,23 @@ define gen_pacemaker::master_slave ($primitive, $meta, $customtag="pacemaker_${e
 }
 
 #
+# Define: gen_pacemaker::clone
+#
+# Parameters:
+#  $primitive:
+#    The primitive that should be cloned. Can be a group as well.
+#  $meta:
+#    The metadata associated with this clone.
+#  $customtag:
+#    Set this to the appropriate cluster
+define gen_pacemaker::clone ($primitive, $meta, $customtag="pacemaker_${environment}") {
+  gen_pacemaker::cib_cfg { "ms_${name}":
+    content   => template("gen_pacemaker/clone.erb"),
+    customtag => $customtag,
+  }
+}
+
+#
 # Define: gen_pacemaker::location
 #
 # http://www.clusterlabs.org/doc/en-US/Pacemaker/1.0/html/Pacemaker_Explained/ch-constraints.html
