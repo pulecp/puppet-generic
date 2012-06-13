@@ -144,13 +144,11 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
     $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false,
     $check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false,
     $max_check_attempts=false, $check_command=false, $base_check_command=false, $arguments=false, $register=false, $ensure=present, $proxy=false) {
-  if $::monitoring == "true" {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/service_${name}.cfg;${::fqdn}":
-      content => template("gen_icinga/service"),
-      notify  => Exec["reload-icinga"],
-      tag     => "icinga_config",
-      ensure  => $ensure;
-    }
+  @@ekfile { "/etc/icinga/config/${conf_dir}/service_${name}.cfg;${::fqdn}":
+    content => template("gen_icinga/service"),
+    notify  => Exec["reload-icinga"],
+    tag     => "icinga_config",
+    ensure  => $ensure;
   }
 }
 
