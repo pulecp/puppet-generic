@@ -43,8 +43,8 @@ define gen_drbd($mastermaster=true, $time_out=false, $connect_int=false, $ping_i
   @@concat::add_content { "1_${device_name}_${fqdn}":
     content => template("gen_drbd/resource_address"),
     target  => "/etc/drbd.d/${device_name}.res",
-    tag     => "drbd_${environment}_${device_name}";
+    tag     => "drbd_${environment}_${name}";
   }
 
-  Concat::Add_content <<| tag == "drbd_${environment}_${device_name}" |>>
+  Concat::Add_content <<| tag == "drbd_${environment}_${name}" |>>
 }
