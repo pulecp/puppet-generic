@@ -378,19 +378,17 @@ define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $mo
 #  gen_puppet
 #
 define gen_icinga::configdir($ensure="present",$base="/etc/icinga/config") {
-  if $::monitoring == "true" {
-    @@ekfile { "${base}/${name};${fqdn}":
-      ensure  => $ensure ? {
-        "present" => "directory",
-        "absent"  => "absent",
-        default   => "directory",
-      },
-      purge   => true,
-      recurse => true,
-      force   => true,
-      tag     => "icinga_config",
-      notify  => Exec["reload-icinga"];
-    }
+  @@ekfile { "${base}/${name};${fqdn}":
+    ensure  => $ensure ? {
+      "present" => "directory",
+      "absent"  => "absent",
+      default   => "directory",
+    },
+    purge   => true,
+    recurse => true,
+    force   => true,
+    tag     => "icinga_config",
+    notify  => Exec["reload-icinga"];
   }
 }
 
