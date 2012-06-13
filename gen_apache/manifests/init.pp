@@ -167,11 +167,15 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   }
 
   if $make_default {
-    gen_apache::forward_vhost { "default":
-      ensure      => $ensure,
-      teststring  => "%{REQUEST_URI}",
-      condpattern => "!^/server-status.*",
-      forward     => "http://${real_name}";
+    if $key or $cert or $intermediate or $wildcard or $ssl {
+      # Do nothing, we do not support defaulting SSL
+    } else {
+      gen_apache::forward_vhost { "default":
+        ensure      => $ensure,
+        teststring  => "%{REQUEST_URI}",
+        condpattern => "!^/server-status.*",
+        forward     => "http://${real_name}";
+      }
     }
   }
 
