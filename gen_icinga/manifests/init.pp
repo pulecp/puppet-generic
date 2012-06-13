@@ -542,12 +542,10 @@ define gen_icinga::serviceescalation($escalation_period, $contact_groups=false, 
 #
 define gen_icinga::servicedependency($ensure="present", $dependent_service_description, $host_name=$fqdn, $service_description, $conf_dir="${environment}/${fqdn}", $dependent_host_name=$fqdn,
     $execution_failure_criteria=false, $notification_failure_criteria="o") {
-  if $::monitoring == "true" {
-    @@ekfile { "/etc/icinga/config/${conf_dir}/servicedependency_${name}.cfg;${fqdn}":
-      ensure  => $ensure,
-      content => template("gen_icinga/servicedependency"),
-      notify  => Exec["reload-icinga"],
-      tag     => "icinga_config";
-    }
+  @@ekfile { "/etc/icinga/config/${conf_dir}/servicedependency_${name}.cfg;${fqdn}":
+    ensure  => $ensure,
+    content => template("gen_icinga/servicedependency"),
+    notify  => Exec["reload-icinga"],
+    tag     => "icinga_config";
   }
 }
