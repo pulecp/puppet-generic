@@ -30,7 +30,6 @@ class gen_icinga::server {
 
   kservice {
     "ido2db":
-      ensure  => 'stopped',
       package => "icinga-idoutils";
     "icinga":
       require => Kservice["ido2db"];
