@@ -15,6 +15,8 @@
 #    Day of week interval field of crontab entry
 #  user
 #    Which user should be used to execute the command
+#  first_wday_of_month
+#    If true, only run on first wday of month
 #  pacemaker_resource
 #    In failover setups, make sure this resource is local before running the command
 #  command
@@ -26,7 +28,7 @@
 # Depends:
 #  gen_puppet
 #
-define kcron($ensure="present", $mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $pacemaker_resource=false, $command=false) {
+define kcron($ensure="present", $mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $first_wday_of_month=false, $pacemaker_resource=false, $command=false) {
   # If the name contains an underscore or dot, cron won't use the file! So fail when that's the case.
   if $name =~ /\./ or $name =~ /_/ {
     fail("Kcron names cannot contain dots or underscores. Resource: ${name}")
