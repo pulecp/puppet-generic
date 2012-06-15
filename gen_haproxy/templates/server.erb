@@ -1,1 +1,7 @@
-	server <%= servername %> <%= serverip %>:<%= serverport %><% if cookie %> cookie<% end %><% if httpcheck_uri %> check<% end %><% if httpcheck_port %> port <%= httpcheck_port %><% end %><% if httpcheck_interval %> inter <%= httpcheck_interval %><% end -%>
+	server <%= servername %> <%= serverip %>:<%= serverport %><% if cookie %> cookie<% end -%>
+<% if httpcheck_uri %> check<% end -%>
+<% if httpcheck_port %> port <%= httpcheck_port %><% end -%>
+<% if httpcheck_interval %> inter <%= httpcheck_interval %><% end -%>
+<% if httpcheck_fall %> fall <%= httpcheck_fall %><% end -%>
+<% if httpcheck_rise %> rise <%= httpcheck_rise %><% end -%>
+<% if backupserver %> backup<% end -%>

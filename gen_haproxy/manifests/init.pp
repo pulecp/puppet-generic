@@ -110,7 +110,7 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 # Depends:
 #  gen_puppet
 #
-define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $balance="static-rr", $serverip=$ipaddress_eth0, $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s",  $haproxy_tag="haproxy_${environment}") {
+define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $httpcheck_fall=false, $httpcheck_rise=false, $backupserver=false, $balance="static-rr", $serverip=$ipaddress_eth0, $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s",  $haproxy_tag="haproxy_${environment}") {
   if $httpcheck_port and ! $httpcheck_uri {
     fail("Please specify a uri to check when you add a port to check on")
   }
