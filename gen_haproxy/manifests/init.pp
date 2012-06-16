@@ -90,6 +90,12 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 #    The port to check on whether the backendserver is running
 #  httpcheck_interval
 #    The interval in ms of the check
+#  httpcheck_fall
+#    The number of times a check should fail before the resource is considered down
+#  httpcheck_rise
+#    The number of times a check should succeed after downtime before the resource is considered up
+#  backupserver
+#    Whether this server is a backupserver or a normal one
 #  servername
 #    The hostname(or made up name) for the backend server
 #  serverport
