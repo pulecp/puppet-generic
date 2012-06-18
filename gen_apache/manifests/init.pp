@@ -185,14 +185,14 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
         false   => "${real_name}.pem",
         default => "${wildcard}.pem",
       },
-      default => $cert,
+      default => "${cert}.pem",
     }
     $real_key = $key ? {
       false   => $wildcard ? {
         false   => "${real_name}.key",
         default => "${wildcard}.key",
       },
-      default => $key,
+      default => "${key}.key",
     }
 
     file { "/etc/apache2/vhost-additions/${full_name}/ssl":
