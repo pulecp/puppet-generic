@@ -46,7 +46,7 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
     command     => "/usr/sbin/haproxy -c -f /etc/haproxy/haproxy.cfg > /dev/null 2>&1",
     refreshonly => true,
     notify      => $failover ? {
-      false   => Service["haproxy"],
+      false   => Exec["reload-haproxy"],
       default => Exec["reload-failover-haproxy"],
     };
   }
