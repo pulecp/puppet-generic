@@ -1,12 +1,12 @@
-File.exist?("/etc/puppet/nomonitoring") ? has_monitoringfile = false : has_monitoringfile = true
+File.exist?("/etc/puppet/nomonitoring") ? (File.open('/etc/puppet/nomonitoring').read.strip == 'FORCE' ? monitoring = 'force_off' : monitoring = false) : monitoring = true
 Facter.add("monitoring") do
-	setcode do
-		has_monitoringfile
-	end
+        setcode do
+                monitoring
+        end
 end
-File.exist?("/etc/puppet/nomonitoringsms") ? has_monitoringsmsfile = false : has_monitoringsmsfile = true
+File.exist?("/etc/puppet/nomonitoringsms") ? monitoringsms = false : monitoringsms = true
 Facter.add("monitoring_sms") do
-	setcode do
-		has_monitoringsmsfile
-	end
+        setcode do
+                monitoringsms
+        end
 end
