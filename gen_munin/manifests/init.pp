@@ -106,7 +106,7 @@ class gen_munin::client {
 define gen_munin::environment {
   File <<| tag == "munin_client_${name}" |>> {}
 
-  @@concat::add_content { "/etc/munin/munin-node.conf server ${fqdn}":
+  @@concat::add_content { "/etc/munin/munin-node.conf server ${fqdn} for env ${name}":
     content => "cidr_allow ${ipaddress}/32\n",
     target  => '/etc/munin/munin-node.conf',
     tag     => "munin-node.conf_server_allows_${name}";
