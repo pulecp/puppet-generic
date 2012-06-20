@@ -8,13 +8,12 @@ pid_file /var/run/munin/munin-node.pid
 
 background 1
 setsid 1
+setseid 1
 
 user root
 group root
 
 # Regexps for files to ignore
-ignore_file [\#~]$
-ignore_file DEADJOE$
 ignore_file \.bak$
 ignore_file %$
 ignore_file \.dpkg-(tmp|new|old|dist)$
@@ -50,4 +49,3 @@ host *
 
 # And which port
 port 4949
-
