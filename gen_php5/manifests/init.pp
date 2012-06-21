@@ -89,7 +89,8 @@ class gen_php5::apc ($shm_size = 64, $ttl = 3600) {
     'apc.filters':        value => 'wp-cache-config';
   }
 
-  $shm_size_in_bytes = $shm_size * 1024 * 1024
+  $shm_size_digits = regsubst($shm_size,'([0-9]+).*', '\1')
+  $shm_size_in_bytes = regsubst($shm_size_digits,'(\d+)', '\1') * 1024 * 1024
 
   line { "Increase shared mem setting in kernel":
     file    => "/etc/sysctl.conf",
