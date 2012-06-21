@@ -11,10 +11,8 @@
 class gen_nfs {
   kservice {
     "nfs-common":
-      enable    => false,
       hasreload => false;
     "portmap":
-      enable    => false,
       hasstatus => false,
       pattern   => "/sbin/portmap",
       require   => Package["nfs-common"];
@@ -64,9 +62,25 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd
     $rpcnfsdpriority="0", $rpcsvcgssdopts="", $failover_ip=false) {
   include gen_nfs
 
+#  Service <| title == "portmap" |> {
+#    enable => true,
+#    ensure => "running",
+#    notify => Service["nfs-common"],
+#  }
+
+#  Service <| title == "nfs-common" |> {
+#    enable => true,
+#    ensure => "running",
+#    notify => $failover_ip ? {
+#      false => Service["nfs-kernel-server"],
+#      default => Exec["reload-nfsd"],
+#    },
+#  }
+
   if $failover_ip {
     kservice { "nfs-kernel-server":
       enable  => false,
+      ensure  => "undef",
       pensure => "latest";
     }
   } else {
@@ -75,18 +89,24 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd
       ensure  => "running",
       pensure => "latest";
     }
+  }
 
-    Service <| title == "nfs-common" |> {
-      enable => true,
-      ensure => "running",
-      notify => Service["nfs-kernel-server"],
-    }
+  if $lsbmajdistrelease > 5 {
+    $nfsinit = "/usr/sbin/service nfs-kernel-server"
+  } else {
+    $nfsinit = "/etc/init.d/nfs-kernel-server"
+  }
 
-    Service <| title == "portmap" |> {
-      enable => true,
-      ensure => "running",
-      notify => Service["nfs-common"],
-    }
+  exec {
+    # only reloads nfs server if it is running; useful for active/standby clusters
+    "reload-nfsd":
+      command     => "${nfsinit} reload",
+      onlyif      => "${nfsinit} status 2>&1 >/dev/null",
+      refreshonly => true;
+    # reload /etc/exports; succeeds even if nfs server isn't running
+    "export-nfsd":
+      command     => "/usr/sbin/exportfs -r",
+      refreshonly => true;
   }
 
   # The lock daemon is a kernel internal thingy, we need to actually set the kernel module options.
@@ -97,8 +117,8 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd
   }
 
   # The mountd service is controlled by nfs-kernel-server, but that status command doesn't check it.
-  exec { "/etc/init.d/nfs-kernel-server restart":
-    unless  => "/bin/pidof rpc.mountd",
+  exec { "${nfsinit} restart":
+    onlyif  => "${nfsinit} status 2>&1 >/dev/null && ! /bin/pidof rpc.mountd",
     require => Package["nfs-kernel-server"];
   }
 
