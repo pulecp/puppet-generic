@@ -218,7 +218,7 @@ define gen_apache::module ($ensure = "enable") {
   }
 }
 
-define gen_apache::forward_vhost($ensure="present", $forward, $address = $ipaddress, $address6 = $ipaddress6, $port=80, $serveralias=false, $statuscode=301, $condpattern=false, $teststring="%{HTTP_HOST}") {
+define gen_apache::forward_vhost($ensure="present", $forward, $address = '*', $address6 = '::', $port=80, $serveralias=false, $statuscode=301, $condpattern=false, $teststring="%{HTTP_HOST}") {
   $full_name = "${name}_${port}"
 
   gen_apache::site { $full_name:
