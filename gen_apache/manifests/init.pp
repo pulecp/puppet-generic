@@ -75,20 +75,16 @@ class gen_apache::jk {
   package { 'libapache2-mod-jk':; }
 }
 
-define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address=false, $address6=false,
+define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address='*', $address6='::',
     $port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false, $log_vhost=false,
     $redirect_non_ssl=true, $access_logformat="combined") {
+  if $address == $ipaddress or $address6 == $ipaddress6 {
+    fail { "${name} has been set specifically to the base IP address, this will cause problems due to * sites being picked up by this vhost as well as it is more specific." }
+  }
+
   $temp_name = $port ? {
     false   => $name,
     default => "${name}_${port}",
-  }
-  $real_address  = $address ? {
-    false   => "*",
-    default => $address,
-  }
-  $real_address6 = $address6 ? {
-    false   => "::",
-    default => $address6,
   }
   if $key or $cert or $intermediate or $wildcard or $ssl {
     $full_name = regsubst($temp_name,'^([^_]*)$','\1_443')
@@ -150,8 +146,8 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
         }
       }
 
-      if !defined(Concat::Add_content["NameVirtualHost ${real_address}:${real_port}"]) {
-        concat::add_content { "NameVirtualHost ${real_address}:${real_port}":
+      if !defined(Concat::Add_content["NameVirtualHost ${address}:${real_port}"]) {
+        concat::add_content { "NameVirtualHost ${address}:${real_port}":
           target => "/etc/apache2/httpd.conf";
         }
       }
