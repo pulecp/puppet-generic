@@ -170,6 +170,8 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
     } else {
       gen_apache::forward_vhost { "default":
         ensure      => $ensure,
+        address     => $address,
+        address6    => $address6,
         teststring  => "%{REQUEST_URI}",
         condpattern => "!^/server-status.*",
         forward     => "http://${real_name}";
@@ -220,11 +222,13 @@ define gen_apache::module ($ensure = "enable") {
   }
 }
 
-define gen_apache::forward_vhost($ensure="present", $port=80, $forward, $serveralias=false, $statuscode=301, $condpattern=false, $teststring="%{HTTP_HOST}") {
+define gen_apache::forward_vhost($ensure="present", $forward, $address = $ipaddress, $address6 = $ipaddress6, $port=80, $serveralias=false, $statuscode=301, $condpattern=false, $teststring="%{HTTP_HOST}") {
   $full_name = "${name}_${port}"
 
   gen_apache::site { $full_name:
     ensure              => $ensure,
+    address             => $address,
+    address6            => $address6,
     serveralias         => $serveralias,
     create_documentroot => false;
   }
