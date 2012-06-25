@@ -79,7 +79,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
     $port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false, $log_vhost=false,
     $redirect_non_ssl=true, $access_logformat="combined") {
   if $address == $ipaddress or $address6 == $ipaddress6 {
-    fail { "${name} has been set specifically to the base IP address, this will cause problems due to * sites being picked up by this vhost as well as it is more specific." }
+    fail { "${name} has been set specifically to the base IP address, this will cause problems due to * sites being picked up by this vhost as well as it is more specific.":; }
   }
 
   $temp_name = $port ? {
