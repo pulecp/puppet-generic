@@ -82,20 +82,18 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
     false   => $name,
     default => "${name}_${port}",
   }
+  $real_address  = $address ? {
+    false   => "*",
+    default => $address,
+  }
+  $real_address6 = $address6 ? {
+    false   => "::",
+    default => $address6,
+  }
   if $key or $cert or $intermediate or $wildcard or $ssl {
-    $full_name     = regsubst($temp_name,'^([^_]*)$','\1_443')
-    $real_address  = $address ? {
-      false   => "*",
-      default => $address,
-    }
-    $real_address6 = $address6 ? {
-      false   => "::",
-      default => $address6,
-    }
+    $full_name = regsubst($temp_name,'^([^_]*)$','\1_443')
   } else {
-    $full_name     = regsubst($temp_name,'^([^_]*)$','\1_80')
-    $real_address  = "*"
-    $real_address6 = "::"
+    $full_name = regsubst($temp_name,'^([^_]*)$','\1_80')
   }
   $real_name = regsubst($full_name,'^(.*)_(.*)$','\1')
   $real_port = regsubst($full_name,'^(.*)_(.*)$','\2')
