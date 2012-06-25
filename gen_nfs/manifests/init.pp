@@ -12,10 +12,20 @@ class gen_nfs {
   kservice {
     "nfs-common":
       hasreload => false;
-    "portmap":
-      hasstatus => false,
-      pattern   => "/sbin/portmap",
-      require   => Package["nfs-common"];
+  }
+
+  if $lsbmajdistrelease < 6 {
+    kservice {
+      "portmap":
+        hasstatus => false,
+        pattern   => "/sbin/portmap",
+        require   => Package["nfs-common"];
+    }
+  } else {
+    kservice {
+      "portmap":
+        require   => Package["nfs-common"];
+    }
   }
 }
 
