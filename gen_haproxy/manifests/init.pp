@@ -12,6 +12,8 @@
 #    Loglevel
 #  forwardfor
 #    Add HTTP X-Forwarded-For header to backend request
+#  tcp_smart_connect
+#    Set to false to disable tcp smart connect. This could prevent some TCP problems.
 #
 # Actions:
 #  Installs HAProxy and fetches its configuration based on the tag
@@ -19,7 +21,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $loglevel="warning", $forwardfor=false) {
+class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $loglevel="warning", $forwardfor=false, $tcp_smart_connect=true) {
   # When haproxy is in a failover setup (e.g. in pacemaker/heartbeat), don't start or stop it from puppet.
   kservice { "haproxy":
     ensure     => $failover ? {
