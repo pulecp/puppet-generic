@@ -1748,6 +1748,20 @@ class gen_base::python_dev {
   }
 }
 
+# Class: gen_base::python_django_south
+#
+# Actions:
+#  Install python-django-south
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_django_south {
+  package { "python-django-south":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-dnspython
 #
 # Actions:
