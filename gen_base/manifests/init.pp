@@ -1706,6 +1706,20 @@ class gen_base::php_pear {
   }
 }
 
+# Class: gen_base::poppler_utils
+#
+# Actions:
+#  Install poppler-utils
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::poppler_utils {
+  package { "poppler-utils":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::pstotext
 #
 # Actions:
