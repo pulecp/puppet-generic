@@ -559,6 +559,20 @@ class gen_base::libactiverecord_ruby18 {
   }
 }
 
+# Class: gen_base::libalgorithm_diff_perl
+#
+# Actions:
+#  Install libalgorithm-diff-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libalgorithm_diff_perl {
+  package { "libalgorithm-diff-perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libapache2-mod-auth-mysql
 #
 # Actions:
@@ -674,6 +688,20 @@ class gen_base::libapr1 {
   }
 }
 
+# Class: gen_base::libcgi_session_perl
+#
+# Actions:
+#  Install libcgi-session-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libcgi_session_perl {
+  package { "libcgi-session-perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libcommons-logging-java
 #
 # Actions:
@@ -758,6 +786,34 @@ class gen_base::libdbi-perl {
   }
 }
 
+# Class: gen_base::libdigest_sha1_perl
+#
+# Actions:
+#  Install libdigest-sha1-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libdigest_sha1_perl {
+  package { "libdigest-sha1-perl":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::liberror_perl
+#
+# Actions:
+#  Install liberror-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::liberror_perl {
+  package { "liberror-perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libfreetype6
 #
 # Actions:
@@ -772,6 +828,20 @@ class gen_base::libfreetype6 {
   }
 }
 
+# Class: gen_base::libhtml_parser_perl
+#
+# Actions:
+#  Install libhtml-parser-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libhtml_parser_perl {
+  package { "libhtml-parser-perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libio-socket-inet6-perl
 #
 # Actions:
@@ -782,6 +852,20 @@ class gen_base::libfreetype6 {
 #
 class gen_base::libio-socket-inet6-perl {
   package { "libio-socket-inet6-perl":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::liblocale_maketext_lexicon_perl
+#
+# Actions:
+#  Install liblocale-maketext-lexicon-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::liblocale_maketext_lexicon_perl {
+  package { "liblocale-maketext-lexicon-perl":
     ensure => latest;
   }
 }
@@ -1132,6 +1216,20 @@ class gen_base::libtiff4 {
 #
 class gen_base::libtime-modules-perl {
   package { "libtime-modules-perl":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::liburi_perl
+#
+# Actions:
+#  Install liburi-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::liburi_perl {
+  package { "liburi-perl":
     ensure => latest;
   }
 }
