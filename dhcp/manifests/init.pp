@@ -31,6 +31,7 @@ class dhcp::server {
     package { "isc-dhcp-server":; }
 
     service { "isc-dhcp-server":
+      ensure     => running,
       require    => Package["isc-dhcp-server"],
       subscribe  => File["/etc/dhcp/dhcpd.conf"],
       hasrestart => true,
