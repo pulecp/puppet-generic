@@ -30,6 +30,8 @@ class gen_icinga::server {
 
   kservice {
     "ido2db":
+      # Stopped till we can resolve the overly high load it causes
+      ensure  => 'stopped',
       package => "icinga-idoutils";
     "icinga":
       require => Kservice["ido2db"];
