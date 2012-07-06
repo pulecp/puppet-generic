@@ -8,7 +8,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
+class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671, $disk_free_limit = 500000000) {
   kservice { "rabbitmq-server":
     srequire => Concat["/etc/rabbitmq/rabbitmq.config"],
   }
