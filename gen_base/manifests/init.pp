@@ -1262,6 +1262,20 @@ class gen_base::libxenstore3_0 {
   }
 }
 
+# Class: gen_base::libxml_simple_perl
+#
+# Actions:
+#  Install libxml-simple-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libxml_simple_perl {
+  package { "libxml-simple-perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libxml2
 #
 # Actions:
