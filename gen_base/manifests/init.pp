@@ -1276,6 +1276,20 @@ class gen_base::libxml_simple_perl {
   }
 }
 
+# Class: gen_base::libxml_xpath_perl
+#
+# Actions:
+#  Install libxml-xpath-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libxml_xpath_perl {
+  package { "libxml-xpath-perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libxml2
 #
 # Actions:
