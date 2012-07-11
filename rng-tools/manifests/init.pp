@@ -11,13 +11,13 @@
 #
 class rng-tools {
   package { "rng-tools":
-    ensure => $lsbmajdistrelease ? {
-      5       => latest,
+    ensure => $lsbdistcodename ? {
+      'lenny' => latest,
       default => absent,
     };
   }
 
-  if $::lsbmajdistrelease <= 5 {
+  if $lsbdistcodename == 'lenny' {
     file { "/etc/default/rng-tools":
       content  => template("rng-tools/rng-tools"),
       notify   => Service["rng-tools"],
