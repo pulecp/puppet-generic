@@ -131,10 +131,15 @@ define gen_munin::environment {
 #  gen_munin::client
 #
 class gen_munin::client::plugin::defaults {
+  if $lsbdistcodename == 'lenny' {
+    include "gen_munin::client::plugin::defaults::lenny"
+  } else {
+    include 'gen_munin::client::plugin::defaults::generic'
+  }
+
   $ifs = split($interfaces, ",")
   gen_munin::client::plugin::interfaces { $ifs:; }
 
-  include "gen_munin::client::plugin::defaults::${lsbdistcodename}"
   gen_munin::client::plugin {
     "cpu":;
     "df":;
@@ -158,7 +163,7 @@ class gen_munin::client::plugin::defaults::lenny {
   # nothing :D
 }
 
-class gen_munin::client::plugin::defaults::squeeze {
+class gen_munin::client::plugin::defaults::generic {
   gen_munin::client::plugin {
     "diskstats":;
     "fw_conntrack":;
