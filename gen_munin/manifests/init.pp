@@ -10,9 +10,10 @@
 #  gen_apt
 #
 class gen_munin {
-  if $lsbdistcodename == "squeeze" {
+  if versioncmp($lsbdistrelease, "6") < 0 {
+    debug("Lenny will be unsupported soon...")
+  } else {
     gen_apt::preference { ["munin","munin-common","munin-doc","munin-java-plugins","munin-node","munin-plugins-core","munin-plugins-extra","munin-plugins-java"]:
-      repo => "squeeze-backports";
     }
   }
 }
@@ -94,10 +95,11 @@ class gen_munin::client {
 
   # Fixed in 2.0.1, see: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=675593
   file { '/var/lib/munin/plugin-state':
-    ensure => directory,
-    owner  => 'munin',
-    group  => 'munin',
-    mode   => 775;
+    ensure  => directory,
+    owner   => 'munin',
+    group   => 'munin',
+    mode    => 775,
+    require => Package["munin-node"];
   }
 }
 
@@ -215,6 +217,8 @@ define gen_munin::client::plugin::interfaces {
 #  gen_munin::client
 #
 define gen_munin::client::plugin ($ensure='present', $script_path='/usr/share/munin/plugins', $script=false) {
+  include gen_munin::client
+
   $plugin_path = $script ? {
     false   => "${script_path}/${name}",
     default => "${script_path}/${script}"
