@@ -6,9 +6,7 @@
 # Depends:
 #  gen_puppet
 class gen_haveged {
-  if $::lsbmajdistrelease >= 6 {
-    kservice { "haveged":
-      pensure => latest;
-    }
+  kservice { "haveged":
+    pensure => latest;
   }
 }
