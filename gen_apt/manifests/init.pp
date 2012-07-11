@@ -80,7 +80,7 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
   }
   $sanitized_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
 
-  if $lsbmajdistrelease < 6 {
+  if $lsbdistcodename == 'lenny' {
     concat::add_content { $name:
       content => template("gen_apt/preference"),
       target  => "/etc/apt/preferences",
