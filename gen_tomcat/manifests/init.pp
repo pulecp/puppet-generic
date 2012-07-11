@@ -30,7 +30,9 @@
 #
 class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
                   $java_home="/usr/lib/jvm/java-6-openjdk/", $java_opts="", $jvm_max_mem=false, $tomcat_tag="tomcat_${environment}") {
-  include gen_tomcat::manager
+  class { 'gen_tomcat::manager':
+    tomcat_tag => $tomcat_tag;
+  }
   include gen_base::openjdk-6-jre
 
   if !$jvm_max_mem {
