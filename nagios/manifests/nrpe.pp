@@ -102,7 +102,10 @@ class nagios::nrpe {
 
   file {
     "/etc/nagios/nrpe.cfg":
-      content => template("nagios/nrpe/${lsbdistcodename}/nrpe.cfg"),
+      content => $lsbdistcodename ? {
+        'lenny' => template("nagios/nrpe/lenny/nrpe.cfg"),
+        default => template("nagios/nrpe/squeeze/nrpe.cfg"),
+      },
       require => Package["nagios-nrpe-server"];
     "/etc/nagios/nrpe.d":
       ensure  => directory,
