@@ -13,14 +13,14 @@ class gen_sudo {
     ensure => latest,
   }
 
-  # Setup /etc/sudoers for either .d inclusion or concatination
-  if $lsbmajdistrelease < 6 { # Lenny and older
+  # Setup /etc/sudoers for either .d inclusion or concatenation
+  if $lsbdistcodename == 'lenny' {
     concat { "/etc/sudoers":
       mode    => 440,
       require => Package["sudo"];
     }
 
-  } else { # Squeeze and newer
+  } else {
     file {
       "/etc/sudoers.d/":
         ensure  => directory,
