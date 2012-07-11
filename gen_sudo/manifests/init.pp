@@ -68,7 +68,17 @@ define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $c
     default => $comment,
   }
 
-  if $lsbmajdistrelease > 5 { # Squeeze or newer
+  if $lsbdistcodename == 'lenny' {
+    gen_sudo::add_rule { "${sanitized_name}":
+      content => template("gen_sudo/sudo"),
+      notify  => Exec["check-sudoers-${sanitized_name}"];
+    }
+
+    exec { "check-sudoers-${sanitized_name}":
+      command     => "/bin/sh -c 'if /usr/sbin/visudo -c -f /var/lib/puppet/concat/_etc_sudoers/fragments/15__etc_sudoers_fragment_${sanitized_name}; then exit 0; else /bin/rm -f /var/lib/puppet/concat/_etc_sudoers/fragments/15__etc_sudoers_fragment_${sanitized_name}; exit 1; fi'",
+      refreshonly => true;
+    }
+  } else {
     file { "/etc/sudoers.d/${sanitized_name}":
       content => template("gen_sudo/sudo"),
       mode    => 440,
@@ -78,16 +88,6 @@ define gen_sudo::rule($entity, $command, $as_user, $password_required = true, $c
     exec { "check-sudoers-${sanitized_name}":
       command     => "/bin/sh -c 'if /usr/sbin/visudo -c -f /etc/sudoers.d/${sanitized_name}; then exit 0; else /bin/rm -f /etc/sudoers.d/${sanitized_name}; exit 1; fi'",
       require     => Package["sudo"],
-      refreshonly => true;
-    }
-  } else {
-    gen_sudo::add_rule { "${sanitized_name}":
-      content => template("gen_sudo/sudo"),
-      notify  => Exec["check-sudoers-${sanitized_name}"];
-    }
-
-    exec { "check-sudoers-${sanitized_name}":
-      command     => "/bin/sh -c 'if /usr/sbin/visudo -c -f /var/lib/puppet/concat/_etc_sudoers/fragments/15__etc_sudoers_fragment_${sanitized_name}; then exit 0; else /bin/rm -f /var/lib/puppet/concat/_etc_sudoers/fragments/15__etc_sudoers_fragment_${sanitized_name}; exit 1; fi'",
       refreshonly => true;
     }
   }

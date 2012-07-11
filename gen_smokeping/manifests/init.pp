@@ -60,7 +60,7 @@ define gen_smokeping::environment($owner, $contact, $cgiurl, $mailhost=false, $s
     default     => "smokeping_${name}",
   }
 
-  if $lsbmajdistrelease < 6 {
+  if $lsbdistcodename == 'lenny' {
     exec { "reload-${initname}":
       command     => "/etc/init.d/${initname} reload",
       refreshonly => true;

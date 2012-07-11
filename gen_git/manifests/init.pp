@@ -9,7 +9,7 @@
 #  gen_puppet
 #
 class gen_git {
-  if $lsbmajdistrelease >= 6 { #squeeze or newer
+  if $lsbdistcodename != 'lenny' {
     $git_pkg = "git"
   } else { #lenny or older
     $git_pkg = "git-core"

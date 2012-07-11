@@ -24,21 +24,17 @@
 #
 class sphinxsearch::server {
   # Install needed package.
-  package {
-    "sphinxsearch":
-      ensure => present;
-  }
+  package { "sphinxsearch":; }
 
   # Run Sphinxsearch searchd daemon.
-  service {
-    "sphinxsearch":
-      ensure    => running,
-      pattern   => "/usr/bin/searchd",
-      hasstatus => false;
+  service { "sphinxsearch":
+    ensure    => running,
+    pattern   => "/usr/bin/searchd",
+    hasstatus => false;
   }
 
   # The config file was added in Squeeze
-  if $lsbmajdistrelease > 5 {
+  if $lsbdistcodename != 'lenny' {
     file { "/etc/default/sphinxsearch":
       content => template("sphinxsearch/sphinxsearch"),
       notify  => Service["sphinxsearch"],

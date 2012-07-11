@@ -14,7 +14,7 @@ class gen_nfs {
       hasreload => false;
   }
 
-  if $lsbmajdistrelease < 6 {
+  if $lsbdistcodename == 'lenny' {
     kservice {
       "portmap":
         hasstatus => false,
@@ -101,7 +101,7 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd
     }
   }
 
-  if $lsbmajdistrelease > 5 {
+  if $lsbdistcodename != 'lenny' {
     $nfsinit = "/usr/sbin/service nfs-kernel-server"
   } else {
     $nfsinit = "/etc/init.d/nfs-kernel-server"

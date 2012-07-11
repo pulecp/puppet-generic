@@ -17,7 +17,7 @@ class gen_apt {
   Exec['/usr/bin/apt-get update'] -> Package <| title != "apt-transport-https" |>
   Package <| title == "apt-transport-https" |> -> Exec['/usr/bin/apt-get update']
 
-  if $lsbmajdistrelease == '5' {
+  if $lsbdistcodename == 'lenny' {
     $preferences_file = "/etc/apt/preferences"
 
     concat { $preferences_file:
