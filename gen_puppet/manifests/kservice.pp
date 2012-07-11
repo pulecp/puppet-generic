@@ -85,7 +85,7 @@ define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatu
   }
 
   if $hasrestart {
-    if $lsbmajdistrelease < 6 {
+    if $lsbdistcodename == 'lenny' {
       exec { "restart-${name}":
         command     => $hasrestart ? {
           true    => "/etc/init.d/${name} restart",
