@@ -461,6 +461,20 @@ class gen_base::libisccc60 {
   }
 }
 
+# Class: gen_base::libisccc80
+#
+# Actions:
+#  Install libisccc80
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libisccc80 {
+  package { "libisccc80":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libmagickcore3
 #
 # Actions:

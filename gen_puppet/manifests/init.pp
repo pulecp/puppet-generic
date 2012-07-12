@@ -32,7 +32,6 @@ class gen_puppet {
   include gen_puppet::puppet_conf
   include gen_base::augeas
   include gen_base::facter
-  include gen_base::libisccc60
 
   package {
     "puppet-common":
