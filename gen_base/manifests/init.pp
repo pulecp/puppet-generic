@@ -912,7 +912,7 @@ class gen_base::libmysql-ruby {
   }
 }
 
-# Class: gen_base::libmysqlclient16
+# Class: gen_base::libmysqlclient
 #
 # Actions:
 #  Install libmysqlclient16
@@ -920,9 +920,15 @@ class gen_base::libmysql-ruby {
 # Depends:
 #  gen_puppet
 #
-class gen_base::libmysqlclient16 {
-  package { "libmysqlclient16":
-    ensure => latest;
+class gen_base::libmysqlclient {
+  if $lsbdistcodename == 'wheezy' {
+    package { "libmysqlclient18":
+      ensure => latest;
+    }
+  } else {
+    package { "libmysqlclient16":
+      ensure => latest;
+    }
   }
 }
 
@@ -1451,7 +1457,7 @@ class gen_base::mysql_client {
 #
 class gen_base::mysql_common {
   if versioncmp($lsbdistrelease, "6") >= 0 {
-    include gen_base::libmysqlclient16
+    include gen_base::libmysqlclient
   }
 
   package { "mysql-common":
