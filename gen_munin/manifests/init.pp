@@ -48,13 +48,12 @@ class gen_munin::client {
     hasreload => false;
   }
 
-  if versioncmp($lsbdistrelease, "6") < 0 {
-  # in lenny we want our own package
+  if $lsbdistcodename == 'lenny' {
+    # in lenny we want our own package
     gen_apt::preference { "munin-plugins-extra":
       repo => "lenny-kumina";
     }
   } else {
-    # in squeeze there exists a munin-plugins-core package
     package {"munin-plugins-core":
       ensure => latest;
     }
