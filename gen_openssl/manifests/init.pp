@@ -10,7 +10,13 @@
 #  gen_puppet
 #
 class gen_openssl::common {
-  package { ["openssl","libssl0.9.8"]:; }
+  package { "openssl":; }
+
+  if $lsbdistcodename == 'wheezy' {
+    package { "libssl1.0.0":; }
+  } else {
+    package { "libssl0.9.8":; }
+  }
 
   file { "/etc/ssl/certs":
     recurse  => true,
