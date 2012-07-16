@@ -202,7 +202,7 @@ class gen_php5::xsl {
 # Depends:
 #  gen_puppet
 #
-define gen_php5::common::config (value, variable=false) {
+define gen_php5::common::config ($value, $variable=false) {
   if ! defined(File["/etc/php5/conf.d/set-via-puppet.ini"]) {
     file { "/etc/php5/conf.d/set-via-puppet.ini":
       require => Package["php5-common"],
