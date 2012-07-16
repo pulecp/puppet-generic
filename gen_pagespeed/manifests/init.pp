@@ -10,11 +10,12 @@
 #
 class gen_pagespeed {
   gen_apt::source { "mod_pagespeed":
-    uri => 'http://dl.google.com/linux/mod-pagespeed/deb/',
-    key => '7FAC5991',
+    uri          => 'http://dl.google.com/linux/mod-pagespeed/deb/',
+    components   => ['main'],
+    key          => '7FAC5991',
   }
 
-  gen_apt::key { "google_pagespeed":
+  gen_apt::key { '7FAC5991':
     content => template("gen_pagespeed/apt.key"),
   }
 
