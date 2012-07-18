@@ -50,11 +50,12 @@ class gen_apache {
 
   concat {
     "/etc/apache2/ports.conf":
-      require => Package["apache2"],
-      notify  => Exec["reload-apache2"];
+      require     => Package["apache2"],
+      notify      => Exec["reload-apache2"];
     "/etc/apache2/httpd.conf":
-      require => Package["apache2"],
-      notify  => Exec["reload-apache2"];
+      require     => Package["apache2"],
+      purge_on_pm => true,
+      notify      => Exec["reload-apache2"];
   }
 
   concat::add_content { "base_httpd":
