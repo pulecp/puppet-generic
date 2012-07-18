@@ -85,11 +85,11 @@ class mysql::server ($datadir=false) {
       notify  => Package[$mysqlserver];
     "/etc/mysql/my.cnf":
       content => template("mysql/my.cnf"),
-      mode    => 0640,
+      mode    => 0644,
       require => Package["${mysqlserver}"];
     "/etc/mysql/conf.d":
       ensure  => directory,
-      mode    => 0750,
+      mode    => 0755,
       notify  => Package["${mysqlserver}"];
     "/etc/mysql/conf.d/binary-logging.cnf":
       content => template("mysql/binary-logging.cnf"),
