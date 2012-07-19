@@ -110,6 +110,7 @@ else
 fi
 
 # find all the files in the fragments directory, sort them numerically and concat to fragments.concat in the working dir
+export LC_ALL=en_US.UTF-8
 /usr/bin/find fragments/ -type f -follow -print0 |${SORT} ${SORTARG}|/usr/bin/xargs -0 /bin/cat >>"fragments.concat"
 
 if [ "${TEST}" = "" ]; then
