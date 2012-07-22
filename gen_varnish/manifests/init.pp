@@ -12,7 +12,7 @@ class gen_varnish {
   kservice { "varnish":
     ensure  => running,
     pensure => latest,
-    notify  => Exec["Clear varnish startup options"];
+    pnotify => Exec["Clear varnish startup options"];
   }
 
   # We need to trucate the default varnish startup options file
@@ -71,8 +71,9 @@ define gen_varnish::config ($nfiles='131072',$memlock='82000',$vcl_conf='/etc/va
                             $admin_port='6082',$min_threads='1',$max_threads='1000',$idle_timeout='120',$storage_file='/var/lib/varnish/varnish_storage.bin',
                             $storage_size='1G',$secret_file='/etc/varnish/secret',$default_ttl='120') {
   gen_varnish::set_config {
-    "NFILES":        value => $nfiles;
-    "MEMLOCK":       value => $memlock;
+    "NFILES":  value => $nfiles;
+    "MEMLOCK": value => $memlock;
+    "START":   value => 'yes';
   }
 
   gen_varnish::set_config { "DAEMON_OPTS":
@@ -103,6 +104,7 @@ define gen_varnish::set_config ($value) {
     file    => '/etc/default/varnish',
     require => Package['varnish'],
     lens    => 'Shellvars.lns',
-    changes => "set ${name} '${value}'";
+    changes => "set ${name} '${value}'",
+    notify  => Service['varnish'],
   }
 }
