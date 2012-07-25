@@ -142,39 +142,9 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
         }
       }
 
-      # Add very specific listeners, for optimal versatility.
-      case $address {
-        "*": {
-          if !defined(Concat::Add_content["Listen ${real_port}"]) {
-            concat::add_content { "Listen ${real_port}":
-              target => "/etc/apache2/ports.conf";
-            }
-          }
-        }
-        default: {
-          if !defined(Concat::Add_content["Listen ${address}:${real_port}"]) {
-            concat::add_content { "Listen ${address}:${real_port}":
-              target => "/etc/apache2/ports.conf";
-            }
-          }
-        }
-      }
-
-      # Do the same for IPv6 addresses.
-      case $address6 {
-        "::": {
-          if !defined(Concat::Add_content["Listen ${real_port}"]) {
-            concat::add_content { "Listen ${real_port}":
-              target => "/etc/apache2/ports.conf";
-            }
-          }
-        }
-        default: {
-          if !defined(Concat::Add_content["Listen [${address6}]:${real_port}"]) {
-            concat::add_content { "Listen [${address6}]:${real_port}":
-              target => "/etc/apache2/ports.conf";
-            }
-          }
+      if !defined(Concat::Add_content["Listen ${real_port}"]) {
+        concat::add_content { "Listen ${real_port}":
+          target => "/etc/apache2/ports.conf";
         }
       }
 
