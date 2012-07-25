@@ -1,4 +1,4 @@
-File.exist?("/etc/puppet/nomonitoring") ? (File.open('/etc/puppet/nomonitoring').read.strip == 'FORCE' ? monitoring = 'force_off' : monitoring = false) : monitoring = true
+File.exist?("/etc/puppet/nomonitoring") ? (File.open('/etc/puppet/nomonitoring').gets.strip == 'FORCE' ? monitoring = 'force_off' : monitoring = false) : monitoring = true
 Facter.add("monitoring") do
         setcode do
                 monitoring
