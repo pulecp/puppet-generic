@@ -90,22 +90,25 @@ class gen_puppet::puppet_conf {
 #
 # Parameters:
 #  configfile
-#    Undocumented
+#    The configfile to change. Defaults to /etc/puppet/puppet.conf.
 #  section
-#    Undocumented
+#    The inifile section to put this directive in. Can be one of 'main','agent' or 'master'. Defaults to 'main'.
 #  order
-#    Undocumented
+#    If an order is needed, add a priority. Check source to see what makes sense. Defaults to false.
 #  var
-#    Undocumented
+#    The variable name to set. Defaults to the name of the resource, $name.
 #  value
-#    Undocumented
+#    The value to set the variable to. Required option.
 #
 # Actions:
-#  Undocumented
+#  Add the config to the correct file.
 #
 # Depends:
-#  Undocumented
+#  gen_puppet::concat
 #  gen_puppet
+#
+# Todo:
+#  Rewrite to use kaugeas instead of concat.
 #
 define gen_puppet::set_config ($value, $configfile = '/etc/puppet/puppet.conf', $section = 'main', $order = false, $var = false) {
   # If no variable name is set, use the name
@@ -124,7 +127,6 @@ define gen_puppet::set_config ($value, $configfile = '/etc/puppet/puppet.conf', 
       'main'   => "15",
       'agent'  => "25",
       'master' => "35",
-      'queue'  => "45",
       default  => fail("No order given and no known section given."),
     }
   }

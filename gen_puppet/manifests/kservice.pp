@@ -19,6 +19,8 @@
 #    The ensure for the package
 #  srequire
 #    If the service start depends on something else, use this to set the require for service.
+#  pnotify
+#    When the package installation should trigger something, use this notify.
 #
 # Actions:
 #  Install a package, starts the service and creates a reload exec.
@@ -26,9 +28,13 @@
 # Depends:
 #  gen_puppet
 #
-define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=$name, $pensure="present", $pattern=false, $srequire=false) {
+define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=$name, $pensure="present", $pattern=false, $srequire=false, $pnotify=false) {
   package { $package:
-    ensure => $pensure;
+    ensure => $pensure,
+    notify => $pnotify ? {
+      false   => undef,
+      default => $pnotify,
+    },
   }
 
   service { $name:
