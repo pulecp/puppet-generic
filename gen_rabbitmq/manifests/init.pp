@@ -91,7 +91,7 @@ define gen_rabbitmq::add_user($password) {
   exec { "add user ${name}":
     command => "/usr/sbin/rabbitmqctl add_user ${name} ${password}",
     unless  => "/usr/sbin/rabbitmqctl list_users | /bin/grep -qP \"^${name}\\t\"",
-    require => Package["rabbitmq-server"];
+    require => Service["rabbitmq-server"];
   }
 }
 
@@ -99,7 +99,7 @@ define gen_rabbitmq::delete_user {
   exec { "delete user ${name}":
     command => "/usr/sbin/rabbitmqctl delete_user ${name}",
     onlyif  => "/usr/sbin/rabbitmqctl list_users | /bin/grep -qP \"^${name}\\t\"",
-    require => Package["rabbitmq-server"];
+    require => Service["rabbitmq-server"];
   }
 }
 
@@ -107,6 +107,6 @@ define gen_rabbitmq::set_permissions($vhostpath="/", $username, $conf='".*"', $w
   exec { "set permission ${vhostpath} ${username}":
     command => "/usr/sbin/rabbitmqctl set_permissions -p ${vhostpath} ${username} ${conf} ${write} ${read}",
     unless  => "/usr/sbin/rabbitmqctl list_user_permissions -p ${vhostpath} ${username} | grep -qP \"${vhostpath}\\t${conf}\\t${write}\\t${read}\"",
-    require => [Package["rabbitmq-server"],Gen_rabbitmq::Add_user[$username]];
+    require => Gen_rabbitmq::Add_user[$username];
   }
 }
