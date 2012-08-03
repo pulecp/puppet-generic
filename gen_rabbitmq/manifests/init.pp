@@ -90,7 +90,7 @@ class gen_rabbitmq::stomp($ssl_cert = false, $ssl_key = false, $ssl_port = 5671)
 define gen_rabbitmq::add_user($password) {
   exec { "add user ${name}":
     command => "/usr/sbin/rabbitmqctl add_user ${name} ${password}",
-    unless  => "/usr/sbin/rabbitmqctl list_users | /bin/grep -qP \"^${name}$\"",
+    unless  => "/usr/sbin/rabbitmqctl list_users | /bin/grep -qP \"^${name}\"",
     require => Service["rabbitmq-server"];
   }
 }
