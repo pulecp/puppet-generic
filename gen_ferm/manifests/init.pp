@@ -112,7 +112,7 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
   }
 
   if $ip_proto == "v46" or $ip_proto == $name {
-    if ! $::ipaddress6 or ! $ipaddress6 {
+    if ! $::ipaddress6 and ! $ipaddress6 {
       rule { "${real_name}_v4":
         prio      => $prio,
         interface => $interface,
