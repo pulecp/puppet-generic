@@ -43,6 +43,25 @@ class gen_ferm {
   gen_ferm::chain { ['OUTPUT_filter_v4', 'OUTPUT_filter_v6']:; }
 
   @gen_ferm::table { ["filter_v4","filter_v6","mangle_v4","mangle_v6","nat_v4","nat_v6"]:; }
+
+  Gen_ferm::Chain <| title == 'INPUT_filter_v4' |> {
+    policy => 'DROP',
+  }
+  Gen_ferm::Chain <| title == 'FORWARD_filter_v4' |> {
+    policy => 'DROP',
+  }
+  Gen_ferm::Chain <| title == 'OUTPUT_filter_v4' |> {
+    policy => 'ACCEPT',
+  }
+  Gen_ferm::Chain <| title == 'INPUT_filter_v6' |> {
+    policy => 'DROP',
+  }
+  Gen_ferm::Chain <| title == 'FORWARD_filter_v6' |> {
+    policy => 'DROP',
+  }
+  Gen_ferm::Chain <| title == 'OUTPUT_filter_v6' |> {
+    policy => 'ACCEPT',
+  }
 }
 
 # Define: gen_ferm::rule
