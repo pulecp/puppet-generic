@@ -1,9 +1,11 @@
 # Author: Kumina bv <support@kumina.nl>
 
-# Class: gen_timezone
+# Define: gen_timezone::tz
 #
 # Actions:
 #  Set the system's timezone
+#  This is a defined type because it's impossible to change a
+#  class' parameters later
 #
 # Parameters:
 #  tz
@@ -12,25 +14,34 @@
 # Depends:
 #  gen_puppet
 #
-class gen_timezone ($tz="Europe/Amsterdam") {
+define gen_timezone::tz ($tz) {
   package { "tzdata":
-    ensure    => "latest";
+    ensure => "latest";
   }
 
-  file { "/etc/localtime":
-    ensure  => link,
-    target  => "/usr/share/zoneinfo/${tz}";
+  file {
+    "/etc/timezone":
+      ensure  => present,
+      content => "${tz}\n";
+    "/etc/localtime":
+      ensure  => link,
+      target  => "/usr/share/zoneinfo/${tz}",
+      require => Package["tzdata"];
   }
 }
 
-class gen_timezone::Amsterdam {
-  class { "gen_timezone":
+# Class: gen_timezone
+#
+# Actions:
+#  Set the default timezone (Europe/Amsterdam)
+#
+# Parameters:
+#
+# Depends:
+#  gen_timezone
+#
+class gen_timezone {
+  gen_timezone::tz { "timezone":
     tz => "Europe/Amsterdam";
-  }
-}
-
-class gen_timezone::London {
-  class { "gen_timezone":
-    tz => "Europe/London";
   }
 }
