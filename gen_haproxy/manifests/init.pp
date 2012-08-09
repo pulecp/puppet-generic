@@ -133,43 +133,52 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$h
   $safe_name = regsubst($name, " ", "_")
   gen_haproxy::proxyconfig {
     "site_${safe_name}_1_listen":
-      content => template("gen_haproxy/listen.erb");
+      content    => template("gen_haproxy/listen.erb"),
+      contenttag => $haproxy_tag;
     "site_${safe_name}_2_server_${servername}":
-      content => template("gen_haproxy/server.erb");
+      content    => template("gen_haproxy/server.erb"),
+      contenttag => $haproxy_tag;
     "site_${safe_name}_3_timeouts":
-      content => template("gen_haproxy/timeouts.erb");
+      content    => template("gen_haproxy/timeouts.erb"),
+      contenttag => $haproxy_tag;
   }
 
   if $mode != "http" {
     gen_haproxy::proxyconfig { "site_${safe_name}_2_mode":
-      content => "\tmode ${mode}";
+      content    => "\tmode ${mode}",
+      contenttag => $haproxy_tag;
     }
     if $mode == "tcp" {
       gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
-        content => "\toption tcplog";
+        content    => "\toption tcplog",
+        contenttag => $haproxy_tag;
       }
     }
   } elsif $mode == "http" {
     gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
-      content => "\toption httplog";
+      content    => "\toption httplog",
+      contenttag => $haproxy_tag;
     }
   }
 
   if $cookie {
     gen_haproxy::proxyconfig { "site_${safe_name}_3_cookie":
-      content => "\tcookie ${cookie}";
+      content    => "\tcookie ${cookie}",
+      contenttag => $haproxy_tag;
     }
   }
 
   if $httpcheck_uri {
     gen_haproxy::proxyconfig { "site_${safe_name}_3_httpcheck":
-      content => "\toption httpchk GET ${httpcheck_uri}";
+      content    => "\toption httpchk GET ${httpcheck_uri}",
+      contenttag => $haproxy_tag;
     }
   }
 
   if $balance {
     gen_haproxy::proxyconfig { "site_${safe_name}_3_balance":
-      content => "\tbalance ${balance}";
+      content    => "\tbalance ${balance}",
+      contenttag => $haproxy_tag;
     }
   }
 }
@@ -178,13 +187,15 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$h
 # Define: gen_haproxy::proxyconf
 #
 # Actions:
-#  Exports the config, $customtag is passed implicitly (due to scoping) from gen_haproxy::site. This define should not be called from any other define than gen_haproxy::site
+#  Exports the config.
 #
 # Parameters:
 #  content:
 #    The content of the fragment
+#  haproxy_tag
+#    Change this when there are multiple loadbalancers in one environment
 #
-define gen_haproxy::proxyconfig ($content) {
+define gen_haproxy::proxyconfig ($content, $haproxy_tag) {
   concat::add_content { "${name}":
     content    => $content,
     exported   => true,
