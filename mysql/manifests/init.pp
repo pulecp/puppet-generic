@@ -174,7 +174,7 @@ class mysql::server ($datadir=false) {
     if !defined(Exec["grant_${real_user}_${real_db}_${hostname}"]) {
       exec { "grant_${real_user}_${real_db}_${hostname}":
         unless  => $cmd_unless,
-        command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${real_db}.* to '${real_user}'@'${hostname}' ${cmd_password} ${cmd_grant_option} ${cmd_require_ssl};\"",
+        command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${real_db}.* to '${real_user}'@'${hostname}' ${cmd_password} ${cmd_require_ssl} ${cmd_grant_option};\"",
         require => $real_db ? {
           "*"     => Service["mysql"],
           default => [Service["mysql"], Exec["create-${real_db}-db"]],
