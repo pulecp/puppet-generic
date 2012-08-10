@@ -38,7 +38,7 @@ class localbackup::common {
 #  Undocumented
 #  gen_puppet
 #
-class localbackup::client {
+class localbackup::client($backup_home) {
   include gen_base::backup-scripts
 
   package { "local-backup":
