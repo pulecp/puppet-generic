@@ -128,11 +128,11 @@ class apache {
       $apache_ports = $::apache_ports
    }
 
-   if !$apache_virtualhosts {
+   if !$::apache_virtualhosts {
       $apache_virtualhosts = $ipaddress
    }
 
-   if !$apache_virtualhosts_ssl {
+   if !$::apache_virtualhosts_ssl {
       $apache_virtualhosts_ssl = ""
    }
 
