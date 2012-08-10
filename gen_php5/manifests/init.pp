@@ -195,6 +195,20 @@ class gen_php5::xsl {
   }
 }
 
+# Class: gen_php5::imap
+#
+# Actions:
+#  Install imap extension for PHP5.
+#
+# Depends:
+#  -
+#
+class gen_php5::imap {
+  package { "php5-imap":
+    ensure => latest,
+  }
+}
+
 # Define: gen_php5::common::config
 #
 # Actions:
