@@ -161,12 +161,12 @@ class mysql::server ($datadir=false) {
 
     $cmd_unless = $grant_option ? {
       true  => $require_ssl ? {
-        true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON \`${real_db}\`.*\" -e \"ON \*.*\" | grep \"${cmd_grant_option}\" | grep -q \"${cmd_require_ssl}\"",
-        false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON \`${real_db}\`.*\" -e \"ON \*.*\" | grep -q \"${cmd_grant_option}\"",
+        true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON `${real_db}`.*\" -e \"ON *.*\" | grep \"${cmd_grant_option}\" | grep -q \"${cmd_require_ssl}\"",
+        false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON `${real_db}`.*\" -e \"ON *.*\" | grep -q \"${cmd_grant_option}\"",
       },
       false => $require_ssl ? {
-        true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON \`${real_db}\`.*\" -e \"ON \*.*\" | grep -q \"${cmd_require_ssl}\"",
-        false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON \`${real_db}\`.*\" -e \"ON \*.*\"",
+        true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON `${real_db}`.*\" -e \"ON *.*\" | grep -q \"${cmd_require_ssl}\"",
+        false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON `${real_db}`.*\" -e \"ON *.*\"",
       },
     }
 
