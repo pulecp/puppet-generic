@@ -110,7 +110,7 @@ class gen_ferm {
 #
 define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false,
     $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter,
-    $chain=INPUT, $ensure=present, $exported=false, $ferm_tag=false, $fqdn=$fqdn, $ipaddress6=false, $customtag="foobar") {
+    $chain=INPUT, $ensure=present, $exported=false, $ferm_tag=false, $fqdn = $::fqdn, $ipaddress6=false, $customtag="foobar") {
     if $customtag != "foobar" { notify { "gen_ferm::rule ${name} customtag ${customtag}":; } }
   $real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
   $sanitized_name = regsubst($real_name, '[^a-zA-Z0-9\-_]', '_', 'G')
