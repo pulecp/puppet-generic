@@ -133,52 +133,52 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$h
   $safe_name = regsubst($name, " ", "_")
   gen_haproxy::proxyconfig {
     "site_${safe_name}_1_listen":
-      content    => template("gen_haproxy/listen.erb"),
-      contenttag => $haproxy_tag;
+      content     => template("gen_haproxy/listen.erb"),
+      haproxy_tag => $haproxy_tag;
     "site_${safe_name}_2_server_${servername}":
-      content    => template("gen_haproxy/server.erb"),
-      contenttag => $haproxy_tag;
+      content     => template("gen_haproxy/server.erb"),
+      haproxy_tag => $haproxy_tag;
     "site_${safe_name}_3_timeouts":
-      content    => template("gen_haproxy/timeouts.erb"),
-      contenttag => $haproxy_tag;
+      content     => template("gen_haproxy/timeouts.erb"),
+      haproxy_tag => $haproxy_tag;
   }
 
   if $mode != "http" {
     gen_haproxy::proxyconfig { "site_${safe_name}_2_mode":
-      content    => "\tmode ${mode}",
-      contenttag => $haproxy_tag;
+      content     => "\tmode ${mode}",
+      haproxy_tag => $haproxy_tag;
     }
     if $mode == "tcp" {
       gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
-        content    => "\toption tcplog",
-        contenttag => $haproxy_tag;
+        content     => "\toption tcplog",
+        haproxy_tag => $haproxy_tag;
       }
     }
   } elsif $mode == "http" {
     gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
-      content    => "\toption httplog",
-      contenttag => $haproxy_tag;
+      content     => "\toption httplog",
+      haproxy_tag => $haproxy_tag;
     }
   }
 
   if $cookie {
     gen_haproxy::proxyconfig { "site_${safe_name}_3_cookie":
-      content    => "\tcookie ${cookie}",
-      contenttag => $haproxy_tag;
+      content     => "\tcookie ${cookie}",
+      haproxy_tag => $haproxy_tag;
     }
   }
 
   if $httpcheck_uri {
     gen_haproxy::proxyconfig { "site_${safe_name}_3_httpcheck":
-      content    => "\toption httpchk GET ${httpcheck_uri}",
-      contenttag => $haproxy_tag;
+      content     => "\toption httpchk GET ${httpcheck_uri}",
+      haproxy_tag => $haproxy_tag;
     }
   }
 
   if $balance {
     gen_haproxy::proxyconfig { "site_${safe_name}_3_balance":
-      content    => "\tbalance ${balance}",
-      contenttag => $haproxy_tag;
+      content     => "\tbalance ${balance}",
+      haproxy_tag => $haproxy_tag;
     }
   }
 }
