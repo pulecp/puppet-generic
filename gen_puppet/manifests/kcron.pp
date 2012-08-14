@@ -3,6 +3,8 @@
 # Define: kcron
 #
 # Parameters:
+#  mailto
+#    The mail address notifications are sent to
 #  minute
 #    Minute interval field of crontab entry
 #  hour
@@ -35,7 +37,7 @@ define kcron($ensure="present", $mailto=false, $minute="*", $hour="*", $mday="*"
   }
 
   if $ensure == "present" {
-    # Notify when there's not mailto defined, since this usually is not what you want
+    # Notify when there's no mailto defined, since this usually is not what you want
     if ! $mailto {
       notify { "No mailto set for Kcron['${name}']. Are you sure you want that?":; }
     }
