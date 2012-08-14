@@ -30,22 +30,13 @@
 # Depends:
 #  gen_puppet
 #
-define kcron($ensure="present", $mailto=false, $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $first_wday_of_month=false, $pacemaker_resource=false, $command=false) {
+define kcron($ensure="present", $mailto='root', $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $first_wday_of_month=false, $pacemaker_resource=false, $command) {
   # If the name contains an underscore or dot, cron won't use the file! So fail when that's the case.
   if $name =~ /\./ or $name =~ /_/ {
     fail("Kcron names cannot contain dots or underscores. Resource: ${name}")
   }
 
   if $ensure == "present" {
-    # Notify when there's no mailto defined, since this usually is not what you want
-    if ! $mailto {
-      notify { "No mailto set for Kcron['${name}']. Are you sure you want that?":; }
-    }
-
-    if ! $command {
-      fail("Must pass command to Kcron[${name}]")
-    }
-
     if $pacemaker_resource {
       # A cronjob on a host in failover, where we only want the active host
       # to run the cronjob
