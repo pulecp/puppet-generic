@@ -159,15 +159,15 @@ class mysql::server ($datadir=false) {
       default => "identified by '${password}'",
     }
 
-    $cmd_unless = $grant_option ? {
-      true  => $require_ssl ? {
-        true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON `${real_db}`.*\" -e \"ON *.*\" | grep \"${cmd_grant_option}\" | grep -q \"${cmd_require_ssl}\"",
-        false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON `${real_db}`.*\" -e \"ON *.*\" | grep -q \"${cmd_grant_option}\"",
-      },
-      false => $require_ssl ? {
-        true  => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -e \"ON `${real_db}`.*\" -e \"ON *.*\" | grep -q \"${cmd_require_ssl}\"",
-        false => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i \"${permissions}\" | grep -q -e \"ON `${real_db}`.*\" -e \"ON *.*\"",
-      },
+    $cmd_check_grant_option =  $grant_option ? {
+      true  => "-e \"${cmd_grant_option}\"",
+      false => '',
+    }
+
+    $cmd_unless = "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -q -i -e \"${permissions}\" -e \"ON \\`${real_db}\\`.*\" -e \"ON *.*\" ${cmd_check_grant_option}"
+
+    if $require_ssl {
+      $cmd_check_ssl = " && /usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -q \"${cmd_require_ssl}\""
     }
 
     if !defined(Db[$real_db]) and $real_db != "*" {
@@ -176,7 +176,7 @@ class mysql::server ($datadir=false) {
 
     if !defined(Exec["grant_${real_user}_${real_db}_${hostname}"]) {
       exec { "grant_${real_user}_${real_db}_${hostname}":
-        unless  => $cmd_unless,
+        unless  => "${cmd_unless} ${cmd_check_ssl}",
         command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${real_db}.* to '${real_user}'@'${hostname}' ${cmd_password} ${cmd_require_ssl} ${cmd_grant_option};\"",
         require => $real_db ? {
           "*"     => Service["mysql"],
