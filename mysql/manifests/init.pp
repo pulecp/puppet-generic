@@ -141,7 +141,7 @@ class mysql::server ($datadir=false) {
       $real_db = $db
     }
     if inline_template('<%= real_user.length %>') > 16 {
-      fail("String '$real_user}' is too long for user name (should be no longer than 16)")
+      fail("String '${real_user}' is too long for user name (should be no longer than 16)")
     }
 
     $cmd_grant_option = $grant_option ? {
