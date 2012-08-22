@@ -76,23 +76,17 @@ class gen_apache::jk {
 }
 
 define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address='*', $address6='::',
-    $port=false, $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false, $log_vhost=false,
+    $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false, $log_vhost=false,
     $redirect_non_ssl=true, $access_logformat="combined") {
   if $address == $ipaddress {
     fail("${name} has been set specifically to the base IP address, this will cause problems due to * sites being picked up by this vhost as well as it is more specific.")
   }
+  if regsubst($name, '^(.*)_.*$', '\1') == $name {
+    fail("The gen_apache::site name should include the port, not only ${name}")
+  }
 
-  $temp_name = $port ? {
-    false   => $name,
-    default => "${name}_${port}",
-  }
-  if $key or $cert or $intermediate or $wildcard or $ssl {
-    $full_name = regsubst($temp_name,'^([^_]*)$','\1_443')
-  } else {
-    $full_name = regsubst($temp_name,'^([^_]*)$','\1_80')
-  }
-  $real_name = regsubst($full_name,'^(.*)_(.*)$','\1')
-  $real_port = regsubst($full_name,'^(.*)_(.*)$','\2')
+  $real_name = regsubst($name, '^(.*)_(.*)$', '\1')
+  $port      = regsubst($name, '^(.*)_(.*)$', '\2')
 
   if $create_documentroot and ! defined(File[$documentroot]) {
     file { $documentroot:
@@ -108,17 +102,17 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   }
 
   file {
-    "/etc/apache2/sites-available/${full_name}":
+    "/etc/apache2/sites-available/${name}":
       ensure  => $ensure,
       content => template("gen_apache/available_site"),
       require => Package["apache2"],
       notify  => Exec["reload-apache2"];
-    "/etc/apache2/vhost-additions/${full_name}":
+    "/etc/apache2/vhost-additions/${name}":
       ensure  => $ensure ? {
         present => directory,
         absent  => absent,
       };
-    "/etc/apache2/vhost-additions/${full_name}/${full_name}":
+    "/etc/apache2/vhost-additions/${name}/${name}":
       ensure  => $ensure,
       content => template("gen_apache/vhost-additions/basic"),
       notify  => Exec["reload-apache2"];
@@ -127,33 +121,33 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   case $ensure {
     "present": {
       if $real_name == "default" {
-        file { "/etc/apache2/sites-enabled/000_${full_name}":
+        file { "/etc/apache2/sites-enabled/000_${name}":
           ensure => link,
-          target => "/etc/apache2/sites-available/${full_name}",
+          target => "/etc/apache2/sites-available/${name}",
           notify => Exec["reload-apache2"];
         }
       } else {
-        file { "/etc/apache2/sites-enabled/${full_name}":
+        file { "/etc/apache2/sites-enabled/${name}":
           ensure => link,
-          target => "/etc/apache2/sites-available/${full_name}",
+          target => "/etc/apache2/sites-available/${name}",
           notify => Exec["reload-apache2"];
         }
       }
 
-      if !defined(Concat::Add_content["Listen ${real_port}"]) {
-        concat::add_content { "Listen ${real_port}":
+      if !defined(Concat::Add_content["Listen ${port}"]) {
+        concat::add_content { "Listen ${port}":
           target => "/etc/apache2/ports.conf";
         }
       }
 
-      if !defined(Concat::Add_content["NameVirtualHost ${address}:${real_port}"]) {
-        concat::add_content { "NameVirtualHost ${address}:${real_port}":
+      if !defined(Concat::Add_content["NameVirtualHost ${address}:${port}"]) {
+        concat::add_content { "NameVirtualHost ${address}:${port}":
           target => "/etc/apache2/httpd.conf";
         }
       }
     }
     "absent": {
-      file { "/etc/apache2/sites-enabled/${full_name}":
+      file { "/etc/apache2/sites-enabled/${name}":
         ensure => absent,
         notify => Exec["reload-apache2"];
       }
@@ -191,7 +185,7 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
       default => "${key}.key",
     }
 
-    file { "/etc/apache2/vhost-additions/${full_name}/ssl":
+    file { "/etc/apache2/vhost-additions/${name}/ssl":
       content => template("gen_apache/vhost-additions/ssl"),
       notify  => Exec["reload-apache2"];
     }
