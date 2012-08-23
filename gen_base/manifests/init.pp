@@ -1405,6 +1405,20 @@ class gen_base::mc {
   }
 }
 
+# Class: gen_base::memcached
+#
+# Actions:
+#  Install memcached
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::memcached {
+  package { "memcached":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::module_init_tools
 #
 # Actions:
