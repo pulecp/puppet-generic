@@ -27,7 +27,7 @@ class nagios::nrpe {
     ensure     => stopped,
     pattern    => "/usr/sbin/nrpe",
     hasrestart => true,
-    require    => Package["nagios-nrpe-server"],
+    require    => Line["INETD=1"],
   }
 
   # Make sure NRPE knows it's going to be run through inetd.
