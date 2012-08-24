@@ -12,7 +12,7 @@
 class gen_munin {
   if $lsbdistcodename == "squeeze" {
     gen_apt::preference { ["munin","munin-common","munin-doc","munin-java-plugins","munin-node","munin-plugins-core","munin-plugins-extra","munin-plugins-java"]:
-      repo => "squeeze-backports";
+      repo => "squeeze-kumina";
     }
   }
 }
