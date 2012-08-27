@@ -70,7 +70,7 @@ class gen_apt {
 # Depends:
 #  gen_puppet
 #
-define gen_apt::preference($package=false, $repo=false, $version=false, $prio="999") {
+define gen_apt::preference($package=false, $repo=false, $version=false, $prio="999", $ensure=present) {
   $use_repo = $version ? {
     false   => $repo ? {
       false   => "${lsbdistcodename}-backports",
@@ -84,11 +84,13 @@ define gen_apt::preference($package=false, $repo=false, $version=false, $prio="9
     concat::add_content { $name:
       content => template("gen_apt/preference"),
       target  => "/etc/apt/preferences",
+      ensure  => $ensure,
       notify  => Exec["/usr/bin/apt-get update"];
     }
   } else {
     file { "/etc/apt/preferences.d/${sanitized_name}":
       content => template("gen_apt/preference"),
+      ensure  => $ensure,
       notify  => Exec["/usr/bin/apt-get update"];
     }
   }
