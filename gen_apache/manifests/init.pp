@@ -64,11 +64,11 @@ class gen_apache {
 }
 
 class gen_apache::headers {
-  apache::module { "headers":; }
+  gen_apache::module { "headers":; }
 }
 
 class gen_apache::jk {
-  apache::module { 'jk':
+  gen_apache::module { 'jk':
     require => Package['libapache2-mod-jk'];
   }
 
