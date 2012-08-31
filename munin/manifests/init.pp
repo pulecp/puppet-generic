@@ -10,13 +10,13 @@
 #  gen_puppet
 #
 class munin::client {
+  include munin::setup
   define plugin($ensure='present', $script_path='/usr/share/munin/plugins', $script=false) {
     if $script {
       $plugin_path = "$script_path/$script"
     } else {
       $plugin_path = "$script_path/$name"
     }
-
     file { "/etc/munin/plugins/$name":
       ensure => $ensure ? {
         'present' => $plugin_path,
@@ -39,7 +39,9 @@ class munin::client {
     }
   }
 
-  package { "munin-node":; }
+  package { ["munin-node",'munin-common','munin-plugins-core']:
+    ensure => latest;
+  }
 
   if versioncmp($lsbdistrelease,"5.0") >= 0 { # in Lenny and above we have the extra-plugins in a package
     if versioncmp($lsbdistrelease, "6") < 0 { # in lenny we want our own package
@@ -184,6 +186,14 @@ class munin::client::default_plugins::squeeze {
     "threads":;
     "uptime":;
     "users":;
+  }
+}
+
+class munin::setup {
+  if $lsbdistcodename == "squeeze" {
+    gen_apt::preference { ["munin","munin-common","munin-doc","munin-java-plugins","munin-node","munin-plugins-core","munin-plugins-extra","munin-plugins-java"]:
+      repo => "squeeze-kumina";
+    }
   }
 }
 

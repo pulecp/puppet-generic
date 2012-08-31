@@ -45,7 +45,8 @@ class gen_munin::client {
   include gen_munin::client::plugin::defaults
 
   kservice { "munin-node":
-    hasreload => false;
+    hasreload => false,
+    pensure   => latest;
   }
 
   if $lsbdistcodename == 'lenny' {
@@ -59,7 +60,7 @@ class gen_munin::client {
     }
   }
 
-  package{ ["munin-plugins-extra","libnet-cidr-perl"]:
+  package{ ["munin-plugins-extra","libnet-cidr-perl",'munin-common']:
     ensure => latest;
   }
 
