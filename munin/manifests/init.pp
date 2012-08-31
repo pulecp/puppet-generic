@@ -39,7 +39,7 @@ class munin::client {
     }
   }
 
-  package { ["munin-node",'munin-common','munin-plugins-core']:
+  package { ["munin-node",'munin-common']:
     ensure => latest;
   }
 
@@ -194,6 +194,10 @@ class munin::setup {
     gen_apt::preference { ["munin","munin-common","munin-doc","munin-java-plugins","munin-node","munin-plugins-core","munin-plugins-extra","munin-plugins-java"]:
       repo => "squeeze-kumina";
     }
+
+    package {'munin-plugins-core':
+      ensure => latest;
+   }
   }
 }
 
