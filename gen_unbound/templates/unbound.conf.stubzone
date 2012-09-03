@@ -1,0 +1,15 @@
+stub-zone:
+	name: <%= name %>
+<% if stub_host -%>
+	stub-host: <%= stub_host %>
+<% end -%>
+<% if stub_addr -%>
+	stub-addr: <%= stub_addr %>
+<% end -%>
+<% if stub_prime -%>
+	stub-prime: yes
+<% end -%>
+<% if stub_first -%>
+	stub-first: yes
+<% end -%>
+
