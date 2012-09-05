@@ -28,13 +28,17 @@
 # Depends:
 #  gen_puppet
 #
-define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=$name, $pensure="present", $pattern=false, $srequire=false, $pnotify=false) {
+define kservice ($ensure="running", $hasreload=true, $hasrestart=true, $hasstatus=true, $enable=true, $package=$name, $pensure="present", $pattern=false, $srequire=false, $pnotify=false, responsefile = false) {
   package { $package:
-    ensure => $pensure,
-    notify => $pnotify ? {
+    ensure       => $pensure,
+    notify       => $pnotify ? {
       false   => undef,
       default => $pnotify,
     },
+    responsefile => $responsefile ? {
+      false   => undef,
+      default => $responsefile,
+    };
   }
 
   service { $name:

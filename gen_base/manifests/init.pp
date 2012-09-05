@@ -70,6 +70,20 @@ class gen_base::archive_pmacct_data {
   }
 }
 
+# Class: gen_base::arj
+#
+# Actions:
+#  Install arj
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::arj {
+  package { "arj":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libaugeas-ruby
 #
 # Actions:
@@ -151,6 +165,20 @@ class gen_base::bsdtar {
 #
 class gen_base::bzip2 {
   package { "bzip2":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::cabextract
+#
+# Actions:
+#  Install cabextract
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::cabextract {
+  package { "cabextract":
     ensure => latest;
   }
 }
@@ -1880,6 +1908,20 @@ class gen_base::poppler_utils {
   }
 }
 
+# Class: gen_base::postfix_mysql
+#
+# Actions:
+#  Install postfix-mysql
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::postfix_mysql {
+  package { 'postfix-mysql':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::pstotext
 #
 # Actions:
@@ -2136,6 +2178,20 @@ class gen_base::python_virtualenv {
   }
 }
 
+# Class: gen_base::pyzor
+#
+# Actions:
+#  Install pyzor
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::pyzor {
+  package { 'pyzor':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::qemu_utils
 #
 # Actions:
@@ -2146,6 +2202,20 @@ class gen_base::python_virtualenv {
 #
 class gen_base::qemu_utils {
   package { "qemu-utils":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::razor
+#
+# Actions:
+#  Install razor
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::razor {
+  package { 'razor':
     ensure => latest;
   }
 }
@@ -2458,3 +2528,16 @@ class gen_base::zip {
   }
 }
 
+# Class: gen_base::zoo
+#
+# Actions:
+#  Install zoo
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::zoo {
+  package { "zoo":
+    ensure => latest;
+  }
+}

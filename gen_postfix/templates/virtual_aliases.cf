@@ -1,0 +1,7 @@
+user = <%= mysql_user %>
+password = <%= mysql_pass %>
+dbname = <%= mysql_db %>
+table = mail_aliases
+select_field = destination
+where_field = address
+hosts = <%= mysql_host %>

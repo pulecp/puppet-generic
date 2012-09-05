@@ -1,18 +1,18 @@
 # Author: Kumina bv <support@kumina.nl>
 
-# Class: spamassassin
+# Class: gen_spamassassin
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
-class spamassassin {
+class gen_spamassassin {
   package { ["spamassassin","libmail-spf-perl", "libmail-dkim-perl"]:; }
 
   file { "/etc/default/spamassassin":
-    content => template("spamassassin/spamassassin");
+    content => template("gen_spamassassin/spamassassin");
   }
 }

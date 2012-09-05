@@ -1,0 +1,97 @@
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+# Debian specific:  Specifying a file name will cause the first
+# line of that file to be used as the name.  The Debian default
+# is /etc/mailname.
+myorigin = /etc/mailname
+
+smtpd_banner = $myhostname ESMTP $mail_name (Debian/GNU)
+biff = no
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+myhostname = <% if myhostname %><%= myhostname %><% else %><%= fqdn %><% end %>
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+<% if always_bcc -%>
+always_bcc = <%= always_bcc %>
+<% end -%>
+mydestination = <% if mydestination %><%= mydestination %>, <% end %><%= fqdn %>, <%= hostname %>, localhost.localdomain, localhost
+mynetworks = <% if mynetworks %><%= mynetworks %><% else %>127.0.0.0/8 [::1]/128<% end %>
+mailbox_size_limit = 0
+recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = all
+message_size_limit = 26214400
+<% if mode != 'primary' and mode != 'secondary' -%>
+<% if relayhost -%>
+relayhost = <%= relayhost %>
+<% end -%>
+<% end -%>
+<% if mode == 'primary' or mode == 'secondary' -%>
+
+#soft_bounce = yes
+soft_bounce = no
+
+smtpd_tls_security_level = may
+smtpd_tls_key_file = /etc/dovecot/mail.kumina.nl.key
+smtpd_tls_cert_file = /etc/dovecot/mail.kumina.nl.pem
+smtpd_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+smtpd_tls_mandatory_ciphers = HIGH
+smtpd_tls_exclude_ciphers = ADH, aNULL, eNULL, NULL
+smtpd_tls_mandatory_exclude_ciphers = ADH, aNULL, eNULL, NULL
+smtpd_tls_mandatory_protocols = TLSv1, SSLv3
+
+smtp_tls_security_level = may
+smtp_tls_key_file = /etc/dovecot/mail.kumina.nl.key
+smtp_tls_cert_file = /etc/dovecot/mail.kumina.nl.pem
+smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+smtp_tls_mandatory_ciphers = HIGH
+smtp_tls_exclude_ciphers = ADH, aNULL, eNULL, NULL
+smtp_tls_mandatory_exclude_ciphers = ADH, aNULL, eNULL, NULL
+smtp_tls_mandatory_protocols = TLSv1, SSLv3
+
+# Virus scanning
+content_filter=lmtp-amavis:[127.0.0.1]:10024
+
+relay_domains = $mydestination, lists.kumina.nl
+
+transport_maps = hash:/etc/postfix/transport
+mailman_destination_recipient_limit = 1
+
+virtual_mailbox_domains = mysql:/etc/postfix/virtual_domains.cf
+virtual_minimum_uid = 8
+virtual_uid_maps = static:8
+virtual_gid_maps = static:8
+virtual_mailbox_base = /srv/mail
+virtual_mailbox_maps = mysql:/etc/postfix/virtual_mailboxes.cf
+virtual_alias_maps = mysql:/etc/postfix/virtual_aliases.cf
+
+smtpd_sasl_type = dovecot
+smtpd_sasl_path = dovecot/auth-client
+smtpd_sasl_auth_enable = yes
+smtpd_sasl_security_options = noanonymous
+smtpd_sasl_local_domain = $myhostname
+broken_sasl_auth_clients = yes
+
+dovecot_destination_recipient_limit = 1
+virtual_transport = dovecot
+
+message_size_limit = 26214400
+
+queue_run_delay = 300s
+minimal_backoff_time = 300s
+
+smtpd_recipient_restrictions = permit_mynetworks,
+	permit_sasl_authenticated,
+	check_policy_service inet:127.0.0.1:10023,
+	permit_mx_backup,
+	reject_unknown_sender_domain,
+	reject_unauth_destination
+
+smtpd_sender_restrictions = hash:/etc/postfix/blocked_domains
+<% end -%>
