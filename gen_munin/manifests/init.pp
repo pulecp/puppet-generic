@@ -91,15 +91,6 @@ class gen_munin::client {
     require => File["/etc/munin/conf"],
     tag     => "munin_client_${environment}";
   }
-
-  # Fixed in 2.0.1, see: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=675593
-  file { '/var/lib/munin/plugin-state':
-    ensure  => directory,
-    owner   => 'munin',
-    group   => 'munin',
-    mode    => 775,
-    require => Package['munin-node'];
-  }
 }
 
 #
