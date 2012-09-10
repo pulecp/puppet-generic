@@ -1,10 +1,16 @@
 stub-zone:
 	name: <%= name %>
 <% if stub_host -%>
-	stub-host: <%= stub_host %>
+<% stub_host_a = []; stub_host_a << stub_host; stub_host_a.flatten! -%>
+<% stub_host_a.each do |host| -%>
+	stub-host: <%= host %>
+<% end -%>
 <% end -%>
 <% if stub_addr -%>
-	stub-addr: <%= stub_addr %>
+<% stub_addr_a = []; stub_addr_a << stub_addr; stub_addr_a.flatten! -%>
+<% stub_addr_a.each do |addr| -%>
+	stub-addr: <%= addr %>
+<% end -%>
 <% end -%>
 <% if stub_prime -%>
 	stub-prime: yes

@@ -69,14 +69,12 @@ define gen_unbound::allow {
 #  kbp_unbound
 #
 define gen_unbound::stub_zone ($stub_host=false, $stub_addr=false, $stub_prime=false, $stub_first=false) {
-    if !(($stub_host and ! $stub_addr) or (! $stub_host and $stub_addr)) {
-      fail("Please supply either a \$stub_host or a \$stub_addr")
-    }
+  if !($stub_host or $stub_addr) {
+    fail("Please provide at least one \$stub_host or \$stub_addr")
+  }
 
-    notify { [$stub_host]:; }
-
-    concat::add_content { "20 stubzone ${name}":
-      target  => '/etc/unbound/unbound.conf',
-      content => template('gen_unbound/unbound.conf.stubzone');
-    }
+  concat::add_content { "20 stubzone ${name}":
+    target  => '/etc/unbound/unbound.conf',
+    content => template('gen_unbound/unbound.conf.stubzone');
+  }
 }
