@@ -6,6 +6,7 @@
 #  Set up Postfix
 #
 # Parameters:
+#  certs         The Puppet location and name (without extension) of the certificates for Dovecot. Only used and has to be set when mode is primary
 #  relayhost     Same as Postfix, see http://www.postfix.org/postconf.5.html#relayhost. Absent by default
 #  myhostname    Same as Postfix, see http://www.postfix.org/postconf.5.html#myhostname. Defaults to $fqdn
 #  mynetworks    Same as Postfix, see http://www.postfix.org/postconf.5.html#mynetworks. Defaults to 127.0.0.0/8 [::1]/128
@@ -16,11 +17,21 @@
 #  mysql_pass    The MySQL password used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
 #  mysql_db      The MySQL database used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
 #  mysql_host    The MySQL host used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
+#  relay_domains Same as Postfix, see http://www.postfix.org/postconf.5.html#relay_domains. Only used when mode is primary or secondary. Defaults to false (which means '$mydestination' in Postfix)
 #
 # Depends:
 #  gen_puppet
 #
-class gen_postfix($relayhost = false, $myhostname = false, $mynetworks = false, $mydestination = false, $mode = false, $always_bcc = false, mysql_user = false, mysql_pass = false, mysql_db = false, mysql_host = false) {
+class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks=false, $mydestination=false, $mode=false, $always_bcc=false,
+    $mysql_user=false, $mysql_pass=false, $mysql_db=false, $mysql_host=false, $relay_domains=false) {
+  if $mode == 'primary' {
+    if ! $certs {
+      fail('When using primary mode for gen_postfix, $certs must be set')
+    } else {
+      $key_name = regsubst($certs,'^(.*)/(.*)$','\2')
+    }
+  }
+
   package { 'nullmailer':
     ensure => absent;
   }
