@@ -2034,6 +2034,20 @@ class gen_base::python-ipaddr {
   }
 }
 
+# Class: gen_base::python-ldap
+#
+# Actions:
+#  Install python-ldap
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-ldap {
+  package { "python-ldap":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-libvirt
 #
 # Actions:
