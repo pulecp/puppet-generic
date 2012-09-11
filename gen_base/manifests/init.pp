@@ -1447,6 +1447,20 @@ class gen_base::memcached {
   }
 }
 
+# Class: gen_base::mercurial
+#
+# Actions:
+#  Install mercurial
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::mercurial {
+  package { "mercurial":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::module_init_tools
 #
 # Actions:
