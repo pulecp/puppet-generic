@@ -19,6 +19,7 @@ class gen_unbound {
     "Install DNS root key for unbound":
       command     => "/usr/sbin/unbound-anchor",
       creates     => "/etc/unbound/root.key",
+      returns     => [0,1],
       require     => [Package["unbound-anchor"],Exec['check-unbound.conf']];
     "check-unbound.conf":
       command     => "/usr/sbin/unbound-checkconf",
