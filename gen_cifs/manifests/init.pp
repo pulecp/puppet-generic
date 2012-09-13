@@ -39,6 +39,8 @@ class gen_cifs::configdir {
 #    Mountpoint
 #   ensure
 #    Same values as mount resource (http://docs.puppetlabs.com/references/stable/type.html#mount), default 'mounted'
+#   createdir (bool)
+#    Create mountpoint, default true
 #   unc
 #    Uniform Naming Convention (http://en.wikipedia.org/wiki/Path_%28computing%29#Uniform_Naming_Convention), e.g. //servername/sharename/foo
 #   options
@@ -53,11 +55,19 @@ class gen_cifs::configdir {
 # Depends:
 #  gen_puppet
 #
-define gen_cifs::mount($ensure='mounted', $unc, $options='rw', $username, $password, $domain) {
+define gen_cifs::mount($ensure='mounted', $createdir=true, $unc, $options='rw', $username, $password, $domain) {
   include gen_cifs::configdir
   include gen_cifs
 
   $credsfile = regsubst($unc, '[^a-zA-Z0-9\-_]', '_', 'G')
+
+  if $createdir {
+    if !defined(File[$name]) {
+      file { $name:
+        ensure => directory;
+      }
+    }
+  }
 
   file { "/etc/cifs/${credsfile}":
     ensure  => $ensure ? {
@@ -74,6 +84,9 @@ define gen_cifs::mount($ensure='mounted', $unc, $options='rw', $username, $passw
     fstype  => 'cifs',
     device  => $unc,
     options => "${options},credentials=/etc/cifs/${credsfile}",
-    require => [File["/etc/cifs/${credsfile}"],Package["cifs-utils"]];
+    require => $createdir ? {
+      false =>   [File["/etc/cifs/${credsfile}"],Package["cifs-utils"]],
+      default => [File[$name],File["/etc/cifs/${credsfile}"],Package["cifs-utils"]],
+    };
   }
 }
