@@ -55,6 +55,7 @@ class gen_cifs::configdir {
 #
 define gen_cifs::mount($ensure='mounted', $unc, $options='rw', $username, $password, $domain) {
   include gen_cifs::configdir
+  include gen_cifs
 
   $credsfile = regsubst($unc, '[^a-zA-Z0-9\-_]', '_', 'G')
 
