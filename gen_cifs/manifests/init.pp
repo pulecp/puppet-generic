@@ -51,11 +51,17 @@ class gen_cifs::configdir {
 #    CIFS password
 #   domain
 #    CIFS domain
+#   group
+#    The group that the files and dirs in the mount belong to (used when the SMB server does not support unix-type file permissions)
+#   dir_perms
+#    The permissions of the directories within the mount in OCTAL (used when the SMB server does not support unix-type file permissions)
+#   file_perms
+#    The permissions of the files within the mount in OCTAL (used when the SMB server does not support unix-type file permissions)
 #
 # Depends:
 #  gen_puppet
 #
-define gen_cifs::mount($ensure='mounted', $createdir=true, $unc, $options='rw', $username, $password, $domain) {
+define gen_cifs::mount($ensure='mounted', $createdir=true, $group='root', $dir_perms='0755', $file_perms='0644', $unc, $options='rw', $username, $password, $domain) {
   include gen_cifs::configdir
   include gen_cifs
 
@@ -64,7 +70,9 @@ define gen_cifs::mount($ensure='mounted', $createdir=true, $unc, $options='rw', 
   if $createdir {
     if !defined(File[$name]) {
       file { $name:
-        ensure => directory;
+        ensure => directory,
+        group  => $group,
+        mode   => $dir_perms,
       }
     }
   }
@@ -83,7 +91,7 @@ define gen_cifs::mount($ensure='mounted', $createdir=true, $unc, $options='rw', 
     ensure  => $ensure,
     fstype  => 'cifs',
     device  => $unc,
-    options => "${options},credentials=/etc/cifs/${credsfile}",
+    options => "${options},gid=${group},file_mode=${file_perms},dir_mode=${dir_perms},credentials=/etc/cifs/${credsfile}",
     require => $createdir ? {
       false =>   [File["/etc/cifs/${credsfile}"],Package["cifs-utils"]],
       default => [File[$name],File["/etc/cifs/${credsfile}"],Package["cifs-utils"]],
