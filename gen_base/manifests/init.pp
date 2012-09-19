@@ -2318,6 +2318,20 @@ class gen_base::ruby_stomp {
   }
 }
 
+# Class: gen_base::scponly
+#
+# Actions:
+#  Install scponly
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::scponly {
+  package { "scponly":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::sharutils
 #
 # Actions:
