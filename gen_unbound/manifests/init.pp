@@ -12,7 +12,7 @@ class gen_unbound {
 
   service { "unbound":
     hasstatus => false,
-    require   => [Exec["Install DNS root key for unbound","check-unbound.conf"],Package["unbound"]];
+    require   => [Exec["check-unbound.conf"],Package["unbound"]];
   }
 
   exec {
@@ -20,11 +20,12 @@ class gen_unbound {
       command     => "/usr/sbin/unbound-anchor",
       creates     => "/etc/unbound/root.key",
       returns     => [0,1],
-      require     => [Package["unbound-anchor"],Exec['check-unbound.conf']];
+      require     => Package["unbound-anchor"];
     "check-unbound.conf":
       command     => "/usr/sbin/unbound-checkconf",
       refreshonly => true,
-      notify      => Service["unbound"];
+      notify      => Service["unbound"],
+      require     => [Exec['Install DNS root key for unbound'],Concat['/etc/unbound/unbound.conf']];
   }
 
   concat { "/etc/unbound/unbound.conf":
