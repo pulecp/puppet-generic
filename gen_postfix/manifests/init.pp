@@ -52,9 +52,13 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
       require => Package['postfix'];
   }
 
-  exec { 'newaliases':
-    refreshonly => true,
-    path        => '/usr/bin';
+  exec {
+    'newaliases':
+      refreshonly => true,
+      path        => '/usr/bin';
+    'postmap-transport':
+      refreshonly => true,
+      command     => '/usr/sbin/postmap /etc/postfix/transport';
   }
 
   if $mode == 'primary' {
@@ -102,5 +106,27 @@ define gen_postfix::alias($ensure = 'present') {
     ensure => $ensure,
     file   => '/etc/aliases',
     notify => Exec['newaliases'];
+  }
+}
+
+
+# Define: gen_postfix:transport
+#
+# Actions:
+#  Add a Postfix transport
+#
+# Parameters:
+#  name   postfix transport entry, e.g. "lists.kumina.nl mailman:"
+#  ensure Standard Puppet ensure
+#
+# Depends:
+#  gen_puppet
+#
+define gen_postfix::transport($ensure='present') {
+  line { $name:
+    ensure  => $ensure,
+    file    => '/etc/postfix/transport',
+    require => Package['postfix'],
+    notify  => Exec['postmap-transport'];
   }
 }
