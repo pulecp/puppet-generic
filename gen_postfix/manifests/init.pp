@@ -139,3 +139,25 @@ define gen_postfix::transport($ensure='present') {
     notify  => Exec['postmap-transport'];
   }
 }
+
+# Define: gen_postfix:postconf
+#
+# Actions:
+#  Set a postfix main.cf parameter
+#
+# Parameters:
+#  name   Line in main.cf (e.g. "mailman_destination_recipient_limit = 1")
+#  ensure Standard Puppet ensure
+#
+# Depends:
+#  gen_puppet
+#
+define gen_postfix::postconf($ensure='present') {
+  $sanitized_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
+
+  concat::fragment { "postfix_main.cf_${sanitized_name}":
+    content => "${name}\n",
+    ensure  => $ensure,
+    target  => '/etc/postfix/main.cf';
+  }
+}
