@@ -63,7 +63,6 @@ relay_domains = <%= relay_domains.join(', ') %>
 <% end -%>
 
 transport_maps = hash:/etc/postfix/transport
-mailman_destination_recipient_limit = 1
 
 virtual_mailbox_domains = mysql:/etc/postfix/virtual_domains.cf
 virtual_minimum_uid = 8
