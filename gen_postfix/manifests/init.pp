@@ -61,9 +61,14 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
     'newaliases':
       refreshonly => true,
       path        => '/usr/bin';
+    'postfix-init-transport':
+      command     => '/usr/bin/touch /etc/postfix/transport',
+      creates     => '/etc/postfix/transport',
+      require     => Package['postfix'];
     'postmap-transport':
       refreshonly => true,
-      command     => '/usr/sbin/postmap /etc/postfix/transport';
+      command     => '/usr/sbin/postmap /etc/postfix/transport',
+      require     => Exec['postfix-init-transport'];
   }
 
   if $mode == 'primary' {
@@ -130,7 +135,7 @@ define gen_postfix::transport($ensure='present') {
   line { $name:
     ensure  => $ensure,
     file    => '/etc/postfix/transport',
-    require => Package['postfix'],
+    require => Exec['postfix-init-transport'],
     notify  => Exec['postmap-transport'];
   }
 }
