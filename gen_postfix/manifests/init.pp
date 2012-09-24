@@ -40,16 +40,21 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
     pattern => '/usr/lib/postfix/master';
   }
 
-  file {
-    '/etc/postfix/main.cf':
-      content => template('gen_postfix/main.cf'),
-      require => Package['postfix'],
-      notify  => Exec['reload-postfix'];
-    '/var/spool/postfix/dovecot':
-      ensure  => directory,
-      owner   => 'postfix',
-      group   => 'mail',
-      require => Package['postfix'];
+  concat { '/etc/postfix/main.cf':
+    require => Package['postfix'],
+    notify  => Exec['reload-postfix'];
+  }
+
+  concat::fragment { 'postfix_main.cf':
+    content => template('gen_postfix/main.cf'),
+    target  => '/etc/postfix/main.cf';
+  }
+
+  file { '/var/spool/postfix/dovecot':
+    ensure  => directory,
+    owner   => 'postfix',
+    group   => 'mail',
+    require => Package['postfix'];
   }
 
   exec {
@@ -108,7 +113,6 @@ define gen_postfix::alias($ensure = 'present') {
     notify => Exec['newaliases'];
   }
 }
-
 
 # Define: gen_postfix:transport
 #
