@@ -6,8 +6,6 @@
 #  failover
 #    Is this this haproxy in a failover setup?
 #    This needs to be true if something like pacemaker controls HAProxy (i.e. we don't want puppet to start it)
-#  haproxy_tag
-#    The tag used when declaring gen_haproxy::site, so we can import the right config
 #  loglevel
 #    Loglevel
 #  forwardfor
@@ -16,32 +14,29 @@
 #    Set to false to disable tcp smart connect. This could prevent some TCP problems.
 #
 # Actions:
-#  Installs HAProxy and fetches its configuration based on the tag
+#  Installs HAProxy
 #
 # Depends:
 #  gen_puppet
 #
-class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $loglevel="warning", $forwardfor=false, $tcp_smart_connect=true) {
+class gen_haproxy ($failover=false, $loglevel="warning") {
   # When haproxy is in a failover setup (e.g. in pacemaker/heartbeat), don't start or stop it from puppet.
   kservice { "haproxy":
-    ensure     => $failover ? {
+    ensure => $failover ? {
       false   => "running",
       default => "undef",
-    },
+    };
   }
 
-  # Yes, we would like to be able to start the service.....
+  # Yes, we would like to be able to start the service...
   file { "/etc/default/haproxy":
     content => "ENABLED=1\n",
     require => Package["haproxy"];
   }
 
-  # These exported kfiles contain the configuration fragments
-  # They should be exported on the webservers-to-be-loadbalanced
-  Ekfile <<| tag == $haproxy_tag |>>
   concat { "/etc/haproxy/haproxy.cfg" :
-    require          => Package["haproxy"],
-    notify           => Exec["test-haproxy-config-and-reload"];
+    require => Package["haproxy"],
+    notify  => Exec["test-haproxy-config-and-reload"];
   }
 
   exec { "test-haproxy-config-and-reload":
@@ -55,22 +50,20 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 
   # This is needed to reload the config when in failover. We don't want puppet failures because we can't reload the dormant server.
   exec { "reload-failover-haproxy":
-    command      => "/usr/sbin/service haproxy status > /dev/null || exit 0; /usr/sbin/service haproxy reload > /dev/null",
+    command     => "/usr/sbin/service haproxy status > /dev/null || exit 0; /usr/sbin/service haproxy reload > /dev/null",
     refreshonly => true;
   }
 
   # Some default configuration. Alter the templates and add the options when needed.
   concat::add_content {
     "globals":
-      order      => 10,
-      contenttag => $haproxy_tag,
-      target     => "/etc/haproxy/haproxy.cfg",
-      content    => template("gen_haproxy/global.erb");
+      order   => 10,
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => template("gen_haproxy/global.erb");
     "defaults":
-      order      => 11,
-      contenttag => $haproxy_tag,
-      target     => "/etc/haproxy/haproxy.cfg",
-      content    => template("gen_haproxy/defaults.erb");
+      order   => 11,
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => template("gen_haproxy/defaults.erb");
   }
 }
 
@@ -84,6 +77,84 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 #    The external IP to listen to
 #  port
 #    The external port to listen on
+#  balance
+#    The balancing-method to use
+#  timeout_connect
+#    TCP connection timeout between proxy and server
+#  timeout_server_client
+#    TCP connection timeout between client and proxy and Maximum time for the server to respond to the proxy
+#  timeout_http_request
+#    Maximum time for HTTP request between client and proxy
+#
+# Depends:
+#  gen_puppet
+#
+define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false) {
+  if !($balance in ["roundrobin","static-rr","source"]) {
+    fail("${balance} is not a valid balancing type")
+  }
+
+  if !($mode in ["http","tcp"]) {
+    fail("Please select either http or tcp as mode")
+  }
+
+  $safe_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
+
+  concat::add_content {
+    "site_${safe_name}_1_listen":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => template("gen_haproxy/listen.erb");
+    "site_${safe_name}_3_timeouts":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => template("gen_haproxy/timeouts.erb");
+  }
+
+  if $mode != "http" {
+    concat::add_content { "site_${safe_name}_2_mode":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => "\tmode ${mode}";
+    }
+    if $mode == "tcp" {
+      concat::add_content { "site_${safe_name}_2_mode_option":
+        target  => "/etc/haproxy/haproxy.cfg",
+        content => "\toption tcplog";
+      }
+    }
+  } else {
+    concat::add_content { "site_${safe_name}_2_mode_option":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => "\toption httplog";
+    }
+  }
+
+  if $cookie {
+    concat::add_content { "site_${safe_name}_3_cookie":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => "\tcookie ${cookie}";
+    }
+  }
+
+  if $httpcheck_uri {
+    concat::add_content { "site_${safe_name}_3_httpcheck":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => "\toption httpchk GET ${httpcheck_uri}";
+    }
+  }
+
+  if $balance {
+    concat::add_content { "site_${safe_name}_3_balance":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => "\tbalance ${balance}";
+    }
+  }
+}
+
+# Define: gen_haproxy::site
+#
+# Actions:
+#  This define exports the configuration for the load balancers. Use this to have webservers loadbalanced
+#
+# Parameters:
 #  cookie
 #    The cookie option from HAProxy(see http://haproxy.1wt.eu/download/1.4/doc/configuration.txt)
 #  httpcheck_uri
@@ -104,102 +175,17 @@ class gen_haproxy ($failover=false, $haproxy_tag="haproxy_${environment}", $logl
 #    The port for haproxy to connect to on the backend server
 #  serverip
 #    The IP of the backend server
-#  balance
-#    The balancing-method to use
-#  timeout_connect
-#    TCP connection timeout between proxy and server
-#  timeout_server_client
-#    TCP connection timeout between client and proxy and Maximum time for the server to respond to the proxy
-#  timeout_http_request
-#    Maximum time for HTTP request between client and proxy
-#  haproxy_tag="haproxy_${environment}"
-#    Change this when there are multiple loadbalancers in one environment
 #
 # Depends:
 #  gen_puppet
 #
-define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $servername=$hostname, $serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $httpcheck_fall=false, $httpcheck_rise=false, $backupserver=false, $balance="static-rr", $serverip=$ipaddress_eth0, $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s",  $haproxy_tag="haproxy_${environment}") {
-  if $httpcheck_port and ! $httpcheck_uri {
-    fail("Please specify a uri to check when you add a port to check on")
-  }
-  if !($balance in ["roundrobin","static-rr","source"]) {
-    fail("${balance} is not a valid balancing type")
-  }
+define gen_haproxy::site::add_server ($serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $httpcheck_fall=false, $httpcheck_rise=false, $backupserver=false, $serverip=$ipaddress_eth0) {
+  $site_name = regsubst($name, '(.*);(.*)', '\1')
+  $server_name = regsubst($name, '(.*);(.*)', '\2')
+  $safe_name = regsubst($site_name, '[^a-zA-Z0-9\-_]', '_', 'G')
 
-  if !($mode in ["http","tcp"]) {
-    fail("Please select either http or tcp as mode")
-  }
-
-  $safe_name = regsubst($name, " ", "_")
-  gen_haproxy::proxyconfig {
-    "site_${safe_name}_1_listen":
-      content     => template("gen_haproxy/listen.erb"),
-      haproxy_tag => $haproxy_tag;
-    "site_${safe_name}_2_server_${servername}":
-      content     => template("gen_haproxy/server.erb"),
-      haproxy_tag => $haproxy_tag;
-    "site_${safe_name}_3_timeouts":
-      content     => template("gen_haproxy/timeouts.erb"),
-      haproxy_tag => $haproxy_tag;
-  }
-
-  if $mode != "http" {
-    gen_haproxy::proxyconfig { "site_${safe_name}_2_mode":
-      content     => "\tmode ${mode}",
-      haproxy_tag => $haproxy_tag;
-    }
-    if $mode == "tcp" {
-      gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
-        content     => "\toption tcplog",
-        haproxy_tag => $haproxy_tag;
-      }
-    }
-  } elsif $mode == "http" {
-    gen_haproxy::proxyconfig { "site_${safe_name}_2_mode_option":
-      content     => "\toption httplog",
-      haproxy_tag => $haproxy_tag;
-    }
-  }
-
-  if $cookie {
-    gen_haproxy::proxyconfig { "site_${safe_name}_3_cookie":
-      content     => "\tcookie ${cookie}",
-      haproxy_tag => $haproxy_tag;
-    }
-  }
-
-  if $httpcheck_uri {
-    gen_haproxy::proxyconfig { "site_${safe_name}_3_httpcheck":
-      content     => "\toption httpchk GET ${httpcheck_uri}",
-      haproxy_tag => $haproxy_tag;
-    }
-  }
-
-  if $balance {
-    gen_haproxy::proxyconfig { "site_${safe_name}_3_balance":
-      content     => "\tbalance ${balance}",
-      haproxy_tag => $haproxy_tag;
-    }
-  }
-}
-
-#
-# Define: gen_haproxy::proxyconf
-#
-# Actions:
-#  Exports the config.
-#
-# Parameters:
-#  content:
-#    The content of the fragment
-#  haproxy_tag
-#    Change this when there are multiple loadbalancers in one environment
-#
-define gen_haproxy::proxyconfig ($content, $haproxy_tag) {
-  concat::add_content { "${name}":
-    content    => $content,
-    exported   => true,
-    contenttag => $haproxy_tag,
-    target     => "/etc/haproxy/haproxy.cfg";
+  concat::add_content { "site_${safe_name}_2_server_${server_name}":
+    target  => "/etc/haproxy/haproxy.cfg",
+    content => template("gen_haproxy/server.erb");
   }
 }

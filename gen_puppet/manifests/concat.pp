@@ -264,7 +264,7 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
 #  Undocumented
 #  gen_puppet
 #
-define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=true, $testpms=[]) {
+define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn=false, $force=false, $purge_on_testpm=false, $purge_on_pm=true, $testpms=[], $alt_destination=false) {
   require concat::setup
 
   if $settings::masterport != '8140' {
@@ -316,12 +316,27 @@ define concat($ensure="present", $mode=0644, $owner="root", $group="root", $warn
   }
 
   if $ensure == "present" {
-    exec { "concat_${name}":
+    $exec_name = $alt_destination ? {
+      false   => $name,
+      default => $alt_destination,
+    }
+
+    File <| notify == Exec["concat_${name}"] |> {
+      notify => Exec["concat_${exec_name}"],
+    }
+
+    exec { "concat_${exec_name}":
       user      => "root",
       group     => $group,
       alias     => "concat_${fragdir}",
-      unless    => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
-      command   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
+      unless    => $alt_destination ? {
+        false   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
+        default => "/usr/local/bin/concatfragments.sh -o ${alt_destination} -d ${fragdir} -t -s ${sort} ${warnflag} ${forceflag}",
+      },
+      command   => $alt_destination ? {
+        false   => "/usr/local/bin/concatfragments.sh -o ${name} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
+        default => "/usr/local/bin/concatfragments.sh -o ${alt_destination} -d ${fragdir} -s ${sort} ${warnflag} ${forceflag}",
+      },
       notify    => File[$name],
       subscribe => File[$fragdir],
       require   => [File["/usr/local/bin/concatfragments.sh","${fragdir}/fragments","${fragdir}/fragments.concat"]];
