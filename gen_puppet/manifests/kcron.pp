@@ -33,7 +33,7 @@
 define kcron($ensure="present", $mailto='root', $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $first_wday_of_month=false, $pacemaker_resource=false, $command) {
   # If the name contains an underscore or dot, cron won't use the file! So fail when that's the case.
   if $name =~ /\./ or $name =~ /_/ or $name =~ /\// or $name =~ / / {
-    fail("Kcron names cannot contain dots or underscores or slashes. Resource: ${name}")
+    fail("Kcron names cannot contain dots, underscores, slashes or spaces. Resource: ${name}")
   }
 
   if $ensure == "present" {
