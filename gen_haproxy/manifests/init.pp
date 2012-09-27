@@ -89,7 +89,7 @@ class gen_haproxy ($failover=false, $loglevel="warning") {
 # Depends:
 #  gen_puppet
 #
-define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false) {
+define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false) {
   if !($balance in ["roundrobin","static-rr","source"]) {
     fail("${balance} is not a valid balancing type")
   }
@@ -149,7 +149,7 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
   }
 }
 
-# Define: gen_haproxy::site
+# Define: gen_haproxy::add_server
 #
 # Actions:
 #  This define exports the configuration for the load balancers. Use this to have webservers loadbalanced
