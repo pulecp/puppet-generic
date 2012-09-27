@@ -100,80 +100,6 @@ class concat::setup {
   }
 }
 
-# Puts a file fragment into a directory previous setup using concat
-#
-# OPTIONS:
-#   - target    The file that these fragments belong to
-#   - content   If present puts the content into the file
-#   - order     By default all files gets a 10_ prefix in the directory
-#               you can set it to anything else using this to influence the
-#               order of the content in the file
-#   - ensure    Present/Absent
-# Define: concat::fragment
-#
-# Parameters:
-#  content
-#    Undocumented
-#  order
-#    Undocumented
-#  ensure
-#    Undocumented
-#  target
-#    Undocumented
-#
-# Actions:
-#  Undocumented
-#
-# Depends:
-#  Undocumented
-#  gen_puppet
-#
-define concat::fragment($target, $content=false, $order=10, $ensure = "present", $exported=false, $contenttag=false) {
-  $safe_target_name = regsubst($target, '/', '_', 'G')
-  $safe_name        = regsubst($name, '/', '_', 'G')
-  $concatdir        = $concat::setup::concatdir
-  $fragdir          = "${concatdir}/${safe_target_name}"
-
-  if $exported {
-    if $contenttag {
-      $export = true
-    } else {
-      fail("Exported concat fragment without tag: ${name}")
-    }
-  }
-
-  # if content is passed, use that, else if $ensure is in symlink form, make a symlink
-  case $content {
-    false: {
-      case $ensure {
-        "", "absent", "present", "file", "directory": {
-          crit("No content specified")
-        }
-      }
-    }
-    default: {
-      if $export {
-        Ekfile{ content => $content }
-      } else {
-        File{ content => $content }
-      }
-    }
-  }
-
-  if $export {
-    @@ekfile { "${fragdir}/fragments/${order}_${safe_name};${fqdn}":
-      ensure => $ensure,
-      notify => Exec["concat_${target}"],
-      tag    => $contenttag;
-    }
-  } else {
-    file { "${fragdir}/fragments/${order}_${safe_name}":
-      ensure => $ensure,
-      notify => Exec["concat_${target}"];
-    }
-  }
-}
-
 # Define: concat::add_content
 #
 # Parameters:
@@ -195,8 +121,19 @@ define concat::fragment($target, $content=false, $order=10, $ensure = "present",
 #  Undocumented
 #  gen_puppet
 #
-define concat::add_content($target, $content=false, $order=15, $ensure=present, $linebreak=true, $exported=false, $contenttag=false) {
-  $body = $content ? {
+define concat::add_content($target, $content=false, $order=15, $ensure=present, $linebreak=true, $contenttag=false, $exported=false) {
+  if $exported {
+    if $contenttag {
+      $export = true
+    } else {
+      fail("Exported concat fragment without tag: ${name}")
+    }
+  }
+  $safe_target_name = regsubst($target, '/', '_', 'G')
+  $safe_name        = regsubst("${target}_fragment_${name}", '/', '_', 'G')
+  $concatdir        = $concat::setup::concatdir
+  $fragdir          = "${concatdir}/${safe_target_name}"
+  $body             = $content ? {
     false   => $linebreak ? {
       false => $name,
       true  => "${name}\n",
@@ -207,13 +144,35 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
     },
   }
 
-  concat::fragment{ "${target}_fragment_${name}":
-    content    => $body,
-    target     => $target,
-    order      => $order,
-    ensure     => $ensure,
-    exported   => $exported,
-    contenttag => $contenttag;
+  # if body is passed, use that, else if $ensure is in symlink form, make a symlink
+  case $body {
+    false: {
+      case $ensure {
+        '', 'absent', 'present', 'file', 'directory': {
+          crit('No content specified')
+        }
+      }
+    }
+    default: {
+     if $export {
+        Ekfile{ content => $body }
+      } else {
+        File{ content => $body }
+      }
+    }
+  }
+
+  if $export {
+    @@ekfile { "${fragdir}/fragments/${order}_${safe_name};${fqdn}":
+      ensure => $ensure,
+      notify => Exec["concat_${target}"],
+      tag    => $contenttag;
+    }
+  } else {
+    file { "${fragdir}/fragments/${order}_${safe_name}":
+      ensure => $ensure,
+      notify => Exec["concat_${target}"];
+    }
   }
 }
 

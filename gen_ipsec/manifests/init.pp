@@ -39,7 +39,7 @@ class gen_ipsec ($listen=false, $ssl_path="/etc/ssl") {
       require => Package["racoon"];
   }
 
-  concat::fragment { "ipsec-tools.conf_header":
+  concat::add_content { "ipsec-tools.conf_header":
     target  => "/etc/ipsec-tools.conf",
     order   => "01",
     content => template("gen_ipsec/ipsec-tools.conf_header");
@@ -138,7 +138,7 @@ define gen_ipsec::peer ($local_ip, $peer_ip, $encap="tunnel", $exchange_mode="ma
 
   if $my_authmethod == "pre_shared_key" {
     if $psk {
-      concat::fragment { "psk_fragment_$name":
+      concat::add_content { "psk_fragment_$name":
         target  => "/etc/racoon/psk.txt",
         content => "$peer_ip $psk\n";
       }
@@ -154,7 +154,7 @@ define gen_ipsec::peer ($local_ip, $peer_ip, $encap="tunnel", $exchange_mode="ma
     }
   }
 
-  concat::fragment { "ipsec-tools.conf_fragment_$name":
+  concat::add_content { "ipsec-tools.conf_fragment_$name":
     target  => "/etc/ipsec-tools.conf",
     content => template("gen_ipsec/ipsec-tools.conf_fragment.erb");
   }

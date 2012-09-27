@@ -45,7 +45,7 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
     notify  => Exec['reload-postfix'];
   }
 
-  concat::fragment { 'postfix_main.cf':
+  concat::add_content { 'postfix_main.cf':
     content => template('gen_postfix/main.cf'),
     target  => '/etc/postfix/main.cf';
   }
@@ -190,7 +190,7 @@ define gen_postfix::block_domain($ensure='present', $message='rejected') {
 define gen_postfix::postconf($ensure='present') {
   $sanitized_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
 
-  concat::fragment { "postfix_main.cf_${sanitized_name}":
+  concat::add_content { "postfix_main.cf_${sanitized_name}":
     content => "${name}\n",
     ensure  => $ensure,
     target  => '/etc/postfix/main.cf';
