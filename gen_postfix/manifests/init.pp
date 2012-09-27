@@ -64,11 +64,19 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
     'postfix-init-transport':
       command     => '/usr/bin/touch /etc/postfix/transport',
       creates     => '/etc/postfix/transport',
+      notify      => Exec['postmap-transport'],
+      require     => Package['postfix'];
+    'postfix-init-blocked_domains':
+      command     => '/usr/bin/touch /etc/postfix/blocked_domains',
+      creates     => '/etc/postfix/blocked_domains',
+      notify      => Exec['postmap-blocked_domains'],
       require     => Package['postfix'];
     'postmap-transport':
       refreshonly => true,
-      command     => '/usr/sbin/postmap /etc/postfix/transport',
-      require     => Exec['postfix-init-transport'];
+      command     => '/usr/sbin/postmap /etc/postfix/transport';
+    'postmap-blocked_domains':
+      refreshonly => true,
+      command     => '/usr/sbin/postmap /etc/postfix/blocked_domains';
   }
 
   if $mode == 'primary' {
@@ -137,6 +145,27 @@ define gen_postfix::transport($ensure='present') {
     file    => '/etc/postfix/transport',
     require => Exec['postfix-init-transport'],
     notify  => Exec['postmap-transport'];
+  }
+}
+
+# Define: gen_postfix:blocked_domain
+#
+# Actions:
+#  Add a Postfix blocked domain
+#
+# Parameters:
+#  name   postfix blocked_domains entry, e.g. "lists.kumina.nl mailman:"
+#  ensure Standard Puppet ensure
+#
+# Depends:
+#  gen_puppet
+#
+define gen_postfix::blocked_domain($ensure='present') {
+  line { $name:
+    ensure  => $ensure,
+    file    => '/etc/postfix/blocked_domains',
+    require => Exec['postfix-init-blocked_domains'],
+    notify  => Exec['postmap-blocked_domains'];
   }
 }
 
