@@ -89,7 +89,7 @@ class gen_haproxy ($failover=false, $loglevel="warning") {
 # Depends:
 #  gen_puppet
 #
-define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false) {
+define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false, $forwardfor_except=false) {
   if !($balance in ["roundrobin","static-rr","source"]) {
     fail("${balance} is not a valid balancing type")
   }
@@ -145,6 +145,13 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
     concat::add_content { "site_${safe_name}_3_balance":
       target  => "/etc/haproxy/haproxy.cfg",
       content => "\tbalance ${balance}";
+    }
+  }
+
+  if $forwardfor_except {
+    concat::add_content { "site_${safe_name}_3_forwardfor_except":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => "\toption  forwardfor except ${forwardfor_except}";
     }
   }
 }
