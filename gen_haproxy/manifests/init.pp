@@ -151,7 +151,7 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
   if $forwardfor_except {
     concat::add_content { "site_${safe_name}_3_forwardfor_except":
       target  => "/etc/haproxy/haproxy.cfg",
-      content => "\toption  forwardfor except ${forwardfor_except}";
+      content => "\toption forwardfor except ${forwardfor_except}";
     }
   }
 }
