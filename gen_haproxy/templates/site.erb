@@ -11,3 +11,6 @@ listen <%= safe_name %> <%= listenaddress %>:<%= port %>
 <% if balance -%>
 	balance <%= balance %>
 <% end -%>
+<% if timeout_server -%>
+	timeout server <%= timeout_server %>
+<% end -%>
