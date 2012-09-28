@@ -159,7 +159,7 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
   if $httpclose {
     concat::add_content { "site_${safe_name}_3_httpclose":
       target  => '/etc/haproxy/haproxy.cfg',
-      content => '\toption httpclose';
+      content => "\toption httpclose";
     }
   }
 }
