@@ -15,7 +15,8 @@ class gen_amavis {
   include gen_base::cabextract
 
   kservice { 'amavis':
-    package => 'amavisd-new',
-    require => Package['zoo', 'arj', 'cabextract'];
+    package   => 'amavisd-new',
+    hasreload => false,
+    require   => Package['zoo', 'arj', 'cabextract'];
   }
 }
