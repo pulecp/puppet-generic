@@ -153,20 +153,21 @@ define gen_postfix::transport($ensure='present') {
   }
 }
 
-# Define: gen_postfix:blocked_domain
+# Define: gen_postfix:block_domain
 #
 # Actions:
-#  Add a Postfix blocked domain
+#  Block a domain in postfix
 #
 # Parameters:
-#  name   postfix blocked_domains entry, e.g. "lists.kumina.nl mailman:"
-#  ensure Standard Puppet ensure
+#  name     Domain to be blocked, e.g. 'spamspamspamlovelyspaaaaam.com'
+#  message  Optional message, e.g. "I don't like spam!"
+#  ensure   Standard Puppet ensure
 #
 # Depends:
 #  gen_puppet
 #
-define gen_postfix::blocked_domain($ensure='present') {
-  line { $name:
+define gen_postfix::block_domain($ensure='present', $message='rejected') {
+  line { "${name} REJECT ${message}":
     ensure  => $ensure,
     file    => '/etc/postfix/blocked_domains',
     require => Exec['postfix-init-blocked_domains'],
