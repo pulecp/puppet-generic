@@ -33,6 +33,18 @@ relayhost = <%= relayhost %>
 <% end -%>
 <% end -%>
 <% if mode == 'primary' or mode == 'secondary' -%>
+<% if relay_domains -%>
+relay_domains = <%= relay_domains.join(', ') %>
+<% end -%>
+smtpd_sender_restrictions = hash:/etc/postfix/blocked_domains
+smtpd_recipient_restrictions = permit_mynetworks,
+<% if mode == 'primary' -%>	permit_sasl_authenticated,<% end %>
+	check_policy_service inet:127.0.0.1:10023,
+	permit_mx_backup,
+	reject_unknown_sender_domain,
+	reject_unauth_destination
+<% end -%>
+<% if mode == 'primary' -%>
 
 #soft_bounce = yes
 soft_bounce = no
@@ -57,10 +69,6 @@ smtp_tls_mandatory_protocols = TLSv1, SSLv3
 
 # Virus scanning
 content_filter=lmtp-amavis:[127.0.0.1]:10024
-
-<% if relay_domains -%>
-relay_domains = <%= relay_domains.join(', ') %>
-<% end -%>
 
 transport_maps = hash:/etc/postfix/transport
 
@@ -87,12 +95,4 @@ message_size_limit = 26214400
 queue_run_delay = 300s
 minimal_backoff_time = 300s
 
-smtpd_recipient_restrictions = permit_mynetworks,
-	permit_sasl_authenticated,
-	check_policy_service inet:127.0.0.1:10023,
-	permit_mx_backup,
-	reject_unknown_sender_domain,
-	reject_unauth_destination
-
-smtpd_sender_restrictions = hash:/etc/postfix/blocked_domains
 <% end -%>
