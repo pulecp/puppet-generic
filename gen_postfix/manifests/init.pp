@@ -61,22 +61,6 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
     'newaliases':
       refreshonly => true,
       path        => '/usr/bin';
-    'postfix-init-transport':
-      command     => '/usr/bin/touch /etc/postfix/transport',
-      creates     => '/etc/postfix/transport',
-      notify      => Exec['postmap-transport'],
-      require     => Package['postfix'];
-    'postfix-init-blocked_domains':
-      command     => '/usr/bin/touch /etc/postfix/blocked_domains',
-      creates     => '/etc/postfix/blocked_domains',
-      notify      => Exec['postmap-blocked_domains'],
-      require     => Package['postfix'];
-    'postmap-transport':
-      refreshonly => true,
-      command     => '/usr/sbin/postmap /etc/postfix/transport';
-    'postmap-blocked_domains':
-      refreshonly => true,
-      command     => '/usr/sbin/postmap /etc/postfix/blocked_domains';
   }
 
   if $mode == 'primary' {
@@ -103,6 +87,27 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
         content => template('gen_postfix/master.cf'),
         require => Package['postfix'],
         notify  => Exec['reload-postfix'];
+    }
+  }
+
+  if $mode == 'primary' or $mode == 'secondary' {
+    exec {
+      'postfix-init-transport':
+        command     => '/usr/bin/touch /etc/postfix/transport',
+        creates     => '/etc/postfix/transport',
+        notify      => Exec['postmap-transport'],
+        require     => Package['postfix'];
+      'postfix-init-blocked_domains':
+        command     => '/usr/bin/touch /etc/postfix/blocked_domains',
+        creates     => '/etc/postfix/blocked_domains',
+        notify      => Exec['postmap-blocked_domains'],
+        require     => Package['postfix'];
+      'postmap-transport':
+        refreshonly => true,
+        command     => '/usr/sbin/postmap /etc/postfix/transport';
+      'postmap-blocked_domains':
+        refreshonly => true,
+        command     => '/usr/sbin/postmap /etc/postfix/blocked_domains';
     }
   }
 }
