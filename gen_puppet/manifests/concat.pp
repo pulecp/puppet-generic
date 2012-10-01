@@ -13,7 +13,7 @@
 #    notify => Service["named"]
 # }
 #
-# concat::fragment{"foo.com_config":
+# concat::concat{"foo.com_config":
 #    target  => "/etc/named.conf",
 #    order   => 10,
 #    content => template("named_conf_zone.erb")
@@ -193,7 +193,7 @@ define concat::add_content($target, $content=false, $order=15, $ensure=present, 
 #    * The directory changes 
 #    * fragments.concat != final destination, this means rebuilds will happen whenever 
 #      someone changes or deletes the final file.  Checking is done using /usr/bin/cmp.
-#    * The Exec gets notified by something else - like the concat::fragment define
+#    * The Exec gets notified by something else - like the concat::concat define
 #  - Defines a File resource to ensure $mode is set correctly but also to provide another 
 #    means of requiring
 #
