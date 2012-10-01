@@ -146,3 +146,16 @@ define gen_pacemaker::group {
       content   => "\n";
   }
 }
+
+# Define: gen_pacemaker::clone
+#
+# Use this to define a clone
+#
+# Parameters:
+#  resource: The resource to clone.
+define gen_pacemaker::clone ($resource) {
+  concat::add_content { "clone_${name}":
+    target  => '/etc/heartbeat/cib.cfg',
+    content => template('gen_pacemaker/clone');
+  }
+}
