@@ -28,7 +28,11 @@ class gen_sudo {
         purge   => true,
         mode    => 440;
       "/etc/sudoers":
-        content => "#includedir /etc/sudoers.d\n",
+        content => $lsbdistcodename ? {
+          'squeeze' => "#includedir /etc/sudoers.d\n",
+          'wheezy'  => "Defaults  env_reset\nDefaults  mail_badpass\nDefaults  secure_path=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\n#includedir /etc/sudoers.d\n",
+          default   => fail("Unknown distro, please update gen_sudo!"),
+        },
         mode    => 440,
         require => Package["sudo"];
     }
