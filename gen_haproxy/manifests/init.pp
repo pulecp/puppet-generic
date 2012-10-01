@@ -94,11 +94,9 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
   if !($balance in ["roundrobin","static-rr","source"]) {
     fail("${balance} is not a valid balancing type")
   }
-
   if !($mode in ["http","tcp"]) {
     fail("Please select either http or tcp as mode")
   }
-
   $safe_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
 
   concat::add_content {
@@ -195,9 +193,10 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
 #  gen_puppet
 #
 define gen_haproxy::site::add_server ($serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $httpcheck_fall=false, $httpcheck_rise=false, $backupserver=false, $serverip=$ipaddress_eth0) {
-  $site_name = regsubst($name, '(.*);(.*)', '\1')
-  $server_name = regsubst($name, '(.*);(.*)', '\2')
-  $safe_name = regsubst($site_name, '[^a-zA-Z0-9\-_]', '_', 'G')
+  $site_name      = regsubst($name, '(.*);(.*)', '\1')
+  $server_name    = regsubst($name, '(.*);(.*)', '\2')
+  $safe_name      = regsubst($site_name, '[^a-zA-Z0-9\-_]', '_', 'G')
+  $cookie_content = regsubst($server_name, '([^\.]*)\..*', '\1')
 
   concat::add_content { "site_${safe_name}_2_server_${server_name}":
     target  => "/etc/haproxy/haproxy.cfg",
