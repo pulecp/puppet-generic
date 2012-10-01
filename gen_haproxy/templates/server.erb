@@ -1,4 +1,4 @@
-	server <%= server_name %> <%= serverip %>:<%= serverport %><% if cookie %> cookie<% end -%>
+	server <%= server_name %> <%= serverip %>:<%= serverport %><% if cookie %> cookie <%= hostname %><% end -%>
 <% if httpcheck_uri %> check<% end -%>
 <% if httpcheck_port %> port <%= httpcheck_port %><% end -%>
 <% if httpcheck_interval %> inter <%= httpcheck_interval %><% end -%>
