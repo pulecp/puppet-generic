@@ -1,2 +1,1 @@
-clone <%= name %> \
-	primitive id='<%= resource %>'
+clone <%= name %> <%= resource %>
