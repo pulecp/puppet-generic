@@ -36,7 +36,7 @@ class gen_sudo {
 
   if $lsbdistcodename == 'wheezy' {
     file { "/etc/sudoers.d/000defaults":
-      content => "Defaults  env_reset\nDefaults  mail_badpass\nDefaults  secure_path=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\n#includedir /etc/sudoers.d\n",
+      content => "Defaults  env_reset\nDefaults  mail_badpass\nDefaults  secure_path=\"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin\"\n",
       mode    => 440,
       require => Package["sudo"];
     }
