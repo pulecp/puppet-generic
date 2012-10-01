@@ -41,17 +41,22 @@
 #  gen_puppet
 #
 define line ($ensure="present", $file, $content=$name) {
+  # Escape single quotes: '\'' doesn't work so we need to close the single quote,
+  #  add the literal single quote within double quotes (which we need to escape),
+  #  and add a new opening single quote to continue
+  $real_content = regsubst($content, "'", "'\"'\"'", "G")
+
   case $ensure {
     "present": {
       exec { "line ${name}":
-        command => "/bin/echo '${content}' >> '${file}'",
-        unless  => "/bin/grep -Fx '${content}' '${file}'";
+        command => "/bin/echo '${real_content}' >> '${file}'",
+        unless  => "/bin/grep -Fx '${real_content}' '${file}'";
       }
     }
     "absent": {
       exec { "line ${name}":
-        command => "/usr/bin/perl -ni -e 'print unless /^\\Q${content}\\E\$/' '${file}'",
-        onlyif  => "/bin/grep -Fx '${content}' '${file}'";
+        command => "/usr/bin/perl -ni -e 'print unless /^\\Q${real_content}\\E\$/' '${file}'",
+        onlyif  => "/bin/grep -Fx '${real_content}' '${file}'";
       }
     }
     default: {
