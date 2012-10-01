@@ -31,6 +31,7 @@ class mysql::server ($datadir=false) {
   case $lsbdistcodename {
     "lenny":   { $mysqlserver = "mysql-server-5.0" }
     "squeeze": { $mysqlserver = "mysql-server-5.1" }
+    "wheezy":  { $mysqlserver = "mysql-server-5.5" }
   }
 
   if $datadir {
