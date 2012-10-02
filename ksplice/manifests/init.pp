@@ -57,7 +57,12 @@ class ksplice($ensure='present') {
   }
 
   # The modified configuration file
-  File <<| title == "/etc/uptrack/uptrack.conf" |>>
+  File <<| title == "/etc/uptrack/uptrack.conf" |>> {
+    ensure => $ensure ? {
+      'present' => 'present',
+      default   => 'absent',
+    },
+  }
 
   # Set directory permissions so Nagios can read status
   file { "/var/cache/uptrack":
