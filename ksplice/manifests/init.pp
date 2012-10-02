@@ -14,12 +14,12 @@
 #  Undocumented
 #  gen_puppet
 #
-class ksplice {
+class ksplice($ensure='present') {
   # Add the source repo
   gen_apt::source { "ksplice":
     uri          => "http://www.ksplice.com/apt",
     distribution => "${lsbdistcodename}",
-    components   => ["ksplice"],
+    components   => ["ksplice"];
   }
 
   # Preseed the ksplice package
@@ -29,15 +29,24 @@ class ksplice {
 
   # Install the ksplice package
   package { "uptrack":
-    ensure       => latest,
+    ensure       => $ensure ? {
+      'present' => 'latest',
+      default   => 'absent',
+    },
     responsefile => "/var/cache/debconf/ksplice.preseed",
     require      => File["/var/cache/debconf/ksplice.preseed"],
-    notify       => Exec["initial uptrack run"];
+    notify       => $ensure ? {
+      'present' => Exec["initial uptrack run"],
+      default   => undef,
+    };
   }
 
   # Install the ksplice additional apps (includes nagios plugins)
   package { "python-ksplice-uptrack":
-    ensure => latest,
+    ensure => $ensure ? {
+      'present' => 'latest',
+      default   => 'absent',
+    };
   }
 
   # Run the script when it's first installed
