@@ -176,15 +176,16 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
       gen_ferm::chain { "${chain}_${table}_${ip_proto}":; }
     }
 
-    fermfile { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
-      content   => $ip_proto ? {
+    concat::add_content { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
+      target     => "/etc/ferm/ferm.conf",
+      content    => $ip_proto ? {
         "v4" => template("gen_ferm/rule_v4"),
         "v6" => template("gen_ferm/rule_v6"),
       },
-      ensure   => $ensure,
-      exported => $exported,
-      ferm_tag => $ferm_tag,
-      require  => Gen_ferm::Chain["${chain}_${table}_${ip_proto}"];
+      ensure     => $ensure,
+      exported   => $exported,
+      contenttag => $ferm_tag,
+      require    => Gen_ferm::Chain["${chain}_${table}_${ip_proto}"];
     }
   }
 }
@@ -235,7 +236,8 @@ define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $p
       gen_ferm::chain { "${chain}_${table}_${ip_proto}":; }
     }
 
-    fermfile { "${ip_proto}_${table}_${chain}_0001_${real_name}":
+    concat::add_content { "${ip_proto}_${table}_${chain}_0001_${real_name}":
+      target  => "/etc/ferm/ferm.conf",
       content => template("gen_ferm/mod"),
       require => Gen_ferm::Chain["${chain}_${table}_${ip_proto}"];
     }
@@ -267,17 +269,20 @@ define gen_ferm::chain($policy=false) {
 
   realize Gen_ferm::Table["${table}_${ip_proto}"]
 
-  fermfile {
+  concat::add_content {
     "${ip_proto}_${table}_${real_name}":
+      target  => "/etc/ferm/ferm.conf",
       content => "\tchain ${real_name} {",
       require => Gen_ferm::Table["${table}_${ip_proto}"];
     "${ip_proto}_${table}_${real_name}_zzzz":
+      target  => "/etc/ferm/ferm.conf",
       content => "\t}",
       require => Gen_ferm::Table["${table}_${ip_proto}"];
   }
 
   if $policy {
-    fermfile { "${ip_proto}_${table}_${real_name}_0000":
+    concat::add_content { "${ip_proto}_${table}_${real_name}_0000":
+      target  => "/etc/ferm/ferm.conf",
       content => "\t\tpolicy ${policy};",
       require => Gen_ferm::Table["${table}_${ip_proto}"];
     }
@@ -300,41 +305,15 @@ define gen_ferm::table() {
   $real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
   $ip_proto  = regsubst($name,'^(.*)_(v4?6?)$','\2')
 
-  fermfile {
+  concat::add_content {
     "${ip_proto}_${real_name}":
+      target  => "/etc/ferm/ferm.conf",
       content => $ip_proto ? {
         "v4" => "table ${real_name} {",
         "v6" => "domain ip6 table ${real_name} {",
       };
     "${ip_proto}_${real_name}_zzzz":
+      target  => "/etc/ferm/ferm.conf",
       content => "}";
-  }
-}
-
-# Define: gen_ferm::fermfile
-#
-# Parameters:
-#  ensure
-#    Standard ensure
-#  content
-#    The content to enter into the firewall
-#  exported
-#    Define whether the file should be exported
-#  ferm_tag
-#    The tag to give to the exported file
-#
-# Actions:
-#  Creates a fragment of the firewall
-#
-# Depends:
-#  gen_puppet
-#
-define gen_ferm::fermfile($content, $ensure=present, $exported=false, $ferm_tag=false) {
-  concat::add_content { $name:
-    content    => $content,
-    target     => "/etc/ferm/ferm.conf",
-    ensure     => $ensure,
-    exported   => $exported,
-    contenttag => $ferm_tag;
   }
 }
