@@ -14,6 +14,10 @@ class nagios::plugins {
     ensure => installed;
   }
 
+  if $lsbdistcodename == 'squeeze' {
+    gen_apt::preference { 'nagios-plugins-basic':; }
+  }
+
   file {
     "/usr/local/lib/nagios":
       ensure => directory,
