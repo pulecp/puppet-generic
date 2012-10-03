@@ -6,7 +6,7 @@
 #  failover
 #    Is this this haproxy in a failover setup?
 #    This needs to be true if something like pacemaker controls HAProxy (i.e. we don't want puppet to start it)
-#  loglevel
+#  haproxy_loglevel
 #    Loglevel
 #  forwardfor
 #    Add HTTP X-Forwarded-For header to backend request
@@ -19,7 +19,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_haproxy ($failover=false, $loglevel="warning") {
+class gen_haproxy ($failover=false, $haproxy_loglevel="warning") {
   # When haproxy is in a failover setup (e.g. in pacemaker/heartbeat), don't start or stop it from puppet.
   kservice { "haproxy":
     ensure => $failover ? {
