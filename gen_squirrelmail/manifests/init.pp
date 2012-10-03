@@ -1,6 +1,6 @@
 # Author: Kumina bv <support@kumina.nl>
 
-# Class: squirrelmail
+# Class: gen_squirrelmail
 #
 # Actions:
 #	Undocumented
@@ -9,7 +9,7 @@
 #	Undocumented
 #	gen_puppet
 #
-class squirrelmail {
+class gen_squirrelmail {
   package { ["squirrelmail", "squirrelmail-locales"]:
     ensure => installed,
   }
