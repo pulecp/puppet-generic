@@ -11,7 +11,7 @@
 #
 class nagios::plugins {
   package { "nagios-plugins-basic":
-    ensure => installed;
+    ensure => latest;
   }
 
   if $lsbdistcodename == 'squeeze' {
