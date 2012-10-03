@@ -90,12 +90,12 @@ class gen_haproxy ($failover=false, $loglevel="warning") {
 #  gen_puppet
 #
 define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false, $forwardfor_except=false,
-      $httpclose=false, $timeout_server=false) {
+      $httpclose=false, $timeout_server=false, $redirect_non_ssl=false) {
   if !($balance in ["roundrobin","static-rr","source"]) {
-    fail("${balance} is not a valid balancing type")
+    fail("${balance} is not a valid balancing type (roundrobin, static-rr or source).")
   }
   if !($mode in ["http","tcp"]) {
-    fail("Please select either http or tcp as mode")
+    fail("Please select either http or tcp as mode.")
   }
   $safe_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
 
@@ -123,6 +123,13 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
     concat::add_content { "site_${safe_name}_2_mode_option":
       target  => "/etc/haproxy/haproxy.cfg",
       content => "\toption httplog";
+    }
+  }
+
+  if $redirect_non_ssl {
+    concat::add_content { "site_account_iqnomy_com_2_ssl_header":
+      target  => "/etc/haproxy/haproxy.cfg",
+      content => "\tacl viastunnel src ${listenaddress}/32\n\treqadd X-SSL:\\ On if viastunnel";
     }
   }
 
