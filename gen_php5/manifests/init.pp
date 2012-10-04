@@ -209,6 +209,21 @@ class gen_php5::imap {
   }
 }
 
+# Class: gen_php5::xmlrpc
+#
+# Actions:
+#  Install xmlrpc extension for PHP5.
+#
+# Depends:
+#  -
+#
+class gen_php5::xmlrpc ($httpd_type="apache2") {
+  package { "php5-xmlrpc":
+    ensure => latest,
+    notify => Exec["reload-${httpd_type}"];
+  }
+}
+
 # Define: gen_php5::common::config
 #
 # Actions:
