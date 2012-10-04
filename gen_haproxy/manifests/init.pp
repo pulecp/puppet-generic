@@ -55,15 +55,9 @@ class gen_haproxy ($failover=false, $haproxy_loglevel="warning") {
   }
 
   # Some default configuration. Alter the templates and add the options when needed.
-  concat::add_content {
-    "globals":
-      order   => 10,
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => template("gen_haproxy/global.erb");
-    "defaults":
-      order   => 11,
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => template("gen_haproxy/defaults.erb");
+  concat::add_content { 'globals':
+    target  => '/etc/haproxy/haproxy.cfg',
+    content => template('gen_haproxy/global');
   }
 }
 
@@ -99,73 +93,9 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
   }
   $safe_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
 
-  concat::add_content {
-    "site_${safe_name}_1_listen":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => template("gen_haproxy/listen.erb");
-    "site_${safe_name}_3_timeouts":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => template("gen_haproxy/timeouts.erb");
-  }
-
-  if $mode != "http" {
-    concat::add_content { "site_${safe_name}_2_mode":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => "\tmode ${mode}";
-    }
-    if $mode == "tcp" {
-      concat::add_content { "site_${safe_name}_2_mode_option":
-        target  => "/etc/haproxy/haproxy.cfg",
-        content => "\toption tcplog";
-      }
-    }
-  } else {
-    concat::add_content { "site_${safe_name}_2_mode_option":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => "\toption httplog";
-    }
-  }
-
-  if $redirect_non_ssl {
-    concat::add_content { "site_account_iqnomy_com_2_ssl_header":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => "\tacl viastunnel src ${listenaddress}/32\n\treqadd X-SSL:\\ On if viastunnel";
-    }
-  }
-
-  if $cookie {
-    concat::add_content { "site_${safe_name}_3_cookie":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => "\tcookie ${cookie}";
-    }
-  }
-
-  if $httpcheck_uri {
-    concat::add_content { "site_${safe_name}_3_httpcheck":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => "\toption httpchk GET ${httpcheck_uri}";
-    }
-  }
-
-  if $balance {
-    concat::add_content { "site_${safe_name}_3_balance":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => "\tbalance ${balance}";
-    }
-  }
-
-  if $forwardfor_except {
-    concat::add_content { "site_${safe_name}_3_forwardfor_except":
-      target  => "/etc/haproxy/haproxy.cfg",
-      content => "\toption forwardfor except ${forwardfor_except}";
-    }
-  }
-
-  if $httpclose {
-    concat::add_content { "site_${safe_name}_3_httpclose":
-      target  => '/etc/haproxy/haproxy.cfg',
-      content => "\toption httpclose";
-    }
+  concat::add_content { "site_${safe_name}_1_ip":
+    target  => "/etc/haproxy/haproxy.cfg",
+    content => template("gen_haproxy/ip");
   }
 }
 
@@ -207,6 +137,6 @@ define gen_haproxy::site::add_server ($serverport=80, $cookie=false, $httpcheck_
 
   concat::add_content { "site_${safe_name}_2_server_${server_name}":
     target  => "/etc/haproxy/haproxy.cfg",
-    content => template("gen_haproxy/server.erb");
+    content => template("gen_haproxy/server");
   }
 }

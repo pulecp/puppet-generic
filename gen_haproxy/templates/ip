@@ -1,0 +1,28 @@
+listen <%= safe_name %> <%= listenaddress %>:<%= port %>
+<% if mode != 'http' -%>
+	mode                 <%= mode %>
+<% end -%>
+	option               <%= mode %>log
+<% if cookie -%>
+	cookie               <%= cookie %>
+<% end -%>
+<% if httpcheck_uri -%>
+	option               httpchk GET <%= httpcheck_uri %>
+<% end -%>
+<% if balance -%>
+	balance              <%= balance %>
+<% end -%>
+<% if forwardfor_except -%>
+	option               forwardfor except <%= forwardfor_except %>
+<% end -%>
+<% if httpclose -%>
+	option               httpclose
+<% end -%>
+	timeout connect      <%= timeout_connect %>
+	timeout client       <%= timeout_server_client %>
+	timeout server       <%= timeout_server_client %>
+	timeout http-request <%= timeout_http_request %>
+<% if redirect_non_ssl -%>
+	acl viastunnel src <%= listenaddress %>/32
+	reqadd X-SSL:\\ On if viastunnel
+<% end -%>

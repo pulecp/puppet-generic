@@ -1,8 +1,0 @@
-global
-	log /dev/log daemon <%= haproxy_loglevel %>
-	maxconn 32000
-	ulimit-n 65536
-	user haproxy
-	group haproxy
-	daemon
-	stats socket /var/run/haproxy.sock uid haproxy
