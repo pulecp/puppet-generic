@@ -26,5 +26,5 @@ listen <%= safe_name %> <%= listenaddress %>:<%= port %>
 	timeout http-request <%= timeout_http_request %>
 <% if redirect_non_ssl -%>
 	acl viastunnel src <%= listenaddress %>/32
-	reqadd X-SSL:\\ On if viastunnel
+	reqadd X-SSL:\ On if viastunnel
 <% end -%>
