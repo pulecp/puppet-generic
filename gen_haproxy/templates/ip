@@ -20,7 +20,9 @@ listen <%= safe_name %> <%= listenaddress %>:<%= port %>
 <% end -%>
 	timeout connect      <%= timeout_connect %>
 	timeout client       <%= timeout_server_client %>
+<% if timeout_server -%>
 	timeout server       <%= timeout_server %>
+<% end -%>
 	timeout http-request <%= timeout_http_request %>
 <% if redirect_non_ssl -%>
 	acl viastunnel src <%= listenaddress %>/32
