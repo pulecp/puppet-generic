@@ -14,3 +14,9 @@ class gen_squirrelmail {
     ensure => installed,
   }
 }
+
+class gen_squirrelmail::plugin::avelsieve {
+  package { "avelsieve":
+    ensure => installed,
+  }
+}
