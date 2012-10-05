@@ -84,7 +84,7 @@ class gen_haproxy ($failover=false, $haproxy_loglevel="warning") {
 #  gen_puppet
 #
 define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false, $forwardfor_except=false,
-      $httpclose=false, $timeout_server=false, $redirect_non_ssl=false) {
+      $httpclose=false, $timeout_server='5s', $redirect_non_ssl=false) {
   if !($balance in ["roundrobin","static-rr","source"]) {
     fail("${balance} is not a valid balancing type (roundrobin, static-rr or source).")
   }
