@@ -1366,6 +1366,20 @@ class gen_base::libxml2_utils {
   }
 }
 
+# Class: gen_base::libxslt1_1
+#
+# Actions:
+#  Install and upgrade libxslt1.1
+#
+# Depends:
+#  nothing
+#
+class gen_base::libxslt1_1 {
+  package { "libxslt1.1":
+    ensure => latest,
+  }
+}
+
 # Class: gen_base::linux-base
 #
 # Actions:

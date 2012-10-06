@@ -13,6 +13,8 @@
 # Depends:
 #  gen_puppet
 class gen_pacemaker {
+  include gen_base::libxslt1_1
+
   package { "pacemaker":; }
 
   concat { "/etc/heartbeat/cib.cfg":
