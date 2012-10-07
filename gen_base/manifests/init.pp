@@ -2116,7 +2116,7 @@ class gen_base::python_libxml2 {
 #  gen_puppet
 #
 class gen_base::python_lxml {
-  include libxslt1_1
+  include gen_base::libxslt1_1
 
   package { "python-lxml":
     ensure => latest;
