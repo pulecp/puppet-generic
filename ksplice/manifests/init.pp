@@ -15,16 +15,24 @@
 #  gen_puppet
 #
 class ksplice($ensure='present') {
-  # Add the source repo
-  gen_apt::source { "ksplice":
-    uri          => "http://www.ksplice.com/apt",
-    distribution => "${lsbdistcodename}",
-    components   => ["ksplice"];
-  }
+  if $ensure == 'present' {
+    # Add the source repo
+    gen_apt::source { "ksplice":
+      uri          => "http://www.ksplice.com/apt",
+      distribution => "${lsbdistcodename}",
+      components   => ["ksplice"];
+    }
 
-  # Preseed the ksplice package
-  file { "/var/cache/debconf/ksplice.preseed":
-    content => template("ksplice/ksplice.preseed");
+    # Preseed the ksplice package
+    file { "/var/cache/debconf/ksplice.preseed":
+      content => template("ksplice/ksplice.preseed");
+    }
+  } else {
+    # Make sure we don't have a repo set nor a preseed file
+    file {
+      ['/etc/apt/sources.list.d/ksplice.list',"/var/cache/debconf/ksplice.preseed"]:
+        ensure => absent;
+    }
   }
 
   # Install the ksplice package
