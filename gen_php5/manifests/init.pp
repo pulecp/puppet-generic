@@ -190,6 +190,8 @@ class gen_php5::smarty {
 #  gen_puppet
 #
 class gen_php5::xsl {
+  include libxslt1_1
+
   package { "php5-xsl":
     ensure => latest,
   }
