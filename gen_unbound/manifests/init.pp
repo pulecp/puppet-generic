@@ -68,7 +68,7 @@ define gen_unbound::allow {
 #  Configure a stub-zone
 #
 # Depends:
-#  kbp_unbound
+#  gen_unbound
 #
 define gen_unbound::stub_zone ($stub_host=false, $stub_addr=false, $stub_prime=false, $stub_first=false) {
   if !($stub_host or $stub_addr) {
@@ -78,5 +78,28 @@ define gen_unbound::stub_zone ($stub_host=false, $stub_addr=false, $stub_prime=f
   concat::add_content { "20 stubzone ${name}":
     target  => '/etc/unbound/unbound.conf',
     content => template('gen_unbound/unbound.conf.stubzone');
+  }
+}
+
+#
+# Define: gen_unbound::local_zone
+#
+# Actions:
+#  Configure a local-zone
+#
+# Depends:
+#  gen_unbound
+#
+# ToDo:
+#  Create a define for local-data, so puppet can add this data to the config file
+#
+define gen_unbound::local_zone ($zonetype) {
+  if $zonetype in ['deny','refuse','static','transparent','typetransparent','redirect','nodefault'] {
+    concat::add_content { "19 localzone ${name}":
+      target  => '/etc/unbound/unbound.conf',
+      content => "local-zone: ${name} ${zonetype}\n";
+    }
+  } else {
+    fail("\$zonetype ${zonetype} is not valid (read the unbound documentation).")
   }
 }
