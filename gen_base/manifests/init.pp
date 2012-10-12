@@ -2123,6 +2123,22 @@ class gen_base::python_lxml {
   }
 }
 
+# Class: gen_base::python_libxslt1
+#
+# Actions:
+#  Install python-libxslt1
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_libxslt1 {
+  include gen_base::libxslt1_1
+
+  package { "python-libxslt1":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-mysqldb
 #
 # Actions:
