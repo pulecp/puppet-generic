@@ -1352,6 +1352,20 @@ class gen_base::libxml2 {
   }
 }
 
+# Class: gen_base::libxml2_dev
+#
+# Actions:
+#  Install libxml2-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libxml2_dev {
+  package { "libxml2-dev":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libxml2_utils
 #
 # Actions:
@@ -1376,6 +1390,20 @@ class gen_base::libxml2_utils {
 #
 class gen_base::libxslt1_1 {
   package { "libxslt1.1":
+    ensure => latest,
+  }
+}
+
+# Class: gen_base::libxslt1_dev
+#
+# Actions:
+#  Install and upgrade libxslt1-dev
+#
+# Depends:
+#  nothing
+#
+class gen_base::libxslt1_dev {
+  package { "libxslt1-dev":
     ensure => latest,
   }
 }
