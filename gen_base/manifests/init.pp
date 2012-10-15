@@ -2392,6 +2392,20 @@ class gen_base::scponly {
   }
 }
 
+# Class: gen_base::screen
+#
+# Actions:
+#  Install screen
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::screen {
+  package { "screen":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::sharutils
 #
 # Actions:
