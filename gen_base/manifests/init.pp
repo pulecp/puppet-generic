@@ -2167,7 +2167,7 @@ class gen_base::python_libxslt1 {
   }
 }
 
-# Class: gen_base::python-mysqldb
+# Class: gen_base::python_mysqldb
 #
 # Actions:
 #  Install python-mysqldb
@@ -2175,7 +2175,7 @@ class gen_base::python_libxslt1 {
 # Depends:
 #  gen_puppet
 #
-class gen_base::python-mysqldb {
+class gen_base::python_mysqldb {
   package { "python-mysqldb":
     ensure => latest;
   }
