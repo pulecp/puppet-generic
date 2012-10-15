@@ -18,14 +18,15 @@ class gen_unbound {
   exec {
     "Install DNS root key for unbound":
       command     => "/usr/sbin/unbound-anchor",
-      creates     => "/etc/unbound/root.key",
+      creates     => "/var/lib/unbound/root.key",
+      user        => 'unbound',
       returns     => [0,1],
-      require     => Package["unbound-anchor"];
+      require     => [Concat['/etc/unbound/unbound.conf'],Package["unbound-anchor"]];
     "check-unbound.conf":
       command     => "/usr/sbin/unbound-checkconf",
       refreshonly => true,
       notify      => Service["unbound"],
-      require     => [Exec['Install DNS root key for unbound'],Concat['/etc/unbound/unbound.conf']];
+      require     => Exec['Install DNS root key for unbound'];
   }
 
   concat { "/etc/unbound/unbound.conf":
