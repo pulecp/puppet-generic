@@ -4,6 +4,25 @@ resource <%= device_name %> {
     become-primary-on both;
   }
 <% end -%>
+<% if ! disk_flushes -%>
+  disk {
+    no-disk-flushes;
+  }
+<% end -%>
+<% if max_buffers or unplug_watermark or sndbuf_size or al_extents -%>
+  net {
+<% if max_buffers -%>
+    max-buffers <%= max_buffers %>;
+    max-epoch-size <%= max_buffers %>;
+<% end -%>
+<% if unplug_watermark -%>
+    unplug-watermark <%= unplug_watermark %>;
+<% end -%>
+<% if sndbuf_size -%>
+    sndbuf-size <%= sndbuf_size %>;
+<% end -%>
+  }
+<% end -%>
   device    /dev/drbd1;
   disk      /dev/vg/<%= device_name %>;
   meta-disk /dev/vg/<%= device_name %>-meta[0];

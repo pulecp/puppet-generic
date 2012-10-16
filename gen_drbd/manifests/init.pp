@@ -17,7 +17,8 @@ class gen_drbd::common {
 }
 
 define gen_drbd($mastermaster=true, $time_out=false, $connect_int=false, $ping_int=false, $ping_timeout=false, $after_sb_0pri="discard-younger-primary",
-    $after_sb_1pri="discard-secondary", $after_sb_2pri="call-pri-lost-after-sb", $rate="5M", $verify_alg="md5", $use_ipaddress=$external_ipaddress, $device_name=$name) {
+    $after_sb_1pri="discard-secondary", $after_sb_2pri="call-pri-lost-after-sb", $rate="5M", $verify_alg="md5", $use_ipaddress=$external_ipaddress, $device_name=$name,
+    $disk_flushes=true,$max_buffers=false,$unplug_watermark=false,$sndbuf_size=false,$al_extents=false) {
   include gen_drbd::common
 
   if !defined(File["/etc/drbd.d/global_common.conf"]) {
