@@ -75,8 +75,7 @@ class gen_apache::jk {
   package { 'libapache2-mod-jk':; }
 }
 
-define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $create_documentroot=true, $address='*', $address6='::',
-    $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false, $log_vhost=false,
+define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $address='*', $address6='::', $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false, $log_vhost=false,
     $redirect_non_ssl=true, $access_logformat="combined") {
   if $address == $ipaddress {
     fail("${name} has been set specifically to the base IP address, this will cause problems due to * sites being picked up by this vhost as well as it is more specific.")
@@ -88,10 +87,11 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
   $real_name = regsubst($name, '^(.*)_(.*)$', '\1')
   $port      = regsubst($name, '^(.*)_(.*)$', '\2')
 
-  if $create_documentroot and ! defined(File[$documentroot]) {
+  if ! defined(File[$documentroot]) {
     file { $documentroot:
-      ensure => directory,
-      notify => Exec["initialize_${documentroot}"];
+      ensure  => directory,
+      replace => false,
+      notify  => Exec["initialize_${documentroot}"];
     }
 
     exec { "initialize_${documentroot}":
@@ -220,11 +220,10 @@ define gen_apache::forward_vhost($ensure="present", $forward, $address = '*', $a
   }
 
   gen_apache::site { $full_name:
-    ensure              => $ensure,
-    address             => $address,
-    address6            => $address6,
-    serveralias         => $serveralias,
-    create_documentroot => false;
+    ensure      => $ensure,
+    address     => $address,
+    address6    => $address6,
+    serveralias => $serveralias;
   }
 
   gen_apache::redirect { $full_name:
