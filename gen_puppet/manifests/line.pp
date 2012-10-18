@@ -44,7 +44,8 @@ define line ($ensure="present", $file, $content=$name) {
   # Escape single quotes: '\'' doesn't work so we need to close the single quote,
   #  add the literal single quote within double quotes (which we need to escape),
   #  and add a new opening single quote to continue
-  $real_content = regsubst($content, "'", "'\"'\"'", "G")
+  $temp_content = regsubst($temp_content, "'", "'\"'\"'", "G")
+  $real_content = regsubst($content, "@", "\\E\\@\\Q", "G")
 
   case $ensure {
     "present": {
