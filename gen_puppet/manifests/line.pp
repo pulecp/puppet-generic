@@ -44,11 +44,8 @@ define line ($ensure="present", $file, $content=$name) {
   # Escape single quotes: '\'' doesn't work so we need to close the single quote,
   #  add the literal single quote within double quotes (which we need to escape),
   #  and add a new opening single quote to continue
-  $temp_content = regsubst($temp_content, "'", "'\"'\"'", "G")
-  $real_content = $ensure ? {
-    'absent' => regsubst($temp_content, "@", "\\E\\@\\Q", "G"),
-    default  => $temp_content,
-  }
+  $real_content = regsubst($content, "'", "'\"'\"'", "G")
+  $absent_content = regsubst($real_content, "@", "\\E\\@\\Q", "G")
 
   case $ensure {
     "present": {
@@ -59,7 +56,7 @@ define line ($ensure="present", $file, $content=$name) {
     }
     "absent": {
       exec { "line ${name}":
-        command => "/usr/bin/perl -ni -e 'print unless /^\\Q${real_content}\\E\$/' '${file}'",
+        command => "/usr/bin/perl -ni -e 'print unless /^\\Q${absent_content}\\E\$/' '${file}'",
         onlyif  => "/bin/grep -Fx '${real_content}' '${file}'";
       }
     }
