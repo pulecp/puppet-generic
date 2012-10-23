@@ -331,7 +331,7 @@ define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $mo
 # Depends:
 #  gen_puppet
 #
-define gen_icinga::configdir($ensure="present",$base="/etc/icinga/config") {
+define gen_icinga::configdir($ensure='present', $base='/etc/icinga/config', $host_name=false, $address=false) {
   # Empty define as the Icinga config is pulled directly from the DB
 }
 
