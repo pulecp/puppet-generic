@@ -1156,6 +1156,20 @@ class gen_base::libsocket6-perl {
   }
 }
 
+# Class: gen_base::libspice_server1
+#
+# Actions:
+#  Install libspice-server1
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libspice_server1 {
+  package { "libspice-server1":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libspreadsheet-parseexcel-perl
 #
 # Actions:
