@@ -137,12 +137,10 @@ class gen_icinga::server {
 # Depends:
 #  gen_puppet
 #
-define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $service_description=false, $servicegroups=false,
-    $host_name=false, $hostgroup_name=false, $initial_state=false, $active_checks_enabled=false, $passive_checks_enabled=false,
-    $obsess_over_service=false, $check_freshness=false, $freshness_threshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false,
-    $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false,
-    $check_interval=false, $retry_interval=false, $notification_period=false, $notification_options=false, $contact_groups=false, $contacts=false,
-    $max_check_attempts=false, $check_command=false, $base_check_command=false, $arguments=false, $register=false, $ensure=present, $proxy=false) {
+define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $service_description=false, $servicegroups=false, $host_name=false, $address=false, $hostgroup_name=false, $initial_state=false, $active_checks_enabled=false,
+    $passive_checks_enabled=false, $obsess_over_service=false, $check_freshness=false, $freshness_threshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false,
+    $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $check_interval=false, $retry_interval=false, $notification_period=false,
+    $notification_options=false, $contact_groups=false, $contacts=false, $max_check_attempts=false, $check_command=false, $base_check_command=false, $arguments=false, $register=false, $ensure=present, $proxy=false) {
   # Empty define as the Icinga config is pulled directly from the DB
 }
 
@@ -461,7 +459,7 @@ define gen_icinga::serviceescalation($escalation_period, $contact_groups=false, 
 # Depends:
 #  gen_puppet
 #
-define gen_icinga::servicedependency($ensure="present", $dependent_service_description, $host_name=$fqdn, $service_description, $conf_dir="${environment}/${fqdn}", $dependent_host_name=$fqdn,
+define gen_icinga::servicedependency($ensure="present", $dependent_service_description, $host_name=$fqdn, $address=false, $service_description, $conf_dir="${environment}/${fqdn}", $dependent_host_name=$fqdn,
     $execution_failure_criteria=false, $notification_failure_criteria="o") {
   # Empty define as the Icinga config is pulled directly from the DB
 }
