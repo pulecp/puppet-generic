@@ -18,7 +18,7 @@ class gen_kvm {
 
   # In squeeze, pin both.
   if $lsbdistcodename == 'squeeze' {
-    gen_apt::preference { "kvm":; }
+    gen_apt::preference { ["kvm","libspice-server1","seabios","vgabios"]:; }
   }
 
   package { "qemu-kvm":
