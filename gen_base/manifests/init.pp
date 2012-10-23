@@ -1801,6 +1801,8 @@ class gen_base::openoffice_org_writer {
 #  gen_puppet
 #
 class gen_base::openjdk-6-jre {
+  include gen_base::libtiff4
+
   package { "openjdk-6-jre":
     ensure => installed;
   }
