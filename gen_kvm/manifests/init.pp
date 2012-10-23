@@ -9,7 +9,6 @@
 #  gen_puppet
 #
 class gen_kvm {
-  include gen_base::libspice_server1
 
   # Against our policy we use a define from an other gen class here, but we'd have to do other icky stuff if we didn't
   if $lsbdistcodename == 'lenny' or $lsbdistcodename == 'squeeze' {
@@ -18,6 +17,7 @@ class gen_kvm {
 
   # In squeeze, pin both.
   if $lsbdistcodename == 'squeeze' {
+    include gen_base::libspice_server1
     gen_apt::preference { ["kvm","libspice-server1","seabios","vgabios","libpixman-1-0"]:; }
   }
 
