@@ -18,7 +18,7 @@ class gen_kvm {
   # In squeeze, pin both.
   if $lsbdistcodename == 'squeeze' {
     include gen_base::libspice_server1
-    gen_apt::preference { ["kvm","libspice-server1","seabios","vgabios","libpixman-1-0","qemu-keymaps","python-libvirt","libspice-server1","libvirt0","libvirt-bin"]:; }
+    gen_apt::preference { ["kvm","seabios","vgabios","libpixman-1-0","qemu-keymaps","python-libvirt","libspice-server1","libvirt0","libvirt-bin"]:; }
   }
 
   package { "qemu-kvm":
