@@ -167,6 +167,22 @@ class gen_php5::curl {
   }
 }
 
+# Class: gen_php5::memcache
+#
+# Actions:
+#  Install memcache extensions for PHP5.
+#
+# Depends:
+#  gen_puppet
+#
+class gen_php5::memcache {
+  include gen_php5::common
+
+  package { "php5-memcache":
+    ensure => latest,
+  }
+}
+
 # Class: gen_php5::smarty
 #
 # Actions:
