@@ -1,9 +1,43 @@
 # Author: Kumina bv <support@kumina.nl>
 
+# Class: gen_netif::alias::setup
+#
+# Action: setup shared stuff used by gen_netif::alias
+#
+# Depends:
+#  gen_puppet
+class gen_netif::alias::setup {
+  file {
+    '/etc/network/if-up.d/up-aliases':
+      content => template('gen_netif/up-aliases'),
+      mode    => 755;
+    '/etc/network/if-down.d/down-aliases':
+      ensure  => link,
+      target  => '../if-up.d/up-aliases';
+    '/usr/local/sbin/refresh-netif-aliases.sh':
+      content => template('gen_netif/refresh-netif-aliases.sh'),
+      mode    => 755;
+  }
+
+  exec { "refresh-netif-aliases":
+    command     => "/usr/local/sbin/refresh-netif-aliases.sh -a",
+    refreshonly => true;
+  }
+
+  concat { '/etc/network/aliases':
+    force   => true,
+    notify  => Exec["refresh-netif-aliases"];
+  }
+}
+
 # Define: gen_netif::alias
 #
 # Actions:
 #  Setup network interface aliases
+#
+#  WARNING: This currently strips all aliases not defined in /etc/network/aliases, but for which the interface does exist in
+#  /etc/network/aliases. An example of this situation is pacemaker managed IP aliases. So if you have a failover IP on eth0
+#  don't create additional aliases on eth0 using this puppet define!
 #
 # Parameters:
 #  name
@@ -18,6 +52,8 @@
 #  gen_puppet
 #
 define gen_netif::alias($iface, $ip) {
+  include gen_netif::alias::setup
+
   $cidr = $ip ? {
     # loosely matches IPv4 addresses
     /^[0-9]{1,3}(\.[0-9]{1,3}){3}$/ => "${ip}/32",
@@ -26,31 +62,9 @@ define gen_netif::alias($iface, $ip) {
     default            => $ip,
   }
 
-  file {
-    '/etc/network/if-up.d/up-aliases':
-      content => template('gen_netif/up-aliases'),
-      mode    => 755;
-    '/etc/network/if-down.d/down-aliases':
-      ensure  => link,
-      target  => '../if-up.d/up-aliases';
-    '/etc/network/refresh-aliases.sh':
-      content => template('gen_netif/refresh-aliases.sh'),
-      mode    => 755;
-  }
-
-  exec { "refresh-netif-aliases-${iface}":
-    command     => "/etc/network/refresh-aliases.sh ${iface}",
-    refreshonly => true;
-  }
-
-  concat { '/etc/network/aliases':
-    force   => true,
-    notify  => Exec["refresh-netif-aliases-${iface}"];
-  }
-
   concat::add_content { "netif-alias ${cidr} on ${iface}":
     target  => '/etc/network/aliases',
-    content => "${iface} ${cidr}     # ${name}\n",
-    notify  => Exec["refresh-netif-aliases-${iface}"];
+    content => "${iface} ${cidr}     # ${name}",
+    notify  => Exec["refresh-netif-aliases"];
   }
 }
