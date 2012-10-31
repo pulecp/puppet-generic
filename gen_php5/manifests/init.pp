@@ -246,17 +246,29 @@ class gen_php5::xmlrpc ($httpd_type="apache2") {
 #
 # Actions:
 #  Settings for PHP5, globally.
+# Parameters:
+#  ensure      standard puppet ensure
+#  variable    PHP settings variable, defaults to resource name
+#  value       PHP settings value
 #
 # Depends:
 #  gen_puppet
 #
-define gen_php5::common::config ($value, $variable=false) {
+define gen_php5::common::config ($ensure='present', $value=false, $variable=false) {
   if ! defined(File["/etc/php5/conf.d/set-via-puppet.ini"]) {
     file { "/etc/php5/conf.d/set-via-puppet.ini":
       require => Package["php5-common"],
       content => "[PHP]\n",
       replace => false,
     }
+  }
+
+  if ! $value {
+    if $ensure == 'present' {
+      fail("Gen_php5::Common::Config[${name}]: no value given")
+    }
+  } else {
+    $real_value = $value
   }
 
   if ! $variable {
@@ -269,6 +281,9 @@ define gen_php5::common::config ($value, $variable=false) {
     file    => "/etc/php5/conf.d/set-via-puppet.ini",
     require => File["/etc/php5/conf.d/set-via-puppet.ini"],
     lens    => "PHP.lns",
-    changes => "set PHP/${real_var} '${value}'"
+    changes => $ensure ? {
+      'present' => "set PHP/${real_var} '${real_value}'",
+      default   => "rm PHP/${real_var}",
+    };
   }
 }
