@@ -5,7 +5,7 @@ class gen_mediawiki {
 }
 
 class gen_mediawiki::extensionbase {
-  package { ["mediawiki-extensions-base","mediawiki-extensions-fckeditor"]:
+  package { ["mediawiki-extensions-base","mediawiki-extensions-fckeditor","mediawiki-extensions-ldapauth"]:
     ensure => latest;
   }
 }
