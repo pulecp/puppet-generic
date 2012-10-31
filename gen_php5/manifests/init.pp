@@ -284,6 +284,7 @@ define gen_php5::common::config ($ensure='present', $value=false, $variable=fals
     changes => $ensure ? {
       'present' => "set PHP/${real_var} '${real_value}'",
       default   => "rm PHP/${real_var}",
-    };
+    },
+    notify  => Exec['reload-apache2'];
   }
 }
