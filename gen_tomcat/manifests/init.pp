@@ -20,6 +20,8 @@
 #    The JVM options to add to the jvm invocation.
 #  jvm_max_mem
 #    Maximum memory to allow the JVM to use.
+#  jvm_permgen_mem
+#    Set the PermGen size for the JVM.
 #  tomcat_tag
 #    The tag used for exporting the Tomcat users in tomcat-users.xml
 #
@@ -29,7 +31,8 @@
 #  gen_tomcat::manager
 #
 class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
-                  $java_home="/usr/lib/jvm/java-6-openjdk/", $java_opts="", $jvm_max_mem=false, $tomcat_tag="tomcat_${environment}") {
+                  $java_home="/usr/lib/jvm/java-6-openjdk/", $java_opts="", $jvm_max_mem=false, $jvm_permgen_mem=false,
+                  $tomcat_tag="tomcat_${environment}") {
   class { 'gen_tomcat::manager':
     tomcat_tag => $tomcat_tag;
   }
@@ -40,6 +43,12 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
     $jvm_mem = sprintf('%.0f',$tmp_jvm_mem)
   } else {
     $jvm_mem = $jvm_max_mem
+  }
+
+  if !$jvm_permgen_mem {
+    $permgen_mem = "128"
+  } else {
+    $permgen_mem = $jvm_permgen_mem
   }
 
   kservice { "tomcat6":
