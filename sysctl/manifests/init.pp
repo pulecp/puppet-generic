@@ -30,7 +30,7 @@ class sysctl {
 define sysctl::setting ($param = $name, $value) {
   include sysctl
 
-  exec { "Set ${param} to ${value} for Sysctl::Setting '${name}'":
+  exec { "sysctl ${param} to ${value}":
     command => "/bin/echo '${param} = ${value}' >> '/etc/sysctl.conf'",
     unless  => "/bin/grep -Fx '${param} = ${value}' /etc/sysctl.conf",
     notify  => Exec["reload-sysctl"];
