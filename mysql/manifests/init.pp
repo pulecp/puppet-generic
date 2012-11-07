@@ -165,7 +165,7 @@ class mysql::server ($datadir=false) {
       false => '',
     }
 
-    $cmd_unless = "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -q -i -e \"${permissions}\" -e \"ON \\`${real_db}\\`.*\" -e \"ON *.*\" ${cmd_check_grant_option}"
+    $cmd_unless = "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -i -e \"${permissions}\" | grep -q -i -e \"ON \\`${real_db}\\`.*\" -e \"ON *.*\" ${cmd_check_grant_option}"
 
     if $require_ssl {
       $cmd_check_ssl = " && /usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${hostname}';\" | grep -q \"${cmd_require_ssl}\""
