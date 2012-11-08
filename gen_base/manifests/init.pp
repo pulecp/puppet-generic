@@ -1617,7 +1617,6 @@ class gen_base::nagios-nrpe-plugin {
 class gen_base::nagios-plugins-standard {
   include gen_base::libxml2
   include gen_base::libpq5
-  include gen_base::mysql_common
 
   package { "nagios-plugins-standard":
     ensure => latest;
