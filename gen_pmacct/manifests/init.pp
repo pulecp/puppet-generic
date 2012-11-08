@@ -45,7 +45,7 @@ class gen_pmacct {
 #  gen_pmacct
 #  gen_puppet
 #
-define gen_pmacct::config ($aggregates, $filter, $plugins, $sql_host, $sql_db, $sql_user, $sql_passwd, $sql_history, $sql_history_roundoff, $sql_refresh_time, $sql_dont_try_update) {
+define gen_pmacct::config ($aggregates=false, $aggregates_sql=$aggregates, $aggregates_nfprobe=false, $filter=false, $plugins=false, $sql_host=false, $sql_db=false, $sql_user=false, $sql_passwd=false, $sql_history=false, $sql_history_roundoff=false, $sql_refresh_time=false, $sql_dont_try_update=false, $nfprobe_version=9, $nfprobe_receiver=false) {
   include gen_pmacct
 
   $table_part = regsubst($hostname, '-', '_', 'G')
