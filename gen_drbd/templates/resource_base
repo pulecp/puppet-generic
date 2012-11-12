@@ -1,4 +1,4 @@
-resource <%= device_name %> {
+resource <%= disk %> {
 <% if mastermaster -%>
   startup {
     become-primary-on both;
@@ -24,5 +24,5 @@ resource <%= device_name %> {
   }
 <% end -%>
   device    /dev/drbd1;
-  disk      /dev/vg/<%= device_name %>;
-  meta-disk /dev/vg/<%= device_name %>-meta[0];
+  disk      /dev/vg/<%= disk %>;
+  meta-disk /dev/vg/<%= disk %>-meta[0];
