@@ -91,6 +91,7 @@ class gen_percona::server ($datadir=false) {
 
   exec { "reload-percona":
     command     => "/etc/init.d/mysql reload",
+    alias       => "reload-mysql",
     refreshonly => true,
     require     => Package[$perconaserver];
   }
