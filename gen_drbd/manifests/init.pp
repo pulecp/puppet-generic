@@ -33,14 +33,14 @@ define gen_drbd($drbd_tag=false, $mastermaster=true, $time_out=false, $connect_i
     notify  => Service['drbd'];
   }
 
-  if !defined(Concat::Add_content['0']) {
-    concat::add_content { '0':
+  if !defined(Concat::Add_content['drbd']) {
+    concat::add_content { 'drbd':
       content => template('gen_drbd/resource_base'),
       target  => "/etc/drbd.d/${disk}.res";
     }
   }
 
-  @@concat::add_content { "1_${fqdn}":
+  @@concat::add_content { "drbd_${fqdn}":
     content => template('gen_drbd/resource_address'),
     target  => "/etc/drbd.d/${disk}.res",
     tag     => $drbd_tag;
