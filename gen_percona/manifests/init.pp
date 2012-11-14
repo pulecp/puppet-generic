@@ -36,12 +36,16 @@ class gen_percona {
 #  Undocumented
 #  gen_puppet
 #
-class gen_percona::server ($datadir=false) {
+class gen_percona::server ($datadir=false,$version=false) {
   include gen_percona
 
-  case $lsbdistcodename {
-    "squeeze": { $perconaserver = "percona-server-server-5.1" }
-    "wheezy":  { $perconaserver = "percona-server-server-5.5" }
+  if ! $version {
+    case $lsbdistcodename {
+      "squeeze": { $perconaserver = "percona-server-server-5.1" }
+      "wheezy":  { $perconaserver = "percona-server-server-5.5" }
+    }
+  } else {
+    $perconaserver = "percona-server-server-${version}"
   }
 
   if $datadir {
