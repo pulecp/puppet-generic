@@ -3,11 +3,11 @@
 # Class: rsyslog::common
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class rsyslog::common {
   package { "rsyslog":
@@ -23,11 +23,11 @@ class rsyslog::common {
 # Class: rsyslog::client
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class rsyslog::client {
   include rsyslog::common
@@ -42,11 +42,11 @@ class rsyslog::client {
 # Class: rsyslog::server
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class rsyslog::server {
   include rsyslog::common
@@ -61,11 +61,11 @@ class rsyslog::server {
 # Class: rsyslog::mysql
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class rsyslog::mysql {
   package { "rsyslog-mysql":
