@@ -32,6 +32,7 @@ class gen_cassandra ($branch = "07x") {
     key          => $branch ? {
       "07x" => "8D77295D",
       "10x" => "2B5C1B00",
+      "11x" => "2B5C1B00",
     };
   }
 
