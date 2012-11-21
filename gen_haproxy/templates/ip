@@ -1,4 +1,4 @@
-listen <%= safe_name %> <%= listenaddress %>:<%= port %>
+listen <%= site %>:<%= ip %>:<%= port %> <%= ip %>:<%= port %>
 <% if mode != 'http' -%>
 	mode                 <%= mode %>
 <% end -%>
@@ -25,6 +25,6 @@ listen <%= safe_name %> <%= listenaddress %>:<%= port %>
 <% end -%>
 	timeout http-request <%= timeout_http_request %>
 <% if redirect_non_ssl -%>
-	acl viastunnel src <%= listenaddress %>/32
+	acl viastunnel src <%= ip %>/32
 	reqadd X-SSL:\ On if viastunnel
 <% end -%>

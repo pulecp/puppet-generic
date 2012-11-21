@@ -83,7 +83,7 @@ class gen_haproxy ($failover=false, $haproxy_loglevel="warning") {
 # Depends:
 #  gen_puppet
 #
-define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false, $forwardfor_except=false,
+define gen_haproxy::site($site, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false, $forwardfor_except=false,
       $httpclose=false, $timeout_server='20s', $redirect_non_ssl=false) {
   if !($balance in ["roundrobin","static-rr","source"]) {
     fail("${balance} is not a valid balancing type (roundrobin, static-rr or source).")
@@ -91,9 +91,14 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
   if !($mode in ["http","tcp"]) {
     fail("Please select either http or tcp as mode.")
   }
-  $safe_name = regsubst($name, '[^a-zA-Z0-9\-_]', '_', 'G')
+  $ip        = regsubst($name, '(.*)_.*', '\1')
+  $temp_port = regsubst($name, '.*_(.*)', '\1')
+  $port      = $temp_port ? {
+    $real_name => 80,
+    default    => $temp_port,
+  }
 
-  concat::add_content { "site_${safe_name}_1_ip":
+  concat::add_content { "site_${name}_1_ip":
     target  => "/etc/haproxy/haproxy.cfg",
     content => template("gen_haproxy/ip");
   }
@@ -129,13 +134,13 @@ define gen_haproxy::site ($listenaddress, $port=80, $mode="http", $balance="stat
 # Depends:
 #  gen_puppet
 #
-define gen_haproxy::site::add_server ($serverport=80, $cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $httpcheck_fall=false, $httpcheck_rise=false, $backupserver=false, $serverip=$ipaddress_eth0) {
-  $site_name      = regsubst($name, '(.*);(.*)', '\1')
-  $server_name    = regsubst($name, '(.*);(.*)', '\2')
-  $safe_name      = regsubst($site_name, '[^a-zA-Z0-9\-_]', '_', 'G')
+define gen_haproxy::site::add_server($cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $httpcheck_fall=false, $httpcheck_rise=false, $backupserver=false,
+    $serverip=$ipaddress_eth0, $serverport=80) {
+  $real_name      = regsubst($name, '(.*);.*', '\1')
+  $server_name    = regsubst($name, '.*;(.*)', '\1')
   $cookie_content = regsubst($server_name, '([^\.]*)\..*', '\1')
 
-  concat::add_content { "site_${safe_name}_2_server_${server_name}":
+  concat::add_content { "site_${real_name}_2_server_${server_name}":
     target  => "/etc/haproxy/haproxy.cfg",
     content => template("gen_haproxy/server");
   }
