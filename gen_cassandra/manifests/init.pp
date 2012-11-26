@@ -18,7 +18,7 @@ class gen_cassandra ($branch = "07x") {
     content => template("gen_cassandra/8D77295D"),
   }
 
-  # for the 10x branch
+  # for the 10x and 11x branch
   gen_apt::key { "2B5C1B00":
     content => template("gen_cassandra/2B5C1B00"),
   }
