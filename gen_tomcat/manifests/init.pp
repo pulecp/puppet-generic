@@ -12,6 +12,8 @@
 #    The base directory for this Tomcat instance
 #  ajp13_connector_port
 #    The port to setup for ajp13 connections.
+#  ajp13_maxclients
+#    The MaxClients setting for Tomcat's AJP port. Does not affect HTTP. Defaults to 200.
 #  http_connector_port
 #    The port to setup for HTTP connections directly to the Tomcat.
 #  java_home
@@ -32,7 +34,7 @@
 #
 class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
                   $java_home="/usr/lib/jvm/java-6-openjdk/", $java_opts="", $jvm_max_mem=false, $jvm_permgen_mem=false,
-                  $tomcat_tag="tomcat_${environment}") {
+                  $tomcat_tag="tomcat_${environment}",$ajp13_maxclients='200') {
   class { 'gen_tomcat::manager':
     tomcat_tag => $tomcat_tag;
   }
