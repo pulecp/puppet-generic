@@ -93,10 +93,9 @@ class gen_php5::apc ($shm_size = 64, $ttl = 3600) {
   # TODO this only works if the value is in MBs...
   $shm_size_in_bytes = regsubst($shm_size_digits,'(\d+)', '\1') * 1024 * 1024
 
-  line { "Increase shared mem setting in kernel":
-    file    => "/etc/sysctl.conf",
-    content => "kernel.shmmax=${shm_size_in_bytes}",
-    notify  => Exec["reload-sysctl"];
+  # Increase shared mem setting in kernel
+  sysctl::setting { 'kernel.shmmax':
+    value => $shm_size_in_bytes;
   }
 }
 
