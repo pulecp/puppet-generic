@@ -27,12 +27,13 @@ class sysctl {
 # Depends:
 #  sysctl
 #
-define sysctl::setting ($param = $name, $value) {
+define sysctl::setting ($value) {
   include sysctl
 
-  exec { "sysctl ${param} to ${value}":
-    command => "/bin/echo '${param} = ${value}' >> '/etc/sysctl.conf'",
-    unless  => "/bin/grep -Fx '${param} = ${value}' /etc/sysctl.conf",
+  kaugeas { "sysctl ${name}":
+    file => '/etc/sysctl.conf',
+    lens => 'Sysctl.lns',
+    changes => "set ${name} '${value}'",
     notify  => Exec["reload-sysctl"];
   }
 }
