@@ -79,12 +79,14 @@ class gen_haproxy ($failover=false, $haproxy_loglevel="warning") {
 #    TCP connection timeout between client and proxy and Maximum time for the server to respond to the proxy
 #  timeout_http_request
 #    Maximum time for HTTP request between client and proxy
+#  timeout_check
+#    Maximum time before a check is considered failed
 #
 # Depends:
 #  gen_puppet
 #
-define gen_haproxy::site($site, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false, $forwardfor_except=false,
-      $httpclose=false, $timeout_server='20s', $redirect_non_ssl=false) {
+define gen_haproxy::site($site, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false,
+      $forwardfor_except=false, $httpclose=false, $timeout_server='20s', $redirect_non_ssl=false, $timeout_check='10s') {
   if !($balance in ["roundrobin","static-rr","source"]) {
     fail("${balance} is not a valid balancing type (roundrobin, static-rr or source).")
   }

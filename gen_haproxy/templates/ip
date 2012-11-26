@@ -24,6 +24,7 @@ listen <%= site %>:<%= ip %>:<%= port %> <%= ip %>:<%= port %>
 	timeout server       <%= timeout_server %>
 <% end -%>
 	timeout http-request <%= timeout_http_request %>
+	timeout check        <%= timeout_check %>
 <% if redirect_non_ssl -%>
 	acl viastunnel src <%= ip %>/32
 	reqadd X-SSL:\ On if viastunnel
