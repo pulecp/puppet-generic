@@ -66,8 +66,6 @@ class gen_icinga::server {
 #    Set the arguments of the check, defaults to false
 #  conf_dir
 #    The config dir the service file will be placed in
-#  ensure
-#    Standard ensure
 #  name
 #    Same as Icinga
 #  host_name
@@ -140,7 +138,7 @@ class gen_icinga::server {
 define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $service_description=false, $servicegroups=false, $host_name=false, $address=false, $hostgroup_name=false, $initial_state=false, $active_checks_enabled=false,
     $passive_checks_enabled=false, $obsess_over_service=false, $check_freshness=false, $freshness_threshold=false, $notifications_enabled=false, $event_handler_enabled=false, $flap_detection_enabled=false, $process_perf_data=false,
     $retain_status_information=false, $retain_nonstatus_information=false, $notification_interval=false, $is_volatile=false, $check_period=false, $check_interval=false, $retry_interval=false, $notification_period=false,
-    $notification_options=false, $contact_groups=false, $contacts=false, $max_check_attempts=false, $check_command=false, $arguments=false, $register=false, $ensure=present, $proxy=false) {
+    $notification_options=false, $contact_groups=false, $contacts=false, $max_check_attempts=false, $check_command=false, $arguments=false, $register=false, $proxy=false) {
   # Empty define as the Icinga config is pulled directly from the DB
 }
 
@@ -196,7 +194,7 @@ define gen_icinga::service($conf_dir="${environment}/${fqdn}", $use=false, $serv
 # Depends:
 #  gen_puppet
 #
-define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgroups=false, $parents=false, $address=$ipaddress, $initial_state=false, $ensure=present, $notifications_enabled=false, $event_handler_enabled=false,
+define gen_icinga::host($conf_dir="${environment}/${fqdn}", $use=false, $hostgroups=false, $parents=false, $address=$ipaddress, $initial_state=false, $notifications_enabled=false, $event_handler_enabled=false,
     $flap_detection_enabled=false, $process_perf_data=false, $retain_status_information=false, $retain_nonstatus_information=false, $check_command=false, $check_interval=false, $retry_interval=false, $notification_period=false,
     $notification_interval=false, $contact_groups=false, $contacts=false, $max_check_attempts=false, $register=false, $proxy=false, $base_check_command=false) {
   # Empty define as the Icinga config is pulled directly from the DB
@@ -281,7 +279,7 @@ define gen_icinga::contactgroup($cg_alias, $conf_dir="${environment}/${fqdn}") {
 #  gen_puppet
 #
 define gen_icinga::contact($c_alias, $contact_data=false, $notification_type=false, $conf_dir="${environment}/${fqdn}", $timeperiod="24x7", $contactgroups=false,
-    $host_notifications_enabled=1, $service_notifications_enabled=1, $ensure=present, $host_notification_options=false, $service_notification_options=false,
+    $host_notifications_enabled=1, $service_notifications_enabled=1, $host_notification_options=false, $service_notification_options=false,
     $host_notification_period=false, $service_notification_period=false, $pager=false, $email=false, $service_notification_commands=false, $host_notification_commands=false) {
   # Empty define as the Icinga config is pulled directly from the DB
 }
@@ -330,7 +328,7 @@ define gen_icinga::timeperiod($tp_alias, $conf_dir="${environment}/${fqdn}", $mo
 # Depends:
 #  gen_puppet
 #
-define gen_icinga::configdir($ensure='present', $base='/etc/icinga/config', $host_name=false, $address=false) {
+define gen_icinga::configdir($base='/etc/icinga/config', $host_name=false, $address=false) {
   # Empty define as the Icinga config is pulled directly from the DB
 }
 
@@ -458,7 +456,7 @@ define gen_icinga::serviceescalation($escalation_period, $contact_groups=false, 
 # Depends:
 #  gen_puppet
 #
-define gen_icinga::servicedependency($ensure="present", $dependent_service_description, $host_name=$fqdn, $address=false, $service_description, $conf_dir="${environment}/${fqdn}", $dependent_host_name=$fqdn,
+define gen_icinga::servicedependency($dependent_service_description, $host_name=$fqdn, $address=false, $service_description, $conf_dir="${environment}/${fqdn}", $dependent_host_name=$fqdn,
     $execution_failure_criteria=false, $notification_failure_criteria="o") {
   # Empty define as the Icinga config is pulled directly from the DB
 }
