@@ -14,7 +14,7 @@ class gen_ferm {
 
   kservice { "ferm":
     hasstatus => false,
-    ensure    => false,
+    ensure    => "undef",
     require   => Package["libnet-dns-perl"],
     pensure   => latest;
   }
