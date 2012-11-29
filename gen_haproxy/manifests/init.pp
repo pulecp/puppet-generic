@@ -3,9 +3,6 @@
 # Class: gen_haproxy
 #
 # Parameters:
-#  failover
-#    Is this this haproxy in a failover setup?
-#    This needs to be true if something like pacemaker controls HAProxy (i.e. we don't want puppet to start it)
 #  haproxy_loglevel
 #    Loglevel
 #  forwardfor
@@ -19,13 +16,9 @@
 # Depends:
 #  gen_puppet
 #
-class gen_haproxy ($failover=false, $haproxy_loglevel="warning") {
-  # When haproxy is in a failover setup (e.g. in pacemaker/heartbeat), don't start or stop it from puppet.
+class gen_haproxy ($haproxy_loglevel="warning") {
   kservice { "haproxy":
-    ensure => $failover ? {
-      false   => "running",
-      default => "undef",
-    };
+    ensure => 'running';
   }
 
   # Yes, we would like to be able to start the service...
@@ -34,24 +27,15 @@ class gen_haproxy ($failover=false, $haproxy_loglevel="warning") {
     require => Package["haproxy"];
   }
 
-  concat { "/etc/haproxy/haproxy.cfg" :
-    require => Package["haproxy"],
-    notify  => Exec["test-haproxy-config-and-reload"];
-  }
-
   exec { "test-haproxy-config-and-reload":
     command     => "/usr/sbin/haproxy -c -f /etc/haproxy/haproxy.cfg > /dev/null 2>&1",
     refreshonly => true,
-    notify      => $failover ? {
-      false   => Exec["reload-haproxy"],
-      default => Exec["reload-failover-haproxy"],
-    };
+    notify      => Exec["reload-haproxy"];
   }
 
-  # This is needed to reload the config when in failover. We don't want puppet failures because we can't reload the dormant server.
-  exec { "reload-failover-haproxy":
-    command     => "/usr/sbin/service haproxy status > /dev/null || exit 0; /usr/sbin/service haproxy reload > /dev/null",
-    refreshonly => true;
+  concat { "/etc/haproxy/haproxy.cfg" :
+    require => Package["haproxy"],
+    notify  => Exec["test-haproxy-config-and-reload"];
   }
 
   # Some default configuration. Alter the templates and add the options when needed.
