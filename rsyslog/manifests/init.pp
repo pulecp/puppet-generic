@@ -53,8 +53,13 @@ class rsyslog::server {
 
   file { "/etc/rsyslog.d/remote-logging-server.conf":
     content => template("rsyslog/server/remote-logging-server.conf"),
-    require => Package["rsyslog"],
-    notify => Service["rsyslog"],
+    require => [Package["rsyslog"],File['/var/log/external']],
+    notify  => Service["rsyslog"],
+  }
+
+  # Make sure the directory actually exists
+  file { "/var/log/external":
+    ensure => directory,
   }
 }
 
