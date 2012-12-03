@@ -198,6 +198,20 @@ class gen_base::curl {
   }
 }
 
+# Class: gen_base::davfs2
+#
+# Actions:
+#  Install davfs2
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::davfs2 {
+  package { 'davfs2':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::dnsutils
 #
 # Actions:
