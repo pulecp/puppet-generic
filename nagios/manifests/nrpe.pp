@@ -20,7 +20,7 @@ class nagios::nrpe {
   }
 
   package { "nagios-nrpe-server":
-    require => File['/etc/default/nagios-nrpe-server'];
+    require => File['/etc/default/nagios-nrpe-server', '/etc/init.d/nagios-nrpe-server'];
   }
 
   # We're starting NRPE from inetd, to allow it to use tcpwrappers for
@@ -32,9 +32,11 @@ class nagios::nrpe {
     require    => Package['nagios-nrpe-server'];
   }
 
-  # Make sure NRPE knows it's going to be run through inetd.
-  file { '/etc/default/nagios-nrpe-server':
-    content => "INETD=1\n";
+  file {
+    '/etc/default/nagios-nrpe-server':
+      content => "INETD=1\n";
+    '/etc/init.d/nagios-nrpe-server':
+      content => template('nagios/nrpe/squeeze/nagios-nrpe-server');
   }
 
   package { "openbsd-inetd":; }
