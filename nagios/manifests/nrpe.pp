@@ -19,7 +19,9 @@ class nagios::nrpe {
     }
   }
 
-  package { "nagios-nrpe-server":; }
+  package { "nagios-nrpe-server":
+    require => File['/etc/default/nagios-nrpe-server'];
+  }
 
   # We're starting NRPE from inetd, to allow it to use tcpwrappers for
   # access control.
@@ -27,13 +29,12 @@ class nagios::nrpe {
     ensure     => stopped,
     pattern    => "/usr/sbin/nrpe",
     hasrestart => true,
-    require    => Line["INETD=1"],
+    require    => Package['nagios-nrpe-server'];
   }
 
   # Make sure NRPE knows it's going to be run through inetd.
-  line { "INETD=1":
-    file => "/etc/default/nagios-nrpe-server",
-    require => Package["nagios-nrpe-server"];
+  file { '/etc/default/nagios-nrpe-server':
+    content => "INETD=1\n";
   }
 
   package { "openbsd-inetd":; }
@@ -45,7 +46,7 @@ class nagios::nrpe {
       "lenny" => false,
       default => true,
     },
-    require   => Package["openbsd-inetd"],
+    require   => Package["openbsd-inetd"];
   }
 
   exec { "update-services-add-nrpe":
