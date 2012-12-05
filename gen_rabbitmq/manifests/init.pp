@@ -23,9 +23,11 @@ class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671, $disk_
     file {
       "/etc/rabbitmq/rabbitmq.key":
         content => $ssl_key,
+        require => Package['rabbitmq-server'],
         notify  => Service["rabbitmq-server"];
       "/etc/rabbitmq/rabbitmq.pem":
         content => $ssl_cert,
+        require => Package['rabbitmq-server'],
         notify  => Service["rabbitmq-server"];
     }
 
