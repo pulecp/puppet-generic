@@ -2133,6 +2133,20 @@ class gen_base::python-ipaddr {
   }
 }
 
+# Class: gen_base::python-ipy
+#
+# Actions:
+#  Install python-ipy
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-ipy {
+  package { "python-ipy":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-ldap
 #
 # Actions:
