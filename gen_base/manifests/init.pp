@@ -2007,6 +2007,20 @@ class gen_base::pstotext {
   }
 }
 
+# Class: gen_base::python-amqplib
+#
+# Actions:
+#  Install python-amqplib
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-amqplib {
+  package { "python-amqplib":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-argparse
 #
 # Actions:
