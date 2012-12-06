@@ -2021,6 +2021,20 @@ class gen_base::python-argparse {
   }
 }
 
+# Class: gen_base::python-carrot
+#
+# Actions:
+#  Install python-carrot
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-carrot {
+  package { "python-carrot":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_dev
 #
 # Actions:
