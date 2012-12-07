@@ -25,7 +25,10 @@ class gen_ferm {
     require          => Package["ferm"];
   }
 
-  gen_ferm::rule { "Accept local traffic":
+  # Explicitly create these two rules; we want this for IPv6 even if there is no (public) IPv6 address
+  # on any interface because 'localhost' also points to ::1 on newer (Debian wheezy) systems.
+  # gen_ferm::rule won't create rules for IPv6 if IPv6 isn't configured and _v6 isn't specified.
+  gen_ferm::rule { ['Accept local traffic_v4', 'Accept local traffic_v6']:
     interface => "lo",
     action    => "ACCEPT";
   }
