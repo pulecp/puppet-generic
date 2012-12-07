@@ -2260,7 +2260,7 @@ class gen_base::python_psycopg2 {
 # Depends:
 #  gen_puppet
 #
-class gen_base::python-pycountry
+class gen_base::python-pycountry {
   package { "python-pycountry":
     ensure => latest;
   }
