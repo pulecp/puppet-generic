@@ -2252,6 +2252,20 @@ class gen_base::python_psycopg2 {
   }
 }
 
+# Class: gen_base::python-pycountry
+#
+# Actions:
+#  Install python-pycountry
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-pycountry
+  package { "python-pycountry":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_pycurl
 #
 # Actions:
