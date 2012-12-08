@@ -19,7 +19,10 @@
 class gen_softflowd ($interface='eth0', $host='127.0.0.1', $port='9995', $version='9', $maxlife='5m', $expint='0') {
   $nf_collector = "${host}:${port}"
 
-  kservice { 'softflowd':; }
+  kservice { 'softflowd':
+    hasstatus => false,
+    pattern   => 'softflowd';
+  }
 
   file { '/etc/default/softflowd':
     content => template('gen_softflowd/default'),
