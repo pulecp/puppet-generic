@@ -32,10 +32,17 @@ class rsyslog::common {
 class rsyslog::client {
   include rsyslog::common
 
-  file { "/etc/rsyslog.d/remote-logging-client.conf":
-    content => template("rsyslog/client/remote-logging-client.conf"),
-    require => Package["rsyslog"],
-    notify => Service["rsyslog"],
+  $pemfile = "${fqdn}.pem"
+
+  file {
+    "/etc/rsyslog.d/remote-logging-client.conf":
+      content => template("rsyslog/client/remote-logging-client.conf"),
+      require => Package["rsyslog"],
+      notify => Service["rsyslog"];
+    '/etc/rsyslog.d/enable-ssl-puppet-certs.conf':
+      content => template('rsyslog/client/enable-ssl-puppet-certs.conf'),
+      require => Package["rsyslog"],
+      notify => Service["rsyslog"];
   }
 }
 
@@ -51,10 +58,17 @@ class rsyslog::client {
 class rsyslog::server {
   include rsyslog::common
 
-  file { "/etc/rsyslog.d/remote-logging-server.conf":
-    content => template("rsyslog/server/remote-logging-server.conf"),
-    require => [Package["rsyslog"],File['/var/log/external']],
-    notify  => Service["rsyslog"],
+  $pemfile = "${fqdn}.pem"
+
+  file {
+    "/etc/rsyslog.d/remote-logging-server.conf":
+      content => template("rsyslog/server/remote-logging-server.conf"),
+      require => [Package["rsyslog"],File['/var/log/external']],
+      notify  => Service["rsyslog"];
+    '/etc/rsyslog.d/enable-ssl-puppet-certs.conf':
+      content => template('rsyslog/server/enable-ssl-puppet-certs.conf'),
+      require => Package["rsyslog"],
+      notify  => Service["rsyslog"];
   }
 
   # Make sure the directory actually exists
