@@ -10,8 +10,9 @@
 #  gen_puppet
 #
 class rsyslog::common {
-  package { "rsyslog":
-    ensure => installed,
+  package { ['rsyslog','rsyslog-gnutls']:
+    ensure => latest,
+    notify => Service['rsyslog'],
   }
 
   service { "rsyslog":
