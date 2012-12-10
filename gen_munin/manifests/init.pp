@@ -75,6 +75,7 @@ class gen_munin::client {
   }
   Concat::Add_content <<| tag == "munin-node.conf_server_allows_${environment}" |>>
 
+  # This is passed through from customer specific implicitly (we don't wanna do proxies anyway)
   if $munin_proxy {
     $munin_template = "gen_munin/server/munin.conf_client_with_proxy"
   } else {
