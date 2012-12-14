@@ -10,4 +10,4 @@ INTERFACE="<%= interface %>"
 # You should at least define a host and a port where the accounting
 # datagrams should be sent to, e.g. 
 # OPTIONS="-n 127.0.0.1:9995"
-OPTIONS="-n <%= nf_collector %> -t maxlife=<%= maxlife %> -t expint=<%= expint %>"
+OPTIONS="-n <%= nf_collector %> -t maxlife=<%= maxlife %> -t expint=<%= expint %><% if maxflows -%> -m <%= maxflows %><% end -%>"

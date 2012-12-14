@@ -12,11 +12,12 @@
 #   version    Netflow version (default '9')
 #   maxlife    Max lifetime of a flow (default '5m' (= five minutes))
 #   expint     Flow expire interval, expint=0 means expire immediately (default '0')
+#   maxflows   Maximum flows concurrently tracked (softflowd's default is 8192)
 #
 # Depends:
 #  gen_puppet
 #
-class gen_softflowd ($interface='eth0', $host='127.0.0.1', $port='9995', $version='9', $maxlife='5m', $expint='0') {
+class gen_softflowd ($interface='eth0', $host='127.0.0.1', $port='9995', $version='9', $maxlife='5m', $expint='0', $maxflows=false) {
   $nf_collector = "${host}:${port}"
 
   kservice { 'softflowd':
