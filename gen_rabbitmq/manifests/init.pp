@@ -106,9 +106,34 @@ define gen_rabbitmq::delete_user {
 }
 
 define gen_rabbitmq::set_permissions($vhostpath="/", $username, $conf='".*"', $write='".*"', $read='".*"') {
+  if defined(Gen_rabbitmq::Vhost[$vhostpath]) {
+    $req = [Gen_rabbitmq::Add_user[$username], Gen_rabbitmq::Vhost[$vhostpath]]
+  } else {
+    $req = Gen_rabbitmq::Add_user[$username]
+  }
+
   exec { "set permission ${vhostpath} ${username}":
     command => "/usr/sbin/rabbitmqctl set_permissions -p ${vhostpath} ${username} ${conf} ${write} ${read}",
     unless  => "/usr/sbin/rabbitmqctl list_user_permissions -p ${vhostpath} ${username} | grep -qP \"${vhostpath}\\t${conf}\\t${write}\\t${read}\"",
-    require => Gen_rabbitmq::Add_user[$username];
+    require => $req;
+  }
+}
+
+define gen_rabbitmq::vhost ($ensure='present') {
+  case $ensure {
+    'present': {
+      exec { "rabbitmq vhost $name":
+        command => "/usr/sbin/rabbitmqctl add_vhost $name",
+        unless  => "/usr/sbin/rabbitmqctl list_vhosts | grep -q '^$name\$'",
+        require => Service['rabbitmq-server'];
+      }
+    }
+    'absent': {
+      exec { "rabbitmq vhost $name":
+        command => "/usr/sbin/rabbitmqctl delete_vhost $name",
+        onlyif  => "/usr/sbin/rabbitmqctl list_vhosts | grep -q '^$name\$'",
+        require => Service['rabbitmq-server'];
+      }
+    }
   }
 }
