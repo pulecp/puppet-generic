@@ -26,9 +26,9 @@
 
 # create-vm.sh: Create a virtual machine using libvirt/KVM
 
-if test $# -ne 10
+if test $# -lt 10
 then
-	echo "usage: $0 name nproc ram_mb [disk_volgrp|img_dir] disk_gb [-|disk_splitsize] disk_image [-|vnc_port] [-|vnc_secret] bridge_dev" >&2
+	echo "usage: $0 name nproc ram_mb [disk_volgrp|img_dir] disk_gb [-|disk_splitsize] disk_image [-|vnc_port] [-|vnc_secret] bridge_dev [macaddress]" >&2
 	exit 1
 fi
 
@@ -42,6 +42,7 @@ DISK_IMAGE=$7
 VNC_PORT=$8
 VNC_SECRET=$9
 BRIDGE_DEV=${10}
+MACADDRESS=${11}
 
 set -e -x
 
@@ -113,6 +114,10 @@ then
 	esac
 fi
 
+if [ -n ${MACADDRESS} ]; then
+	MAC_CONFIG="      <mac address='${MACADDRESS}'/>"
+fi
+
 # Create the configuration for libvirt.
 virsh define /dev/stdin << EOF
 <domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
@@ -139,6 +144,7 @@ virsh define /dev/stdin << EOF
     <emulator>/usr/bin/kvm</emulator>
 $DISK_CONFIG
     <interface type='bridge'>
+$MAC_CONFIG
       <source bridge='$BRIDGE_DEV'/>
       <target dev="${NAME}_eth0"/>
       <model type='virtio'/>
