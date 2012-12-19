@@ -120,7 +120,7 @@ fi
 
 # Create the configuration for libvirt.
 virsh define /dev/stdin << EOF
-<domain type='kvm' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
+<domain type='<%= hypervisor %>' xmlns:qemu='http://libvirt.org/schemas/domain/qemu/1.0'>
   <name>$NAME</name>
   <description>Created on: $CREATED</description>
   <memory>$(($RAM_MB * 1024))</memory>
@@ -141,7 +141,7 @@ virsh define /dev/stdin << EOF
   <on_reboot><%= on_reboot %></on_reboot>
   <on_crash><%= on_crash %></on_crash>
   <devices>
-    <emulator>/usr/bin/kvm</emulator>
+    <emulator>/usr/bin/<%= hypervisor %></emulator>
 $DISK_CONFIG
     <interface type='bridge'>
 $MAC_CONFIG

@@ -20,6 +20,13 @@ class libvirt ($on_crash="destroy", $on_reboot="restart") {
     require    => Package["libvirt-bin"];
   }
 
+  # qemu can be used for testing
+  $hypervisor = $is_virtual ? {
+    true    => 'qemu',
+    'true'  => 'qemu',
+    default => 'kvm',
+  }
+
   file {
     "/etc/libvirt/libvirtd.conf":
       content  => template("libvirt/libvirtd.conf"),
