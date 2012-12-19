@@ -61,11 +61,14 @@ class offsitebackup::common {
 # Actions:
 #  Undocumented
 #
+# Parameters:
+#  splay: number of second to use as max splay. Defaults to 28800 (8 hours).
+#
 # Depends:
 #  Undocumented
 #  gen_puppet
 #
-class offsitebackup::client($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B") {
+class offsitebackup::client($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B", $splay=28800) {
   include gen_base::backup-scripts
 
   package { ["offsite-backup"]:
