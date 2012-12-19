@@ -114,7 +114,7 @@ then
 	esac
 fi
 
-if [ -n ${MACADDRESS} ]; then
+if [ -n "${MACADDRESS}" ]; then
 	MAC_CONFIG="      <mac address='${MACADDRESS}'/>"
 fi
 
