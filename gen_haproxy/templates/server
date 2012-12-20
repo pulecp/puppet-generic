@@ -5,3 +5,4 @@
 <% if httpcheck_fall %> fall <%= httpcheck_fall %><% end -%>
 <% if httpcheck_rise %> rise <%= httpcheck_rise %><% end -%>
 <% if backupserver %> backup<% end -%>
+<% if redir %> redir  <%= redir %><% end -%>

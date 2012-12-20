@@ -116,12 +116,14 @@ define gen_haproxy::site($site, $mode="http", $balance="static-rr", $timeout_con
 #    The port for haproxy to connect to on the backend server
 #  serverip
 #    The IP of the backend server
+#  redir
+#    Redirect to another site with a HTTP 302 status
 #
 # Depends:
 #  gen_puppet
 #
 define gen_haproxy::site::add_server($cookie=false, $httpcheck_uri=false, $httpcheck_port=false, $httpcheck_interval=false, $httpcheck_fall=false, $httpcheck_rise=false, $backupserver=false,
-    $serverip=$ipaddress_eth0, $serverport=80) {
+    $serverip=$ipaddress_eth0, $serverport=80, $redir=false) {
   $real_name      = regsubst($name, '(.*);.*', '\1')
   $server_name    = regsubst($name, '.*;(.*)', '\1')
   $cookie_content = regsubst($server_name, '([^\.]*)\..*', '\1')
