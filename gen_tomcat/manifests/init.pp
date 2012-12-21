@@ -26,6 +26,8 @@
 #    Set the PermGen size for the JVM.
 #  tomcat_tag
 #    The tag used for exporting the Tomcat users in tomcat-users.xml
+#  max_open_files
+#    Max. allowed open files (ulimit -n)
 #
 # Depends:
 #  gen_puppet
@@ -34,11 +36,15 @@
 #
 class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
                   $java_home="/usr/lib/jvm/java-6-openjdk/", $java_opts="", $jvm_max_mem=false, $jvm_permgen_mem=false,
-                  $tomcat_tag="tomcat_${environment}",$ajp13_maxclients='200') {
+                  $tomcat_tag="tomcat_${environment}",$ajp13_maxclients='200', $max_open_files=false) {
   class { 'gen_tomcat::manager':
     tomcat_tag => $tomcat_tag;
   }
   include gen_base::openjdk-6-jre
+
+  if $max_open_files {
+    $real_max_open_files = $max_open_files
+  }
 
   if !$jvm_max_mem {
     $tmp_jvm_mem = $memorysizeinbytes/1024/1024*0.75

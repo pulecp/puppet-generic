@@ -46,3 +46,8 @@ JAVA_OPTS="-server -Djava.awt.headless=true -Xmx<%= jvm_mem %>m -XX:+UseConcMark
 
 # This is the 'base'-directory for all webapps
 CATALINA_BASE=<%= catalina_base %>
+<% if max_open_files -%>
+
+# Set max open files
+ulimit -n <%= real_max_open_files %>
+<% end -%>
