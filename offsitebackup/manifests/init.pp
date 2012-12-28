@@ -127,13 +127,13 @@ class offsitebackup::client::package {
 #  finish: directory with finish scripts (optional)
 #  finish_conf: directory with configuration for the finish scripts (optional)
 #  includes: a list of patterns to include
-#  excludes: a list of patterns to exclude
+#  excludes: a list of patterns to exclude (optional)
 #
 # Depends:
 #  Undocumented
 #  gen_puppet
 #
-define offsitebackup::extraclient($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B", $splay=28800, $confprefix="${name}_", $sshpubkey, $sshprivkey, $backupdir="${fqdn}_${name}", $prepare="/dev/null", $prepare_conf="/dev/null", $finish="/dev/null", $finish_conf="/dev/null", $includes, $excludes) {
+define offsitebackup::extraclient($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B", $splay=28800, $confprefix="${name}_", $sshpubkey, $sshprivkey, $backupdir="${fqdn}_${name}", $prepare="/dev/null", $prepare_conf="/dev/null", $finish="/dev/null", $finish_conf="/dev/null", $includes, $excludes='') {
   include gen_base::backup-scripts
   include offsitebackup::client::package
 
