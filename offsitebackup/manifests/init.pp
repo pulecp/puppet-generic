@@ -139,7 +139,7 @@ define offsitebackup::extraclient($backup_server, $backup_home="/backup/${enviro
 
   Sshkey <<| title == $backup_server |>>
 
-  @@offsitebackup::common::backupkey { $backupdir:
+  @@offsitebackup::common::backupkey { "${backupdir}_${fqdn}":
     backupserver => $backup_server,
     backuproot => $backup_home,
     user => $backup_user,
