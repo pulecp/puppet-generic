@@ -10,9 +10,9 @@
 #  gen_puppet
 #
 class offsitebackup::common {
-  define backupkey($backupserver, $backuproot=$backup_home, $user, $key) {
-    $backupdir = "$backuproot/$name"
-    $line = "command=\"rdiff-backup --server --restrict $backupdir\",no-pty,no-port-forwarding,no-agent-forwarding,no-X11-forwarding ssh-rsa $key Backup key for $name"
+  define backupkey($backupserver, $backuproot=$backup_home, $user, $key, $backupdir=$name) {
+    $real_backupdir = "$backuproot/$backupdir"
+    $line = "command=\"rdiff-backup --server --restrict ${real_backupdir}\",no-pty,no-port-forwarding,no-agent-forwarding,no-X11-forwarding ssh-rsa $key Backup key for $name"
 
     line { "add-key-${name}":
       file    => "${backuproot}/.ssh/authorized_keys",
@@ -140,6 +140,7 @@ define offsitebackup::extraclient($backup_server, $backup_home="/backup/${enviro
   Sshkey <<| title == $backup_server |>>
 
   @@offsitebackup::common::backupkey { "${backupdir}_${fqdn}":
+    backupdir => $backupdir,
     backupserver => $backup_server,
     backuproot => $backup_home,
     user => $backup_user,
