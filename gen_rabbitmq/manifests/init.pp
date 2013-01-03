@@ -40,8 +40,8 @@ class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671, $disk_
   gen_rabbitmq::delete_user { "guest":; }
 
   concat { "/etc/rabbitmq/rabbitmq.config":
-    require => Package["rabbitmq"],
-    notify  => Service["rabbitmq"];
+    require => Package["rabbitmq-server"],
+    notify  => Service["rabbitmq-server"];
   }
 }
 
