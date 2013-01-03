@@ -7,6 +7,19 @@
 class gen_insserv {
 }
 
+# Define: gen_insserv::enable_script
+#
+# Actions: Enable an initscript using the settings in the initscript.
+#
+# Parameters:
+#  name: The script to enable
+#
+define gen_insserv::enable_script () {
+  exec { "/sbin/insserv ${name}":
+    unless => "/bin/cat /etc/init.d/.depend.boot /etc/init.d/.depend.start /etc/init.d/.depend.stop | /bin/grep ${name}",
+  }
+}
+
 # Define: gen_insserv::disable_script
 #
 # Actions: Disable an initscript at all levels (boot, start and stop).
