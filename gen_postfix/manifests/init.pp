@@ -6,30 +6,39 @@
 #  Set up Postfix
 #
 # Parameters:
-#  certs         The Puppet location and name (without extension) of the certificates for Dovecot. Only used and has to be set when mode is primary
-#  relayhost     Same as Postfix, see http://www.postfix.org/postconf.5.html#relayhost. Absent by default
-#  mydomain      The default domain to use for the sender address. Defaults to $domain
-#  myhostname    Same as Postfix, see http://www.postfix.org/postconf.5.html#myhostname. Defaults to $fqdn
-#  mynetworks    Same as Postfix, see http://www.postfix.org/postconf.5.html#mynetworks. Defaults to 127.0.0.0/8 [::1]/128
-#  mydestination Same as Postfix, see http://www.postfix.org/postconf.5.html#mydestination. Defaults to $fqdn, $hostname, localhost.localdomain, localhost. The default is appended when this param is set
-#  mode          Set to primary for a full mailserver, secondary for a backup mailserver, false otherwise. Defaults to false
-#  always_bcc    Same as Postfix, see http://www.postfix.org/postconf.5.html#always_bcc. Absent by default
-#  mysql_user    The MySQL username used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
-#  mysql_pass    The MySQL password used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
-#  mysql_db      The MySQL database used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
-#  mysql_host    The MySQL host used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
-#  relay_domains Same as Postfix, see http://www.postfix.org/postconf.5.html#relay_domains. Only used when mode is primary or secondary. Defaults to false (which means '$mydestination' in Postfix)
+#  certs                The Puppet location and name (without extension) of the certificates for Dovecot. Only used and has to be set when mode is primary
+#  relayhost            Same as Postfix, see http://www.postfix.org/postconf.5.html#relayhost. Absent by default
+#  mydomain             The default domain to use for the sender address. Defaults to $domain
+#  myhostname           Same as Postfix, see http://www.postfix.org/postconf.5.html#myhostname. Defaults to $fqdn
+#  mynetworks           Same as Postfix, see http://www.postfix.org/postconf.5.html#mynetworks. Defaults to 127.0.0.0/8 [::1]/128
+#  mydestination        Same as Postfix, see http://www.postfix.org/postconf.5.html#mydestination. Defaults to $fqdn, $hostname, localhost.localdomain, localhost. The default is appended when this param is set
+#  mode                 Set to primary for a full mailserver, secondary for a backup mailserver, false otherwise. Defaults to false
+#  always_bcc           Same as Postfix, see http://www.postfix.org/postconf.5.html#always_bcc. Absent by default
+#  mysql_user           The MySQL username used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
+#  mysql_pass           The MySQL password used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
+#  mysql_db             The MySQL database used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
+#  mysql_host           The MySQL host used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
+#  relay_domains        Same as Postfix, see http://www.postfix.org/postconf.5.html#relay_domains. Only used when mode is primary or secondary. Defaults to false (which means '$mydestination' in Postfix)
+#  check_policy_service Same as Postfix
 #
 # Depends:
 #  gen_puppet
 #
-class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks=false, $mydestination=false, $mode=false, $always_bcc=false,
-    $mysql_user=false, $mysql_pass=false, $mysql_db=false, $mysql_host=false, $relay_domains=false, $mydomain=$domain) {
+class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks=false, $mydestination=false, $mode=false, $always_bcc=false, $mysql_user=false, $mysql_pass=false, $mysql_db=false, $mysql_host=false,
+    $relay_domains=false, $mydomain=$domain, $check_policy_service=false, $content_filter=false) {
   if $mode == 'primary' {
+    if ! $content_filter {
+      fail('When using primary mode for gen_postfix, $content_filter must be set')
+    }
     if ! $certs {
       fail('When using primary mode for gen_postfix, $certs must be set')
     } else {
       $key_name = regsubst($certs,'^(.*)/(.*)$','\2')
+    }
+  }
+  if $mode == 'primary' or $mode == 'secondary' {
+    if ! $check_policy_service {
+      fail('When using primary or secondary for gen_postfix, $check_policy_service must be set')
     }
   }
 

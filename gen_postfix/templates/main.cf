@@ -42,7 +42,7 @@ relay_domains = <%= relay_domains.join(', ') %>
 smtpd_sender_restrictions = hash:/etc/postfix/blocked_domains
 smtpd_recipient_restrictions = permit_mynetworks,
 <% if mode == 'primary' -%>	permit_sasl_authenticated,<% end %>
-	check_policy_service inet:127.0.0.1:10023,
+	check_policy_service <%= check_policy_service %>,
 	reject_unknown_sender_domain,
 	reject_unauth_destination
 <% end -%>
@@ -70,7 +70,7 @@ smtp_tls_mandatory_exclude_ciphers = ADH, aNULL, eNULL, NULL
 smtp_tls_mandatory_protocols = TLSv1, SSLv3
 
 # Virus scanning
-content_filter=lmtp-amavis:[127.0.0.1]:10024
+content_filter=<%= content_filter %>
 
 transport_maps = hash:/etc/postfix/transport
 
