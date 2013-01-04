@@ -20,10 +20,10 @@ class gen_percona {
   }
 
   gen_apt::source { "percona":
-    uri => "http://repo.percona.com/apt",
+    uri          => "http://repo.percona.com/apt",
     distribution => $lsbdistcodename,
-    components => ['main'],
-    key => 'CD2EFD2A',
+    components   => ['main'],
+    key          => 'CD2EFD2A',
   }
 }
 
