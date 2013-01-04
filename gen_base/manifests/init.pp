@@ -384,8 +384,14 @@ class gen_base::imagemagick {
 #  gen_puppet
 #
 class gen_base::ipaddress_ruby {
-  package { "ipaddress-ruby":
-    ensure => latest;
+  if versioncmp($lsbmajdistrelease, 7) < 0 {
+    package { "ipaddress-ruby":
+      ensure => latest;
+    }
+  } else {
+    package { "ruby-ipaddress":
+      ensure => latest;
+    }
   }
 }
 
