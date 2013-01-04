@@ -10,7 +10,7 @@
 #
 class gen_percona {
   exec { "Percona flush privileges":
-    command     => "/usr/bin/perconaadmin --defaults-file=/etc/percona/debian.cnf flush-privileges",
+    command     => "/usr/bin/mysqladmin --defaults-file=/etc/mysql/debian.cnf flush-privileges",
     refreshonly => true,
     require     => Service["mysql"],
   }
