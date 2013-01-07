@@ -150,10 +150,25 @@ define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
     order    => 10,
   }
 
-  concat::add_content { "Add footer for config.ru for puppetmaster ${pname}":
+  concat::add_content { "Add required module for config.ru for puppetmaster ${pname}":
     target   => "${rackdir}/config.ru",
-    content  => "ARGV << \"--rack\"\nrequire 'puppet/application/master'\n# These nexts are only needed for ruby 1.9? Or not?\n#Encoding.default_external = Encoding::UTF_8\n#Encoding.default_internal = Encoding::UTF_8\nrun Puppet::Application[:master].run\n",
+    content  => "ARGV << \"--rack\"\nrequire 'puppet/application/master'",
     order    => 20,
+  }
+
+  if $lsbdistcodename == 'wheezy' {
+    # We need this since ruby 1.9
+    concat::add_content { "Add encoding information for puppetmaster ${pname}":
+      target   => "${rackdir}/config.ru",
+      content  => "Encoding.default_external = Encoding::UTF_8\nEncoding.default_internal = Encoding::UTF_8",
+      order    => 30,
+    }
+  }
+
+  concat::add_content { "Add application starter for config.ru for puppetmaster ${pname}":
+    target   => "${rackdir}/config.ru",
+    content  => "run Puppet::Application[:master].run",
+    order    => 40,
   }
 
   # We can easily enable debugging in puppetmaster
