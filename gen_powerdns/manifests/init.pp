@@ -41,7 +41,7 @@ class gen_powerdns ($localaddress='0.0.0.0') {
 #
 define gen_powerdns::backend::mysql ($db_host='localhost', $db_name='pdns', $db_user='pdns', $db_password='pdns'){
   package { 'pdns-backend-mysql':
-    ensure  => latest,
+    ensure  => installed,
     require => Package['pdns-server'];
   }
 
