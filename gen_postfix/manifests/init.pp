@@ -25,7 +25,7 @@
 #  gen_puppet
 #
 class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks=false, $mydestination=false, $mode=false, $always_bcc=false, $mysql_user=false, $mysql_pass=false, $mysql_db=false, $mysql_host=false,
-    $relay_domains=false, $mydomain=$domain, $check_policy_service=false, $content_filter=false) {
+    $relay_domains=false, $mydomain=$domain, $check_policy_service=false, $content_filter=false, $inet_protocols='all') {
   if $mode == 'primary' {
     if ! $content_filter {
       fail('When using primary mode for gen_postfix, $content_filter must be set')
