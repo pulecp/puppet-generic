@@ -2111,6 +2111,20 @@ class gen_base::python-docutils {
   }
 }
 
+# Class: gen_base::python-epydoc
+#
+# Actions:
+#  Install python-epydoc
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-epydoc {
+  package { "python-epydoc":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_imaging
 #
 # Actions:
