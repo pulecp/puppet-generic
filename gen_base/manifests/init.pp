@@ -2027,6 +2027,20 @@ class gen_base::pstotext {
   }
 }
 
+# Class: gen_base::pylint
+#
+# Actions:
+#  Install pylint
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::pylint {
+  package { "pylint":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-amqplib
 #
 # Actions:
