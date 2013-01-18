@@ -329,6 +329,20 @@ class gen_base::genisoimage {
   }
 }
 
+# Class: gen_base::graphviz
+#
+# Actions:
+#  Install graphviz
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::graphviz {
+  package { "graphviz":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ia32-libs
 #
 # Actions:
