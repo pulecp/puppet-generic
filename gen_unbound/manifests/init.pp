@@ -7,7 +7,7 @@
 # Dependencies:
 #  gen_puppet
 #
-class gen_unbound {
+class gen_unbound ($interfaces=['0.0.0.0','::0']) {
   package { ["unbound-anchor", "unbound"]:; }
 
   service { "unbound":

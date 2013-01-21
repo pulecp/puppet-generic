@@ -2,9 +2,10 @@ server:
 	# verbosity number, 0 is least verbose. 1 is default.
 	verbosity: 1
 
-	# Listen on all interfaces
-	interface: 0.0.0.0
-	interface: ::0
+<% interfaces_a = []; interfaces_a << interfaces; interfaces_a.flatten! -%>
+<% interfaces_a.each do |interface| -%>
+	interface: <%= interface %>
+<% end -%>
 
 	# Auto update the root key
 	auto-trust-anchor-file: "/var/lib/unbound/root.key"
