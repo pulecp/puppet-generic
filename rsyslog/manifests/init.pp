@@ -36,15 +36,18 @@ class rsyslog::client {
   $pemfile = "${fqdn}.pem"
 
   file {
-    "/etc/rsyslog.d/remote-logging-client.conf":
-      content => template("rsyslog/client/remote-logging-client.conf"),
-      require => Package["rsyslog"],
-      notify => Service["rsyslog"];
+    '/etc/rsyslog.d/forwardfile-logformat.conf':
+      content => template('rsyslog/client/forwardfile-logformat.conf'),
+      require => Package['rsyslog'],
+      notify => Service['rsyslog'];
     '/etc/rsyslog.d/enable-ssl-puppet-certs.conf':
       content => template('rsyslog/client/enable-ssl-puppet-certs.conf'),
-      require => Package["rsyslog"],
-      notify => Service["rsyslog"];
+      require => Package['rsyslog'],
+      notify => Service['rsyslog'];
   }
+
+  # We import this so we can change the server to use
+  File <<| title == '/etc/rsyslog.d/remote-logging-client.conf' |>>
 }
 
 # Class: rsyslog::server
@@ -75,6 +78,13 @@ class rsyslog::server {
   # Make sure the directory actually exists
   file { "/var/log/external":
     ensure => directory,
+  }
+
+  # Export the client configuration for remote logging
+  @@file { '/etc/rsyslog.d/remote-logging-client.conf':
+      content => template('rsyslog/server/remote-logging-client.conf'),
+      require => Package['rsyslog'],
+      notify => Service['rsyslog'];
   }
 }
 
