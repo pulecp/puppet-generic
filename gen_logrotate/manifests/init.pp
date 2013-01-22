@@ -28,6 +28,8 @@ class gen_logrotate {
 #    The name of the logrotate config file to create
 #  logs
 #    Defines which log file(s) to rotate
+#  ensure
+#    Defines whether the rotation should exist or not. Defaults to 'present'. Can also be 'absent'.
 #  options
 #    An array with the logrotate options, defaults to ["weekly","compress","rotate 7","missingok"]
 #  prerotate
@@ -39,10 +41,11 @@ class gen_logrotate {
 #  gen_logrotate
 #  gen_puppet
 #
-define gen_logrotate::rotate ($logs, $options=["weekly","compress","rotate 7","missingok"], $prerotate=false, $postrotate=false) {
+define gen_logrotate::rotate ($logs, $ensure='present', $options=["weekly","compress","rotate 7","missingok"], $prerotate=false, $postrotate=false) {
   include gen_logrotate
 
   file { "/etc/logrotate.d/${name}":
+    ensure  => $ensure,
     content => template("gen_logrotate/logrotate.erb");
   }
 }
