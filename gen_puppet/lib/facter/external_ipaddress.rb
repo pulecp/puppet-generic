@@ -14,6 +14,13 @@ begin
       end
     end
   end
+
+  # now v6 :)
+  address = %x{/bin/ip -6 route get 2a00:1450:4013:c00::8a}.scan(/src ([^ ]*)/)[0][0]
+  if address != '::' and address !~ /^fe80:/
+    Facter.add(:external_ipaddress_v6) { setcode { address } }
+  end
+
 rescue
 # do nothing
 end
