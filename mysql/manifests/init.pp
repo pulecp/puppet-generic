@@ -124,7 +124,7 @@ class mysql::server ($datadir=false) {
 
   define grant($user=false, $db=false, $password=false, $hostname="localhost", $permissions="all", $grant_option=false, $require_ssl=false) {
     if !$user {
-      $real_user = regsubst($title, '([a-zA-Z0-9_]+) +on +([*a-zA-Z0-9_]+).*', '\1')
+      $real_user = regsubst($title, '([-a-zA-Z0-9_]+) +on +([*a-zA-Z0-9_]+).*', '\1')
       if ($real_user == $title) {
         fail("Mysql::Server::Grant[\"${title}\"]: please name resource '<user> on <db>.*'")
       }
