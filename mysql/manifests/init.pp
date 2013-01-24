@@ -133,7 +133,7 @@ class mysql::server ($datadir=false) {
       $real_user = $user
     }
     if !$db {
-      $real_db = regsubst($title, '([a-zA-Z0-9_]+) +on +([*a-zA-Z0-9_]+).*', '\2')
+      $real_db = regsubst($title, '([-a-zA-Z0-9_]+) +on +([*a-zA-Z0-9_]+).*', '\2')
       if ($real_db == $title) {
         fail("Mysql::Server::Grant[\"${title}\"]: please name resource '<user> on <db>.*'")
       }
