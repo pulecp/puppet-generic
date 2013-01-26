@@ -37,3 +37,18 @@ class gen_dovecot::imap {
     require => Package['dovecot-common'];
   }
 }
+
+# Class: gen_dovecot::sieve
+#
+# Actions:
+#  Make sure required packages for Sieve are available and installed.
+#
+class gen_dovecot::sieve {
+  include gen_dovecot::common
+
+  if $lsbdistcodename == 'wheezy' {
+    package { ['dovecot-sieve','dovecot-managesieved']:
+      ensure => latest,
+    }
+  }
+}
