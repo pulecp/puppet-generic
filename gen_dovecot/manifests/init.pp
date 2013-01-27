@@ -58,7 +58,7 @@ class gen_dovecot::sieve {
 # Actions:
 #  Make sure required packages for making MySQL connections are available and installed.
 #
-class gen_dovecot::sieve {
+class gen_dovecot::mysql {
   include gen_dovecot::common
 
   if $lsbdistcodename == 'wheezy' {
