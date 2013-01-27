@@ -20,12 +20,13 @@
 #  mysql_host           The MySQL host used for virtual_aliases, virtual_domains and virtual_mailboxes. Only used and has to be set when mode is primary
 #  relay_domains        Same as Postfix, see http://www.postfix.org/postconf.5.html#relay_domains. Only used when mode is primary or secondary. Defaults to false (which means '$mydestination' in Postfix)
 #  check_policy_service Same as Postfix
+#  self_signed_certs    If we use self-signed certificate, set this to true. Defaults to false.
 #
 # Depends:
 #  gen_puppet
 #
-class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks=false, $mydestination=false, $mode=false, $always_bcc=false, $mysql_user=false, $mysql_pass=false, $mysql_db=false, $mysql_host=false,
-    $relay_domains=false, $mydomain=$domain, $check_policy_service=false, $content_filter=false, $inet_protocols='all') {
+class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks=false, $mydestination=false, $mode=false, $always_bcc=false, $mysql_user=false, $mysql_pass=false, $mysql_db=false,
+    $mysql_host=false, $relay_domains=false, $mydomain=$domain, $check_policy_service=false, $content_filter=false, $inet_protocols='all', $self_signed_certs=false) {
   if $mode == 'primary' {
     if ! $content_filter {
       fail('When using primary mode for gen_postfix, $content_filter must be set')
@@ -34,6 +35,9 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
       fail('When using primary mode for gen_postfix, $certs must be set')
     } else {
       $key_name = regsubst($certs,'^(.*)/(.*)$','\2')
+      if $self_signed_certs {
+        notify { 'This setup is using self-signed certificates. You probably do not want that for a production server.':; }
+      }
     }
   }
   if $mode == 'primary' or $mode == 'secondary' {

@@ -54,7 +54,10 @@ soft_bounce = no
 smtpd_tls_security_level = may
 smtpd_tls_key_file = /etc/ssl/private/<%= key_name %>.key
 smtpd_tls_cert_file = /etc/ssl/certs/<%= key_name %>.pem
+<% if self_signed_certs -%>
+<% else -%>
 smtpd_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+<% end -%>
 smtpd_tls_mandatory_ciphers = HIGH
 smtpd_tls_exclude_ciphers = ADH, aNULL, eNULL, NULL
 smtpd_tls_mandatory_exclude_ciphers = ADH, aNULL, eNULL, NULL
@@ -63,7 +66,10 @@ smtpd_tls_mandatory_protocols = TLSv1, SSLv3
 smtp_tls_security_level = may
 smtp_tls_key_file = /etc/ssl/private/<%= key_name %>.key
 smtp_tls_cert_file = /etc/ssl/certs/<%= key_name %>.pem
+<% if self_signed_certs -%>
+<% else -%>
 smtp_tls_CAfile = /etc/ssl/certs/ca-certificates.crt
+<% end -%>
 smtp_tls_mandatory_ciphers = HIGH
 smtp_tls_exclude_ciphers = ADH, aNULL, eNULL, NULL
 smtp_tls_mandatory_exclude_ciphers = ADH, aNULL, eNULL, NULL
