@@ -80,7 +80,7 @@ define gen_unbound::stub_zone ($stub_host=false, $stub_addr=false, $stub_prime=f
   }
 
   if $stub_addr == 'localhost' or $stub_addr =~ /^127\./ {
-    include gen_unbound::stub_zone::query_localhost
+    include gen_unbound::query_localhost
   }
 
   concat::add_content { "20 stubzone ${name}":
