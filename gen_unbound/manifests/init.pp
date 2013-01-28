@@ -11,7 +11,10 @@ class gen_unbound {
   package { ["unbound-anchor", "unbound"]:; }
 
   service { "unbound":
-    hasstatus => false,
+    hasstatus => $lstdistcodename ? {
+      'squeeze' => false,
+      default   => true,
+    },
     require   => [Exec["check-unbound.conf"],Package["unbound"]];
   }
 

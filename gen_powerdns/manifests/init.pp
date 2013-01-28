@@ -8,7 +8,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_powerdns ($localaddress='0.0.0.0') {
+class gen_powerdns ($localaddress='0.0.0.0', $localport='53') {
   kservice { 'pdns':
     package => 'pdns-server';
   }
@@ -45,6 +45,7 @@ define gen_powerdns::backend::mysql ($db_host='localhost', $db_name='pdns', $db_
     require => Package['pdns-server'];
   }
 
+  # This file comes from the package, but the 'include' statement breaks the pdnssec application.
   file { '/etc/powerdns/pdns.d/mysql.conf':
     ensure  => absent,
     require => Package['pdns-backend-mysql'];

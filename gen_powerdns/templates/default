@@ -93,7 +93,11 @@ lazy-recursion=yes
 #################################
 # local-address	Local IP address to which we bind
 #
-local-address=<%= localaddress %> 127.0.0.1
+<% if localaddress !~ /127\.0\.0\.1/ -%>
+local-address=127.0.0.1 <%= localaddress %>
+<% else -%>
+local-address=<%= localaddress %>
+<% end -%>
 
 #################################
 # local-ipv6	Local IP address to which we bind
@@ -103,7 +107,7 @@ local-address=<%= localaddress %> 127.0.0.1
 #################################
 # local-port	The port on which we listen
 #
-local-port=53
+local-port=<%= localport %>
 
 #################################
 # log-dns-details	If PDNS should log failed update requests
