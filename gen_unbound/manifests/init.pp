@@ -79,9 +79,29 @@ define gen_unbound::stub_zone ($stub_host=false, $stub_addr=false, $stub_prime=f
     fail("Please provide at least one \$stub_host or \$stub_addr")
   }
 
+  if $stub_addr == 'localhost' or $stub_addr =~ /^127\./ {
+    include gen_unbound::stub_zone::query_localhost
+  }
+
   concat::add_content { "20 stubzone ${name}":
     target  => '/etc/unbound/unbound.conf',
     content => template('gen_unbound/unbound.conf.stubzone');
+  }
+}
+
+#
+# Class: gen_unbound::query_localhost
+#
+# Actions:
+#  Configure Unbound to do queries to localhost
+#
+# Depends:
+#  gen_unbound
+#
+class gen_unbound::query_localhost {
+  concat::add_content { '09 Allow queries to localhost':
+    target  => '/etc/unbound/unbound.conf',
+    content => template('gen_unbound/unbound.conf.do-not-query-localhost');
   }
 }
 

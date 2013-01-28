@@ -1,0 +1,2 @@
+	# Allow Unbound to query localhost
+	do-not-query-localhost: no
