@@ -343,6 +343,20 @@ class gen_base::graphviz {
   }
 }
 
+# Class: gen_base::htop
+#
+# Actions:
+#  Install htop
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::htop {
+  package { "htop":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ia32-libs
 #
 # Actions:
