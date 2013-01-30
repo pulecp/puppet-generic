@@ -37,5 +37,10 @@ class libvirt ($on_crash="destroy", $on_reboot="restart") {
       group    => "staff",
       mode     => 750,
       require  => Package["libvirt-bin"];
+    "/usr/local/sbin/create-vm-new":
+      content  => template("libvirt/create-vm-new"),
+      group    => "staff",
+      mode     => 750,
+      require  => Package["libvirt-bin"];
   }
 }
