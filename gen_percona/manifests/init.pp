@@ -66,10 +66,10 @@ class gen_percona::server ($datadir=false,$version=false) {
     }
   }
 
-  # Package needs to be on old, otherwise you could inadvertantly install something like mysql-common, which will
+  # Package needs to be on hold, otherwise you could inadvertantly install something like mysql-common, which will
   # remove percona from the server...
   package { $perconaserver:
-    ensure  => held,
+    ensure  => installed,
     require => $datadir ? {
       false   => undef,
       default => Exec["Create datadir before we install Percona, if needed"],
@@ -228,8 +228,6 @@ class gen_percona::slave inherits gen_percona::server {
       mode    => 755,
       require => Package["$perconaserver"];
   }
-
-  fail("This class is untested.")
 }
 
 # Class: gen_percona::slave::delayed
