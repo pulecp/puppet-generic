@@ -1218,6 +1218,20 @@ class gen_base::libspreadsheet-parseexcel-perl {
   }
 }
 
+# Class: gen_base::libssh2-php
+#
+# Actions:
+#  Install libssh2-php
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libssh2-php {
+  package { "libssh2-php":
+      ensure => latest;
+  }
+}
+
 # Class: gen_base::libssl-dev
 #
 # Actions:
