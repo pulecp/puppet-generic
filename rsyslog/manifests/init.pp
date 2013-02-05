@@ -10,9 +10,20 @@
 #  gen_puppet
 #
 class rsyslog::common {
-  package { ['rsyslog','rsyslog-gnutls']:
-    ensure => latest,
-    notify => Service['rsyslog'],
+  if $lsbdistcodename == 'wheezy' {
+    package { ['rsyslog','rsyslog-gnutls']:
+      ensure => latest,
+      notify => Service['rsyslog'],
+    }
+  } else {
+    package {
+      'rsyslog':
+        ensure => latest,
+        notify => Service['rsyslog'];
+      'rsyslog-gnutls':
+        ensure => absent,
+        notify => Service['rsyslog'];
+    }
   }
 
   service { "rsyslog":
