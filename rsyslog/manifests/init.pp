@@ -26,6 +26,11 @@ class rsyslog::common {
     }
   }
 
+  file { '/var/spool/rsyslog':
+    ensure => directory,
+    notify => Service['rsyslog'];
+  }
+
   service { "rsyslog":
     enable => true,
     require => Package["rsyslog"],
