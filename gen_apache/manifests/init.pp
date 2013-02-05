@@ -48,18 +48,24 @@ class gen_apache {
       ensure  => absent;
   }
 
+  if $lsbmajdistrelease >= 7 {
+    $httpd_conf_location = '/etc/apache2/conf.d/httpd.conf'
+  } else {
+    $httpd_conf_location = '/etc/apache2/httpd.conf'
+  }
+
   concat {
     "/etc/apache2/ports.conf":
-      require     => Package["apache2"],
-      notify      => Exec["reload-apache2"];
-    "/etc/apache2/httpd.conf":
-      require     => Package["apache2"],
-      notify      => Exec["reload-apache2"];
+      require => Package["apache2"],
+      notify  => Exec["reload-apache2"];
+    $httpd_conf_location:
+      require => Package["apache2"],
+      notify  => Exec["reload-apache2"];
   }
 
   concat::add_content { "base_httpd":
     content => template("gen_apache/httpd.conf"),
-    target  => "/etc/apache2/httpd.conf";
+    target  => $httpd_conf_location;
   }
 }
 
@@ -141,8 +147,14 @@ define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/v
       }
 
       if !defined(Concat::Add_content["NameVirtualHost ${address}:${port}"]) {
+        if $lsbmajdistrelease >= 7 {
+          $httpd_conf_location = '/etc/apache2/conf.d/httpd.conf'
+        } else {
+          $httpd_conf_location = '/etc/apache2/httpd.conf'
+        }
+
         concat::add_content { "NameVirtualHost ${address}:${port}":
-          target => "/etc/apache2/httpd.conf";
+          target => $httpd_conf_location;
         }
       }
     }
