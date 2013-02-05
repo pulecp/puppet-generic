@@ -64,11 +64,14 @@ class gen_postfix($certs=false, $relayhost=false, $myhostname=false, $mynetworks
     target  => '/etc/postfix/main.cf';
   }
 
-  file { '/var/spool/postfix/dovecot':
-    ensure  => directory,
-    owner   => 'postfix',
-    group   => 'mail',
-    require => Package['postfix'];
+  file {
+    '/var/spool/postfix':
+      ensure  => directory;
+    '/var/spool/postfix/dovecot':
+      ensure  => directory,
+      owner   => 'postfix',
+      group   => 'mail',
+      require => Package['postfix'];
   }
 
   exec {
