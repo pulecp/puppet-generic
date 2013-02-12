@@ -1,0 +1,6 @@
+<% if mailto %>MAILTO=<%= mailto %>
+<% end -%>
+<% if environment %><% environments = [] ; environments << environment ; environments.flatten! -%><% environments.each do |x| -%>
+<%= x %>
+<% end %><% end -%>
+<%= minute %> <%= hour %> <%= mday %> <%= month %> <% if first_wday_of_month -%><%= first_wday_of_month %><% else -%><%= wday %><% end -%> <%= user %> <% if first_wday_of_month -%>[ `/bin/date +\%d` -le 7 ] && <% end -%> if [ ! -f /var/run/<%= lockfile %> ]; then touch /var/run/<%= lockfile %>; <%= command %>; rm /var/run/<%= lockfile %>; fi

@@ -12,13 +12,19 @@
 #  user:                Which user should be used to execute the command
 #  first_wday_of_month: If true, only run on first wday of month
 #  pacemaker_resource:  In failover setups, make sure this resource is local before running the command
+#  lockfile:            A lockfile to check, create and remove. Use if only one instance of the cronjob can run, a next will skip.
 #  command:             The command of the crontab entry
 #  environment:         (Array of) environment var that need to be set for the cron
 # Depends: gen_puppet
-define kcron($ensure="present", $mailto='root', $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $first_wday_of_month=false, $pacemaker_resource=false, $command, $environment=false) {
+define kcron($ensure="present", $mailto='root', $minute="*", $hour="*", $mday="*", $month="*", $wday="*", $user="root", $first_wday_of_month=false, $pacemaker_resource=false, $command, $environment=false, $lockfile=false) {
   # If the name contains an underscore or dot, cron won't use the file! So fail when that's the case.
   if $name =~ /\./ or $name =~ /_/ or $name =~ /\// or $name =~ / / {
     fail("Kcron names cannot contain dots, underscores, slashes or spaces. Resource: ${name}")
+  }
+
+  # For now, this cannot work together.
+  if $pacemaker_resource and $lockfile {
+    fail("Kcron cannot use both a lockfile and a pacemaker resource. Resource: ${name}")
   }
 
   if $ensure == "present" {
@@ -41,10 +47,17 @@ define kcron($ensure="present", $mailto='root', $minute="*", $hour="*", $mday="*
         }
       }
     } else {
-      # A simple cronjob
-      file { "/etc/cron.d/${name}":
-        content => template("gen_puppet/kcron"),
-        notify  => Exec["reload-cron"];
+      if $lockfile {
+        file { "/etc/cron.d/${name}":
+          content => template("gen_puppet/kcron-lockfile"),
+          notify  => Exec["reload-cron"];
+        }
+      } else {
+        # A simple cronjob
+        file { "/etc/cron.d/${name}":
+          content => template("gen_puppet/kcron"),
+          notify  => Exec["reload-cron"];
+        }
       }
     }
   } else {
