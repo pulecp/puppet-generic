@@ -21,10 +21,15 @@ class gen_nfs {
         pattern   => "/sbin/portmap",
         require   => Package["nfs-common"];
     }
-  } else {
+  } elsif $lsbdistcodename == 'squeeze' {
     kservice {
       "portmap":
         require   => Package["nfs-common"];
+    }
+  } elsif $lsbdistcodename == 'wheezy' {
+    kservice { 'rpcbind':
+      pensure => latest,
+      alias   => 'portmap';
     }
   }
 }
