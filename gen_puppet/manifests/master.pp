@@ -71,13 +71,9 @@ class gen_puppet::master ($servertype = 'passenger') {
 #  Undocumented
 #  gen_puppet
 #
-define gen_puppet::master::config ($configfile = "/etc/puppet/puppet.conf",
-    $debug = false, $factpath = '$vardir/lib/facter',
-    $fileserverconf = "/etc/puppet/fileserver.conf",
-    $logdir = "/var/log/puppet", $pluginsync = true, $queue = false,
-    $rackroot = "/usr/local/share/puppet/rack", $rundir = "/var/run/puppet",
-    $ssldir = "/var/lib/puppet/ssl", $templatedir = '$confdir/templates',
-    $vardir = "/var/lib/puppet") {
+define gen_puppet::master::config ($configfile = "${confdir}/puppet.conf", $debug = false, $factpath = '$vardir/lib/facter', $fileserverconf = "${confdir}/fileserver.conf",
+    $logdir = "/var/log/puppet", $pluginsync = true, $queue = false, $rackroot = "/usr/local/share/puppet/rack", $rundir = "/var/run/puppet", $ssldir = "/var/lib/puppet/ssl",
+    $templatedir = '$confdir/templates', $vardir = "/var/lib/puppet",$confdir = '/etc/puppet') {
   # If the name is 'default', we want to change the puppetmaster name (pname)
   # we're using for this instance to something without crud.
   if $name == 'default' {
