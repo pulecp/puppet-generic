@@ -147,6 +147,21 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd
   }
 }
 
+# Class: gen_nfs::cachefiles
+#
+# Action: Setup cachefilesd for NFS clients. This requires a separate partition mounted with user_xattr under /var/cache/fscache!
+#
+class gen_nfs::cachefilesd {
+  package { 'cachefilesd':
+    ensure => latest,
+  }
+
+  file { '/etc/default/cachefilesd':
+    content => "RUN=yes\n",
+    require => Package['cachefilesd'];
+  }
+}
+
 # Define: gen_nfs::mount
 #
 # Parameters:
