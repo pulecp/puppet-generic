@@ -162,8 +162,9 @@ class gen_nfs::cachefilesd {
   }
 
   service { 'cachefilesd':
-    ensure  => running,
-    require => File['/etc/default/cachefilesd'];
+    ensure    => running,
+    hasstatus => true,
+    require   => File['/etc/default/cachefilesd'];
   }
 }
 
