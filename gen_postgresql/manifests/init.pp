@@ -18,11 +18,12 @@ class gen_postgresql {
 #
 # Parameters:
 #  datadir: Location where to put the data files. Optional.
+#  version: The version of PostgreSQL we want to install
 #
 # Depends:
 #  gen_puppet
 #
-class gen_postgresql::server ($datadir=false, $version="8.4") {
+class gen_postgresql::server ($datadir=false, $version=false) {
   include gen_postgresql
   include gen_base::libpq5
 
@@ -42,12 +43,42 @@ class gen_postgresql::server ($datadir=false, $version="8.4") {
     }
   }
 
-  package { "postgresql-${version}":
-    require => $datadir ? {
-      false   => Package["libpq5"],
-      default => [Package["libpq5"],Exec["Create datadir before we install MySQL, if needed"]],
-    },
-    alias   => "postgresql-server";
+  if $version and versioncmp($version,'8.4') == 0 {
+    # Not available in Wheezy
+    if $lsbdistcodename == 'wheezy' {
+      fail('Wheezy does not support PostgreSQL 8.4.')
+    }
+
+    package { "postgresql-${version}":
+      require => $datadir ? {
+        false   => Package["libpq5"],
+        default => [Package["libpq5"],Exec["Create datadir before we install PostgreSQL, if needed"]],
+      },
+      alias   => "postgresql-server";
+    }
+  } elsif $version and versioncmp($version, '9.1') == 0 {
+    # Use backports on Squeeze
+    if $lsbdistcodename == 'squeeze' {
+      gen_apt::preference { ["postgresql-${version}","libpq5","postgresql-client-9.1","postgresql-common","postgresql-client-common"]:; }
+    }
+
+    package {
+      "postgresql-${version}":
+        require => $datadir ? {
+          false   => Package["libpq5"],
+          default => [Package["libpq5"],Exec["Create datadir before we install PostgreSQL, if needed"]],
+        },
+        alias   => "postgresql-server";
+      "postgresql-client-${version}":
+        require => Package["postgresql-common","postgresql-client-common"],
+        notify  => Package["postgresql-server"];
+      "postgresql-common":
+        require => Package["postgresql-client-common"],
+        notify  => Package["postgresql-server"];
+      "postgresql-client-common":;
+    }
+  } elsif $version {
+    fail("Unknown PostgreSQL version ${version}. Please check the puppet code in gen_postgresql.")
   }
 
   service { "postgresql":
