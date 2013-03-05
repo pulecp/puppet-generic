@@ -37,9 +37,7 @@ class gen_base::ant {
 #  gen_puppet
 #
 class gen_base::apache2_mpm_prefork {
-  package { "apache2-mpm-prefork":
-    ensure => latest;
-  }
+  package { "apache2-mpm-prefork":; }
 }
 
 # Class: gen_base::apache2_mpm_worker
@@ -51,9 +49,7 @@ class gen_base::apache2_mpm_prefork {
 #  gen_puppet
 #
 class gen_base::apache2_mpm_worker {
-  package { "apache2-mpm-worker":
-    ensure => latest;
-  }
+  package { "apache2-mpm-worker":; }
 }
 
 # Class: gen_base::archive_pmacct_data
