@@ -1,4 +1,5 @@
 listen <%= site %>:<%= ip %>:<%= port %> <%= ip %>:<%= port %>
+	reqidel              ^X-Forwarded-For:.*
 <% if mode != 'http' -%>
 	mode                 <%= mode %>
 <% end -%>

@@ -11,6 +11,18 @@
 class gen_postgresql {
 }
 
+# Class: gen_postgresql::client
+#
+# Actions: Setup required client packages.
+#
+class gen_postgresql::client {
+  if $lsbdistcodename == 'wheezy' {
+    package { 'postgresql-client':; }
+  } else {
+    fail('Only tested on Wheezy, check gen_postgresql::client.')
+  }
+}
+
 # Class: gen_postgresql::server
 #
 # Actions:
@@ -18,11 +30,12 @@ class gen_postgresql {
 #
 # Parameters:
 #  datadir: Location where to put the data files. Optional.
+#  version: The version of PostgreSQL we want to install
 #
 # Depends:
 #  gen_puppet
 #
-class gen_postgresql::server ($datadir=false, $version="8.4") {
+class gen_postgresql::server ($datadir=false, $version) {
   include gen_postgresql
   include gen_base::libpq5
 
@@ -30,7 +43,6 @@ class gen_postgresql::server ($datadir=false, $version="8.4") {
     exec { "Create datadir before we install PostgreSQL, if needed":
       command => "/bin/mkdir -p ${datadir}",
       creates => $datadir,
-      require => Package["postgresql-server"],
     }
 
     file {
@@ -42,12 +54,42 @@ class gen_postgresql::server ($datadir=false, $version="8.4") {
     }
   }
 
-  package { "postgresql-${version}":
-    require => $datadir ? {
-      false   => Package["libpq5"],
-      default => [Package["libpq5"],Exec["Create datadir before we install MySQL, if needed"]],
-    },
-    alias   => "postgresql-server";
+  if versioncmp($version,'8.4') == 0 {
+    # Not available in Wheezy
+    if $lsbdistcodename == 'wheezy' {
+      fail('Wheezy does not support PostgreSQL 8.4.')
+    }
+
+    package { "postgresql-${version}":
+      require => $datadir ? {
+        false   => Package["libpq5"],
+        default => [Package["libpq5"],Exec["Create datadir before we install PostgreSQL, if needed"]],
+      },
+      alias   => "postgresql-server";
+    }
+  } elsif versioncmp($version, '9.1') == 0 {
+    # Use backports on Squeeze
+    if $lsbdistcodename == 'squeeze' {
+      gen_apt::preference { ["postgresql-${version}","libpq5","postgresql-client-9.1","postgresql-common","postgresql-client-common"]:; }
+    }
+
+    package {
+      "postgresql-${version}":
+        require => $datadir ? {
+          false   => Package["libpq5"],
+          default => [Package["libpq5"],Exec["Create datadir before we install PostgreSQL, if needed"]],
+        },
+        alias   => "postgresql-server";
+      "postgresql-client-${version}":
+        require => Package["postgresql-common","postgresql-client-common"],
+        notify  => Package["postgresql-server"];
+      "postgresql-common":
+        require => Package["postgresql-client-common"],
+        notify  => Package["postgresql-server"];
+      "postgresql-client-common":;
+    }
+  } else {
+    fail("Unknown PostgreSQL version ${version}. Please check the puppet code in gen_postgresql.")
   }
 
   service { "postgresql":
