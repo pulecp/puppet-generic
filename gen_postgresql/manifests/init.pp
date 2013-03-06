@@ -43,6 +43,10 @@ class gen_postgresql::server ($datadir=false, $version=false) {
     }
   }
 
+  if ! $version {
+    fail('We require a version to be provided to gen_postgresql.')
+  }
+
   if $version and versioncmp($version,'8.4') == 0 {
     # Not available in Wheezy
     if $lsbdistcodename == 'wheezy' {
