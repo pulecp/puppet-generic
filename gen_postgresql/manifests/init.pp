@@ -31,7 +31,6 @@ class gen_postgresql::server ($datadir=false, $version=false) {
     exec { "Create datadir before we install PostgreSQL, if needed":
       command => "/bin/mkdir -p ${datadir}",
       creates => $datadir,
-      require => Package["postgresql-server"],
     }
 
     file {
