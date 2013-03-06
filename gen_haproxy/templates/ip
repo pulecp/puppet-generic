@@ -1,5 +1,7 @@
 listen <%= site %>:<%= ip %>:<%= port %> <%= ip %>:<%= port %>
+<% if remove_external_forwarded_for -%>
 	reqidel              ^X-Forwarded-For:.*
+<% end -%>
 <% if mode != 'http' -%>
 	mode                 <%= mode %>
 <% end -%>
