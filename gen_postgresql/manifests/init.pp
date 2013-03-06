@@ -47,7 +47,7 @@ class gen_postgresql::server ($datadir=false, $version=false) {
     fail('We require a version to be provided to gen_postgresql.')
   }
 
-  if $version and versioncmp($version,'8.4') == 0 {
+  if versioncmp($version,'8.4') == 0 {
     # Not available in Wheezy
     if $lsbdistcodename == 'wheezy' {
       fail('Wheezy does not support PostgreSQL 8.4.')
@@ -60,7 +60,7 @@ class gen_postgresql::server ($datadir=false, $version=false) {
       },
       alias   => "postgresql-server";
     }
-  } elsif $version and versioncmp($version, '9.1') == 0 {
+  } elsif versioncmp($version, '9.1') == 0 {
     # Use backports on Squeeze
     if $lsbdistcodename == 'squeeze' {
       gen_apt::preference { ["postgresql-${version}","libpq5","postgresql-client-9.1","postgresql-common","postgresql-client-common"]:; }
@@ -81,7 +81,7 @@ class gen_postgresql::server ($datadir=false, $version=false) {
         notify  => Package["postgresql-server"];
       "postgresql-client-common":;
     }
-  } elsif $version {
+  } else {
     fail("Unknown PostgreSQL version ${version}. Please check the puppet code in gen_postgresql.")
   }
 
