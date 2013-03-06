@@ -11,6 +11,18 @@
 class gen_postgresql {
 }
 
+# Class: gen_postgresql::client
+#
+# Actions: Setup required client packages.
+#
+class gen_postgresql::client {
+  if $lsbdistcodename == 'wheezy' {
+    package { 'postgresql-client':; }
+  } else {
+    fail('Only tested on Wheezy, check gen_postgresql::client.')
+  }
+}
+
 # Class: gen_postgresql::server
 #
 # Actions:
@@ -23,7 +35,7 @@ class gen_postgresql {
 # Depends:
 #  gen_puppet
 #
-class gen_postgresql::server ($datadir=false, $version=false) {
+class gen_postgresql::server ($datadir=false, $version) {
   include gen_postgresql
   include gen_base::libpq5
 
@@ -40,10 +52,6 @@ class gen_postgresql::server ($datadir=false, $version=false) {
         owner  => "postgres",
         group  => "postgres";
     }
-  }
-
-  if ! $version {
-    fail('We require a version to be provided to gen_postgresql.')
   }
 
   if versioncmp($version,'8.4') == 0 {
