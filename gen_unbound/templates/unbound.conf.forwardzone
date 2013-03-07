@@ -1,0 +1,18 @@
+forward-zone:
+	name: <%= name %>
+<% if forward_host -%>
+<% forward_host_a = []; forward_host_a << forward_host; forward_host_a.flatten! -%>
+<% forward_host_a.each do |host| -%>
+	forward-host: <%= host %>
+<% end -%>
+<% end -%>
+<% if forward_addr -%>
+<% forward_addr_a = []; forward_addr_a << forward_addr; forward_addr_a.flatten! -%>
+<% forward_addr_a.each do |addr| -%>
+	forward-addr: <%= addr %>
+<% end -%>
+<% end -%>
+<% if forward_first -%>
+	forward-first: yes
+<% end -%>
+

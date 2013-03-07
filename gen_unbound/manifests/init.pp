@@ -127,3 +127,24 @@ define gen_unbound::local_zone ($zonetype) {
     fail("\$zonetype ${zonetype} is not valid (read the unbound documentation).")
   }
 }
+
+#
+# Define: gen_unbound::forward_zone
+#
+# Actions:
+#  Configure a forward-zone
+#
+# Depends:
+#  gen_unbound
+#
+define gen_unbound::forward_zone ($forward_host=false, $forward_addr=false, $forward_first=false) {
+  if !($forward_host or $forward_addr) {
+    fail("Please provide at least one \$forward_host or \$forward_addr")
+  }
+
+  concat::add_content { "30 forwardzone ${name}":
+    target  => '/etc/unbound/unbound.conf',
+    content => template('gen_unbound/unbound.conf.forwardzone');
+  }
+}
+
