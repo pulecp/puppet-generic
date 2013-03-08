@@ -3,11 +3,11 @@
 # Class: p910nd::server
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class p910nd::server {
   package { "p910nd":; }
