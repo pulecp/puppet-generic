@@ -12,14 +12,17 @@
 class approx {
   package { "approx":; }
 
-  service  { "approx":
-    ensure => running,
-    hasstatus => $lsbdistcodename ? {
-      "lenny" => false,
-      default => true,
-    },
-    require => Package["approx"],
-    subscribe => File["/etc/approx/approx.conf"],
+  # As of wheezy, approx is run from inetd.
+  if $lsbdistcodename == 'lenny' or $lsbdistcodename == 'squeeze' {
+    service  { "approx":
+      ensure    => running,
+      hasstatus => $lsbdistcodename ? {
+        "lenny" => false,
+        default => true,
+      },
+      require   => Package["approx"],
+      subscribe => File["/etc/approx/approx.conf"],
+    }
   }
 
   file { "/etc/approx/approx.conf":
