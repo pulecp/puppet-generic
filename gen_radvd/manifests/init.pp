@@ -28,11 +28,15 @@ class gen_radvd {
 #   The interface the advertisment should be sent out on.
 #  prefix:
 #   The IPv6 prefix (in the form of 1:2:2:3::/64) to be announced on this interface
+#  rdnss:
+#   An (optional) array of recursive DNS servers that should be announced
+#  dnssl:
+#   An (optional) array of DNS search domains that should be announced
 #
 # Depends:
 #  gen_radvd
 #
-define gen_radvd::prefix ($interface, $prefix) {
+define gen_radvd::prefix ($interface, $prefix, $rdnss=false, $dnssl=false) {
   include gen_radvd
   concat::add_content { "radvd config for ${name}":
     content => template('gen_radvd/config'),

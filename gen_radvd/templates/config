@@ -1,5 +1,10 @@
 interface <%= interface %> {
   AdvSendAdvert on;
   prefix <%= prefix %> {};
+<% if rdnss -%>
+  RDNSS <%= rdnss_a = []; rdnss_a << rdnss; rdnss_a.flatten!; rdnss_a.join(' ') %> {};
+<% end -%>
+<% if dnssl -%>
+  DNSSL <%= dnssl_a = []; dnssl_a << dnssl; dnssl_a.flatten!; dnssl_a.join(' ') %> {};
+<% end -%>
 };
-
