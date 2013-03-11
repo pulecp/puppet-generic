@@ -80,6 +80,21 @@ class gen_base::arj {
   }
 }
 
+
+# Class: gen_base::aspell-nl
+#
+# Actions:
+#  Install aspell-nl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::aspell_nl {
+  package { "aspell-nl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libaugeas-ruby
 #
 # Actions:
@@ -471,6 +486,21 @@ class gen_base::libcurl3 {
 #
 class gen_base::libcurl3_gnutls {
   package { "libcurl3-gnutls":
+    ensure => latest;
+  }
+}
+
+
+# Class: gen_base::libenchant1c2a
+#
+# Actions:
+#  Install libenchant1c2a
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libenchant1c2a {
+  package { "libenchant1c2a":
     ensure => latest;
   }
 }
