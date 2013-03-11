@@ -844,6 +844,20 @@ class gen_base::libdate-manip-perl {
   }
 }
 
+# Class: gen_base::libdbd_pg_perl
+#
+# Actions:
+#  Install libdbd-pg-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libdbd_pg_perl {
+  package { "libdbd-pg-perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libdbi-perl
 #
 # Actions:
