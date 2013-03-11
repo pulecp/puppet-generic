@@ -93,6 +93,10 @@ class gen_base::aspell_nl {
   package { "aspell-nl":
     ensure => latest;
   }
+
+  Package <| title == 'dictionaries-common' |> {
+    ensure => latest,
+  }
 }
 
 # Class: gen_base::libaugeas-ruby
