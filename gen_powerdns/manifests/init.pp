@@ -8,7 +8,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_powerdns ($localaddress='0.0.0.0', $localport='53') {
+class gen_powerdns ($localaddress='0.0.0.0', $localaddress6=false, $localport='53') {
   kservice { 'pdns':
     package => 'pdns-server';
   }

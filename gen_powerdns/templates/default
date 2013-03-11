@@ -103,6 +103,9 @@ local-address=<%= localaddress %>
 # local-ipv6	Local IP address to which we bind
 #
 # local-ipv6=
+<% if localaddress6 -%>
+local-ip6=::1 <%= localaddress6 %>
+<% end -%>
 
 #################################
 # local-port	The port on which we listen
