@@ -1609,6 +1609,48 @@ class gen_base::mercurial {
   }
 }
 
+# Class: gen_base::mod_gearman_module
+#
+# Actions:
+#  Install mod-gearman-module
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::mod_gearman_module {
+  package { 'mod-gearman-module':
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::mod_gearman_worker
+#
+# Actions:
+#  Install mod-gearman-worker
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::mod_gearman_worker {
+  package { 'mod-gearman-worker':
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::mod_gearman_tools
+#
+# Actions:
+#  Install mod-gearman-tools
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::mod_gearman_tools {
+  package { 'mod-gearman-tools':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::module_init_tools
 #
 # Actions:
