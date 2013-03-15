@@ -878,6 +878,20 @@ class gen_base::libdate-manip-perl {
   }
 }
 
+# Class: gen_base::libdbd_pgsql
+#
+# Actions:
+#  Install libdbd-pgsql
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libdbd_pgsql {
+  package { 'libdbd-pgsql':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libdbd_pg_perl
 #
 # Actions:
