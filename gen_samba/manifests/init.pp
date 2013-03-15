@@ -6,8 +6,10 @@
 #
 # Parameters:
 #  bindaddress: The address to bind to. Can also be an interface name. Defaults to false, which makes it bind to everything.
+#  servername: The name of the server. Defaults to '$hostname'.
+#  workgroup: The name of the workgroup for this server. Defaults to 'KUMINA'.
 #
-class gen_samba::server ($bindaddress=false) {
+class gen_samba::server ($bindaddress=false, $servername=$hostname, $workgroup='KUMINA') {
   package { 'samba-common-bin':; }
 
   kservice { 'samba':; }
@@ -20,6 +22,7 @@ class gen_samba::server ($bindaddress=false) {
   concat::add_content { 'global_smb_config':
     target  => '/etc/samba/smb.conf',
     order   => 5,
+    notify  => Service['samba'],
     content => template('gen_samba/smb_global.conf');
   }
 }
@@ -30,6 +33,7 @@ class gen_samba::server ($bindaddress=false) {
 #
 class gen_samba::clean {
   $usernames = split($samba_users,'[;:]')
+
   gen_samba::clean_database { $usernames:; }
 }
 
@@ -96,9 +100,9 @@ define gen_samba::user ($ensure='present',$password) {
 #
 define gen_samba::clean_database {
   if ! defined(Gen_samba::User[$name]) {
-    gen_samba::user { $name:
-      ensure   => absent,
-      password => 'dummy';
+    exec { "Remove samba user for ${name}":
+      command => "/usr/bin/smbpasswd -x ${name}",
+      require => Package['samba-common-bin'];
     }
   }
 }
