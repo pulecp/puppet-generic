@@ -48,6 +48,7 @@ Puppet::Type.newtype(:postgresql_psql) do
 
   newparam(:db) do
     desc "The name of the database to execute the SQL command against."
+    defaultto("template1")
   end
 
   newparam(:psql_path) do

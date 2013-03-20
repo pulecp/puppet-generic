@@ -1,4 +1,8 @@
 # Author: Kumina bv <support@kumina.nl>
+#
+# A huge amount of logic and code is copied from Puppetlabs' puppet-postgresql module, so kudos to them!
+# https://github.com/puppetlabs/puppet-postgresql/
+#
 
 # Class: gen_postgresql::client
 #
@@ -80,7 +84,7 @@ class gen_postgresql::server ($datadir=false, $version) {
     fail("Unknown PostgreSQL version ${version}. Please check the puppet code in gen_postgresql.")
   }
 
-  service { "postgresql":
+  kservice { "postgresql":
     hasrestart => true,
     hasstatus  => true,
     require    => Package["postgresql-server"];
@@ -93,14 +97,17 @@ class gen_postgresql::server ($datadir=false, $version) {
   group { "postgres":
     require => Package["postgresql-server"];
   }
-
-  exec { "reload-postgresql":
-    command     => "/etc/init.d/postgresql reload",
-    refreshonly => true,
-    require     => Package["postgresql-server"];
-  }
 }
 
+# Define: gen_postgresql::server::db
+#
+# Actions: Create a PostgreSQL database, if it doesn't exist.
+#
+# Parameters:
+#  name: Name of the database.
+#  use_utf8: Use UTF8 encoding.
+#  owner: A specific user should be owner. An owner can create tables and everything without additional required permissions.
+#
 define gen_postgresql::server::db ($use_utf8=false, $owner=false) {
   if ! ($name in split($psql_dbs,';')) {
     # Encoding set to utf8
@@ -119,11 +126,32 @@ define gen_postgresql::server::db ($use_utf8=false, $owner=false) {
   }
 }
 
+# Define: gen_postgresql::server::user
+#
+# Actions: Create a PostgreSQL user, if it doesn't exist.
+#
+# Parameters:
+#  name: Name of the user.
+#  password: The password for this user.
+#
 define gen_postgresql::server::user (password) {
   if ! ($name in split($psql_users,';')) {
-    exec { "Create user ${name} in PostgreSQL":
-      command => "/usr/bin/sudo -u postgres /usr/bin/psql -c \"CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;\"",
-      require => Package["postgresql-server"],
-    }
+    postgresql_psql { "CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN":; }
   }
+}
+
+# Define: gen_postgresql::server::grant_on_database
+#
+# Actions: Setup permissions on a database (schema) for a specific user that's not the owner.
+#
+# Parameters:
+#  name: Something unique, but it's not used anywhere.
+#  user: The user this change should be about.
+#  db: The database this change should be about.
+#  permissions: The permissions to grant to the user on this database. Can be one of 'CREATE', 'CONNECT', 'TEMPORARY' or 'TEMP' (alias for 'TEMPORARY'). Can be multiple,
+#               if you delimit them with spaces.
+#
+define gen_postgresql::server::grant_on_database () {
+  # XXX
+  fail('Not yet implemented.')
 }
