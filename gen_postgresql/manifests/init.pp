@@ -1,16 +1,5 @@
 # Author: Kumina bv <support@kumina.nl>
 
-# Class: gen_postgresql
-#
-# Actions:
-#  Stuff.
-#
-# Depends:
-#  gen_puppet
-#
-class gen_postgresql {
-}
-
 # Class: gen_postgresql::client
 #
 # Actions: Setup required client packages.
@@ -36,7 +25,6 @@ class gen_postgresql::client {
 #  gen_puppet
 #
 class gen_postgresql::server ($datadir=false, $version) {
-  include gen_postgresql
   include gen_base::libpq5
 
   if $datadir {
