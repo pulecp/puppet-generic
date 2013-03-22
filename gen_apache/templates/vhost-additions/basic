@@ -6,11 +6,7 @@ ServerAlias <%= sa %>
 <% end -%>
 <% end -%>
 
-<% if log_vhost -%>
-CustomLog    /var/log/apache2/<%= real_name %>-access.log vhostcombined
-<% else -%>
 CustomLog    /var/log/apache2/<%= real_name %>-access.log <%= access_logformat %>
-<% end -%>
 ErrorLog     /var/log/apache2/<%= real_name %>-error.log
 <% if documentroot -%>
 DocumentRoot <%= documentroot %>

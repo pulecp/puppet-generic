@@ -81,7 +81,7 @@ class gen_apache::jk {
   package { 'libapache2-mod-jk':; }
 }
 
-define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $address='*', $address6='::', $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false, $log_vhost=false,
+define gen_apache::site($ensure="present", $serveralias=false, $documentroot="/var/www", $address='*', $address6='::', $make_default=false, $ssl=false, $key=false, $cert=false, $intermediate=false, $wildcard=false,
     $redirect_non_ssl=true, $access_logformat="combined") {
   if $address == $ipaddress {
     fail("${name} has been set specifically to the base IP address, this will cause problems due to * sites being picked up by this vhost as well as it is more specific.")
