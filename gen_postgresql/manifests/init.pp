@@ -136,7 +136,8 @@ define gen_postgresql::server::db ($use_utf8=false, $owner=false) {
 #
 define gen_postgresql::server::user (password) {
   if ! ($name in split($psql_users,';')) {
-    postgresql_psql { "CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN":; }
+    #postgresql_psql { "CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN":; }
+    debug("CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN")
   }
 }
 
