@@ -6,7 +6,7 @@
 #  Install the mod_spdy package from Google for Apache. Installing will automatically enable it.
 #
 class gen_apache_mod_spdy {
-  gen_apt::source { 'mod_spdy':
+  gen_apt::source { 'mod-spdy':
     uri => 'http://dl.google.com/linux/mod-spdy/deb/',
     components => 'main';
   }
