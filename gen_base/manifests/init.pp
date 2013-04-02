@@ -312,6 +312,22 @@ class gen_base::file {
   }
 }
 
+# Class: gen_base::firmware_realtek
+#
+# Actions:
+#  Install firmware for realtek stuff
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::firmware_realtek {
+  if versioncmp($lsbmajdistrelease, '5') > 0 {
+    package { "firmware-realtek":
+      ensure => latest;
+    }
+  }
+}
+
 # Class: gen_base::funkload
 #
 # Actions:
