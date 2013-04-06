@@ -2599,6 +2599,20 @@ class gen_base::realpath {
   }
 }
 
+# Class: gen_base::reportbug
+#
+# Actions:
+#  Install reportbug
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::reportbug {
+  package { "reportbug":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::reprepro
 #
 # Actions:
