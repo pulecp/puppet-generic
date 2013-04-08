@@ -2501,6 +2501,20 @@ class gen_base::python_reportlab {
   }
 }
 
+# Class: gen_base::python-unbound
+#
+# Actions:
+#  Install python-unbound
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-unbound {
+  package { "python-unbound":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-setuptools
 #
 # Actions:
@@ -2791,6 +2805,20 @@ class gen_base::ttf_mscorefonts_installer {
 #
 class gen_base::ucarp {
   package { "ucarp":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::unbound-anchor
+#
+# Actions:
+#  Install unbound-anchor
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::unbound-anchor {
+  package { "unbound-anchor":
     ensure => latest;
   }
 }
