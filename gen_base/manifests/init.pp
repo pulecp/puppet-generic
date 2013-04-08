@@ -2068,9 +2068,10 @@ class gen_base::php5_mcrypt {
 #  gen_puppet
 #
 class gen_base::php5_mysql {
-  package { "php5-mysql":
-    ensure => latest;
-  }
+  # We got this setup already in it's own class.
+  include gen_php5::mysql
+  # Warn about this
+  notify { 'This server includes gen_base::php5_mysql, this should change to gen_php5::mysql.':; }
 }
 
 # Class: gen_base::php5_recode
