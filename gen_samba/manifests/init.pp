@@ -79,7 +79,7 @@ define gen_samba::user ($ensure='present',$password) {
   } elsif $ensure == 'absent' {
     if $name in split($samba_users,'[;:]') {
       exec { "Remove samba user for ${name}":
-        command => "/usr/bin/smbpasswd -x ${name}",
+        command => "/usr/bin/pdbedit -x -u ${name}",
         require => Package['samba-common-bin'];
       }
     }
