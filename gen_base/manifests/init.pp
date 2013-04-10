@@ -2679,8 +2679,12 @@ class gen_base::ruby_stomp {
 #  gen_puppet
 #
 class gen_base::scponly {
-  package { "scponly":
-    ensure => latest;
+  if versioncmp($lsbmajdistrelease, '6') > 0 {
+    debug('Scponly has been removed from Wheezy.')
+  } else {
+    package { "scponly":
+      ensure => latest;
+    }
   }
 }
 
