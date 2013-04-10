@@ -29,6 +29,7 @@ class gen_newrelic ($key) {
   file { '/etc/newrelic/nrsysmond.cfg':
     content => template('gen_newrelic/nrsysmond.cfg'),
     require => Package['newrelic-sysmond'],
+    notify  => Service['newrelic-sysmond'];
   }
 
   service { 'newrelic-sysmond':
