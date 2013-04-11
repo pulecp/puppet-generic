@@ -2228,6 +2228,20 @@ class gen_base::python-carrot {
   }
 }
 
+# Class: gen_base::python_cheetah
+#
+# Actions:
+#  Install python-cheetah
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_cheetah {
+  package { 'python-cheetah':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_dev
 #
 # Actions:
