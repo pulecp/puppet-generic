@@ -35,12 +35,21 @@
 #  gen_tomcat::manager
 #
 class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
-                  $java_home="/usr/lib/jvm/java-6-openjdk/", $java_opts="", $jvm_max_mem=false, $jvm_permgen_mem=false,
+                  $java_home=false, $java_opts="", $jvm_max_mem=false, $jvm_permgen_mem=false,
                   $tomcat_tag="tomcat_${environment}",$ajp13_maxclients='200', $max_open_files=false) {
   class { 'gen_tomcat::manager':
     tomcat_tag => $tomcat_tag;
   }
   include gen_base::openjdk-6-jre
+
+  if ! $java_home {
+    case $lsbdistcodename {
+      'wheezy':  { $real_java_home = "/usr/lib/jvm/java-6-openjdk-${architecture}" }
+      default: { $real_java_home = '/usr/lib/jvm/java-6-openjdk/' }
+    }
+  } else {
+    $real_java_home = $java_home
+  }
 
   if $max_open_files {
     $real_max_open_files = $max_open_files
