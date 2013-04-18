@@ -426,8 +426,16 @@ class gen_base::ifenslave-2_6 {
 #
 class gen_base::imagemagick {
   include gen_base::libtiff4
-  include gen_base::libmagickwand3
-  include gen_base::libmagickcore3
+  case $lsbdistcodename {
+    'wheezy': {
+      include gen_base::libmagickwand5
+      include gen_base::libmagickcore5
+    }
+    default: {
+      include gen_base::libmagickwand3
+      include gen_base::libmagickcore3
+    }
+  }
 
   package { "imagemagick":
     ensure => latest;
@@ -607,6 +615,34 @@ class gen_base::libmagickcore3 {
 #
 class gen_base::libmagickwand3 {
   package { "libmagickwand3":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libmagickcore5
+#
+# Actions:
+#  Install libmagickcore5
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libmagickcore5 {
+  package { "libmagickcore5":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libmagickwand5
+#
+# Actions:
+#  Install libmagickwand5
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libmagickwand5 {
+  package { "libmagickwand5":
     ensure => latest;
   }
 }
