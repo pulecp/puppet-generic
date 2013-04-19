@@ -40,7 +40,7 @@ class gen_icinga::server {
       ensure  => directory,
       owner   => "nagios",
       group   => "www-data",
-      mode    => 760,
+      mode    => 770,
       require => Package["icinga"];
     "/var/lib/icinga/rw/icinga.cmd":
       owner   => "nagios",
