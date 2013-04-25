@@ -36,7 +36,7 @@
 #
 class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
                   $java_home=false, $java_opts="", $jvm_max_mem=false, $jvm_permgen_mem=false,
-                  $tomcat_tag="tomcat_${environment}",$ajp13_maxclients='200', $max_open_files=false) {
+                  $tomcat_tag="tomcat_${environment}",$ajp13_maxclients='200', $max_open_files=false, $autodeploy=false) {
   class { 'gen_tomcat::manager':
     tomcat_tag => $tomcat_tag;
   }
