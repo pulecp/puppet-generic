@@ -5,7 +5,7 @@ if File.exists?('/usr/bin/apt-get')
   fact = ''
   Facter.add('upgrades_available') { setcode { packages.size } }
   packages.each do |pkg|
-    fact += "|#{pkg[0]}|#{pkg[1]}|#{pkg[2]};"
+    fact += "#{pkg[0]}||#{pkg[1]}|#{pkg[2]};"
   end
   Facter.add('upgrades_available_packages') { setcode { fact.chomp(';') } }
 end
