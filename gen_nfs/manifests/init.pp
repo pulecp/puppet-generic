@@ -77,21 +77,6 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd
     $rpcnfsdpriority="0", $rpcsvcgssdopts="", $failover_ip=false) {
   include gen_nfs
 
-#  Service <| title == "portmap" |> {
-#    enable => true,
-#    ensure => "running",
-#    notify => Service["nfs-common"],
-#  }
-
-#  Service <| title == "nfs-common" |> {
-#    enable => true,
-#    ensure => "running",
-#    notify => $failover_ip ? {
-#      false => Service["nfs-kernel-server"],
-#      default => Exec["reload-nfsd"],
-#    },
-#  }
-
   if $failover_ip {
     kservice { "nfs-kernel-server":
       enable  => false,
@@ -126,7 +111,7 @@ class gen_nfs::server ($rpcmountdopts, $statdopts, $need_gssd="no", $need_idmapd
 
   # The lock daemon is a kernel internal thingy, we need to actually set the kernel module options.
   if $lock_port {
-    file { "/etc/modprobe.d/lock":
+    file { "/etc/modprobe.d/lock.conf":
       content => "options lockd nlm_udpport=${lock_port} nlm_tcpport=${lock_port}\n";
     }
   }
