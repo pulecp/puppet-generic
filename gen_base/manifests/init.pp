@@ -2250,6 +2250,20 @@ class gen_base::python-argparse {
   }
 }
 
+# Class: gen_base::python_django_auth_ldap
+#
+# Actions:
+#  Install python-django-auth-ldap
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_django_auth_ldap {
+  package { "python-django-auth-ldap":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-carrot
 #
 # Actions:
