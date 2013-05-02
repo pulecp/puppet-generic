@@ -2608,6 +2608,34 @@ class gen_base::python_virtualenv {
   }
 }
 
+# Class: gen_base::python_xlwt
+#
+# Actions:
+#  Install python-xlwt
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_xlwt {
+  package { "python-xlwt":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python_xlrd
+#
+# Actions:
+#  Install python-xlrd
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_xlrd {
+  package { "python-xlrd":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::pyzor
 #
 # Actions:
