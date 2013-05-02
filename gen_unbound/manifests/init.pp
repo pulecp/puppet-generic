@@ -148,3 +148,67 @@ define gen_unbound::forward_zone ($forward_host=false, $forward_addr=false, $for
   }
 }
 
+#
+# Define: gen_unbound::reverse_1918_stub
+#
+# Action:
+#  Create a stub-zone AND a local-zone for $name
+#
+# Parameters:
+#  See gen_unbound::stub_zone
+#
+define gen_unbound::reverse_1918_stub ($stub_host=false, $stub_addr=false, $stub_prime=false, $stub_first=false) {
+  gen_unbound::local_zone { $name:
+    zonetype => 'transparent';
+  }
+
+  gen_unbound::stub_zone { $name:
+    stub_host  => $stub_host,
+    stub_addr  => $stub_addr,
+    stub_prime => $stub_prime,
+    stub_first => $stub_first;
+  }
+}
+
+#
+# Class: gen_unbound::all_1918_zones_local
+#
+# Actions:
+#  Mark ALL RFC1918 zones as local-zones and mark them insecure
+#  This is handy when you're forwarding all queries to another resolver that contains (parts) of these zones
+#
+# Depends:
+#  gen_unbound
+#
+class gen_unbound::all_1918_zones_local {
+  gen_unbound::local_zone { ['10.in-addr.arpa','16.172.in-addr.arpa', '17.172.in-addr.arpa', '18.172.in-addr.arpa',
+                            '19.172.in-addr.arpa', '20.172.in-addr.arpa', '21.172.in-addr.arpa', '22.172.in-addr.arpa',
+                            '23.172.in-addr.arpa', '24.172.in-addr.arpa', '25.172.in-addr.arpa', '26.172.in-addr.arpa',
+                            '27.172.in-addr.arpa', '28.172.in-addr.arpa', '29.172.in-addr.arpa', '30.172.in-addr.arpa',
+                            '31.172.in-addr.arpa', '168.192.in-addr.arpa']:
+    zonetype => 'transparent';
+  }
+
+  gen_unbound::domain_insecure { ['10.in-addr.arpa','16.172.in-addr.arpa', '17.172.in-addr.arpa', '18.172.in-addr.arpa',
+                                 '19.172.in-addr.arpa', '20.172.in-addr.arpa', '21.172.in-addr.arpa', '22.172.in-addr.arpa',
+                                 '23.172.in-addr.arpa', '24.172.in-addr.arpa', '25.172.in-addr.arpa', '26.172.in-addr.arpa',
+                                 '27.172.in-addr.arpa', '28.172.in-addr.arpa', '29.172.in-addr.arpa', '30.172.in-addr.arpa',
+                                 '31.172.in-addr.arpa', '168.192.in-addr.arpa']:;
+  }
+}
+
+#
+# Define: gen_unbound::domain_insecure
+#
+# Action:
+#  Set domain $name as always insecure (ignore all DNSSEC information of this domain)
+#
+# Depends:
+#  gen_unbound
+#
+define gen_unbound::domain_insecure {
+  concat::add_content { "18 domain-insecure ${name}":
+    target  => '/etc/unbound/unbound.conf',
+    content => "domain-insecure: ${name}\n";
+  }
+}
