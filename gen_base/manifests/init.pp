@@ -360,6 +360,34 @@ class gen_base::genisoimage {
   }
 }
 
+# Class: gen_base::graphicsmagick
+#
+# Actions:
+#  Install graphicsmagick
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::graphicsmagick {
+  package { "graphicsmagick":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::ghostscript
+#
+# Actions:
+#  Install ghostscript
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ghostscript {
+  package { "ghostscript":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::graphviz
 #
 # Actions:
