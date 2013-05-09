@@ -38,6 +38,8 @@ class gen_base::ant {
 #
 class gen_base::apache2_mpm_prefork {
   package { "apache2-mpm-prefork":; }
+
+  kbp_icinga::debsums { 'apache2-mpm-prefork':; }
 }
 
 # Class: gen_base::apache2_mpm_worker
@@ -50,6 +52,8 @@ class gen_base::apache2_mpm_prefork {
 #
 class gen_base::apache2_mpm_worker {
   package { "apache2-mpm-worker":; }
+
+  kbp_icinga::debsums { 'apache2-mpm-worker':; }
 }
 
 # Class: gen_base::archive_pmacct_data
@@ -772,6 +776,8 @@ class gen_base::libapache2-mod-auth-mysql {
     ensure => latest,
     notify => Exec["reload-apache2"];
   }
+
+  kbp_icinga::debsums { 'libapache2-mod-auth-mysql':; }
 }
 
 # Class: gen_base::libapache2-mod-fastcgi
@@ -787,6 +793,8 @@ class gen_base::libapache2-mod-fastcgi {
     ensure => latest,
     notify => Exec["reload-apache2"];
   }
+
+  kbp_icinga::debsums { 'libapache2-mod-fastcgi':; }
 }
 
 # Class: gen_base::libapache2-mod-fcgid
@@ -802,6 +810,8 @@ class gen_base::libapache2-mod-fcgid {
     ensure => latest,
     notify => Exec["reload-apache2"];
   }
+
+  kbp_icinga::debsums { 'libapache2-mod-fcgid':; }
 }
 
 # Class: gen_base::libapache2-mod-passenger
@@ -816,6 +826,8 @@ class gen_base::libapache2-mod-passenger {
   package { "libapache2-mod-passenger":
     ensure => latest;
   }
+
+  kbp_icinga::debsums { 'libapache2-mod-passenger':; }
 }
 
 # Class: gen_base::libapache2_mod_php5
@@ -830,6 +842,8 @@ class gen_base::libapache2_mod_php5 {
   package { "libapache2-mod-php5":
     ensure => latest;
   }
+
+  kbp_icinga::debsums { 'libapache2-mod-php5':; }
 }
 
 # Class: gen_base::libapache2-mod-perl2
@@ -844,6 +858,8 @@ class gen_base::libapache2-mod-perl2 {
   package { "libapache2-mod-perl2":
     ensure => latest;
   }
+
+  kbp_icinga::debsums { 'libapache2-mod-perl2':; }
 }
 
 # Class: gen_base::libapache2-mod-wsgi
@@ -858,6 +874,8 @@ class gen_base::libapache2-mod-wsgi {
   package { "libapache2-mod-wsgi":
     ensure => latest;
   }
+
+  kbp_icinga::debsums { 'libapache2-mod-wsgi':; }
 }
 
 # Class: gen_base::libapr1
