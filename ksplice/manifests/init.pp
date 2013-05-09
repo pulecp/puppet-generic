@@ -49,12 +49,14 @@ class ksplice($ensure='present') {
     };
   }
 
-  # Install the ksplice additional apps (includes nagios plugins)
-  package { "python-ksplice-uptrack":
-    ensure => $ensure ? {
-      'present' => 'latest',
-      default   => 'absent',
-    };
+  if $lsbdistcodename == 'squeeze' {
+    # Install the ksplice additional apps (includes nagios plugins)
+    package { "python-ksplice-uptrack":
+      ensure => $ensure ? {
+        'present' => 'latest',
+        default   => 'absent',
+      };
+    }
   }
 
   # Run the script when it's first installed
