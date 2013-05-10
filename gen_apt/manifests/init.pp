@@ -42,7 +42,7 @@ class gen_apt {
       ensure => directory;
     # Increase the available cachesize
     "/etc/apt/apt.conf.d/50cachesize":
-      content => "APT::Cache-Limit \"33554432\";\n",
+      content => "APT::Cache-Limit \"67108864\";\n",
       notify  => Exec["/usr/bin/apt-get update"];
   }
 
