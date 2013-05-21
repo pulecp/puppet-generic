@@ -2067,6 +2067,22 @@ class gen_base::openjdk-6-jre {
   }
 }
 
+# Class: gen_base::openjdk-7-jre
+#
+# Actions:
+#  Install openjdk-7-jre
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::openjdk-7-jre {
+  include gen_base::libtiff4
+
+  package { "openjdk-7-jre":
+    ensure => installed;
+  }
+}
+
 # Class: gen_base::perl
 #
 # Actions:
