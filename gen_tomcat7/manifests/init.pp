@@ -483,7 +483,6 @@ define gen_tomcat7::user ($username=$name, $password, $role, $tomcat_tag="tomcat
     content    => "<user username=\"${username}\" password=\"${password}\" roles=\"${role}\"/>",
     target     => "/srv/tomcat/conf/tomcat-users.xml",
     order      => 15,
-    exported   => true,
     contenttag => "${tomcat_tag}_user",
     require    => [Gen_tomcat7::Role[$role], File["/srv/tomcat/conf"]];
   }
