@@ -507,7 +507,6 @@ define gen_tomcat7::role ($role=$name, $tomcat_tag="tomcat_${environment}_${cust
     content    => "<role rolename=\"${role}\"/>",
     target     => "/srv/tomcat/conf/tomcat-users.xml",
     order      => 11,
-    exported   => true,
     contenttag => "${tomcat_tag}_user";
   }
 }
