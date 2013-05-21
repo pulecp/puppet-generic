@@ -198,9 +198,9 @@ class gen_tomcat7::manager ($tomcat_tag="tomcat_${environment}_${custenv}") {
 
   gen_tomcat7::valve {
     "manager: org.apache.catalina.valves.RemoteHostValve":
-      allow => "localhost,127.0.0.1";
+      allow => "localhost,127.0.0.1,${ipaddress}";
     "host-manager: org.apache.catalina.valves.RemoteHostValve":
-      allow => "localhost,127.0.0.1";
+      allow => "localhost,127.0.0.1,${ipaddress}";
   }
 
   gen_tomcat7::user { "manager":
