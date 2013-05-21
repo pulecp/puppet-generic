@@ -32,7 +32,7 @@
 # Depends:
 #  gen_puppet
 #  gen_base::openjdk-7-jre
-#  gen_tomcat::manager
+#  gen_tomcat7::manager
 #
 class gen_tomcat7($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
                   $java_home=false, $java_opts="", $jvm_max_mem=false, $jvm_permgen_mem=false,
@@ -70,7 +70,8 @@ class gen_tomcat7($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 
   kservice { "tomcat7":
     hasreload => false,
-    require   => [File["/srv/tomcat"],Package['tomcat6']];
+    srequire  => File[$catalina_base],
+    require   => Package['tomcat6'];
   }
 
   package { 'tomcat6':
@@ -82,38 +83,39 @@ class gen_tomcat7($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
     "tomcat-users top":
       content => "<?xml version='1.0' encoding='utf-8'?>\n<tomcat-users>",
       order   => 10,
-      target  => "/srv/tomcat/conf/tomcat-users.xml";
+      target  => "${catalina_base}/conf/tomcat-users.xml";
     "tomcat-users bottom":
       content => "</tomcat-users>",
       order   => 20,
-      target  => "/srv/tomcat/conf/tomcat-users.xml";
+      target  => "${catalina_base}/conf/tomcat-users.xml";
   }
 
   # Create the actual tomcat-users.xml file
-  concat { "/srv/tomcat/conf/tomcat-users.xml":
-    require => File["/srv/tomcat/conf"];
+  concat { "${catalina_base}/conf/tomcat-users.xml":
+    require => File["${catalina_base}/conf"];
   }
 
   file {
-    "/srv/tomcat":
-      ensure  => directory;
-    ["/srv/tomcat/webapps",
-     "/srv/tomcat/webapps/ROOT",
-     "/srv/tomcat/lib"]:
+    $catalina_base:
+      ensure  => directory,
+      require => Package["tomcat7"];
+    ["${catalina_base}/webapps",
+     "${catalina_base}/webapps/ROOT",
+     "${catalina_base}/lib"]:
       ensure  => directory,
       owner   => "tomcat7",
       group   => "tomcat7",
       mode    => 775,
       require => Package["tomcat7"];
-    "/srv/tomcat/conf":
+    "${catalina_base}/conf":
       ensure  => link,
       target  => "/etc/tomcat7",
       require => Package["tomcat7"];
-    "/srv/tomcat/logs":
+    "${catalina_base}/logs":
       ensure  => link,
       target  => "/var/log/tomcat7",
       require => Package["tomcat7"];
-    "/srv/tomcat/work":
+    "${catalina_base}/work":
       ensure  => link,
       target  => "/var/cache/tomcat7",
       require => Package["tomcat7"];
@@ -137,39 +139,40 @@ class gen_tomcat7($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
 #  gen_puppet
 #  gen_tomcat
 #
-class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}_${custenv}") {
+class gen_tomcat7::manager ($tomcat_tag="tomcat_${environment}_${custenv}") {
   package { "tomcat7-admin":
-  #  notify => Exec["remove-tomcatmanagerxml"];
+    require => Package['tomcat7'],
+    notify  => Exec["remove-tomcatmanagerxml"];
   }
 
   # This is a workaround for a bug in Augeas' xml lens that causes it to fail
   # on XML <elements/> like this one (<elements></elements> is fine);
   # The "tomcat7-admin" package includes files with this faulty XML tag.
-  #exec { "remove-tomcatmanagerxml":
-  #  command     => "/bin/rm -f /etc/tomcat6/Catalina/localhost/manager.xml /etc/tomcat6/Catalina/localhost/host-manager.xml",
-  #  refreshonly => true,
-  #  notify      => [File["/etc/tomcat6/Catalina/localhost/manager.xml"],File["/etc/tomcat6/Catalina/localhost/host-manager.xml"]],
-  #  require     => Package["tomcat6-admin"];
-  #}
+  exec { "remove-tomcatmanagerxml":
+    command     => "/bin/rm -f /etc/tomcat7/Catalina/localhost/manager.xml /etc/tomcat7/Catalina/localhost/host-manager.xml",
+    refreshonly => true,
+    notify      => [File["/etc/tomcat7/Catalina/localhost/manager.xml"],File["/etc/tomcat7/Catalina/localhost/host-manager.xml"]],
+    require     => Package["tomcat7-admin"];
+  }
 
-  #file {
-  #  "/etc/tomcat6/Catalina/localhost/manager.xml":
-  #    content => template("gen_tomcat/manager.xml"),
-  #    replace => false,
-  #    owner   => "tomcat6",
-  #    group   => "tomcat6",
-  #    mode    => 0664,
-  #    require => Package["tomcat6-admin"],
-  #    notify  => Gen_tomcat::Context["manager"];
-  #  "/etc/tomcat6/Catalina/localhost/host-manager.xml":
-  #    content => template("gen_tomcat/host-manager.xml"),
-  #    replace => false,
-  #    owner   => "tomcat6",
-  #    group   => "tomcat6",
-  #    mode    => 0664,
-  #    require => Package["tomcat6-admin"],
-  #    notify  => Gen_tomcat::Context["host-manager"];
-  #}
+  file {
+    "/etc/tomcat7/Catalina/localhost/manager.xml":
+      content => template("gen_tomcat7/manager.xml"),
+      replace => false,
+      owner   => "tomcat7",
+      group   => "tomcat7",
+      mode    => 0664,
+      require => Package["tomcat7-admin"],
+      notify  => Gen_tomcat7::Context["manager"];
+    "/etc/tomcat7/Catalina/localhost/host-manager.xml":
+      content => template("gen_tomcat7/host-manager.xml"),
+      replace => false,
+      owner   => "tomcat7",
+      group   => "tomcat7",
+      mode    => 0664,
+      require => Package["tomcat7-admin"],
+      notify  => Gen_tomcat7::Context["host-manager"];
+  }
 
   gen_tomcat7::context {
     "manager":
@@ -465,7 +468,7 @@ define gen_tomcat7::datasource($username, $password, $url, $context = false, $ma
 #  password
 #    The password for this user, plain text.
 #  role
-#    The role of this user. The role should be added with gen_tomcat::role.
+#    The role of this user. The role should be added with gen_tomcat7::role.
 #  tomcat_tag
 #    The tag to use for the created resource.
 #
@@ -482,7 +485,7 @@ define gen_tomcat7::user ($username=$name, $password, $role, $tomcat_tag="tomcat
     order      => 15,
     exported   => true,
     contenttag => "${tomcat_tag}_user",
-    require    => [Gen_tomcat::Role[$role], File["/srv/tomcat/conf"]];
+    require    => [Gen_tomcat7::Role[$role], File["/srv/tomcat/conf"]];
   }
 }
 

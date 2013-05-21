@@ -15,8 +15,7 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 -->
-<Context path="/manager" 
-	docBase="/usr/share/tomcat6-admin/manager" 
+<Context path="/manager"
+	docBase="/usr/share/tomcat7-admin/manager"
 	antiResourceLocking="false" privileged="true">
-<Valve className="org.apache.catalina.valves.RemoteHostValve" allow="localhost,127.0.0.1"></Valve>
 </Context>
