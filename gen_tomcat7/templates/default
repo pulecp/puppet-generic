@@ -1,10 +1,10 @@
 # Run Tomcat as this user ID. Not setting this or leaving it blank will use the
-# default of tomcat6.
-TOMCAT6_USER=tomcat6
+# default of tomcat7.
+TOMCAT7_USER=tomcat7
 
 # Run Tomcat as this group ID. Not setting this or leaving it blank will use
-# the default of tomcat6.
-TOMCAT6_GROUP=tomcat6
+# the default of tomcat7.
+TOMCAT7_GROUP=tomcat7
 
 # The home directory of the Java development kit (JDK). You need at least
 # JDK version 1.5. If JAVA_HOME is not set, some common directories for
@@ -29,14 +29,14 @@ JAVA_OPTS="-server -Djava.awt.headless=true -Xmx<%= jvm_mem %>m -XX:+UseConcMark
 #JSP_COMPILER=javac
 
 # Use the Java security manager? (yes/no, default: no)
-#TOMCAT6_SECURITY=no
+#TOMCAT7_SECURITY=no
 
-# Number of days to keep logfiles in /var/log/tomcat6. Default is 14 days.
+# Number of days to keep logfiles in /var/log/tomcat7. Default is 14 days.
 #LOGFILE_DAYS=14
 
 # Location of the JVM temporary directory
 # WARNING: This directory will be destroyed and recreated at every startup !
-#JVM_TMP=/tmp/tomcat6-temp
+#JVM_TMP=/tmp/tomcat7-temp
 
 # If you run Tomcat on port numbers that are all higher than 1023, then you
 # do not need authbind.  It is used for binding Tomcat to lower port numbers.

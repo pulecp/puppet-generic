@@ -119,10 +119,10 @@ class gen_tomcat7($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
       ensure  => link,
       target  => "/var/cache/tomcat7",
       require => Package["tomcat7"];
-    #"/etc/default/tomcat7":
-    #  content => template("gen_tomcat/default"),
-    #  require => Package["tomcat7"],
-    #  notify  => Service["tomcat7"];
+    "/etc/default/tomcat7":
+      content => template("gen_tomcat7/default"),
+      require => Package["tomcat7"],
+      notify  => Service["tomcat7"];
     #"/etc/tomcat7/server.xml":
     #  content => template("gen_tomcat/server.xml"),
     #  require => Package["tomcat7"];
