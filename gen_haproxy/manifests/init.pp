@@ -80,8 +80,8 @@ define gen_haproxy::site($site, $mode="http", $balance="static-rr", $timeout_con
   $ip        = regsubst($name, '(.*)_.*', '\1')
   $temp_port = regsubst($name, '.*_(.*)', '\1')
   $port      = $temp_port ? {
-    $real_name => 80,
-    default    => $temp_port,
+    $name   => 80,
+    default => $temp_port,
   }
 
   concat::add_content { "site_${name}_1_ip":
