@@ -3,11 +3,11 @@
 # Class: subversion
 #
 # Actions:
-#	Undocumented
+#  Undocumented
 #
 # Depends:
-#	Undocumented
-#	gen_puppet
+#  Undocumented
+#  gen_puppet
 #
 class subversion {
   package { "subversion":
