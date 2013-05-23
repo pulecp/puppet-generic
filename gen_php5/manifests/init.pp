@@ -191,8 +191,15 @@ class gen_php5::memcache {
 #  gen_puppet
 #
 class gen_php5::smarty {
-  package { "smarty":
-    ensure => latest,
+  if $lsbdistcodename == 'wheezy' {
+    package { "smarty3":
+      alias  => 'smarty',
+      ensure => latest,
+    }
+  } else {
+    package { "smarty":
+      ensure => latest,
+    }
   }
 }
 
