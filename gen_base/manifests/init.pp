@@ -429,8 +429,12 @@ class gen_base::htop {
 #  gen_puppet
 #
 class gen_base::ia32-libs {
-  package { "ia32-libs":
-    ensure => latest;
+  if $lsbmajdistrelease < 7 {
+    package { "ia32-libs":
+      ensure => latest;
+    }
+  } else {
+    notify { 'ia32-libs no longer exists since Wheezy':; }
   }
 }
 
