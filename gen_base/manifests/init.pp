@@ -2561,6 +2561,20 @@ class gen_base::python_mysqldb {
   }
 }
 
+# Class: gen_base::python_numpy
+#
+# Actions:
+#  Install python-numpy
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_numpy {
+  package { "python-numpy":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_psycopg2
 #
 # Actions:
