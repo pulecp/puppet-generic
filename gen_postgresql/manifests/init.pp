@@ -137,7 +137,7 @@ define gen_postgresql::server::db ($use_utf8=false, $owner=false) {
 define gen_postgresql::server::user (password) {
   if ! ($name in split($psql_users,';')) {
     exec { "Create user ${name} in PostgreSQL":
-      command => "/usr/bin/sudo -u postgres psql -c \"CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;\"",
+      command => "/bin/su -u postgres -c '/usr/bin/psql -c \"CREATE USER ${name} WITH PASSWORD '${password}' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;\"'",
       require => Package["postgresql-server"];
     }
     # This doesn't execute for some reason...
