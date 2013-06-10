@@ -60,3 +60,29 @@ class gen_java::oracle_java7_jre_crypto_policy {
       require => Package["oracle-java7-jre"];
   }
 }
+
+class gen_java::openjdk_7_jdk {
+  include gen_java::openjdk_7_jre
+
+  package { "openjdk-7-jdk":; }
+}
+
+class gen_java::openjdk_7_jre {
+  package { "openjdk-7-jre":; }
+}
+
+# Class: gen_java::openjdk_7_jre_crypto_policy
+#
+# Action:
+#  Install strong crypto libraries for java
+#
+class gen_java::openjdk_7_jre_crypto_policy {
+  file {
+    "/usr/lib/jvm/java-7-oracle/jre/lib/security/US_export_policy.jar":
+      source  => "puppet:///modules/gen_java/jce7/US_export_policy.jar",
+      require => Package["openjdk-7-jre"];
+    "/usr/lib/jvm/java-7-oracle/jre/lib/security/local_policy.jar":
+      source  => "puppet:///modules/gen_java/jce7/local_policy.jar",
+      require => Package["openjdk-7-jre"];
+  }
+}
