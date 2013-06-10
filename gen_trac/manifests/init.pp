@@ -12,7 +12,7 @@ class gen_trac($mail_relay=false) {
 
   # Shared Trac configuration
   file { "/etc/trac/trac.ini":
-    content => template("trac/trac.ini"),
+    content => template("gen_trac/trac.ini"),
     owner   => "root",
     group   => "root",
     mode    => 644,
