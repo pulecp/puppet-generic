@@ -2646,6 +2646,20 @@ class gen_base::python_reportlab {
   }
 }
 
+# Class: gen_base::python_subversion
+#
+# Actions:
+#  Install python-subversion
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_subversion {
+  package { "python-subversion":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-unbound
 #
 # Actions:
