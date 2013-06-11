@@ -3098,6 +3098,20 @@ class gen_base::wondershaper {
   }
 }
 
+# Class: gen_base::xpdf
+#
+# Actions:
+#  Install xpdf
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::xpdf {
+  package { 'xpdf':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::xvfb
 #
 # Actions:
