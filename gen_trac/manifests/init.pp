@@ -44,6 +44,14 @@ class gen_trac::git {
   }
 }
 
+# Class: gen_trac::svn
+#
+# Actions: Make sure that trac can talk to subversion
+#
+class gen_trac::svn {
+  include gen_base::python_subversion
+}
+
 # Define: gen_trac::environment
 #
 # Actions: Setup a Trac environment for a project
@@ -64,6 +72,7 @@ define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, 
   }
 
   if $svnrepo {
+    include gen_trac::svn
     $repostring = "svn ${svnrepo}"
   } elsif $gitrepo {
     include gen_trac::git
