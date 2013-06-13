@@ -52,6 +52,46 @@ class gen_trac::svn {
   include gen_base::python_subversion
 }
 
+# Class: gen_trac::datefield
+#
+# Actions: Install the datefield plugin globally for Trac.
+#
+class gen_trac::datefield {
+  package { 'trac-datefieldplugin':
+    ensure => latest;
+  }
+}
+
+# Class: gen_trac::xmlrpc
+#
+# Actions: Install the xmlrpc plugin globally for Trac.
+#
+class gen_trac::xmlrpc {
+  package { 'trac-xmlrpc':
+    ensure => latest;
+  }
+}
+
+# Class: gen_trac::tags
+#
+# Actions: Install the tags plugin globally for Trac.
+#
+class gen_trac::tags {
+  package { 'trac-tags':
+    ensure => latest;
+  }
+}
+
+# Class: gen_trac::accountmanager
+#
+# Actions: Install the accountmanager plugin globally for Trac.
+#
+class gen_trac::accountmanager {
+  package { 'trac-accountmanager':
+    ensure => latest;
+  }
+}
+
 # Define: gen_trac::environment
 #
 # Actions: Setup a Trac environment for a project
