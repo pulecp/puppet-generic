@@ -8,15 +8,17 @@
 # Depends:
 #  gen_puppet
 #
-class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671, $disk_free_limit = 500000000) {
+class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671, $disk_free_limit = 500000000, $upstream_packages=true) {
   kservice { "rabbitmq-server":
     srequire => Concat["/etc/rabbitmq/rabbitmq.config"],
   }
 
-  gen_apt::source { "rabbitmq":
-    uri          => "http://www.rabbitmq.com/debian",
-    distribution => "testing",
-    components   => ["main"];
+  if $upstream_packages {
+    gen_apt::source { "rabbitmq":
+      uri          => "http://www.rabbitmq.com/debian",
+      distribution => "testing",
+      components   => ["main"];
+    }
   }
 
   if $ssl_cert {
