@@ -55,11 +55,12 @@ class gen_rabbitmq($ssl_cert = false, $ssl_key = false, $ssl_port = 5671, $disk_
 # Depends:
 #  gen_puppet
 #
-class gen_rabbitmq::amqp($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
+class gen_rabbitmq::amqp($ssl_cert = false, $ssl_key = false, $ssl_port = 5671, $upstream_packages=true) {
   class { "gen_rabbitmq":
-    ssl_cert => false,
-    ssl_key  => false,
-    ssl_port => 5671;
+    upstream_packages => $upstream_packages,
+    ssl_cert          => false,
+    ssl_key           => false,
+    ssl_port          => 5671;
   }
 }
 
@@ -71,11 +72,12 @@ class gen_rabbitmq::amqp($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) 
 # Depends:
 #  gen_puppet
 #
-class gen_rabbitmq::stomp($ssl_cert = false, $ssl_key = false, $ssl_port = 5671) {
+class gen_rabbitmq::stomp($ssl_cert = false, $ssl_key = false, $ssl_port = 5671, $upstream_packages=true) {
   class { "gen_rabbitmq::amqp":
-    ssl_cert => false,
-    ssl_key  => false,
-    ssl_port => 5671;
+    upstream_packages => $upstream_packages,
+    ssl_cert          => false,
+    ssl_key           => false,
+    ssl_port          => 5671;
   }
 
   concat::add_content { "rabbitmq config for stomp plugin":
