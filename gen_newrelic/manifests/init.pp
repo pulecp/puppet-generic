@@ -64,7 +64,7 @@ class gen_newrelic::php {
       owner   => 'newrelic',
       group   => 'www-data',
       mode    => 660,
-      require => Package['newrelic-daemon'];
+      require => Package['newrelic-daemon','newrelic-sysmond'];
     '/etc/php5/conf.d/newrelic.ini':
       content => template('gen_newrelic/php.ini'),
       require => Package['newrelic-php5'],
