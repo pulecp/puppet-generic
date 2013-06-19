@@ -1,4 +1,7 @@
 [account-manager]
 password_file = <%= access_file %>
+<% if lsbdistcodename == 'squeeze' -%>
 password_format = htpasswd
-
+<% else -%>
+password_store = HtPasswdStore
+<% end %>

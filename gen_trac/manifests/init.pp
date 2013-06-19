@@ -102,8 +102,9 @@ class gen_trac::accountmanager {
 #  svnrepo: The subversion repository to use for this. Defaults to false, which means 'don't use a svn repo'.
 #  gitrepo: Like svnrepo, but for git.
 #  dbtype: The database to use. Defaults to 'sqlite', but 'postgres' can be used as well.
+#  authz_file: Location of the authz file for authz_svn. Defaults to ''.
 #
-define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, $gitrepo=false, $dbtype='sqlite', $dbuser=$name, $dbpassword=false, $dbhost='localhost', $dbname=$name) {
+define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, $gitrepo=false, $dbtype='sqlite', $dbuser=$name, $dbpassword=false, $dbhost='localhost', $dbname=$name, $authz_file='') {
   include gen_trac
 
   if $path {
@@ -156,11 +157,15 @@ define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, 
     "base trac header for ${name}":
       target  => "${tracdir}/conf/trac.ini",
       order   => 10,
-      content => template('gen_trac/trac.ini.base');
+      content => template('gen_trac/trac.ini.header');
     "base trac settings for ${name}":
       target  => "${tracdir}/conf/trac.ini",
       order   => 20,
       content => template('gen_trac/trac.ini.base');
+    "base trac components for ${name}":
+      target  => "${tracdir}/conf/trac.ini",
+      order   => 50,
+      content => template('gen_trac/trac.ini.components_header');
   }
 
   # www-data needs read and write access to the trac database,
@@ -196,5 +201,87 @@ define gen_trac::accountmanager_setup ($access_file, $path="/srv/trac/${name}") 
     target  => "${path}/conf/trac.ini",
     order   => 11,
     content => template('gen_trac/trac.ini.accountmanager');
+  }
+
+  gen_trac::components_setup {
+    "setting acct_mgr.admin.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.admin.*',
+      value => 'enabled';
+    "setting acct_mgr.api.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.api.*',
+      value => 'enabled';
+    "setting acct_mgr.db.sessionstore for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.db.sessionstore',
+      value => 'disabled';
+    "setting acct_mgr.htfile.htdigeststore for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.htfile.htdigeststore',
+      value => 'disabled';
+    "setting acct_mgr.htfile.htpasswdstore for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.htfile.htpasswdstore',
+      value => 'enabled';
+    "setting acct_mgr.http.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.http.*',
+      value => 'disabled';
+    "setting acct_mgr.notification.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.notification.*',
+      value => 'enabled';
+    "setting acct_mgr.pwhash.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.pwhash.*',
+      value => 'disabled';
+    "setting acct_mgr.pwhash.htpasswdhashmethod for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.pwhash.htpasswdhashmethod',
+      value => 'enabled';
+    "setting acct_mgr.register.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.register.*',
+      value => 'disabled';
+    "setting acct_mgr.svnserve.svnservepasswordstore for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.svnserve.svnservepasswordstore',
+      value => 'disabled';
+    "setting acct_mgr.web_ui.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.web_ui.*',
+      value => 'enabled';
+  }
+}
+
+# Define: gen_trac::components_setup
+#
+# Actions: Add lines to the components setup for a trac instance.
+#
+# Parameters:
+#  name: Something that won't clash, please. Not used for the actual config.
+#  trac: The name of the trac environment, should have an associated gen_trac::environment.
+#  path: The path to the trac environment, defaults to /srv/trac/$trac (same as gen_trac::environment).
+#  var: The variable to set in the components section.
+#  value: The value to set the variable to.
+#
+define gen_trac::components_setup ($trac, $path="/srv/trac/${trac}", $var, $value) {
+  concat::add_content { "trac_components_${name}_for_${trac}":
+    target  => "${path}/conf/trac.ini",
+    order   => 51,
+    content => "${var} = ${value}";
   }
 }

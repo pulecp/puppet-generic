@@ -157,7 +157,7 @@ ticket_show_details = false
 [trac]
 auth_cookie_lifetime = 0
 auth_cookie_path = 
-authz_file = 
+authz_file = <%= authz_file %>
 authz_module_name = 
 auto_preview_timeout = 2.0
 auto_reload = False
