@@ -151,20 +151,29 @@ define gen_apt::source($uri, $sourcetype="deb", $distribution="stable", $compone
 #  name
 #    The key to import.
 #  content
-#    The key.
+#    The key. If not giving, it's assumed the name is a hash we can import from a keyserver.
+#  name_is_hash
+#    If the name is a hash, we can import without a file by using keyservers.
 #
 # Depends:
 #  gen_puppet
 #
-define gen_apt::key ($content) {
-  exec { "/usr/bin/apt-key add /etc/apt/keys/${name}":
-    unless  => "/usr/bin/apt-key list | grep -q ${name}",
-    require => File["/etc/apt/keys/${name}"],
-    notify  => Exec["/usr/bin/apt-get update"];
-  }
+define gen_apt::key ($content=false) {
+  if $content {
+    exec { "/usr/bin/apt-key add /etc/apt/keys/${name}":
+      unless  => "/usr/bin/apt-key list | grep -q ${name}",
+      require => File["/etc/apt/keys/${name}"],
+      notify  => Exec["/usr/bin/apt-get update"];
+    }
 
-  file { "/etc/apt/keys/${name}":
-    content => $content;
+    file { "/etc/apt/keys/${name}":
+      content => $content;
+    }
+  } else {
+    exec { "/usr/bin/apt-key adv --keyserver pgp.surfnet.nl --recv-key ${name}":
+      unless => "/usr/bin/apt-key list | grep -q ${name}",
+      notify => Exec["/usr/bin/apt-get update"];
+    }
   }
 }
 
