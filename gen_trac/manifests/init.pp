@@ -324,6 +324,10 @@ define gen_trac::datefield_setup ($path="/srv/trac/${name}", $date_format='mdy',
 #
 # Actions: Setup the tags plugin.
 #
+# More info:
+#  - http://trac-hacks.org/wiki/TagsPlugin
+#  - http://trac-hacks.org/wiki/TracIni#tags-section
+#
 define gen_trac::tags_setup ($path="/srv/trac/${name}") {
   include gen_trac::tags
 
