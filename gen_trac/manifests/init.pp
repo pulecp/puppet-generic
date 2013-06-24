@@ -320,6 +320,21 @@ define gen_trac::datefield_setup ($path="/srv/trac/${name}", $date_format='mdy',
   }
 }
 
+# Define: gen_trac::tags_setup
+#
+# Actions: Setup the tags plugin.
+#
+define gen_trac::tags_setup ($path="/srv/trac/${name}") {
+  include gen_trac::tags
+
+  gen_trac::component_setup { "setting tractags.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'tractags.*',
+      value => 'enabled';
+  }
+}
+
 # Define: gen_trac::components_setup
 #
 # Actions: Add lines to the components setup for a trac instance.
