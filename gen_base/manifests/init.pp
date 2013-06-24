@@ -84,7 +84,6 @@ class gen_base::arj {
   }
 }
 
-
 # Class: gen_base::aspell-nl
 #
 # Actions:
@@ -118,6 +117,34 @@ class gen_base::augeas {
   }
 }
 
+# Class: gen_base::autoconf
+#
+# Actions:
+#  Install autoconf
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::autoconf {
+  package { "autoconf":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::automake
+#
+# Actions:
+#  Install automake
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::automake {
+  package { "automake":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::backup-scripts
 #
 # Actions:
@@ -142,6 +169,34 @@ class gen_base::backup-scripts {
 #
 class gen_base::base-files {
   package { "base-files":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::bison
+#
+# Actions:
+#  Install bison
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::bison {
+  package { "bison":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::build_essential
+#
+# Actions:
+#  Install build-essential
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::build_essential {
+  package { "build-essential":
     ensure => latest;
   }
 }
@@ -526,6 +581,20 @@ class gen_base::jmxquery {
   }
 }
 
+# Class: gen_base::libc6_dev
+#
+# Actions:
+#  Install libc6-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libc6_dev {
+  package { "libc6-dev":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libcurl3
 #
 # Actions:
@@ -554,7 +623,6 @@ class gen_base::libcurl3_gnutls {
   }
 }
 
-
 # Class: gen_base::libenchant1c2a
 #
 # Actions:
@@ -565,6 +633,34 @@ class gen_base::libcurl3_gnutls {
 #
 class gen_base::libenchant1c2a {
   package { "libenchant1c2a":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libffi_dev
+#
+# Actions:
+#  Install libffi-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libffi_dev {
+  package { "libffi-dev":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libgdbm_dev
+#
+# Actions:
+#  Install libgdbm-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libgdbm_dev {
+  package { "libgdbm-dev":
     ensure => latest;
   }
 }
@@ -1322,6 +1418,34 @@ class gen_base::libreadline5-dev {
   }
 }
 
+# Class: gen_base::libreadline6
+#
+# Actions:
+#  Install libreadline6
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libreadline6 {
+  package { "libreadline6":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libreadline6_dev
+#
+# Actions:
+#  Install libreadline6-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libreadline6_dev {
+  package { "libreadline6-dev":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libsnmp-perl
 #
 # Actions:
@@ -1420,6 +1544,20 @@ class gen_base::libstdcplusplus5 {
   }
 }
 
+# Class: gen_base::liblibsqlite3_dev
+#
+# Actions:
+#  Install liblibsqlite3-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::liblibsqlite3_dev {
+  package { "liblibsqlite3-dev":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libstomp_ruby
 #
 # Actions:
@@ -1486,6 +1624,20 @@ class gen_base::libtiff4 {
 #
 class gen_base::libtime-modules-perl {
   package { "libtime-modules-perl":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libtool
+#
+# Actions:
+#  Install libtool
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libtool {
+  package { "libtool":
     ensure => latest;
   }
 }
@@ -1626,6 +1778,20 @@ class gen_base::libxslt1_1 {
 #
 class gen_base::libxslt1_dev {
   package { "libxslt1-dev":
+    ensure => latest,
+  }
+}
+
+# Class: gen_base::libyaml_dev
+#
+# Actions:
+#  Install and upgrade libyaml-dev
+#
+# Depends:
+#  nothing
+#
+class gen_base::libyaml_dev {
+  package { "libyaml-dev":
     ensure => latest,
   }
 }
@@ -1883,6 +2049,20 @@ class gen_base::nagios-plugins-standard {
 #
 class gen_base::nano {
   package { "nano":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::ncurses_dev
+#
+# Actions:
+#  Install ncurses-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ncurses_dev {
+  package { "ncurses-dev":
     ensure => latest;
   }
 }
@@ -2916,6 +3096,20 @@ class gen_base::smbclient {
   }
 }
 
+# Class: gen_base::sqlite3
+#
+# Actions:
+#  Install sqlite3
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::sqlite3 {
+  package { "sqlite3":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::subversion
 #
 # Actions:
@@ -3150,6 +3344,34 @@ class gen_base::xvfb {
 #
 class gen_base::zip {
   package { "zip":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::zlib1g
+#
+# Actions:
+#  Install zlib1g
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::zlib1g {
+  package { "zlib1g":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::zlib1g_dev
+#
+# Actions:
+#  Install zlib1g-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::zlib1g_dev {
+  package { "zlib1g-dev":
     ensure => latest;
   }
 }
