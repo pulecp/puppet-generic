@@ -331,7 +331,7 @@ define gen_trac::datefield_setup ($path="/srv/trac/${name}", $date_format='mdy',
 define gen_trac::tags_setup ($path="/srv/trac/${name}") {
   include gen_trac::tags
 
-  gen_trac::component_setup { "setting tractags.* for ${name}":
+  gen_trac::components_setup { "setting tractags.* for ${name}":
       trac  => $name,
       path  => $path,
       var   => 'tractags.*',
