@@ -1,8 +1,6 @@
-<% if address != "*" or address6 == "::" -%>
 <VirtualHost <%= address %>:<%= port %>>
   Include /etc/apache2/vhost-additions/<%= name %>/
 </VirtualHost>
-<% end -%>
 <% if address6 != "::" -%>
 <VirtualHost [<%= address6 %>]:<%= port %>>
   Include /etc/apache2/vhost-additions/<%= name %>/
