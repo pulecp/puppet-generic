@@ -2925,9 +2925,9 @@ class gen_base::smbclient {
 #  gen_puppet
 #
 class gen_base::subversion {
-  package { "subversion":
-    ensure => latest;
-  }
+  include gen_subversion::client
+
+  notify { 'This machine includes gen_base::subversion when it should be including gen_subversion::client instead. Please fix.':; }
 }
 
 # Class: gen_base::sysstat
