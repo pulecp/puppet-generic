@@ -283,6 +283,43 @@ define gen_trac::accountmanager_setup ($access_file, $path="/srv/trac/${name}") 
   }
 }
 
+# Define: gen_trac::datefield_setup
+#
+# Actions: Setup the datefield plugin for a trac instance
+#
+define gen_trac::datefield_setup ($path="/srv/trac/${name}", $date_format='mdy', $date_separator='-', $date_first_day='1') {
+  include gen_trac::datefield
+
+  gen_trac::components_setup {
+    "setting datefield.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'datefield.*',
+      value => 'enabled';
+  }
+
+  gen_trac::config {
+    "datefield_format_settings_for_${name}":
+      trac    => $name,
+      path    => $path,
+      section => 'datefield',
+      var     => 'format',
+      value   => $date_format;
+    "datefield_separator_settings_for_${name}":
+      trac    => $name,
+      path    => $path,
+      section => 'datefield',
+      var     => 'separator',
+      value   => $date_separator;
+    "datefield_first_day_settings_for_${name}":
+      trac    => $name,
+      path    => $path,
+      section => 'datefield',
+      var     => 'first_day',
+      value   => $date_first_day;
+  }
+}
+
 # Define: gen_trac::components_setup
 #
 # Actions: Add lines to the components setup for a trac instance.
