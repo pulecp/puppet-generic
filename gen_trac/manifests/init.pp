@@ -162,10 +162,6 @@ define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, 
       target  => "${tracdir}/conf/trac.ini",
       order   => 20,
       content => template('gen_trac/trac.ini.base');
-    "base trac components for ${name}":
-      target  => "${tracdir}/conf/trac.ini",
-      order   => 50,
-      content => template('gen_trac/trac.ini.components_header');
   }
 
   # www-data needs read and write access to the trac database,
@@ -197,10 +193,30 @@ define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, 
 define gen_trac::accountmanager_setup ($access_file, $path="/srv/trac/${name}") {
   include gen_trac::accountmanager
 
-  concat::add_content { "accountmanger_settings_for_${name}":
-    target  => "${path}/conf/trac.ini",
-    order   => 11,
-    content => template('gen_trac/trac.ini.accountmanager');
+  gen_trac::config { "accountmanager_settings_for_${name}":
+    trac    => $name,
+    path    => $path,
+    section => 'account-manager',
+    var     => 'password_file',
+    value   => $access_file;
+  }
+
+  if $lsbmajdistrelease > 6 {
+    gen_trac::config { "accountmanager_setting_passwordStore_for_${name}":
+      trac    => $name,
+      path    => $path,
+      section => 'account-manager',
+      var     => 'password_store',
+      value   => 'HtPasswdStore';
+    }
+  } else {
+    gen_trac::config { "accountmanager_setting_password_format_for_${name}":
+      trac    => $name,
+      path    => $path,
+      section => 'account-manager',
+      var     => 'password_format',
+      value   => 'htpasswd';
+    }
   }
 
   gen_trac::components_setup {
@@ -279,9 +295,37 @@ define gen_trac::accountmanager_setup ($access_file, $path="/srv/trac/${name}") 
 #  value: The value to set the variable to.
 #
 define gen_trac::components_setup ($trac, $path="/srv/trac/${trac}", $var, $value) {
-  concat::add_content { "trac_components_${name}_for_${trac}":
+  gen_trac::config { "trac_components_${name}_for_${trac}":
+    trac    => $trac,
+    path    => $path,
+    section => 'components',
+    var     => $var,
+    value   => $value,;
+  }
+}
+
+# Define: gen_trac::config
+#
+# Actions: Add a config option to the config of a trac instance.
+#
+# Parameters:
+#  name: Something that won't clash.
+#  trac: The name of the trac environment, should have an associated gen_trac::environment.
+#  path: The path to the trac environment, defaults to /srv/trac/$trac (same as gen_trac::environment).
+#  section: The section in which the option must be set.
+#  var: The variable to set in the components section.
+#  value: The value to set the variable to.
+#
+define gen_trac::config ($trac, $path="/srv/trac/${trac}", $section, $var, $value) {
+  if ! defined(Concat::Add_content["trac_${section}_aaaaaaaaa_for_${trac}"]) {
+    concat::add_content { "trac_${section}_aaaaaaaaa_for_${trac}":
+      target  => "${path}/conf/trac.ini",
+      content => "\n[${section}]";
+    }
+  }
+
+  concat::add_content { "trac_${section}_${name}_for_${trac}":
     target  => "${path}/conf/trac.ini",
-    order   => 51,
     content => "${var} = ${value}";
   }
 }
