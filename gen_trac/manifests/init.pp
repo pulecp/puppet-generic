@@ -103,8 +103,12 @@ class gen_trac::accountmanager {
 #  gitrepo: Like svnrepo, but for git.
 #  dbtype: The database to use. Defaults to 'sqlite', but 'postgres' can be used as well.
 #  authz_file: Location of the authz file for authz_svn. Defaults to ''.
+#  logo_file: Template with the logo. Defaults to false.
+#  logo_link: Link for the logo. Defaults to an empty string (no link).
+#  logo_alt: Alt text for logo. Defaults to an empty string.
 #
-define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, $gitrepo=false, $dbtype='sqlite', $dbuser=$name, $dbpassword=false, $dbhost='localhost', $dbname=$name, $authz_file='') {
+define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, $gitrepo=false, $dbtype='sqlite', $dbuser=$name, $dbpassword=false, $dbhost='localhost', $dbname=$name, $authz_file='',
+                             $logo_file=false, $logo_link='', $logo_alt='') {
   include gen_trac
 
   if $path {
@@ -183,6 +187,13 @@ define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, 
       group   => $group,
       mode    => 0775,
       require => Exec["create-trac-${name}"];
+  }
+
+  # If a logo file is given, deploy it.
+  if $logo_file {
+    file { "${tracdir}/htdocs/logo":
+      content => $logo_file;
+    }
   }
 }
 

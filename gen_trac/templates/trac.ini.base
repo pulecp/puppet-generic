@@ -21,10 +21,10 @@ max_diff_files = 0
 wiki_format_messages = true
 
 [header_logo]
-alt = (please configure the [header_logo] section in trac.ini)
+alt = <%= logo_alt %>
 height = -1
-link = 
-src = site/your_project_logo.png
+link = <%= logo_link %>
+src = site/logo
 width = -1
 
 [inherit]
