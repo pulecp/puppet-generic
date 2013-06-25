@@ -291,6 +291,11 @@ define gen_trac::accountmanager_setup ($access_file, $path="/srv/trac/${name}") 
       path  => $path,
       var   => 'acct_mgr.web_ui.*',
       value => 'enabled';
+    "setting acct_mgr.web_ui.emailverificationmodule for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'acct_mgr.web_ui.emailverificationmodule',
+      value => 'disabled';
   }
 }
 
