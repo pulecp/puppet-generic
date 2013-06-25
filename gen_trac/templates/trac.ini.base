@@ -79,7 +79,7 @@ admin_trac_url = .
 descr = <%= description %>
 footer = Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a>
 icon = common/trac.ico
-name = <%= title %>
+name = <%= trac_name %>
 url = 
 
 [query]

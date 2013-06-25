@@ -107,11 +107,11 @@ class gen_trac::accountmanager {
 #  logo_filename: The name of the file. Need this so we can pass an extension.
 #  logo_link: Link for the logo. Defaults to an empty string (no link).
 #  logo_alt: Alt text for logo. Defaults to an empty string.
-#  title: The title to be used for the site, defaults to the $name.
+#  trac_name: The title to be used for the site, defaults to the $name.
 #  description: The description to use for the site, defaults to the $name.
 #
 define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, $gitrepo=false, $dbtype='sqlite', $dbuser=$name, $dbpassword=false, $dbhost='localhost', $dbname=$name, $authz_file='',
-                             $logo_file=false, $logo_filename='', $logo_link='', $logo_alt='', $title=$name, $description=$name) {
+                             $logo_file=false, $logo_filename='', $logo_link='', $logo_alt='', $trac_name=$name, $description=$name) {
   include gen_trac
 
   if $path {
