@@ -978,6 +978,22 @@ class gen_base::libapache2-mod-wsgi {
   kbp_icinga::debsums { 'libapache2-mod-wsgi':; }
 }
 
+# Class: gen_base::libapache2_svn
+#
+# Actions:
+#  Install libapache2-svn
+#
+# Depends:
+#  kbp_icinga (which is wrong, I know, but no idea how else to solve this)
+#
+class gen_base::libapache2_svn {
+  package { "libapache2-svn":
+    ensure => latest;
+  }
+
+  kbp_icinga::debsums { 'libapache2-svn':; }
+}
+
 # Class: gen_base::libapr1
 #
 # Actions:
