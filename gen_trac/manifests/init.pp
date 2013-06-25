@@ -104,11 +104,12 @@ class gen_trac::accountmanager {
 #  dbtype: The database to use. Defaults to 'sqlite', but 'postgres' can be used as well.
 #  authz_file: Location of the authz file for authz_svn. Defaults to ''.
 #  logo_file: Template with the logo. Defaults to false.
+#  logo_filename: The name of the file. Need this so we can pass an extension.
 #  logo_link: Link for the logo. Defaults to an empty string (no link).
 #  logo_alt: Alt text for logo. Defaults to an empty string.
 #
 define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, $gitrepo=false, $dbtype='sqlite', $dbuser=$name, $dbpassword=false, $dbhost='localhost', $dbname=$name, $authz_file='',
-                             $logo_file=false, $logo_link='', $logo_alt='') {
+                             $logo_file=false, $logo_filename='', $logo_link='', $logo_alt='') {
   include gen_trac
 
   if $path {

@@ -24,7 +24,7 @@ wiki_format_messages = true
 alt = <%= logo_alt %>
 height = -1
 link = <%= logo_link %>
-src = site/logo
+src = site/<%= logo_filename %>
 width = -1
 
 [inherit]
