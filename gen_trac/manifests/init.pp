@@ -192,7 +192,7 @@ define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, 
 
   # If a logo file is given, deploy it.
   if $logo_file {
-    file { "${tracdir}/htdocs/logo":
+    file { "${tracdir}/htdocs/${logo_filename}":
       content => $logo_file;
     }
   }
