@@ -1544,16 +1544,16 @@ class gen_base::libstdcplusplus5 {
   }
 }
 
-# Class: gen_base::liblibsqlite3_dev
+# Class: gen_base::libsqlite3_dev
 #
 # Actions:
-#  Install liblibsqlite3-dev
+#  Install libsqlite3-dev
 #
 # Depends:
 #  gen_puppet
 #
-class gen_base::liblibsqlite3_dev {
-  package { "liblibsqlite3-dev":
+class gen_base::libsqlite3_dev {
+  package { "libsqlite3-dev":
     ensure => latest;
   }
 }
