@@ -76,10 +76,10 @@ use_tls = false
 [project]
 admin = 
 admin_trac_url = .
-descr = My example project
+descr = <%= description %>
 footer = Visit the Trac open source project at<br /><a href="http://trac.edgewall.org/">http://trac.edgewall.org/</a>
 icon = common/trac.ico
-name = fusion
+name = <%= title %>
 url = 
 
 [query]
