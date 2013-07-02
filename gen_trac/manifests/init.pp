@@ -92,6 +92,16 @@ class gen_trac::accountmanager {
   }
 }
 
+# Class: gen_trac::customfieldadmin
+#
+# Actions: Install the customfieldadmin plugin globally for Trac.
+#
+class gen_trac::customfieldadmin {
+  package { 'trac-customfieldadmin':
+    ensure => latest;
+  }
+}
+
 # Define: gen_trac::environment
 #
 # Actions: Setup a Trac environment for a project
@@ -307,16 +317,6 @@ define gen_trac::accountmanager_setup ($access_file, $path="/srv/trac/${name}") 
 # Actions: Setup the datefield plugin for a trac instance
 #
 define gen_trac::datefield_setup ($path="/srv/trac/${name}", $date_format='mdy', $date_separator='-', $date_first_day='1') {
-  include gen_trac::datefield
-
-  gen_trac::components_setup {
-    "setting datefield.* for ${name}":
-      trac  => $name,
-      path  => $path,
-      var   => 'datefield.*',
-      value => 'enabled';
-  }
-
   gen_trac::config {
     "datefield_format_settings_for_${name}":
       trac    => $name,
@@ -354,6 +354,24 @@ define gen_trac::tags_setup ($path="/srv/trac/${name}") {
       trac  => $name,
       path  => $path,
       var   => 'tractags.*',
+      value => 'enabled';
+  }
+}
+
+# Define: gen_trac::customfield_setup
+#
+# Actions: Setup the customfield plugin.
+#
+# More info:
+#   - http://trac-hacks.org/wiki/CustomFieldAdminPlugin
+#
+define gen_trac::customfield_setup ($path="/srv/trac/${name}") {
+  include gen_trac::customfieldadmin
+
+  gen_trac::components_setup { "setting customfieldadmin.* for ${name}":
+      trac  => $name,
+      path  => $path,
+      var   => 'customfieldadmin.*',
       value => 'enabled';
   }
 }
