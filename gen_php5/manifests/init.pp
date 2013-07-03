@@ -75,11 +75,18 @@ class gen_php5::cli {
 # Depends:
 #  gen_puppet
 #
-class gen_php5::apc ($shm_size = 64, $ttl = 3600) {
+class gen_php5::apc ($shm_size = 64, $ttl = 3600, $shm=true) {
   include gen_php5::common
 
   package { "php-apc":
     ensure => latest,
+  }
+
+  if $shm {
+    $file_mask = '/apc.shm.XXXXXX'
+  } else {
+    # Removing the shm make sure it isn't used.
+    $file_mask = '/tmp/apc.XXXXXX'
   }
 
   gen_php5::common::config {
