@@ -90,7 +90,7 @@ class gen_php5::apc ($shm_size = 64, $ttl = 3600, $shm=true) {
   }
 
   gen_php5::common::config {
-    'apc.mmap_file_mask': value => '/apc.shm.XXXXXX';
+    'apc.mmap_file_mask': value => "${file_mask}";
     'apc.shm_size':       value => "${shm_size}";
     'apc.ttl':            value => "${ttl}";
     'apc.filters':        value => 'wp-cache-config';
