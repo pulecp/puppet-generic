@@ -189,8 +189,6 @@ class mysql::server ($datadir=false) {
     if $source_ipaddress6 and !defined(Exec["grant_${real_user}_${real_db}_${source_ipaddress6}"]) {
       $cmd_unless6 = "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"show grants for '${real_user}'@'${source_ipaddress6}';\" | grep -i -e \"${permissions}\" | grep -q -i -e \"ON \\`${real_db}\\`.*\" -e \"ON *.*\" ${cmd_check_grant_option}"
 
-      notify { "${cmd_unless6} ${cmd_check_ssl}":; }
-
       exec { "grant_${real_user}_${real_db}_${source_ipaddress6}":
         unless  => "${cmd_unless} ${cmd_check_ssl}",
         command => "/usr/bin/mysql --defaults-file=/etc/mysql/debian.cnf -e \"grant ${permissions} on ${real_db}.* to '${real_user}'@'${source_ipaddress6}' ${cmd_password} ${cmd_require_ssl} ${cmd_grant_option};\"",
