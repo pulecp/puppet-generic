@@ -533,6 +533,20 @@ class gen_base::imagemagick {
   }
 }
 
+# Class: gen_base::inotify-tools
+#
+# Actions:
+#  Install inotify-tools
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::inotify-tools {
+  package { 'inotify-tools':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ipaddress_ruby
 #
 # Actions:
