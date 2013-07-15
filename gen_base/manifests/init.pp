@@ -595,6 +595,20 @@ class gen_base::jmxquery {
   }
 }
 
+# Class: gen_base::libaio-dev
+#
+# Actions:
+#  Install libaio-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libaio_dev {
+  package { "libaio-dev":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libc6_dev
 #
 # Actions:
