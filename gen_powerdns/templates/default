@@ -104,7 +104,11 @@ local-address=<%= localaddress %>
 #
 # local-ipv6=
 <% if localaddress6 -%>
+<% if localaddress6 !~ /::1/ -%>
 local-ipv6=::1 <%= localaddress6 %>
+<% else -%>
+local-ipv6=<%= localaddress6 %>
+<% end -%>
 <% end -%>
 
 #################################
