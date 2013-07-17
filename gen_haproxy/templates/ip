@@ -32,3 +32,6 @@ listen <%= site %>:<%= ip %>:<%= port %> <%= ip %>:<%= port %>
 	acl viastunnel src <%= ip %>/32
 	reqadd X-SSL:\ On if viastunnel
 <% end -%>
+<% if source -%>
+	source <%= source %>
+<% end -%>
