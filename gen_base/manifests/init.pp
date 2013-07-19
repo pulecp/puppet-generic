@@ -2582,6 +2582,20 @@ class gen_base::python_cheetah {
   }
 }
 
+# Class: gen_base::python_crypto
+#
+# Actions:
+#  Install python-crypto
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_crypto {
+  package { 'python-crypto':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_dev
 #
 # Actions:
