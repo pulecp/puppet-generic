@@ -24,3 +24,12 @@ begin
 rescue
 # do nothing
 end
+
+# Bonding interfaces fact
+begin
+  if File.exist?('/sys/class/net/bonding_masters')
+    Facter.add(:bonding_interfaces) { setcode { File.open('/sys/class/net/bonding_masters', 'r').read().gsub(/ /, ',') } }
+  end
+rescue
+# do nothing
+end
