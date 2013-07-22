@@ -231,7 +231,7 @@ class gen_tomcat::manager ($tomcat_tag="tomcat_${environment}") {
 #  gen_puppet
 #  gen_tomcat
 #
-define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=false, $root_app=false, $tomcat_tag="tomcat_${environment}") {
+define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=false, $root_app=false, $tomcat_tag="tomcat_${environment}", $ignore_xml_changes=false) {
   file { "/srv/tomcat/conf/Catalina/localhost/${name}.xml":
     content => $context_xml_content ? {
       false   => "<?xml version=\"1.0\" encoding=\"UTF-8\"?><Context path=\"${urlpath}\" docBase=\"${war}\">${extra_opts}</Context>",
@@ -247,7 +247,7 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
     require => [Package["tomcat6"], File["/srv/tomcat/conf"]];
   }
 
-  if $context_xml_content == false {
+  if ($context_xml_content == false) and (! $ignore_xml_changes) {
     kaugeas { "Context path and docBase for ${name}":
       file    => "/srv/tomcat/conf/Catalina/localhost/${name}.xml",
       lens    => "Xml.lns",
@@ -256,7 +256,7 @@ define gen_tomcat::context($war, $urlpath, $extra_opts="", $context_xml_content=
       notify  => Service["tomcat6"],
       require => File["/srv/tomcat/conf/Catalina/localhost/${name}.xml"];
     }
-  } else {
+  } elsif $context_xml_content {
     notify { "The context_xml_content parameter is deprecated. Please remove asap.":; }
   }
 
