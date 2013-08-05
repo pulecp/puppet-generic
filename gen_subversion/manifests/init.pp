@@ -58,7 +58,8 @@ define gen_subversion::repo($group, $svndir="/srv/svn/${name}", $mode="2755", $s
       recurse => false;
     ["${svndir}/db/current","${svndir}/db/revprops/0","${svndir}/db/revs/0","${svndir}/db/uuid","${svndir}/db/write-lock","${svndir}/hooks/post-commit.tmpl",
      "${svndir}/hooks/post-lock.tmpl","${svndir}/hooks/post-revprop-change.tmpl","${svndir}/hooks/post-unlock.tmpl","${svndir}/hooks/pre-commit.tmpl","${svndir}/hooks/pre-lock.tmpl",
-     "${svndir}/hooks/pre-revprop-change.tmpl","${svndir}/hooks/pre-unlock.tmpl","${svndir}/hooks/start-commit.tmpl","${svndir}/locks/db-logs.lock","${svndir}/locks/db.lock"]:
+     "${svndir}/hooks/pre-revprop-change.tmpl","${svndir}/hooks/pre-unlock.tmpl","${svndir}/hooks/start-commit.tmpl","${svndir}/locks/db-logs.lock","${svndir}/locks/db.lock",
+     "${svndir}/db/txn-current-lock","${svndir}/db/txn-current"]:
       mode    => 664,
       owner   => $svnowner,
       group   => $group;
