@@ -63,7 +63,8 @@ define gen_subversion::repo($group, $svndir="/srv/svn/${name}", $mode="2755", $s
       mode    => 664,
       owner   => $svnowner,
       group   => $group;
-    ["${svndir}/db/revprops","${svndir}/db/revs","${svndir}/db/transactions","${svndir}/dav","${svndir}/db/txn-protorevs","${svndir}/dav","${svndir}/dav/activities.d"]:
+    ["${svndir}/db/revprops","${svndir}/db/revs","${svndir}/db/transactions","${svndir}/db/txn-protorevs","${svndir}/dav","${svndir}/dav/activities.d"]:
+      ensure  => directory,
       mode    => 2775,
       owner   => $svnowner,
       group   => $group;
