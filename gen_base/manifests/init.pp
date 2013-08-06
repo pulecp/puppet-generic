@@ -623,6 +623,20 @@ class gen_base::libc6_dev {
   }
 }
 
+# Class: gen_base::libcache_memcached_perl
+#
+# Actions:
+#  Install libcache-memcached-perl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libcache_memcached_perl {
+  package { "libcache-memcached-perl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libcurl3
 #
 # Actions:
