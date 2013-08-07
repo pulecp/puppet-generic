@@ -65,9 +65,7 @@ class rsyslog::client {
   }
 
   # We import this so we can change the server to use
-  File <<| title == '/etc/rsyslog.d/remote-logging-client.conf' |>> {
-    ensure => absent,
-  }
+  File <<| title == '/etc/rsyslog.d/remote-logging-client.conf' |>>
 }
 
 # Class: rsyslog::server
