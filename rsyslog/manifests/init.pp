@@ -53,12 +53,10 @@ class rsyslog::client {
 
   file {
     '/etc/rsyslog.d/forwardfile-logformat.conf':
-      ensure  => absent,
       content => template('rsyslog/client/forwardfile-logformat.conf'),
       require => Package['rsyslog'],
       notify => Service['rsyslog'];
     '/etc/rsyslog.d/enable-ssl-puppet-certs.conf':
-      ensure  => absent,
       content => template('rsyslog/client/enable-ssl-puppet-certs.conf'),
       require => Package['rsyslog'],
       notify => Service['rsyslog'];
