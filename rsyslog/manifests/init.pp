@@ -10,14 +10,7 @@
 #  gen_puppet
 #
 class rsyslog::common {
-  if $lsbdistcodename == 'wheezy' {
-    package { ['rsyslog','rsyslog-gnutls']:
-      ensure => latest,
-      notify => Service['rsyslog'],
-    }
-  } elsif $lsbdistcodename == 'squeeze' {
-    gen_apt::preference { ['rsyslog','rsyslog-gnutls']:; }
-
+  if $lsbmajdistrelease > 5 {
     package { ['rsyslog','rsyslog-gnutls']:
       ensure => latest,
       notify => Service['rsyslog'],
