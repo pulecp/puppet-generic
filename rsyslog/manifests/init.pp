@@ -15,6 +15,13 @@ class rsyslog::common {
       ensure => latest,
       notify => Service['rsyslog'],
     }
+  } elsif $lsbdistcodename == 'squeeze' {
+    gen_apt::preference { ['rsyslog','rsyslog-gnutls']:; }
+
+    package { ['rsyslog','rsyslog-gnutls']:
+      ensure => latest,
+      notify => Service['rsyslog'],
+    }
   } else {
     package {
       'rsyslog':
@@ -49,21 +56,28 @@ class rsyslog::common {
 class rsyslog::client {
   include rsyslog::common
 
-  $pemfile = "${fqdn}.pem"
+  if $lsbmajdistrelease > 5 {
+    $pemfile = "${fqdn}.pem"
 
-  file {
-    '/etc/rsyslog.d/forwardfile-logformat.conf':
-      content => template('rsyslog/client/forwardfile-logformat.conf'),
-      require => Package['rsyslog'],
+    file {
+      '/etc/rsyslog.d/forwardfile-logformat.conf':
+        content => template('rsyslog/client/forwardfile-logformat.conf'),
+        require => Package['rsyslog'],
+        notify => Service['rsyslog'];
+      '/etc/rsyslog.d/enable-ssl-puppet-certs.conf':
+        content => template('rsyslog/client/enable-ssl-puppet-certs.conf'),
+        require => Package['rsyslog'],
+        notify => Service['rsyslog'];
+    }
+
+    # We import this so we can change the server to use
+    File <<| title == '/etc/rsyslog.d/remote-logging-client.conf' |>>
+  } else {
+    file { ['/etc/rsyslog.d/forwardfile-logformat.conf', '/etc/rsyslog.d/enable-ssl-puppet-certs.conf','/etc/rsyslog.d/remote-logging-client.conf']:
+      ensure => absent,
       notify => Service['rsyslog'];
-    '/etc/rsyslog.d/enable-ssl-puppet-certs.conf':
-      content => template('rsyslog/client/enable-ssl-puppet-certs.conf'),
-      require => Package['rsyslog'],
-      notify => Service['rsyslog'];
+    }
   }
-
-  # We import this so we can change the server to use
-  File <<| title == '/etc/rsyslog.d/remote-logging-client.conf' |>>
 }
 
 # Class: rsyslog::server
