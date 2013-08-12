@@ -28,7 +28,15 @@ end
 # Bonding interfaces fact
 begin
   if File.exist?('/sys/class/net/bonding_masters')
-    Facter.add(:bonding_interfaces) { setcode { File.open('/sys/class/net/bonding_masters', 'r').read().chomp().gsub(/ /, ',') } }
+    fact = ''
+    File.open('/sys/class/net/bonding_masters', 'r').read().chomp().split(' ').each do |interface|
+      if File.open("/sys/class/net/#{interface}/operstate", 'r').read() =~ /up/ then
+        fact += "#{interface},"
+      end
+    end
+    if fact != '' then
+      Facter.add(:bonding_interfaces) { setcode { fact.chomp(',') } }
+    end
   end
 rescue
 # do nothing
