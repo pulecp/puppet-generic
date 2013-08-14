@@ -41,6 +41,13 @@ class gen_fail2ban::dovecot ($maxretry='3') {
     content => template('gen_fail2ban/dovecot'),
     target  => '/etc/fail2ban/jail.local';
   }
+
+  if $lsbmajdistrelease < 7 {
+    file { '/etc/fail2ban/filters.d/dovecot.local':
+      content => template('gen_fail2ban/dovecot.local'),
+      notify  => Exec['reload-fail2ban'];
+    }
+  }
 }
 
 # Class: gen_fail2ban::postfix
