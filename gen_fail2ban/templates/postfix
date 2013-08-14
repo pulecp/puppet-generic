@@ -1,0 +1,7 @@
+[postfix]
+
+enabled  = true
+port     = smtp,ssmtp
+filter   = postfix
+logpath  = /var/log/mail.log
+maxretry = <%= maxretry %>

@@ -43,6 +43,20 @@ class gen_fail2ban::dovecot ($maxretry='3') {
   }
 }
 
+# Class: gen_fail2ban::postfix
+#
+# Actions: Enable postfix protections in fail2ban.
+#
+# Parameters:
+#  maxretry: The number of failures we need to see before we will ban the IP address. Defaults to 3.
+#
+class gen_fail2ban::postfix ($maxretry='3') {
+  concat::add_content { 'postfix':
+    content => template('gen_fail2ban/postfix'),
+    target  => '/etc/fail2ban/jail.local';
+  }
+}
+
 # Class: gen_fail2ban::ssh
 #
 # Actions: Enable ssh protections in fail2ban.
