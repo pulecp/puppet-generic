@@ -14,6 +14,7 @@ usage () {
 	echo "  -i|disk-image FILE        - Use this diskimage for the harddisk. Can either be a local file or" >&2
 	echo "                              a URL (default: http://ftp.nl.debian.org/debian/dist/wheezy/main/" >&2
 	echo "                              installer-amd64/current/images/netboot/mini.iso." >&2
+	echo "  --vnc-listen IP           - The IP where the VNC service binds (default: 127.0.0.1)." >&2
 	echo "  --vnc-port PORT           - The port-number for VNC connections (default: empty (=auto))." >&2
 	echo "  --vnc-secret SECRET       - The password for VNC connections (default: empty (=no secret)." >&2
 	echo "  -b|--bridge BRIDGE        - The bridge device to attach the VM to (default: br0)." >&2
@@ -26,7 +27,7 @@ usage () {
 }
 
 # Have getopt parse the arguments
-ARGS=`/usr/bin/getopt -o c:m:v:d:i:b:h -l cpus:,memory:,vg:,volume-group:,disk-size:,disk-splitsize:,disk-image:,vnc-port:,vnc-secret:,bridge:,mac-address:,bridge-2:,mac-address-2:,help -n $0 -- "$@"`
+ARGS=`/usr/bin/getopt -o c:m:v:d:i:b:h -l cpus:,memory:,vg:,volume-group:,disk-size:,disk-splitsize:,disk-image:,vnc-listen:,vnc-port:,vnc-secret:,bridge:,mac-address:,bridge-2:,mac-address-2:,help -n $0 -- "$@"`
 
 if [ $? -ne 0 ]; then # If something went wrong
 	echo "" >&2
@@ -44,6 +45,7 @@ while true; do
 		-d|--disk-size) DISK_GB=$2; shift 2;;
 		--disk-splitsize) DISK_SPLITSIZE=$2; shift 2;;
 		-i|--disk-image) DISK_IMAGE=$2; shift 2;;
+		--vnc-listen) VNC_LISTEN=$2; shift 2;;
 		--vnc-port) VNC_PORT=$2; shift 2;;
 		--vnc-secret) VNC_SECRET=$2; shift 2;;
 		-b|--bridge) BRIDGE_DEV=$2; shift 2;;
@@ -78,6 +80,7 @@ DISK_VOLGRP="${DISK_VOLGRP:-"vg"}"
 DISK_GB="${DISK_GB:-"14"}"
 DISK_SPLITSIZE="${DISK_SPLITSIZE:-"-"}"
 DISK_IMAGE="${DISK_IMAGE:-"http://ftp.nl.debian.org/debian/dists/wheezy/main/installer-amd64/current/images/netboot/mini.iso"}"
+VNC_LISTEN="${VNC_LISTEN:-"127.0.0.1"}"
 VNC_PORT="${VNC_PORT:-"-"}"
 VNC_SECRET="${VNC_SECRET:-"-"}"
 BRIDGE_DEV="${BRIDGE_DEV:-"br0"}"
@@ -94,6 +97,7 @@ echo "Disk split in:        $DISK_SPLITSIZE GB chunks"
 fi
 echo "Disk Volume Group:    $DISK_VOLGRP"
 echo "Using harddisk image: $DISK_IMAGE"
+echo "VNC listen IP:        $VNC_LISTEN"
 echo -n "VNC port:             "
 if [ $VNC_PORT = '-' ]; then
 	echo "auto"
@@ -169,12 +173,14 @@ do
 	I=$(($I + 1))
 done
 
+GRAPHICS_CONFIG="listen=$VNC_LISTEN"
+
 # Generate VNC password if needed.
 if test $VNC_PORT = '-'
 then
-	GRAPHICS_CONFIG="autoport='yes'"
+	GRAPHICS_CONFIG="$GRAPHICS_CONFIG autoport='yes'"
 else
-	GRAPHICS_CONFIG="autoport='no' port='$VNC_PORT'"
+	GRAPHICS_CONFIG="$GRAPHICS_CONFIG autoport='no' port='$VNC_PORT'"
 fi
 test $VNC_SECRET = '-' || GRAPHICS_CONFIG="$GRAPHICS_CONFIG passwd='$VNC_SECRET'"
 
@@ -242,7 +248,7 @@ $MAC_CONFIG
     </interface>
 $NIC2_CONFIG
     <input type='mouse' bus='ps2'/>
-    <graphics type='vnc' listen='0.0.0.0' $GRAPHICS_CONFIG/>
+    <graphics type='vnc' $GRAPHICS_CONFIG/>
     <video>
       <model type='cirrus' vram='9216' heads='1'/>
     </video>
