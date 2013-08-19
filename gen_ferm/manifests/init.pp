@@ -320,3 +320,26 @@ define gen_ferm::table() {
       content => "}";
   }
 }
+
+# Define: gen_ferm::hook
+#
+# Parameters
+#  name
+#    Used as a comment for the hook
+#
+# Actions:
+#  Creates a @hook entry.
+#
+# Depends:
+#  gen_puppet
+#
+define gen_ferm::hook($type, $command) {
+  validate_re($type, ['^pre$','^post$','^flush$'], 'Type needs to be one of pre, post or flush.')
+
+  concat::add_content {
+    "hook_${name}":
+      target  => "/etc/ferm/ferm.conf",
+      order   => 10,
+      content => "hook ${type} \"${command}\"";
+  }
+}
