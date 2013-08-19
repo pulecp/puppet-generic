@@ -13,7 +13,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_fail2ban ($ignoreip='127.0.0.0/8', $email=false, $bantime='7200') {
+class gen_fail2ban ($ignoreip='127.0.0.0/8', $email=false, $bantime='7200', $banaction='iptables-multiport') {
   kservice { 'fail2ban':
     pensure => latest,
   }

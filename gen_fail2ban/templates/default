@@ -1,9 +1,9 @@
 [DEFAULT]
 ignoreip = <%= ignoreip %>
-bantime = 7200
+bantime = <%= bantime %>
 maxretry = 3
 backend = auto
-banaction = iptables-multiport
+banaction = <%= banaction %>
 protocol = tcp
 chain = INPUT
 action_ = %(banaction)s[name=%(__name__)s, port="%(port)s", protocol="%(protocol)s", chain="%(chain)s"]
