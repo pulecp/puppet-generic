@@ -12,6 +12,13 @@ class gen_icinga::client {
   include gen_base::nagios-plugins-standard
 }
 
+# Class: gen_icinga::ido2db
+class gen_icinga::ido2db {
+  kservice { 'ido2db':
+    package => "icinga-idoutils";
+  }
+}
+
 # Class: gen_icinga::server
 #
 # Actions:
@@ -28,12 +35,7 @@ class gen_icinga::server {
 
   package { "icinga-doc":; }
 
-  kservice {
-    "ido2db":
-      package => "icinga-idoutils";
-    "icinga":
-      require => Kservice["ido2db"];
-  }
+  kservice { 'icinga':; }
 
   file {
     "/var/lib/icinga/rw":
