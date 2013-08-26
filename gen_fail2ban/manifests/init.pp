@@ -29,6 +29,25 @@ class gen_fail2ban ($ignoreip='127.0.0.0/8', $email=false, $bantime='7200', $ban
   }
 }
 
+# Class: gen_fail2ban::asterisk
+#
+# Actions: Enable asterisk protections in fail2ban.
+#
+# Parameters:
+#  maxretry: The number of failures we need to see before we will ban the IP address. Defaults to 3.
+#
+class gen_fail2ban::asterisk ($maxretry='3') {
+  concat::add_content { 'asterisk':
+    content => template('gen_fail2ban/asterisk'),
+    target  => '/etc/fail2ban/jail.local';
+  }
+
+  file { '/etc/fail2ban/filter.d/asterisk.local':
+    content => template('gen_fail2ban/filter.d/asterisk.local'),
+    notify  => Exec['reload-fail2ban'];
+  }
+}
+
 # Class: gen_fail2ban::dovecot
 #
 # Actions: Enable dovecot protections in fail2ban.
@@ -44,7 +63,7 @@ class gen_fail2ban::dovecot ($maxretry='3') {
 
   if $lsbmajdistrelease < 7 {
     file { '/etc/fail2ban/filter.d/dovecot.local':
-      content => template('gen_fail2ban/dovecot.local'),
+      content => template('gen_fail2ban/filter.d/dovecot.local'),
       notify  => Exec['reload-fail2ban'];
     }
   }

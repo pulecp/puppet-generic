@@ -1,0 +1,8 @@
+[dovecot]
+
+enabled = true
+port    = sip
+filter  = asterisk
+logpath = /var/log/asterisk/messages
+maxretry = <%= maxretry %>
+
