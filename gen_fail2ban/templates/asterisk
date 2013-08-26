@@ -1,4 +1,4 @@
-[dovecot]
+[asterisk]
 
 enabled = true
 port    = sip
