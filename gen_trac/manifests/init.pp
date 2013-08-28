@@ -166,7 +166,7 @@ define gen_trac::environment($group, $path="/srv/trac/${name}", $svnrepo=false, 
   concat { "${tracdir}/conf/trac.ini":
     owner   => "www-data",
     group   => $group,
-    mode    => 0664,
+    mode    => 0644,
     require => Exec["create-trac-${name}"];
   }
 
