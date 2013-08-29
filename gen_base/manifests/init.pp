@@ -707,6 +707,22 @@ class gen_base::libgdbm_dev {
   }
 }
 
+# Class: gen_base::libgeronimo_javamail_1_4_provider_java
+#
+# Actions:
+#  Install libgeronimo-javamail-1.4-provider-java
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libgeronimo_javamail_1_4_provider_java {
+  include gen_base::libtasn1_3
+
+  package { "libgeronimo-javamail-1.4-provider-java":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libgnutls26
 #
 # Actions:
