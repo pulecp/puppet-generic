@@ -340,6 +340,6 @@ define gen_ferm::hook($type, $command) {
     "hook_${name}":
       target  => "/etc/ferm/ferm.conf",
       order   => 10,
-      content => "hook ${type} \"${command}\";";
+      content => "@hook ${type} \"${command}\";";
   }
 }
