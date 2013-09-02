@@ -2,20 +2,36 @@ class gen_openvpn {
   kservice { 'openvpn':; }
   file { '/var/lib/openvpn':
     ensure => directory,
+    require => Package['openvpn'],
     mode => 750;
   }
 }
 
-class gen_openvpn::server ($ca_cert, $certname=$fqdn, $subnet, $subnet_mask ) {
+class gen_openvpn::server ($ca_cert, $certname=$fqdn, $subnet, $subnet_mask, $dh_location, $push_gateway=false) {
   include gen_openvpn
-  concat { '/etc/openvpn/server.conf':; }
-
-  concat::add_content { 'openvpn server main':
-    content => template('gen_openvpn/server.conf');
+  concat { '/etc/openvpn/server.conf':
+    require => Package['openvpn'],
+    notify  => Service['openvpn'];
   }
 
-  file { '/etc/openvpn/server':
-    ensure => directory;
+  concat::add_content { 'openvpn server main':
+    content => template('gen_openvpn/server.conf'),
+    target  => '/etc/openvpn/server.conf';
+  }
+
+  file {
+    '/etc/openvpn/server':
+      ensure  => directory,
+      require => Package['openvpn'];
+    '/etc/openvpn/server/dh.pem':
+      content => template($dh_location);
+  }
+}
+
+define gen_openvpn::server::route ($network, $network_mask) {
+  concat::add_content { "openvpn route ${name}":
+    content => "#${name}\npush \"route ${network} ${network_mask}\"",
+    target  => '/etc/openvpn/server.conf';
   }
 }
 
