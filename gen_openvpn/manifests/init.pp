@@ -25,6 +25,10 @@ class gen_openvpn::server ($ca_cert, $certname=$fqdn, $subnet, $subnet_mask, $dh
       require => Package['openvpn'];
     '/etc/openvpn/server/dh.pem':
       content => template($dh_location);
+    # Needed because OpenVPN/OpenSSL complains about it.
+    '/usr/share/openssl-blacklist/blacklist.RSA-4096':
+      ensure  => file,
+      replace => false;
   }
 }
 
