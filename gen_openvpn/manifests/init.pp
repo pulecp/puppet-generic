@@ -7,7 +7,7 @@ class gen_openvpn {
   }
 }
 
-class gen_openvpn::server ($ca_cert, $certname=$fqdn, $subnet, $subnet_mask, $dh_location, $push_gateway=false) {
+class gen_openvpn::server ($ca_cert, $certname=$fqdn, $subnet, $subnet_mask, $dh_location, $push_gateway=false, $crl_location=false) {
   include gen_openvpn
   concat { '/etc/openvpn/server.conf':
     require => Package['openvpn'],
