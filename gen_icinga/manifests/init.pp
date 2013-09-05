@@ -12,8 +12,8 @@ class gen_icinga::client {
   include gen_base::nagios-plugins-standard
 }
 
-# Class: gen_icinga::ido2db
-class gen_icinga::ido2db {
+# Class: gen_icinga::idomod
+class gen_icinga::idomod {
   kservice { 'ido2db':
     package => "icinga-idoutils";
   }
