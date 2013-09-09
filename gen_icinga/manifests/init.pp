@@ -14,9 +14,7 @@ class gen_icinga::client {
 
 # Class: gen_icinga::idomod
 class gen_icinga::idomod {
-  kservice { 'ido2db':
-    package => "icinga-idoutils";
-  }
+  package { 'icinga-idoutils':; }
 }
 
 # Class: gen_icinga::server
