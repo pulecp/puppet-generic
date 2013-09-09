@@ -173,7 +173,7 @@ do
 	I=$(($I + 1))
 done
 
-GRAPHICS_CONFIG="listen=$VNC_LISTEN"
+GRAPHICS_CONFIG="listen='$VNC_LISTEN'"
 
 # Generate VNC password if needed.
 if test $VNC_PORT = '-'
