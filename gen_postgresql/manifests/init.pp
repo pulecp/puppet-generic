@@ -28,7 +28,7 @@ class gen_postgresql::client {
 # Depends:
 #  gen_puppet
 #
-class gen_postgresql::server ($datadir=false, $version) {
+class gen_postgresql::server ($datadir=false, $version, $is_failover=false) {
   include gen_base::libpq5
 
   if $datadir {
@@ -87,6 +87,10 @@ class gen_postgresql::server ($datadir=false, $version) {
   kservice { "postgresql":
     hasrestart => true,
     hasstatus  => true,
+    ensure     => $is_failover ? {
+      false   => 'undef',
+      default => 'running'
+    },
     require    => Package["postgresql-server"];
   }
 
