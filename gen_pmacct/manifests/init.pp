@@ -61,6 +61,10 @@ define gen_pmacct::config ($aggregates=false, $aggregates_sql=$aggregates, $aggr
       notify  => Service["pmacct"],
       content => template('gen_pmacct/table.mysql');
     }
+
+    Kcron <| title == "pmacct-data-archive" |> {
+      ensure => absent,
+    }
   }
 
   exec { "/bin/sed -i 's/^\\(INTERFACES=\".*\\)\"$/\\1 ${name}\"/' /etc/default/pmacct":
