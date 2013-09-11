@@ -45,7 +45,7 @@ class gen_pmacct {
 #  gen_pmacct
 #  gen_puppet
 #
-define gen_pmacct::config ($aggregates=false, $aggregates_sql=$aggregates, $aggregates_nfprobe=false, $filter=false, $plugins=false, $sql_host=false, $sql_db=false, $sql_user=false, $sql_passwd=false, $sql_history=false, $sql_history_roundoff=false, $sql_refresh_time=false, $sql_dont_try_update=false, $nfprobe_version=9, $nfprobe_receiver=false) {
+define gen_pmacct::config ($aggregates=false, $aggregates_sql=$aggregates, $aggregates_nfprobe=false, $filter=false, $plugins=false, $sql_host=false, $sql_db=false, $sql_user=false, $sql_passwd=false, $sql_history=false, $sql_history_roundoff=false, $sql_refresh_time=false, $sql_dont_try_update=false, $nfprobe_version=9, $nfprobe_receiver=false, $table_per_day=false) {
   include gen_pmacct
 
   $table_part = regsubst($hostname, '-', '_', 'G')
@@ -54,6 +54,13 @@ define gen_pmacct::config ($aggregates=false, $aggregates_sql=$aggregates, $aggr
     content => template("gen_pmacct/pmacct.conf"),
     require => Package["pmacct"],
     notify  => Service["pmacct"],
+  }
+
+  if $table_per_day {
+    file { '/etc/pmacct/table.mysql':
+      notify  => Service["pmacct"],
+      content => template('gen_pmacct/table.mysql');
+    }
   }
 
   exec { "/bin/sed -i 's/^\\(INTERFACES=\".*\\)\"$/\\1 ${name}\"/' /etc/default/pmacct":
