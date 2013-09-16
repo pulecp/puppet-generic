@@ -2829,6 +2829,20 @@ class gen_base::python_mysqldb {
   }
 }
 
+# Class: gen_base::python_nagioscheck
+#
+# Actions:
+#  Install python-nagioscheck
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python-nagioscheck {
+  package { "python-nagioscheck":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_numpy
 #
 # Actions:
