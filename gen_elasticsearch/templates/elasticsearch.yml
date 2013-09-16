@@ -310,6 +310,9 @@ network.host: "<%= bind_address %>"
 # See <http://elasticsearch.org/guide/reference/modules/discovery/zen.html>
 # for more information.
 
+discovery.zen.ping.multicast.address: <%= bind_address %>
+discovery.zen.ping.multicast.ttl: 1
+
 # Unicast discovery allows to explicitly control which nodes will be used
 # to discover the cluster. It can be used when multicast is not present,
 # or to restrict the cluster communication-wise.
