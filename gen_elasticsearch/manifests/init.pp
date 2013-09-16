@@ -17,7 +17,7 @@ class gen_elasticsearch ($cluster_name='elasticsearch', $bind_address='0.0.0.0',
   }
 }
 
-define kbp_elasticsearch::plugin ($install_name) {
+define gen_elasticsearch::plugin ($install_name) {
   exec { "Elasticsearch plugin ${name}":
     command => "/usr/share/elasticsearch/bin/plugin --install ${name}",
     creates => "/usr/share/elasticsearch/plugins/${install_name}",
