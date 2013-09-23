@@ -2584,6 +2584,20 @@ class gen_base::python_django_auth_ldap {
   }
 }
 
+# Class: gen_base::python_django_debug_toolbar
+#
+# Actions:
+#  Install python-django-debug-toolbar
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_django_debug_toolbar {
+  package { 'python-django-debug-toolbar':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-carrot
 #
 # Actions:
