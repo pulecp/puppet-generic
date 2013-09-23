@@ -1,0 +1,7 @@
+{
+  "network": {
+    "timeout": 15,
+    "ssl ca": "/etc/ssl/certs/<%= sslca %>.pem",
+    "servers": [ "<%= servers.join('","') %>" ]
+  },
+  "files": [

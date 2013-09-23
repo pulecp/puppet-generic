@@ -1,0 +1,10 @@
+    {
+      "paths": [ "/var/log/syslog" ],
+      "fields": {
+        "type": "syslog",
+        "customer": "<%= environment %>",
+        "hostname": "<%= fqdn %>"
+      }
+    }
+  ]
+}
