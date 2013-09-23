@@ -2815,6 +2815,20 @@ class gen_base::python_libxslt1 {
   }
 }
 
+# Class: gen_base::python_memcache
+#
+# Actions:
+#  Install python-memcache
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_memcache {
+  package { 'python-memcache':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_mysqldb
 #
 # Actions:
