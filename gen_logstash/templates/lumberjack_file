@@ -5,7 +5,9 @@
       ],
       "fields": {
         "type": "<% type %>",
-        "customer": "<%= environment %>,
+        "customer": "<%= environment %>",
+        "environment": "<%= custenv %>",
+        "datacenter": "<%= dcenv %>",
         "hostname": "<%= fqdn %>"
       }
     },

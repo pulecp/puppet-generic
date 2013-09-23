@@ -3,6 +3,8 @@
       "fields": {
         "type": "syslog",
         "customer": "<%= environment %>",
+        "environment": "<%= custenv %>",
+        "datacenter": "<%= dcenv %>",
         "hostname": "<%= fqdn %>"
       }
     }
