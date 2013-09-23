@@ -26,6 +26,7 @@ class gen_logstash ($config) {
       require => Package['logstash'];
     '/etc/logstash/conf.d/logstash.conf':
       content => $config,
+      require => Package['logstash'],
       notify  => Exec['restart-logstash'];
   }
 }
