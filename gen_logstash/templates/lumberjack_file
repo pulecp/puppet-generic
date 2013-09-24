@@ -1,10 +1,10 @@
     {
       "paths": [
-      <%- files_a = []; files_a << the_files; files_a.flatten! %>
+      <%- files_a = []; files_a << the_files; files_a.flatten! -%>
       "<%= files_a.join('","') %>"
       ],
       "fields": {
-        "type": "<% type %>",
+        "type": "<% file_type %>",
         "customer": "<%= environment %>",
         "environment": "<%= custenv %>",
         "datacenter": "<%= dcenv %>",

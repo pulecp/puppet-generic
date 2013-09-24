@@ -79,7 +79,7 @@ class gen_logstash::lumberjack ($servers, $sslca) {
 #  gen_logstash::lumberjack
 #  gen_puppet
 #
-define gen_logstash::lumberjack::files ($type, $files=false) {
+define gen_logstash::lumberjack::files ($file_type, $files=false) {
   $the_files = $files ? {
     false   => $name,
     default => $files,
