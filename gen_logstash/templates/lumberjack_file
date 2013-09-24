@@ -4,7 +4,7 @@
       "<%= files_a.join('","') %>"
       ],
       "fields": {
-        "type": "<% file_type %>",
+        "type": "<%= file_type %>",
         "customer": "<%= environment %>",
         "environment": "<%= custenv %>",
         "datacenter": "<%= dcenv %>",
