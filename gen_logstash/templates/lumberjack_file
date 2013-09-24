@@ -1,7 +1,7 @@
     {
       "paths": [
-      <%- files_a << the_files; files_a.flatten!; files = files_a.join('","') -%>
-      "<%= files %>"
+      <%- files_a = []; files_a << the_files; files_a.flatten! %>
+      "<%= files_a.join('","') %>"
       ],
       "fields": {
         "type": "<% type %>",
