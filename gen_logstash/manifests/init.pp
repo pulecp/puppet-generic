@@ -50,7 +50,7 @@ class gen_logstash::lumberjack ($servers, $sslca) {
 
   concat { '/etc/lumberjack.conf':
     require => Package['lumberjack'],
-    notify  => Exec['reload-lumberjack'];
+    notify  => Exec['restart-lumberjack'];
   }
 
   concat::add_content {
