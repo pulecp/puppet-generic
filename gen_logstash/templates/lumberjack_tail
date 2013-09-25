@@ -1,5 +1,5 @@
     {
-      "paths": [ "/var/log/syslog", "/var/log/auth.log" ],
+      "paths": [ "/var/log/syslog", "/var/log/auth.log", "/var/log/kern.log" ],
       "fields": {
         "type": "syslog",
         "customer": "<%= environment %>",
