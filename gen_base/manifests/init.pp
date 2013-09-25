@@ -3040,6 +3040,20 @@ class gen_base::python_xlrd {
   }
 }
 
+# Class: gen_base::python_zmq
+#
+# Actions:
+#  Install python-zmq
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_zmq {
+  package { 'python-zmq':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::pyzor
 #
 # Actions:
