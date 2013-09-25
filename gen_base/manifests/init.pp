@@ -3533,3 +3533,17 @@ class gen_base::zoo {
     ensure => latest;
   }
 }
+
+# Class: gen_base::zmq
+#
+# Actions:
+#  Install libzmq3
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::zmq {
+  package { 'libzmq3':
+    ensure => latest;
+  }
+}
