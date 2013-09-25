@@ -5,13 +5,17 @@
 #
 # Parameters:
 #  config: A big-ass string containing the full content of the desired logstash config file
+#          Set it to false if you drop the config yourself in the /etc/logstash/conf.d/ directory
 #
 # Depends:
 #  gen_puppet
 #
-class gen_logstash ($config) {
+class gen_logstash ($config=false) {
   kservice { 'logstash':
-    srequire => File['/etc/default/logstash','/etc/logstash/conf.d/logstash.conf'];
+    srequire => $config ? {
+      false   => File['/etc/default/logstash'],
+      default => File['/etc/default/logstash','/etc/logstash/conf.d/logstash.conf'],
+    }
   }
 
   file {
@@ -25,7 +29,14 @@ class gen_logstash ($config) {
       source  => 'puppet:///modules/gen_logstash/patterns',
       require => Package['logstash'];
     '/etc/logstash/conf.d/logstash.conf':
-      content => $config,
+      ensure  => $config ? {
+        false   => absent,
+        default => present,
+      },
+      content => $config ? {
+        false   => undef,
+        default => $config,
+      },
       require => Package['logstash'],
       notify  => Exec['restart-logstash'];
   }
