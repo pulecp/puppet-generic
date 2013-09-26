@@ -2,13 +2,13 @@
 # The original of this file can be found at: http://logstashbook.com/code/index.html
 #
 COMP ([\w._\/%-]+)
-COMPPID postfix\/%{COMP:component}(?:\[%{POSINT:pid}\])?
+COMPPID postfix\/%{COMP:[postfix][component]}(?:\[%{POSINT:[postfix][pid]}\])?
 
 # From https://gist.github.com/jamtur01/4385667
 QUEUEID (?:[A-F0-9]+|NOQUEUE)
 EMAILADDRESSPART [a-zA-Z0-9_.+-=:]+
-EMAILADDRESS %{EMAILADDRESSPART:local}@%{EMAILADDRESSPART:remote}
-RELAY (?:%{HOSTNAME:relayhost}(?:\[%{IP:relayip}\](?::[0-9]+(.[0-9]+)?)?)?)
+EMAILADDRESS %{EMAILADDRESSPART:[postfix][local]}@%{EMAILADDRESSPART:[postfix][remote]}
+RELAY (?:%{HOSTNAME:[postfix][relayhost]}(?:\[%{IP:[postfix][relayip]}\](?::[0-9]+(.[0-9]+)?)?)?)
 POSREAL [0-9]+(.[0-9]+)?
 DELAYS (%{POSREAL}[/]*)+
 DSN %{NONNEGINT}.%{NONNEGINT}.%{NONNEGINT}
@@ -16,34 +16,34 @@ STATUS sent|deferred|bounced|expired
 PERMERROR 5[0-9]{2}
 MESSAGELEVEL reject|warning|error|fatal|panic
 
-POSTFIXSMTPMESSAGE %{MESSAGELEVEL}: %{GREEDYDATA:reason}
+POSTFIXSMTPMESSAGE %{MESSAGELEVEL}: %{GREEDYDATA:[postfix][reason]}
 POSTFIXACTION discard|dunno|filter|hold|ignore|info|prepend|redirect|replace|reject|warn
 
 # postfix/smtp and postfix/lmtp and postfix/local
-POSTFIXSMTPRELAY %{QUEUEID:qid}: to=<%{EMAILADDRESS:to}>,(?:\sorig_to=<%{EMAILADDRESS:orig_to}>,)? relay=%{RELAY}, delay=%{POSREAL:delay}, delays=%{DELAYS:delays}, dsn=%{DSN}, status=%{STATUS:result} \(%{DATA:reason}\)
-POSTFIXSMTPCONNECT connect to %{RELAY}: %{GREEDYDATA:reason}
-POSTFIXSMTP5XX %{QUEUEID:qid}: to=<%{EMAILADDRESS:to}>,(?:\sorig_to=<%{EMAILADDRESS:orig_to}>,)? relay=%{RELAY}, delay=%{POSREAL:delay}, delays=%{DELAYS:delays}, dsn=%{DSN}, status=%{STATUS:result} \(host %{HOSTNAME}\[%{IP}\] said: %{PERMERROR:responsecode} %{DATA:smtp_response} \(in reply to %{DATA:command} command\)\)
-POSTFIXSMTPREFUSAL %{QUEUEID:qid}: host %{RELAY} refused to talk to me: %{GREEDYDATA:reason}
-POSTFIXSMTPLOSTCONNECTION %{QUEUEID:qid}: lost connection with %{RELAY} while %{GREEDYDATA:reason}
-POSTFIXSMTPTIMEOUT %{QUEUEID:qid}: conversation with %{RELAY} timed out while %{GREEDYDATA:reason}
+POSTFIXSMTPRELAY %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(%{DATA:[postfix][reason]}\)
+POSTFIXSMTPCONNECT connect to %{RELAY}: %{GREEDYDATA:[postfix][reason]}
+POSTFIXSMTP5XX %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(host %{HOSTNAME}\[%{IP}\] said: %{PERMERROR:[postfix][responsecode]} %{DATA:[postfix][smtp]_response} \(in reply to %{DATA:[postfix][command]} command\)\)
+POSTFIXSMTPREFUSAL %{QUEUEID:[postfix][qid]}: host %{RELAY} refused to talk to me: %{GREEDYDATA:[postfix][reason]}
+POSTFIXSMTPLOSTCONNECTION %{QUEUEID:[postfix][qid]}: lost connection with %{RELAY} while %{GREEDYDATA:[postfix][reason]}
+POSTFIXSMTPTIMEOUT %{QUEUEID:[postfix][qid]}: conversation with %{RELAY} timed out while %{GREEDYDATA:[postfix][reason]}
 
 # postfix/smtpd
 POSTFIXSMTPDCONNECTS (?:dis)?connect from %{RELAY}
-POSTFIXSMTPDACTIONS %{QUEUEID:qid}: %{POSTFIXACTION}: %{DATA:command} from %{RELAY}: %{DATA:smtp_response}: %{DATA:reason}; from=<%{EMAILADDRESS:from}> to=<%{EMAILADDRESS:to}> proto=%{DATA:proto} helo=<%{IPORHOST}>
-POSTFIXSMTPDTIMEOUTS timeout after %{DATA:command} from %{RELAY}
-POSTFIXSMTPDLOGIN %{QUEUEID:qid}: client=%{DATA:client}, sasl_method=%{DATA:saslmethod}, sasl_username=%{EMAILADDRESS:saslusername}
+POSTFIXSMTPDACTIONS %{QUEUEID:[postfix][qid]}: %{POSTFIXACTION}: %{DATA:[postfix][command]} from %{RELAY}: %{DATA:[postfix][smtp]_response}: %{DATA:[postfix][reason]}; from=<%{EMAILADDRESS:[postfix][from]}> to=<%{EMAILADDRESS:[postfix][to]}> proto=%{DATA:[postfix][proto]} helo=<%{IPORHOST}>
+POSTFIXSMTPDTIMEOUTS timeout after %{DATA:[postfix][command]} from %{RELAY}
+POSTFIXSMTPDLOGIN %{QUEUEID:[postfix][qid]}: client=%{DATA:[postfix][client]}, sasl_method=%{DATA:[postfix][saslmethod]}, sasl_username=%{EMAILADDRESS:[postfix][saslusername]}
 
 # postfix/cleanup
-POSTFIXCLEANUP %{QUEUEID:qid}: message-id=<%{EMAILADDRESS:messageid}>
+POSTFIXCLEANUP %{QUEUEID:[postfix][qid]}: message-id=<%{EMAILADDRESS:[postfix][messageid]}>
 
 # postfix/bounce
-POSTFIXBOUNCE %{QUEUEID:qid}: sender non-delivery notification: %{QUEUEID:bouncequeueid}
+POSTFIXBOUNCE %{QUEUEID:[postfix][qid]}: sender non-delivery notification: %{QUEUEID:[postfix][bouncequeueid]}
 
 # postfix/qmgr and postfix/pickup
-POSTFIXQMGR %{QUEUEID:qid}: (?:removed|from=<(?:%{EMAILADDRESS:from})?>(?:, size=%{POSINT:size}, nrcpt=%{POSINT:nrcpt} \(%{GREEDYDATA:queuestatus}\))?)
+POSTFIXQMGR %{QUEUEID:[postfix][qid]}: (?:removed|from=<(?:%{EMAILADDRESS:[postfix][from]})?>(?:, size=%{POSINT:[postfix][size]}, nrcpt=%{POSINT:[postfix][nrcpt]} \(%{GREEDYDATA:[postfix][queuestatus]}\))?)
 
 # postfix/anvil
-POSTFIXANVIL statistics: %{DATA:anvilstatistic} for (%{DATA:remotehost}) at %{SYSLOGTIMESTAMP:timestamp}
+POSTFIXANVIL statistics: %{DATA:[postfix][anvilstatistic]} for (%{DATA:[postfix][remotehost]}) at %{SYSLOGTIMESTAMP:[postfix][timestamp]}
 
 # Match one of the above. If none match, we'll match on POSTFIXSMTPMESSAGE
 POSTFIXLOGLINE %{POSTFIXSMTPRELAY}|%{POSTFIXSMTPCONNECT}|%{POSTFIXSMTP5XX}|%{POSTFIXSMTPREFUSAL}|%{POSTFIXSMTPLOSTCONNECTION}|%{POSTFIXSMTPTIMEOUT}|%{POSTFIXSMTPDCONNECTS}|%{POSTFIXSMTPDACTIONS}|%{POSTFIXSMTPDTIMEOUTS}|%{POSTFIXSMTPDLOGIN}|%{POSTFIXCLEANUP}|%{POSTFIXBOUNCE}|%{POSTFIXQMGR}|%{POSTFIXANVIL}|%{POSTFIXSMTPMESSAGE}
