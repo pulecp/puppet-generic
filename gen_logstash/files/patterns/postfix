@@ -20,9 +20,9 @@ POSTFIXSMTPMESSAGE %{MESSAGELEVEL}: %{GREEDYDATA:[postfix][reason]}
 POSTFIXACTION discard|dunno|filter|hold|ignore|info|prepend|redirect|replace|reject|warn
 
 # postfix/smtp and postfix/lmtp and postfix/local
-POSTFIXSMTPRELAY %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]:float}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(%{DATA:[postfix][reason]}\)
+POSTFIXSMTPRELAY %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(%{DATA:[postfix][reason]}\)
 POSTFIXSMTPCONNECT connect to %{RELAY}: %{GREEDYDATA:[postfix][reason]}
-POSTFIXSMTP5XX %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]:float}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(host %{HOSTNAME}\[%{IP}\] said: %{PERMERROR:[postfix][responsecode]} %{DATA:[postfix][smtp]_response} \(in reply to %{DATA:[postfix][command]} command\)\)
+POSTFIXSMTP5XX %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(host %{HOSTNAME}\[%{IP}\] said: %{PERMERROR:[postfix][responsecode]} %{DATA:[postfix][smtp]_response} \(in reply to %{DATA:[postfix][command]} command\)\)
 POSTFIXSMTPREFUSAL %{QUEUEID:[postfix][qid]}: host %{RELAY} refused to talk to me: %{GREEDYDATA:[postfix][reason]}
 POSTFIXSMTPLOSTCONNECTION %{QUEUEID:[postfix][qid]}: lost connection with %{RELAY} while %{GREEDYDATA:[postfix][reason]}
 POSTFIXSMTPTIMEOUT %{QUEUEID:[postfix][qid]}: conversation with %{RELAY} timed out while %{GREEDYDATA:[postfix][reason]}
