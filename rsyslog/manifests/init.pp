@@ -54,17 +54,19 @@ class rsyslog::client {
 
     file {
       '/etc/rsyslog.d/forwardfile-logformat.conf':
+        ensure  => absent,
         content => template('rsyslog/client/forwardfile-logformat.conf'),
         require => Package['rsyslog'],
-        notify => Service['rsyslog'];
+        notify  => Service['rsyslog'];
       '/etc/rsyslog.d/enable-ssl-puppet-certs.conf':
+        ensure  => absent,
         content => template('rsyslog/client/enable-ssl-puppet-certs.conf'),
         require => Package['rsyslog'],
-        notify => Service['rsyslog'];
+        notify  => Service['rsyslog'];
+      '/etc/rsyslog.d/remote-logging-client.conf':
+        ensure  => absent,
+        notify  => Service['rsyslog'];
     }
-
-    # We import this so we can change the server to use
-    File <<| title == '/etc/rsyslog.d/remote-logging-client.conf' |>>
   } else {
     file { ['/etc/rsyslog.d/forwardfile-logformat.conf', '/etc/rsyslog.d/enable-ssl-puppet-certs.conf','/etc/rsyslog.d/remote-logging-client.conf']:
       ensure => absent,
@@ -89,10 +91,12 @@ class rsyslog::server {
 
   file {
     "/etc/rsyslog.d/remote-logging-server.conf":
+      ensure  => absent,
       content => template("rsyslog/server/remote-logging-server.conf"),
       require => [Package["rsyslog"],File['/var/log/external']],
       notify  => Service["rsyslog"];
     '/etc/rsyslog.d/enable-ssl-puppet-certs.conf':
+      ensure  => absent,
       content => template('rsyslog/server/enable-ssl-puppet-certs.conf'),
       require => Package["rsyslog"],
       notify  => Service["rsyslog"];
@@ -105,6 +109,7 @@ class rsyslog::server {
 
   # Export the client configuration for remote logging
   @@file { '/etc/rsyslog.d/remote-logging-client.conf':
+      ensure  => absent,
       content => template('rsyslog/server/remote-logging-client.conf'),
       require => Package['rsyslog'],
       notify => Service['rsyslog'];
