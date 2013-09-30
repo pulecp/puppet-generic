@@ -12,7 +12,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_elasticsearch ($cluster_name='elasticsearch', $bind_address='0.0.0.0', $node_name=$hostname, $path_data='/srv/elasticsearch'){
+class gen_elasticsearch ($cluster_name='elasticsearch', $bind_address='0.0.0.0', $node_name=$hostname, $path_data='/srv/elasticsearch', $extra_opts=false){
   include gen_java::openjdk_7_jre
 
   kservice { 'elasticsearch':; }
