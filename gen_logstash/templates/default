@@ -39,7 +39,11 @@ OPEN_FILES=2048
 NICE=19
 
 # Set LogStash options
+<% if workers -%>
+LS_OPTS="--log ${LOG_FILE} -w <%= workers %>"
+<% else -%>
 LS_OPTS="--log ${LOG_FILE}"
+<% end -%>
 
 # Set a home directory
 HOME=/var/lib/logstash

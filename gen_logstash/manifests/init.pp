@@ -10,7 +10,7 @@
 # Depends:
 #  gen_puppet
 #
-class gen_logstash ($config=false) {
+class gen_logstash ($config=false, $workers=false) {
   kservice { 'logstash':
     srequire => $config ? {
       false   => File['/etc/default/logstash'],
