@@ -224,7 +224,7 @@ define gen_apache::module ($ensure = "enable") {
   }
 }
 
-define gen_apache::forward_vhost($ensure="present", $forward, $address = '*', $address6 = '::', $port=80, $serveralias=false, $statuscode=301, $condpattern=false, $teststring="%{HTTP_HOST}", $preserve_path=true) {
+define gen_apache::forward_vhost($ensure="present", $forward, $address = '*', $address6 = '::', $port=80, $serveralias=false, $statuscode=301, $condpattern=false, $teststring="%{HTTP_HOST}", $preserve_path=true, $access_logformat='combined') {
   $full_name = "${name}_${port}"
   $substitution = $preserve_path ? {
     true  => "${forward}\$1",
@@ -232,10 +232,11 @@ define gen_apache::forward_vhost($ensure="present", $forward, $address = '*', $a
   }
 
   gen_apache::site { $full_name:
-    ensure      => $ensure,
-    address     => $address,
-    address6    => $address6,
-    serveralias => $serveralias;
+    ensure           => $ensure,
+    address          => $address,
+    address6         => $address6,
+    access_logformat => $access_logformat,
+    serveralias      => $serveralias;
   }
 
   gen_apache::redirect { $full_name:
