@@ -44,4 +44,4 @@ POSTFIXBOUNCE %{QUEUEID:[postfix][qid]}: sender non-delivery notification: %{QUE
 POSTFIXQMGR %{QUEUEID:[postfix][qid]}: (?:uid=%{INT:[postfix][uid]} )?(?:removed|from=<(?:%{EMAILADDRESS:[postfix][from]})?>(?:, size=%{POSINT:[postfix][size]:int}, nrcpt=%{POSINT:[postfix][nrcpt]:int} \(%{GREEDYDATA:[postfix][queuestatus]}\))?)
 
 # postfix/anvil
-POSTFIXANVIL statistics: %{DATA:[postfix][anvilstatistic]} for (%{DATA:[postfix][remotehost]}) at %{SYSLOGTIMESTAMP:[postfix][timestamp]}
+POSTFIXANVIL statistics: %{DATA:[postfix][anvilstatistic]}( for (%{DATA:[postfix][remotehost]}))? at %{SYSLOGTIMESTAMP:[postfix][timestamp]}
