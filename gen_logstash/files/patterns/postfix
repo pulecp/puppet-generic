@@ -40,7 +40,7 @@ POSTFIXCLEANUP %{QUEUEID:[postfix][qid]}: message-id=<%{EMAILADDRESS:[postfix][m
 POSTFIXBOUNCE %{QUEUEID:[postfix][qid]}: sender non-delivery notification: %{QUEUEID:[postfix][bouncequeueid]}
 
 # postfix/qmgr and postfix/pickup
-POSTFIXQMGR %{QUEUEID:[postfix][qid]}: (?:removed|from=<(?:%{EMAILADDRESS:[postfix][from]})?>(?:, size=%{POSINT:[postfix][size]:int}, nrcpt=%{POSINT:[postfix][nrcpt]:int} \(%{GREEDYDATA:[postfix][queuestatus]}\))?)
+POSTFIXQMGR %{QUEUEID:[postfix][qid]}: (?:uid=%{INT:[postfix][uid]} )?(?:removed|from=<(?:%{EMAILADDRESS:[postfix][from]})?>(?:, size=%{POSINT:[postfix][size]:int}, nrcpt=%{POSINT:[postfix][nrcpt]:int} \(%{GREEDYDATA:[postfix][queuestatus]}\))?)
 
 # postfix/anvil
 POSTFIXANVIL statistics: %{DATA:[postfix][anvilstatistic]} for (%{DATA:[postfix][remotehost]}) at %{SYSLOGTIMESTAMP:[postfix][timestamp]}
