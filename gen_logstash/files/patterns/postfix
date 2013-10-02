@@ -6,8 +6,8 @@ COMPPID postfix\/%{COMP:[postfix][component]}(?:\[%{POSINT:[postfix][pid]}\])?
 
 # From https://gist.github.com/jamtur01/4385667
 QUEUEID (?:[A-F0-9]+|NOQUEUE)
-EMAILADDRESSPART [a-zA-Z0-9_.+-=:]+
-EMAILADDRESS %{EMAILADDRESSPART:[postfix][local]}@%{EMAILADDRESSPART:[postfix][remote]}
+EMAILADDRESSPART [-a-zA-Z0-9_.+=:]+
+EMAILADDRESS %{EMAILADDRESSPART:[postfix][local]}(@%{EMAILADDRESSPART:[postfix][remote]})?
 RELAY (?:%{HOSTNAME:[postfix][relayhost]}(?:\[%{IP:[postfix][relayip]}\](?::[0-9]+(.[0-9]+)?)?)?)
 POSREAL [0-9]+(.[0-9]+)?
 DELAYS (%{POSREAL}[/]*)+
@@ -22,19 +22,20 @@ POSTFIXACTION discard|dunno|filter|hold|ignore|info|prepend|redirect|replace|rej
 # postfix/smtp and postfix/lmtp and postfix/local
 POSTFIXSMTPRELAY %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(%{DATA:[postfix][reason]}\)
 POSTFIXSMTPCONNECT connect to %{RELAY}: %{GREEDYDATA:[postfix][reason]}
-POSTFIXSMTP5XX %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(host %{HOSTNAME}\[%{IP}\] said: %{PERMERROR:[postfix][responsecode]} %{DATA:[postfix][smtp]_response} \(in reply to %{DATA:[postfix][command]} command\)\)
+POSTFIXSMTP5XX %{QUEUEID:[postfix][qid]}: to=<%{EMAILADDRESS:[postfix][to]}>,(?:\sorig_to=<%{EMAILADDRESS:[postfix][orig]_to}>,)? relay=%{RELAY}, delay=%{POSREAL:[postfix][delay]}, delays=%{DELAYS:[postfix][delays]}, dsn=%{DSN}, status=%{STATUS:[postfix][result]} \(host %{HOSTNAME}\[%{IP}\] said: %{PERMERROR:[postfix][responsecode]} %{DATA:[postfix][smtp][response]} \(in reply to %{DATA:[postfix][command]} command\)\)
 POSTFIXSMTPREFUSAL %{QUEUEID:[postfix][qid]}: host %{RELAY} refused to talk to me: %{GREEDYDATA:[postfix][reason]}
 POSTFIXSMTPLOSTCONNECTION %{QUEUEID:[postfix][qid]}: lost connection with %{RELAY} while %{GREEDYDATA:[postfix][reason]}
 POSTFIXSMTPTIMEOUT %{QUEUEID:[postfix][qid]}: conversation with %{RELAY} timed out while %{GREEDYDATA:[postfix][reason]}
 
 # postfix/smtpd
 POSTFIXSMTPDCONNECTS (?:dis)?connect from %{RELAY}
+POSTFIXSMTPDLOSTCONNECTION lost connection after %{WORD:[postfix][lost_after]} from %{RELAY}
 POSTFIXSMTPDACTIONS %{QUEUEID:[postfix][qid]}: %{POSTFIXACTION}: %{DATA:[postfix][command]} from %{RELAY}: %{DATA:[postfix][smtp]_response}: %{DATA:[postfix][reason]}; from=<%{EMAILADDRESS:[postfix][from]}> to=<%{EMAILADDRESS:[postfix][to]}> proto=%{DATA:[postfix][proto]} helo=<%{IPORHOST}>
 POSTFIXSMTPDTIMEOUTS timeout after %{DATA:[postfix][command]} from %{RELAY}
-POSTFIXSMTPDLOGIN %{QUEUEID:[postfix][qid]}: client=%{DATA:[postfix][client]}, sasl_method=%{DATA:[postfix][saslmethod]}, sasl_username=%{EMAILADDRESS:[postfix][saslusername]}
+POSTFIXSMTPDLOGIN %{QUEUEID:[postfix][qid]}: client=%{RELAY:[postfix][client]}(, sasl_method=%{DATA:[postfix][saslmethod]}, sasl_username=%{EMAILADDRESS:[postfix][saslusername]})?
 
 # postfix/cleanup
-POSTFIXCLEANUP %{QUEUEID:[postfix][qid]}: message-id=<%{EMAILADDRESS:[postfix][messageid]}>
+POSTFIXCLEANUP %{QUEUEID:[postfix][qid]}: message-id=<%{DATA:[postfix][messageid]}>
 
 # postfix/bounce
 POSTFIXBOUNCE %{QUEUEID:[postfix][qid]}: sender non-delivery notification: %{QUEUEID:[postfix][bouncequeueid]}
@@ -44,6 +45,3 @@ POSTFIXQMGR %{QUEUEID:[postfix][qid]}: (?:uid=%{INT:[postfix][uid]} )?(?:removed
 
 # postfix/anvil
 POSTFIXANVIL statistics: %{DATA:[postfix][anvilstatistic]} for (%{DATA:[postfix][remotehost]}) at %{SYSLOGTIMESTAMP:[postfix][timestamp]}
-
-# Match one of the above. If none match, we'll match on POSTFIXSMTPMESSAGE
-POSTFIXLOGLINE %{POSTFIXSMTPRELAY}|%{POSTFIXSMTPCONNECT}|%{POSTFIXSMTP5XX}|%{POSTFIXSMTPREFUSAL}|%{POSTFIXSMTPLOSTCONNECTION}|%{POSTFIXSMTPTIMEOUT}|%{POSTFIXSMTPDCONNECTS}|%{POSTFIXSMTPDACTIONS}|%{POSTFIXSMTPDTIMEOUTS}|%{POSTFIXSMTPDLOGIN}|%{POSTFIXCLEANUP}|%{POSTFIXBOUNCE}|%{POSTFIXQMGR}|%{POSTFIXANVIL}|%{POSTFIXSMTPMESSAGE}
