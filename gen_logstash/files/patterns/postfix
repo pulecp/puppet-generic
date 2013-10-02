@@ -6,7 +6,7 @@ COMPPID postfix\/%{COMP:[postfix][component]}(?:\[%{POSINT:[postfix][pid]}\])?
 
 # From https://gist.github.com/jamtur01/4385667
 QUEUEID (?:[A-F0-9]+|NOQUEUE)
-EMAILADDRESSPART [-a-zA-Z0-9_.+=:]+
+EMAILADDRESSPART [-a-zA-Z0-9_.+=:/]+
 EMAILADDRESS %{EMAILADDRESSPART:[postfix][local]}(@%{EMAILADDRESSPART:[postfix][remote]})?
 RELAY (?:%{HOSTNAME:[postfix][relayhost]}(?:\[%{IP:[postfix][relayip]}\](?::[0-9]+(.[0-9]+)?)?)?)
 POSREAL [0-9]+(.[0-9]+)?
