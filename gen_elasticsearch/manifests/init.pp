@@ -8,11 +8,14 @@
 #  bind_address: The IP address to bind on
 #  node_name: The name of the node in the cluster
 #  path_data: The path to the elasticsearch data
+#  extra_opts: a hash of extra elasticsearch options
+#  es_nodes: an array of IP addresses of the es nodes in this cluster, use this if you don't want to use multicast
+#  min_nodes: discovery.zen.minimum_master_nodes setting
 #
 # Depends:
 #  gen_puppet
 #
-class gen_elasticsearch ($cluster_name='elasticsearch', $bind_address='0.0.0.0', $node_name=$hostname, $path_data='/srv/elasticsearch', $extra_opts=false){
+class gen_elasticsearch ($cluster_name='elasticsearch', $bind_address='0.0.0.0', $node_name=$hostname, $path_data='/srv/elasticsearch', $extra_opts=false, $es_nodes=false, $min_nodes=false){
   include gen_java::openjdk_7_jre
 
   kservice { 'elasticsearch':; }
