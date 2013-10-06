@@ -6,11 +6,12 @@
 # Parameters:
 #  bind_address: The address to bind to
 #  datadir: The directory where the redis data is stored
+#  memory_limit: The maximum amount of memory to use in bytes. Defaults to 1GB.
 #
 # Depends:
 #  gen_puppet
 #
-class gen_redis ($bind_address='127.0.0.1', $datadir='/var/lib/redis') {
+class gen_redis ($bind_address='127.0.0.1', $datadir='/var/lib/redis', $memory_limit=1048576) {
   kservice { 'redis-server':; }
 
   file {
