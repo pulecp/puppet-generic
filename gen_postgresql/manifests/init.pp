@@ -94,6 +94,15 @@ class gen_postgresql::server ($datadir=false, $version, $is_failover=false) {
     require    => Package["postgresql-server"];
   }
 
+  if $is_failover {
+    # Don't start postgresql on boot, the cluster manager should take care of that.
+    exec { 'disable postgresql service':
+      onlyif  => '/usr/bin/test -f /etc/rc2.d/S03postgresql',
+      command => '/usr/sbin/update-rc.d -f postgresql remove',
+      require => Package['postgresql-server'];
+    }
+  }
+
   user { "postgres":
     require => Package["postgresql-server"];
   }
