@@ -77,23 +77,21 @@ class gen_munin::client ($setup_config=true) {
     content => template('gen_munin/client/munin-node.conf.base');
   }
 
-  # TODO Once all munin config is async, we can me the if $setup_config to this place.
-
-  Concat::Add_content <<| tag == "munin-node.conf_server_allows_${environment}" |>>
-
-  # This is passed through from customer specific implicitly (we don't wanna do proxies anyway)
-  if $munin_proxy {
-    $munin_template = "gen_munin/server/munin.conf_client_with_proxy"
-  } else {
-    $real_ipaddress = $external_ipaddress ? {
-      undef => $ipaddress,
-      false => $ipaddress,
-      default => $external_ipaddress,
-    }
-    $munin_template = "gen_munin/server/munin.conf_client"
-  }
-
   if $setup_config {
+    Concat::Add_content <<| tag == "munin-node.conf_server_allows_${environment}" |>>
+
+    # This is passed through from customer specific implicitly (we don't wanna do proxies anyway)
+    if $munin_proxy {
+      $munin_template = "gen_munin/server/munin.conf_client_with_proxy"
+    } else {
+      $real_ipaddress = $external_ipaddress ? {
+        undef => $ipaddress,
+        false => $ipaddress,
+        default => $external_ipaddress,
+      }
+      $munin_template = "gen_munin/server/munin.conf_client"
+    }
+
     @@file { "/etc/munin/conf/${fqdn}":
       content => template($munin_template),
       require => File["/etc/munin/conf"],
