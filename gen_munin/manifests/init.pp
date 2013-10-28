@@ -11,7 +11,7 @@
 #
 class gen_munin {
   if $lsbdistcodename == "squeeze" {
-    gen_apt::preference { ["munin","munin-common","munin-doc","munin-java-plugins","munin-node","munin-plugins-core","munin-plugins-extra","munin-plugins-java"]:
+    gen_apt::preference { ["munin","munin-common","munin-doc","munin-java-plugins","munin-node","munin-plugins-core","munin-plugins-extra","munin-plugins-java",'munin-async']:
       repo => "squeeze-backports";
     }
   }
@@ -27,7 +27,7 @@ class gen_munin {
 #
 class gen_munin::server {
   include gen_munin
-  package { "munin":
+  package { ['munin']:
     ensure => latest,
   }
 }
@@ -37,10 +37,13 @@ class gen_munin::server {
 # Actions:
 #  - Install and configure munin-node
 #
+# Parameters:
+#  setup_config: Setup remote config. Defaults to true to setup a normal client. The gen_munin::async_client will set it to false, so it can set up it's own config.
+#
 # Depends:
 #  gen_puppet
 #
-class gen_munin::client {
+class gen_munin::client ($setup_config=true) {
   include gen_munin
   include gen_munin::client::plugin::defaults
 
@@ -73,6 +76,9 @@ class gen_munin::client {
     target  => '/etc/munin/munin-node.conf',
     content => template('gen_munin/client/munin-node.conf.base');
   }
+
+  # TODO Once all munin config is async, we can me the if $setup_config to this place.
+
   Concat::Add_content <<| tag == "munin-node.conf_server_allows_${environment}" |>>
 
   # This is passed through from customer specific implicitly (we don't wanna do proxies anyway)
@@ -86,6 +92,34 @@ class gen_munin::client {
     }
     $munin_template = "gen_munin/server/munin.conf_client"
   }
+
+  if $setup_config {
+    @@file { "/etc/munin/conf/${fqdn}":
+      content => template($munin_template),
+      require => File["/etc/munin/conf"],
+      tag     => "munin_client_${environment}";
+    }
+  }
+}
+
+# Class: gen_munin::async_client
+#  Action: Setup an asynchronous munin client with default config
+#
+class gen_munin::async_client {
+  class { 'gen_munin::client':
+    setup_config => false;
+  }
+
+  package { 'munin-async':
+    ensure => latest;
+  }
+
+  $real_ipaddress = $external_ipaddress ? {
+    undef => $ipaddress,
+    false => $ipaddress,
+    default => $external_ipaddress,
+  }
+  $munin_template = "gen_munin/server/munin.conf_async-client"
 
   @@file { "/etc/munin/conf/${fqdn}":
     content => template($munin_template),
