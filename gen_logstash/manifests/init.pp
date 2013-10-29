@@ -56,7 +56,8 @@ class gen_logstash ($config=false, $workers=false) {
 #
 class gen_logstash::lumberjack ($servers, $sslca) {
   kservice { 'lumberjack':
-    srequire => Concat['/etc/lumberjack.conf'];
+    srequire => Concat['/etc/lumberjack.conf'],
+    pensure  => 'latest';
   }
 
   concat { '/etc/lumberjack.conf':
