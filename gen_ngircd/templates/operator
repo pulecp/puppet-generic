@@ -1,0 +1,12 @@
+[Operator]
+	# [Operator] sections are used to define IRC Operators. There may be
+	# more than one [Operator] block, one for each local operator.
+
+	# ID of the operator (may be different of the nick name)
+	Name = <%= name %>
+
+	# Password of the IRC operator
+	Password = <%= password %>
+
+	# Optional Mask from which /OPER will be accepted
+	;Mask = *!ident@somewhere.example.com
