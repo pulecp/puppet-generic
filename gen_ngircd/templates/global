@@ -30,7 +30,7 @@
 	# Info text of the server. This will be shown by WHOIS and
 	# LINKS requests for example.
 <% if serverinfo["Info"] -%>
-	Info = <%= serverinfo["Info"] -%>
+	Info = <%= serverinfo["Info"] %>
 <% else -%>
 	Info = Debian
 <% end -%>
