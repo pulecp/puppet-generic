@@ -27,6 +27,12 @@ class gen_ngircd ($servername=$fqdn, $serverinfo=false, $listen=[$ipaddress], $l
     order   => 10,
     target  => '/etc/ngircd/ngircd.conf';
   }
+
+  if $ssl_dh_params {
+    file { '/etc/ngircd/dhparams.pem':
+      content => $ssl_dh_params;
+    }
+  }
 }
 
 #
