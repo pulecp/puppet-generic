@@ -102,7 +102,7 @@
 
 	# Maximum number of simultaneous connections from a single IP address
 	# the server will accept (0: unlimited):
-	MaxConnectionsIP = 10
+	MaxConnectionsIP = 0
 
 	# Maximum number of channels a user can be member of (0: no limit):
 	MaxJoins = 0
