@@ -12,17 +12,17 @@
 	# Information about the server and the administrator, used by the
 	# ADMIN command. Not required by server but by RFC!
 <% if serverinfo["AdminInfo1"] -%>
-	AdminInfo1 = <%= serverinfo["AdminInfo1"] -%>
+	AdminInfo1 = <%= serverinfo["AdminInfo1"] %>
 <% else -%>
 	AdminInfo1 = Debian
 <% end -%>
 <% if serverinfo["AdminInfo2"] -%>
-	AdminInfo2 = <%= serverinfo["AdminInfo2"] -%>
+	AdminInfo2 = <%= serverinfo["AdminInfo2"] %>
 <% else -%>
 	AdminInfo2 = Debian City
 <% end -%>
 <% if serverinfo["AdminEMail"] -%>
-	AdminEMail = <%= serverinfo["AdminEMail"] -%>
+	AdminEMail = <%= serverinfo["AdminEMail"] %>
 <% else -%>
 	AdminEMail = email@not.valid
 <% end -%>
