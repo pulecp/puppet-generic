@@ -45,7 +45,7 @@ class gen_ngircd ($servername=$fqdn, $serverinfo=false, $listen=[$ipaddress], $l
 #
 define gen_ngircd::operator ($password) {
   concat::add_content { "ngircd.conf operator ${name}":
-    content => template('gen_ircd/operator'),
+    content => template('gen_ngircd/operator'),
     order   => 20,
     target  => '/etc/ngircd/ngircd.conf';
   }
@@ -58,7 +58,7 @@ define gen_ngircd::operator ($password) {
 #
 define gen_ngircd::channel () {
   concat::add_content { "ngircd.conf channel ${name}":
-    content => template('gen_ircd/channel'),
+    content => template('gen_ngircd/channel'),
     order   => 30,
     target  => '/etc/ngircd/ngircd.conf';
   }
