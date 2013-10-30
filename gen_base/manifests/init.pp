@@ -286,6 +286,20 @@ class gen_base::dnsutils {
   }
 }
 
+# Class: gen_base::doxygen
+#
+# Actions:
+#  Install doxygen
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::doxygen {
+  package { "doxygen":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::dpkg
 #
 # Actions:
