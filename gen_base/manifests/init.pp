@@ -581,6 +581,20 @@ class gen_base::ipaddress_ruby {
   }
 }
 
+# Class: gen_base::irssi
+#
+# Actions:
+#  Install irssi
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::irssi {
+  package { 'irssi':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::javascript-common
 #
 # Actions:
