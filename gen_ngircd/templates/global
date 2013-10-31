@@ -110,7 +110,7 @@
 	# Maximum length of an user nick name (Default: 9, as in RFC 2812).
 	# Please note that all servers in an IRC network MUST use the same
 	# maximum nick name length!
-	;MaxNickLength = 9
+	MaxNickLength = 31
 
 	# After <PingTimeout> seconds of inactivity the server will send a
 	# PING to the peer to test whether it is alive or not.

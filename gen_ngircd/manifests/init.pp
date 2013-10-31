@@ -33,6 +33,12 @@ class gen_ngircd ($servername=$fqdn, $serverinfo=false, $listen=[$ipaddress], $l
       content => $ssl_dh_params;
     }
   }
+
+  if $motd {
+    file { '/etc/ngircd/ngircd.motd':
+      content => $motd;
+    }
+  }
 }
 
 #
