@@ -1,6 +1,8 @@
 server:
 	# verbosity number, 0 is least verbose. 1 is default.
 	verbosity: 1
+	num-threads: 5
+	num-queries-per-thread: 4096
 
 <% interfaces_a = []; interfaces_a << interfaces; interfaces_a.flatten! -%>
 <% interfaces_a.each do |interface| -%>
