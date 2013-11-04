@@ -75,7 +75,7 @@ class gen_php5::cli {
 # Depends:
 #  gen_puppet
 #
-class gen_php5::apc ($shm_size = 64, $ttl = 3600, $shm=true) {
+class gen_php5::apc ($shm_size = 64, $ttl = 3600, $shm=true, $shm_size_with_suffix=false) {
   include gen_php5::common
 
   package { "php-apc":
@@ -91,9 +91,14 @@ class gen_php5::apc ($shm_size = 64, $ttl = 3600, $shm=true) {
 
   gen_php5::common::config {
     'apc.mmap_file_mask': value => "${file_mask}";
-    'apc.shm_size':       value => "${shm_size}";
     'apc.ttl':            value => "${ttl}";
     'apc.filters':        value => 'wp-cache-config';
+  }
+
+  if $shm_size_with_suffix {
+    gen_php5::common::config { 'apc.shm_size': value => "${shm_size}M"; }
+  } else {
+    gen_php5::common::config { 'apc.shm_size': value => "${shm_size}"; }
   }
 
   $shm_size_digits = regsubst($shm_size,'([0-9]+).*', '\1')
