@@ -122,7 +122,7 @@ class gen_munin::async_client {
   @@file { "/etc/munin/conf/${fqdn}":
     content => template($munin_template),
     require => File["/etc/munin/conf"],
-    tag     => "munin_aync_client_${environment}";
+    tag     => "munin_async_client_${environment}";
   }
 }
 
