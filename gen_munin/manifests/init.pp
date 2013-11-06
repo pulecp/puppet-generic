@@ -122,7 +122,7 @@ class gen_munin::async_client {
   @@file { "/etc/munin/conf/${fqdn}":
     content => template($munin_template),
     require => File["/etc/munin/conf"],
-    tag     => "munin_client_${environment}";
+    tag     => "munin_aync_client_${environment}";
   }
 }
 
@@ -143,6 +143,26 @@ define gen_munin::environment {
     content => "cidr_allow ${ipaddress}/32\n",
     target  => '/etc/munin/munin-node.conf',
     tag     => "munin-node.conf_server_allows_${name}";
+  }
+}
+
+#
+# Define: gen_munin::async::environment
+#
+# Actions:
+#  - Import all exported server config from async machines in $environment
+#  - Export client config to allow the server access
+#
+# Depends:
+#  gen_munin
+#
+define gen_munin::async::environment {
+  File <<| tag == "munin_async_client_${name}" |>> {}
+
+  @@concat::add_content { "/etc/munin/munin-node.conf server ${fqdn} for env ${name}":
+    content => "cidr_allow ${ipaddress}/32\n",
+    target  => '/etc/munin/munin-node.conf',
+    tag     => "munin-node.conf_async_server_allows_${name}";
   }
 }
 
