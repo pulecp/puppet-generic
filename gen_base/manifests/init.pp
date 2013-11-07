@@ -3208,6 +3208,34 @@ class gen_base::rsync {
   }
 }
 
+# Class: gen_base::ruby_rack
+#
+# Actions:
+#  Install ruby-rack
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ruby_rack {
+  package { "ruby-rack":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::ruby_json
+#
+# Actions:
+#  Install ruby-json
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ruby_json {
+  package { "ruby-json":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::ruby_stomp
 #
 # Actions:
