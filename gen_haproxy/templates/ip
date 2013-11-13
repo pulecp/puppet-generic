@@ -1,5 +1,5 @@
 listen <%= site %>:<%= ip %>:<%= port %> <%= ip %>:<%= port %>
-<% if remove_external_forwarded_for and mode == 'http' -%>
+<% if remove_external_forwarded_for and mode == 'http' and not has_stunnel -%>
 	reqidel              ^X-Forwarded-For:.*
 <% end -%>
 <% if mode != 'http' -%>
@@ -15,7 +15,7 @@ listen <%= site %>:<%= ip %>:<%= port %> <%= ip %>:<%= port %>
 <% if balance -%>
 	balance              <%= balance %>
 <% end -%>
-<% if forwardfor_except -%>
+<% if forwardfor_except and not has_stunnel-%>
 	option               forwardfor except <%= forwardfor_except %>
 <% end -%>
 <% if httpclose -%>
@@ -28,9 +28,11 @@ listen <%= site %>:<%= ip %>:<%= port %> <%= ip %>:<%= port %>
 <% end -%>
 	timeout http-request <%= timeout_http_request %>
 	timeout check        <%= timeout_check %>
-<% if redirect_non_ssl -%>
+<% if has_stunnel -%>
 	acl viastunnel src <%= ip %>/32
-	reqadd X-SSL:\ On if viastunnel
+	reqidel              ^X-Forwarded-For:.* if ! viastunnel
+	reqadd               X-SSL:\ On if viastunnel
+	option               forwardfor except <%= ip %>
 <% end -%>
 <% if source -%>
 	source               <%= source %>
