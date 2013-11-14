@@ -2098,6 +2098,7 @@ class gen_base::mozjs2d {
 #
 class gen_base::multiarch::i386 {
   exec { "Enable i386 multiarch":
+    notify  => Exec["/usr/bin/apt-get update"],
     command => '/usr/bin/dpkg --add-architecture i386',
     unless  => '/usr/bin/dpkg --print-foreign-architectures|grep -q i386';
   }
