@@ -320,6 +320,12 @@ class gen_percona::java {
   include mysql::java
 }
 
+class gen_percona::xtrabackup {
+  package { 'percona-xtrabackup':
+    ensure => 'latest';
+  }
+}
+
 define gen_percona::server::permissions ($user, $db, $hostname="localhost", $permissions="all") {
   # $name is not used, make it whatever you like
   if "select" in $permissions or $permissions == "all" {
