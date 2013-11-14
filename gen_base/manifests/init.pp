@@ -623,6 +623,15 @@ class gen_base::jmxquery {
   }
 }
 
+# Class: gen_base::lbzip2
+#  Actions: Install lbzip2
+#
+class gen_base::lbzip2 {
+  package { 'lbzip2':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libaio-dev
 #
 # Actions:
@@ -2369,6 +2378,15 @@ class gen_base::openjdk-7-jre {
   }
 }
 
+# Class: gen_base::pbzip2
+#  Actions: Install pbzip2
+#
+class gen_base::pbzip2 {
+  package { 'pbzip2':
+    ensure => 'latest';
+  }
+}
+
 # Class: gen_base::perl
 #
 # Actions:
@@ -2380,6 +2398,15 @@ class gen_base::openjdk-7-jre {
 class gen_base::perl {
   package { "perl":
     ensure => latest;
+  }
+}
+
+# Class: gen_base::pigz
+#  Actions: Install pigz
+#
+class gen_base::pigz {
+  package { 'pigz':
+    ensure => 'latest';
   }
 }
 
@@ -2553,6 +2580,15 @@ class gen_base::postfix_mysql {
 class gen_base::pstotext {
   package { "pstotext":
     ensure => latest;
+  }
+}
+
+# Class: gen_base::pv
+#  Actions: Install pv
+#
+class gen_base::pv {
+  package { 'pv':
+    ensure => 'latest';
   }
 }
 
