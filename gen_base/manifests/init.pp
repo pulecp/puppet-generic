@@ -660,6 +660,22 @@ class gen_base::libc6_dev {
   }
 }
 
+# Class: gen_base::libc6:i386
+#
+# Actions:
+#  Install libc6:i386
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libc6::i386 {
+  include gen_base::multiarch::i386
+
+    package { "libc6:i386":
+      ensure => latest;
+    }
+}
+
 # Class: gen_base::libcache_memcached_perl
 #
 # Actions:
@@ -2069,6 +2085,21 @@ class gen_base::module_init_tools {
 class gen_base::mozjs2d {
   package { "mozjs2d":
     ensure => latest;
+  }
+}
+
+# Class: gen_base::multiarch
+#
+# Actions:
+#  Install multiarch
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::multiarch::i386 {
+  exec { "Enable i386 multiarch":
+    command => '/usr/bin/dpkg --add-architecture i386',
+    unless  => '/usr/bin/dpkg --print-foreign-architectures|grep -q i386';
   }
 }
 
