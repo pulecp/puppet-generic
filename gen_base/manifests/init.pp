@@ -2238,6 +2238,15 @@ class gen_base::nscd {
   }
 }
 
+# Class: gen_base::numactl
+#  Actions: Install numactl
+#
+class gen_base::numactl {
+  package { 'numactl':
+    ensure => 'latest';
+  }
+}
+
 # Class: gen_base::openoffice_org_baise
 #
 # Actions:
