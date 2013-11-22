@@ -104,6 +104,8 @@ class gen_ferm {
 #    Defines whether the rule should be exported
 #  ferm_tag
 #    The tag to set on the exported file
+#  ordering
+#    Dirty hack to allow some specific ordering in the filename
 #
 # Actions:
 #  Adds a rule.
@@ -112,7 +114,7 @@ class gen_ferm {
 #  gen_puppet
 #
 define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=false, $daddr=false, $proto=false,
-    $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter,
+    $icmptype=false, $sport=false, $dport=false, $jump=false, $action=DROP, $table=filter, $ordering='',
     $chain=INPUT, $ensure=present, $exported=false, $ferm_tag=false, $fqdn = $::fqdn, $ipaddress6=false, $customtag="foobar") {
   if $customtag != "foobar" { notify { "gen_ferm::rule ${name} customtag ${customtag}":; } }
   $real_name = regsubst($name,'^(.*)_(v4?6?)$','\1')
@@ -151,6 +153,7 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
         chain     => $chain,
         ensure    => $ensure,
         exported  => $exported,
+        ordering  => $ordering,
         ferm_tag  => $ferm_tag;
       }
     } else {
@@ -170,6 +173,7 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
         chain     => $chain,
         ensure    => $ensure,
         exported  => $exported,
+        ordering  => $ordering,
         ferm_tag  => $ferm_tag;
       }
     }
@@ -179,7 +183,7 @@ define gen_ferm::rule($prio=500, $interface=false, $outerface=false, $saddr=fals
       gen_ferm::chain { "${chain}_${table}_${ip_proto}":; }
     }
 
-    concat::add_content { "${ip_proto}_${table}_${chain}_${prio}_${sanitized_name}":
+    concat::add_content { "${ip_proto}_${table}_${chain}${ordering}_${prio}_${sanitized_name}":
       target     => "/etc/ferm/ferm.conf",
       content    => $ip_proto ? {
         "v4" => template("gen_ferm/rule_v4"),
@@ -256,6 +260,8 @@ define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $p
 #    The default policy, defaults to false
 #  name
 #    Used as a comment for the chain, if ending on _v4 a v4 chain will be created, if ending on _v6 a v6 chain will be created, otherwise both v4 and v6 will be created
+#  ordering
+#    Allow us to manipulate the ordering because sometimes it's too arbitrary to rely on the defaults :S
 #
 # Actions:
 #  Add a ferm chain.
@@ -263,7 +269,7 @@ define gen_ferm::mod($comment=false, $table=filter, $chain=INPUT, $mod=state, $p
 # Depends:
 #  gen_puppet
 #
-define gen_ferm::chain($policy=false) {
+define gen_ferm::chain($policy=false, $ordering='') {
   include gen_ferm
 
   $real_name = regsubst($name,'^(.*)_(.*)_(v4?6?)$','\1')
@@ -273,11 +279,11 @@ define gen_ferm::chain($policy=false) {
   realize Gen_ferm::Table["${table}_${ip_proto}"]
 
   concat::add_content {
-    "${ip_proto}_${table}_${real_name}":
+    "${ip_proto}_${table}_${real_name}${ordering}":
       target  => "/etc/ferm/ferm.conf",
       content => "\tchain ${real_name} {",
       require => Gen_ferm::Table["${table}_${ip_proto}"];
-    "${ip_proto}_${table}_${real_name}_zzzz":
+    "${ip_proto}_${table}_${real_name}${ordering}_zzzz":
       target  => "/etc/ferm/ferm.conf",
       content => "\t}",
       require => Gen_ferm::Table["${table}_${ip_proto}"];
