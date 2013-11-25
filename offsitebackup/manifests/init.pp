@@ -68,7 +68,7 @@ class offsitebackup::common {
 #  Undocumented
 #  gen_puppet
 #
-class offsitebackup::client($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B", $splay=28800) {
+class offsitebackup::client($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B", $splay=28800, $listfile='/tmp/backuplist') {
   include gen_base::backup-scripts
   include offsitebackup::client::package
 
@@ -133,7 +133,7 @@ class offsitebackup::client::package {
 #  Undocumented
 #  gen_puppet
 #
-define offsitebackup::extraclient($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B", $splay=28800, $confprefix="${name}_", $sshpubkey, $sshprivkey, $backupdir="${fqdn}_${name}", $prepare="/dev/null", $prepare_conf="/dev/null", $finish="/dev/null", $finish_conf="/dev/null", $includes, $excludes='') {
+define offsitebackup::extraclient($backup_server, $backup_home="/backup/${environment}", $backup_user=$environment, $backup_remove_older_than="30B", $splay=28800, $confprefix="${name}_", $sshpubkey, $sshprivkey, $backupdir="${fqdn}_${name}", $prepare="/dev/null", $prepare_conf="/dev/null", $finish="/dev/null", $finish_conf="/dev/null", $includes, $excludes='', $listfile="/tmp/backuplist_${name}") {
   include gen_base::backup-scripts
   include offsitebackup::client::package
 
