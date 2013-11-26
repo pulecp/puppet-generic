@@ -1,8 +1,8 @@
 CREATE TABLE `acct_%Y%m%d` (
   `mac_src` char(17) NOT NULL,
   `mac_dst` char(17) NOT NULL,
-  `ip_src` char(15) NOT NULL,
-  `ip_dst` char(15) NOT NULL,
+  `ip_src` char(45) NOT NULL,
+  `ip_dst` char(45) NOT NULL,
   `src_port` int(2) unsigned NOT NULL,
   `dst_port` int(2) unsigned NOT NULL,
   `ip_proto` char(6) NOT NULL,
