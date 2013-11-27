@@ -200,7 +200,8 @@ class gen_apt::cron_apt::disable {
     ensure => purged;
   }
 
-  file { '/etc/cron.d/cron-apt':
+  file { ['/etc/cron.d/cron-apt','/etc/cron-apt']:
+    force  => true,
     ensure => absent;
   }
 }
