@@ -193,6 +193,18 @@ class gen_apt::cron_apt {
   concat {"/etc/cron.d/cron-apt":;}
 }
 
+# Class: gen_apt::cron_apt::disable
+#  Actions: Deinstall cron-apt and remove cronjobs.
+class gen_apt::cron_apt::disable {
+  package { 'cron-apt':
+    ensure => purged;
+  }
+
+  file { '/etc/cron.d/cron-apt':
+    ensure => absent;
+  }
+}
+
 # Define: gen_apt::cron_apt::config
 #
 # Actions:
