@@ -86,3 +86,16 @@ class gen_mcollective::common {
     notify  => Service["mcollective"];
   }
 }
+
+# Class: gen_mcollective::disable
+#  Actions: Remove mcollective from a machine.
+class gen_mcollective::disable {
+  package { ['mcollective-common','mcollective-client','mcollective']:
+    ensure => purged;
+  }
+
+  file { ['/etc/mcollective','/etc/default/mcollective']:
+    ensure => absent,
+    force  => true;
+  }
+}
