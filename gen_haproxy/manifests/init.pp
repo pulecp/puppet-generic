@@ -73,8 +73,8 @@ class gen_haproxy ($haproxy_loglevel="warning") {
 #
 define gen_haproxy::site($site, $mode="http", $balance="static-rr", $timeout_connect="5s", $timeout_server_client="5s", $timeout_http_request="5s", $httpcheck_uri=false, $cookie=false,
       $forwardfor_except=false, $httpclose=false, $timeout_server='20s', $redirect_non_ssl=false, $timeout_check='10s', $remove_external_forwarded_for=true, $source=false, $has_stunnel=false) {
-  if !($balance in ["roundrobin","static-rr","source"]) {
-    fail("${balance} is not a valid balancing type (roundrobin, static-rr or source).")
+  if !($balance in ["roundrobin","static-rr","source","leastconn"]) {
+    fail("${balance} is not a valid balancing type (roundrobin, static-rr, leastconn or source).")
   }
   if !($mode in ["http","tcp"]) {
     fail("Please select either http or tcp as mode.")
