@@ -1,5 +1,6 @@
 class gen_openvpn {
   kservice { 'openvpn':; }
+  package { 'openvpn-blacklist':; }
   file { '/var/lib/openvpn':
     ensure => directory,
     require => Package['openvpn'],
