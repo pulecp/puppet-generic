@@ -62,7 +62,7 @@ class offsitebackup::common {
       command => "for server in `/bin/ls ${home}`; do if [ $((`/bin/date +%s` - `/usr/bin/rdiff-backup -l ${home}/\$server | /bin/grep 'Current mirror' | /usr/bin/cut -d' ' -f3- | /usr/bin/xargs -i /bin/date -d '{}' +%s`)) -gt 604800 ]; then echo \"Last backup for ${home}/\$server more than a week ago\"; fi; done",
       hour    => '9',
       minute  => '0',
-      wday    => '1';
+      wday    => '2';
     }
   }
 }
