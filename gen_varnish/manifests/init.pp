@@ -60,7 +60,7 @@ class gen_varnish {
 #     Cache file size: in bytes, optionally using k / M / G / T suffix, or in percentage of available
 #     disk space using the % suffix. Defaults to '1G'.
 #   secret_file
-#     File containing administration secret. Defaults to '/etc/varnish/secret'.
+#     File containing administration secret. Defaults to '/etc/varnish/secret'. False disables secret.
 #   default_ttl
 #     Default TTL used when the backend does not specify one. Defaults to 120.
 #
@@ -76,8 +76,14 @@ define gen_varnish::config ($nfiles='131072',$memlock='82000',$vcl_conf='/etc/va
     "START":   value => 'yes';
   }
 
+  if $secret_file {
+    $secret = " -S ${secret_file}"
+  } else {
+    $secret = ''
+  }
+
   gen_varnish::set_config { "DAEMON_OPTS":
-      value => "\"-a ${listen_address}:${listen_port} -f ${vcl_conf} -T ${admin_address}:${admin_port} -t ${default_ttl} -w ${min_threads},${max_threads},${idle_timeout} -S ${secret_file} -s file,${storage_file},${storage_size}\"";
+      value => "\"-a ${listen_address}:${listen_port} -f ${vcl_conf} -T ${admin_address}:${admin_port} -t ${default_ttl} -w ${min_threads},${max_threads},${idle_timeout} ${secret} -s file,${storage_file},${storage_size}\"";
   }
 }
 
