@@ -21,7 +21,7 @@ class offsitebackup::common {
     }
   }
 
-  define backupuser($home=$backup_home, $comment="") {
+  define backupuser($home=$backup_home, $comment="", $disable_cron=false) {
     user { "$name":
       ensure => present,
       home => $home,
@@ -56,13 +56,19 @@ class offsitebackup::common {
 
     $sanitized_name = regsubst($name, '[^a-zA-Z0-9\-]', '-', 'G')
 
-    kcron { "backup-check-for-${sanitized_name}":
-      mailto  => "reports+${environment}@kumina.nl",
-      user    => 'root',
-      command => "for server in `/bin/ls ${home}`; do if [ $((`/bin/date +\%s` - `/usr/bin/rdiff-backup -l ${home}/\$server | /bin/grep 'Current mirror' | /usr/bin/cut -d' ' -f3- | /usr/bin/xargs -i /bin/date -d '{}' +\%s`)) -gt 604800 ]; then echo \"Last backup for ${home}/\$server more than a week ago\"; fi; done",
-      hour    => '9',
-      minute  => '0',
-      wday    => '3';
+    if $disable_cron {
+      file { "/etc/cron.d/backup-check-for-${sanitized_name}":
+        ensure => absent;
+      }
+    } else {
+      kcron { "backup-check-for-${sanitized_name}":
+        mailto  => "reports+${environment}@kumina.nl",
+        user    => 'root',
+        command => "for server in `/bin/ls ${home}`; do if [ $((`/bin/date +\%s` - `/usr/bin/rdiff-backup -l ${home}/\$server | /bin/grep 'Current mirror' | /usr/bin/cut -d' ' -f3- | /usr/bin/xargs -i /bin/date -d '{}' +\%s`)) -gt 604800 ]; then echo \"Last backup for ${home}/\$server more than a week ago\"; fi; done",
+        hour    => '9',
+        minute  => '0',
+        wday    => '1';
+      }
     }
   }
 }
