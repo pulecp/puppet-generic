@@ -61,6 +61,16 @@ class gen_java::oracle_java7_jre_crypto_policy {
   }
 }
 
+class gen_java::openjdk_6_jre {
+  package { "openjdk-6-jre":; }
+}
+
+class gen_java::openjdk_6_jdk {
+  include gen_java::openjdk_6_jre
+
+  package { "openjdk-6-jdk":; }
+}
+
 class gen_java::openjdk_7_jdk {
   include gen_java::openjdk_7_jre
 
