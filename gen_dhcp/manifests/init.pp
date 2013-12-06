@@ -37,11 +37,13 @@ class gen_dhcp::server {
 #   An array with the seach domains for the clients
 #  name_domain:
 #   The domain for the clients
+#  ntp_server:
+#   array of IPv4 addresses where the NTP server lives
 #
 # Depends:
 #  gen_dhcp::server
 #
-define gen_dhcp::server::subnet ($network_subnet, $network_netmask='255.255.255.0', $network_router, $range=false, $name_servers=['8.8.8.8','8.8.4.4'], $name_search=false, $name_domain=false) {
+define gen_dhcp::server::subnet ($network_subnet, $network_netmask='255.255.255.0', $network_router, $range=false, $name_servers=['8.8.8.8','8.8.4.4'], $name_search=false, $name_domain=false, $ntp_servers=false) {
   concat::add_content { "Subnet ${name}":
     target  => '/etc/dhcp/dhcpd.conf',
     content => template('gen_dhcp/dhcpd_network.conf');
