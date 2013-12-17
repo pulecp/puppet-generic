@@ -14,6 +14,8 @@
 #    The port to setup for ajp13 connections.
 #  ajp13_maxclients
 #    The MaxClients setting for Tomcat's AJP port. Does not affect HTTP. Defaults to 200.
+#  ajp13_uriencoding
+#   The URI encoding scheme of the AJP connection. Default = false, meaning 'use tomcat defaults'
 #  http_connector_port
 #    The port to setup for HTTP connections directly to the Tomcat.
 #  java_home
@@ -36,7 +38,8 @@
 #
 class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
                   $java_home=false, $java_opts="", $jvm_max_mem=false, $jvm_permgen_mem=false,
-                  $tomcat_tag="tomcat_${environment}",$ajp13_maxclients='200', $max_open_files=false, $autodeploy=false) {
+                  $tomcat_tag="tomcat_${environment}",$ajp13_maxclients='200', $ajp13_uriencoding = false,
+                  $max_open_files=false, $autodeploy=false) {
   class { 'gen_tomcat::manager':
     tomcat_tag => $tomcat_tag;
   }
