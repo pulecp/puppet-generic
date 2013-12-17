@@ -1,5 +1,7 @@
 class gen_graphite {
-  kservice { 'graphite-carbon':; }
+  kservice { 'carbon-cache':
+    package => 'graphite-carbon';
+  }
 
   package { 'graphite-web':; }
 }
