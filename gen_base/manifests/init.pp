@@ -229,6 +229,20 @@ class gen_base::bsdtar {
   }
 }
 
+# Class: gen_base::bundler
+#
+# Actions:
+#  Install bundler
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::bundler {
+  package { "bundler":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::bzip2
 #
 # Actions:
@@ -1527,6 +1541,20 @@ class gen_base::libpng12_0 {
 #
 class gen_base::libpq5 {
   package { "libpq5":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::libpq_dev
+#
+# Actions:
+#  Install libpq-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libpq_dev {
+  package { "libpq-dev":
     ensure => latest;
   }
 }
@@ -3278,6 +3306,20 @@ class gen_base::reprepro {
 #
 class gen_base::rsync {
   package { "rsync":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::ruby1_9_1_dev
+#
+# Actions:
+#  Install ruby1.9.1-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::ruby1_9_1_dev {
+  package { "ruby1.9.1-dev":
     ensure => latest;
   }
 }
