@@ -8,8 +8,9 @@ class gen_collectd {
     }
 
     kservice { 'collectd':
-      package  => 'collectd-core',
-      srequire => File['/etc/collectd/collectd.conf'];
+      package   => 'collectd-core',
+      hasreload => false,
+      srequire  => File['/etc/collectd/collectd.conf'];
     }
 
     file {
