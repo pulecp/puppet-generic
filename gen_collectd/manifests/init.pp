@@ -16,6 +16,9 @@ class gen_collectd {
     file {
       '/etc/collectd/conf':
         ensure  => directory,
+        purge   => true,
+        recurse => true,
+        force   => true,
         require => Package['collectd-core'];
       '/etc/collectd/collectd.conf':
         content => "Include \"/etc/collectd/conf\"\n",
