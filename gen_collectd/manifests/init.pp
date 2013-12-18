@@ -46,9 +46,9 @@ class gen_collectd {
 #               </Speak>
 #               Option3 false
 #
-#  loadplugin: Add 'LoadPlugin "plugin"' to the config
+#  noloadplugin: Don't add 'LoadPlugin "plugin"' to the config
 #
-define gen_collectd::plugin ($plugin = false, $pluginconf = false, $loadplugin = false) {
+define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin = false) {
   if ! $plugin {
     $real_plugin = $name
   } else {
