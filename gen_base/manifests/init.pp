@@ -2700,6 +2700,20 @@ class gen_base::python-argparse {
   }
 }
 
+# Class: gen_base::python_cairo
+#
+# Actions:
+#  Install python-cairo
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_cairo {
+  package { 'python-cairo':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_daemon
 #
 # Actions:
@@ -3029,6 +3043,20 @@ class gen_base::python_numpy {
   }
 }
 
+# Class: gen_base::python_pyparsing
+#
+# Actions:
+#  Install python-pyparsing
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_pyparsing {
+  package { 'python-pyparsing':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_psycopg2
 #
 # Actions:
@@ -3110,6 +3138,20 @@ class gen_base::python_reportlab {
 #
 class gen_base::python_subversion {
   package { "python-subversion":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python_tz
+#
+# Actions:
+#  Install python-tz
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_tz {
+  package { 'python-tz':
     ensure => latest;
   }
 }
