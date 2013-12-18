@@ -3,7 +3,3 @@ class gen_graphite {
     package => 'graphite-carbon';
   }
 }
-
-class gen_graphite::graphite_web {
-  package { 'graphite-web':; }
-}
