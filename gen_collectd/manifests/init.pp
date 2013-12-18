@@ -18,9 +18,11 @@ class gen_collectd {
         ensure  => directory,
         require => Package['collectd-core'];
       '/etc/collectd/collectd.conf':
-        content => 'Include "/etc/collectd/conf\n"',
+        content => "Include \"/etc/collectd/conf\"\n",
+        notify  => Exec['reload-collectd'],
         require => Package['collectd-core'];
       '/etc/collectd/conf/1-default.conf':
+        notify  => Exec['reload-collectd'],
         content => template('gen_collectd/conf/default.conf');
     }
   }
