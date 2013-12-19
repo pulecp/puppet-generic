@@ -2756,6 +2756,20 @@ class gen_base::python_django_debug_toolbar {
   }
 }
 
+# Class: gen_base::python_django_oauth-plus
+#
+# Actions:
+#  Install python-django-oauth-plus
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_django_oauth_plus {
+  package { 'python-django-oauth-plus':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-carrot
 #
 # Actions:
@@ -3039,6 +3053,20 @@ class gen_base::python-nagioscheck {
 #
 class gen_base::python_numpy {
   package { "python-numpy":
+    ensure => latest;
+  }
+}
+
+# Class: gen_base::python_oauth2
+#
+# Actions:
+#  Install python-oauth2
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_oauth2 {
+  package { 'python-oauth2':
     ensure => latest;
   }
 }
