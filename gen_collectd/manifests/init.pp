@@ -89,7 +89,7 @@ define gen_collectd::plugin::exec ($script, $as_user='nobody') {
   gen_collectd::plugin { $name:
     plugin       => 'exec',
     noloadplugin => true,
-    pluginconf   => {"Exec" => "\"${as_user}\" \"/usr/lib/collectd/exec-plugins/${script}\""},
+    pluginconf   => {"Exec" => "${as_user}\" \"/usr/lib/collectd/exec-plugins/${script}"},
     require      => File["/usr/lib/collectd/exec-plugins/${script}"];
   }
 }
