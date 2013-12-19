@@ -27,6 +27,9 @@ class gen_collectd {
       '/etc/collectd/conf/1-default.conf':
         notify  => Exec['reload-collectd'],
         content => template('gen_collectd/conf/default.conf');
+      '/usr/lib/collectd/exec-plugins':
+        ensure  => directory,
+        require => Package['collectd-core'];
     }
   }
 }
@@ -54,6 +57,9 @@ class gen_collectd {
 #
 #  noloadplugin: Don't add 'LoadPlugin "plugin"' to the config
 #
+#  For the exec plugin, two extra options exist:
+#  exec_script: The name of the script as installed with gen_collectd::plugin::exec_script
+#
 define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin = false) {
   if ! $plugin {
     $real_plugin = $name
@@ -65,5 +71,43 @@ define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin
     content => template('gen_collectd/conf/plugin.conf'),
     require => File['/etc/collectd/conf'],
     notify  => Exec['reload-collectd'];
+  }
+}
+
+#
+# Define: gen_collectd::plugin::exec
+#
+# Actions:
+#  Set up the exec plugin config
+#
+# Parameters:
+#  name: The name that the config will have
+#  script: The name of the script installed with gen_collectd::plugin::exec::script
+#  as_user: A string containing the user as whom this script is run
+#
+define gen_collectd::plugin::exec ($script, $as_user='nobody') {
+  gen_collectd::plugin { $name:
+    plugin       => 'exec',
+    noloadplugin => true,
+    pluginconf   => {"Exec" => "\"${as_user}\" \"/usr/lib/collectd/exec-plugins/${script}\""},
+    require      => File["/usr/lib/collectd/exec-plugins/${script}"];
+  }
+}
+
+#
+# Define: gen_collectd::plugin::exec::script
+#
+# Actions:
+#  Install a script for the exec plugin
+#
+# Parameters:
+#  name:    The name of the script
+#  content: The content of the script
+#
+define gen_collectd::plugin::exec::script ($content) {
+  file { "/usr/lib/collectd/exec-plugins/${name}":
+    content => $content,
+    mode    => 755,
+    require => File['/usr/lib/collectd/exec-plugins'];
   }
 }
