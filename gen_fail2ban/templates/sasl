@@ -4,4 +4,5 @@ enabled  = true
 port     = smtp,ssmtp,imap2,imap3,imaps,pop3,pop3s
 filter   = sasl
 logpath  = /var/log/mail.warn
+findtime = 21600
 maxretry = <%= maxretry %>
