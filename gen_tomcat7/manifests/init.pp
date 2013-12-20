@@ -198,9 +198,9 @@ class gen_tomcat7::manager ($tomcat_tag="tomcat_${environment}_${custenv}") {
 
   gen_tomcat7::valve {
     "manager: org.apache.catalina.valves.RemoteAddrValve":
-      allow => "127\.0\.0\.1";
+      allow => '127\.0\.0\.1';
     "host-manager: org.apache.catalina.valves.RemoteAddrValve":
-      allow => "127\.0\.0\.1";
+      allow => '127\.0\.0\.1';
   }
 
   gen_tomcat7::user { "manager":
