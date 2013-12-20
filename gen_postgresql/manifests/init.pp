@@ -147,7 +147,7 @@ define gen_postgresql::server::db ($use_utf8=false, $owner=false) {
 #  name: Name of the user.
 #  password: The password for this user.
 #
-define gen_postgresql::server::user (password) {
+define gen_postgresql::server::user ($password) {
   if ! ($name in split($psql_users,';')) {
     #exec { "Create user ${name} in PostgreSQL":
     #  command => "/bin/su postgres -c '/usr/bin/psql -c \"CREATE USER ${name} WITH PASSWORD \\'${password}\\' NOSUPERUSER NOCREATEDB NOCREATEROLE INHERIT LOGIN;\"'",
