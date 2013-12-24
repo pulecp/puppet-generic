@@ -7,6 +7,8 @@ class gen_icinga2::server {
 class gen_icinga2::classicui {
   include gen_icinga2::common
 
+  gen_apt::preference { 'icinga-cgi':; }
+
   package { 'icinga2-classicui':; }
 }
 
