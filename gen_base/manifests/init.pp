@@ -371,6 +371,20 @@ class gen_base::elinks {
   }
 }
 
+# Class: gen_base::links
+#
+# Actions:
+#  Install links
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::links {
+  package { "links":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::facter
 #
 # Actions:
