@@ -10,12 +10,9 @@
 # Depends:
 #  gen_puppet
 #
-class gen_logstash ($config=false, $workers=false) {
+class gen_logstash ($workers=false) {
   kservice { 'logstash':
-    srequire => $config ? {
-      false   => File['/etc/default/logstash'],
-      default => File['/etc/default/logstash','/etc/logstash/conf.d/logstash.conf'],
-    }
+    srequire => File['/etc/default/logstash'],
   }
 
   file {
@@ -28,17 +25,11 @@ class gen_logstash ($config=false, $workers=false) {
       recurse => true,
       source  => 'puppet:///modules/gen_logstash/patterns',
       require => Package['logstash'];
-    '/etc/logstash/conf.d/logstash.conf':
-      ensure  => $config ? {
-        false   => absent,
-        default => present,
-      },
-      content => $config ? {
-        false   => undef,
-        default => $config,
-      },
-      require => Package['logstash'],
-      notify  => Exec['restart-logstash'];
+    '/etc/logstash/conf.d':
+      ensure  => directory,
+      purge   => true,
+      recurse => true,
+      require => Package['logstash'];
   }
 }
 
