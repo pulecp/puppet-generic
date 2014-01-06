@@ -111,3 +111,12 @@ define gen_collectd::plugin::exec::script ($content) {
     require => File['/usr/lib/collectd/exec-plugins'];
   }
 }
+
+
+class gen_collectd::plugin::df {
+  file { '/etc/collectd/conf/3-df':
+    content => template('gen_collectd/conf/df.conf'),
+    require => File['/etc/collectd/conf'],
+    notify  => Exec['reload-collectd'];
+  }
+}
