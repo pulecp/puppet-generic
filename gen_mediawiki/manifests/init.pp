@@ -28,9 +28,6 @@ define gen_mediawiki::site {
     "${name}/index.php":
       ensure => link,
       target => "/usr/share/mediawiki/index.php";
-    "${name}/install-utils.inc":
-      ensure => link,
-      target => "/usr/share/mediawiki/install-utils.inc";
     "${name}/languages":
       ensure => link,
       target => "/usr/share/mediawiki/languages";
@@ -52,15 +49,9 @@ define gen_mediawiki::site {
     "${name}/skins":
       ensure => link,
       target => "/usr/share/mediawiki/skins";
-    "${name}/StartProfiler.php":
-      ensure => link,
-      target => "/usr/share/mediawiki/StartProfiler.php";
     "${name}/thumb.php":
       ensure => link,
       target => "/usr/share/mediawiki/thumb.php";
-    "${name}/trackback.php":
-      ensure => link,
-      target => "/usr/share/mediawiki/trackback.php";
     "${name}/wiki.phtml":
       ensure => link,
       target => "/usr/share/mediawiki/wiki.phtml";
@@ -80,6 +71,22 @@ define gen_mediawiki::site {
       "${name}/thumb_handler.php":
         ensure => link,
         target => "/usr/share/mediawiki/thumb_handler.php";
+      ["${name}/StartProfiler.php","${name}/trackback.php","${name}/install-utils.inc"]:
+        ensure => absent;
+    }
+  }
+
+  if $lsbdistcodename == 'squeeze' {
+    file {
+      "${name}/StartProfiler.php":
+        ensure => link,
+        target => "/usr/share/mediawiki/StartProfiler.php";
+      "${name}/trackback.php":
+        ensure => link,
+        target => "/usr/share/mediawiki/trackback.php";
+      "${name}/install-utils.inc":
+        ensure => link,
+        target => "/usr/share/mediawiki/install-utils.inc";
     }
   }
 
