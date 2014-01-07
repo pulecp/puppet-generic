@@ -72,6 +72,17 @@ define gen_mediawiki::site {
       target => "/var/lib/mediawiki/config/index.php5";
   }
 
+  if $lsbdistcodename == 'wheezy' {
+    file {
+      "${name}/load.php":
+        ensure => link,
+        target => "/usr/share/mediawiki/load.php";
+      "${name}/thumb_handler.php":
+        ensure => link,
+        target => "/usr/share/mediawiki/thumb_handler.php";
+    }
+  }
+
   file {
     ["${name}/config","${name}/images"]:
       ensure => directory,
