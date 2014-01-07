@@ -71,6 +71,9 @@ define gen_mediawiki::site {
       "${name}/thumb_handler.php":
         ensure => link,
         target => "/usr/share/mediawiki/thumb_handler.php";
+      "${name}/resources":
+        ensure => link,
+        target => "/usr/share/mediawiki/resources";
       ["${name}/StartProfiler.php","${name}/trackback.php","${name}/install-utils.inc"]:
         ensure => absent;
     }
