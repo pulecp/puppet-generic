@@ -88,10 +88,12 @@ define gen_git::repo ($branch = "master", $origin = false, $bare = false, $post_
         require => Exec["/usr/bin/git init -q --shared=group ${name}"];
     }
     # This is the hook that makes sure we always have the latest version checked out.
-    file { "${name}/.git/hooks/post-update":
-      content => $post_update_content,
-      mode    => 755,
-      require => Exec["/usr/bin/git init -q --shared=group ${name}"];
+    if $post_update_content {
+      file { "${name}/.git/hooks/post-update":
+        content => $post_update_content,
+        mode    => 755,
+        require => Exec["/usr/bin/git init -q --shared=group ${name}"];
+      }
     }
   } else {
     exec { "/usr/bin/git init --bare -q --shared=group ${name}":
