@@ -356,6 +356,12 @@ class gen_base::echoping {
   }
 }
 
+class gen_base::libicu_dev {
+  package { 'libicu-dev':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::elinks
 #
 # Actions:
