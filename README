@@ -13,3 +13,6 @@ create issues for this.
 More info on our blog: http://blog.kumina.nl/2011/04/published-our-repositories/
 
 You can assume a BSD license if we do not mention any explicitly.
+
+UPDATE: We've moved to our own GitLab setup:
+  http://git.kumina.nl/puppet/generic
