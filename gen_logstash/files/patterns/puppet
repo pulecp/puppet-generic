@@ -6,3 +6,4 @@ PUPPETCHANGES \(/%{PUPPETSTAGE}/%{PUPPETCLASS}/%{PUPPETRESOURCE}(/%{DATA:what_ch
 PUPPETFINISHED Finished catalog run in %{NUMBER:runtime:float} seconds
 
 PUPPETQUEUEPROCESSED Processing queued catalog for %{HOSTNAME:puppet_hostname} in %{NUMBER:processtime:float} seconds
+PUPPETMASTERCOMPILED Compiled catalog for %{HOSTNAME:puppet_hostname} in environment %{DATA:puppet_environment} in %{NUMBER:compile_time:float} seconds
