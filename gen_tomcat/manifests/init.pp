@@ -33,7 +33,7 @@
 #
 # Depends:
 #  gen_puppet
-#  gen_base::openjdk-6-jre
+#  gen_java::openjdk_6_jre
 #  gen_tomcat::manager
 #
 class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $http_connector_port="8080",
@@ -43,7 +43,7 @@ class gen_tomcat ($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
   class { 'gen_tomcat::manager':
     tomcat_tag => $tomcat_tag;
   }
-  include gen_base::openjdk-6-jre
+  include gen_java::openjdk_6_jre
 
   if ! $java_home {
     case $lsbdistcodename {
