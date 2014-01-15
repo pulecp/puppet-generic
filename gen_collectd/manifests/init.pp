@@ -11,7 +11,7 @@ class gen_collectd {
       # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=735173
       gen_apt::preference { ['collectd','collectd-core','collectd-dbg', 'collectd-dev',
                             'collectd-utils', 'libcollectdclient-dev', 'libcollectdclient0']:
-        repo => 'kumina-wheezy';
+        repo => 'wheezy-kumina';
       }
     }
 
