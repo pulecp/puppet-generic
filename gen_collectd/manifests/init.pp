@@ -68,11 +68,15 @@ class gen_collectd {
 #  For the exec plugin, two extra options exist:
 #  exec_script: The name of the script as installed with gen_collectd::plugin::exec_script
 #
-define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin = false) {
+define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin = false, $content = false) {
   if ! $plugin {
     $real_plugin = $name
   } else {
     $real_plugin = $plugin
+  }
+
+  if $pluginconf and $content {
+    fail('Please specify either $pluginconf or $content or neither')
   }
 
   file { "/etc/collectd/conf/3-${name}":
