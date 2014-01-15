@@ -5,6 +5,7 @@ class gen_collectd {
       gen_apt::preference { ['collectd','collectd-core','collectd-dbg', 'collectd-dev',
                             'collectd-utils', 'libcollectdclient-dev', 'libcollectdclient0']:;
       }
+    }
     if $lsbdistcodename == 'wheezy' {
       # Pin to the kumina repo, these packages contain the patches for
       # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=735173
