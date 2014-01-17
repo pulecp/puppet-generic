@@ -2944,6 +2944,20 @@ class gen_base::python-ipy {
   }
 }
 
+# Class: gen_base::python_keyczar
+#
+# Actions:
+#  Install python-keyczar
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_keyczar {
+  package { 'python-keyczar':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python-ldap
 #
 # Actions:
