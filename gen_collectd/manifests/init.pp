@@ -47,6 +47,14 @@ class gen_collectd {
   }
 }
 
+class gen_collectd::python_plugin_base {
+  file {  "/etc/collectd/conf/2-python-plugin-base":
+    content => template('gen_collectd/conf/python_plugin_base'),
+    require => File['/etc/collectd/conf'],
+    notify  => Exec['reload-collectd'];
+  }
+}
+
 # Define: gen_collectd::plugin
 #
 # Actions:
@@ -100,6 +108,8 @@ define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin
 #  options: The options to be passed to the python script
 #  script:  The python script to deploy
 define gen_collectd::python_plugin ($script=false, $plugin=false, $options=false) {
+  include gen_collectd::python_plugin_base
+
   if ! $plugin {
     $real_plugin = $name
   } else {
