@@ -104,10 +104,6 @@ define gen_collectd::python_plugin ($script=false, $plugin=false, $options=false
     $real_plugin = $plugin
   }
 
-  if $pluginconf and $content {
-    fail('Please specify either $pluginconf or $content or neither')
-  }
-
   file {
     "/etc/collectd/conf/3-${name}":
       content => template('gen_collectd/conf/python-plugin.conf'),
