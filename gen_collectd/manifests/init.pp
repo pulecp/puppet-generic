@@ -97,7 +97,7 @@ define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin
 #  plugin:  If the name is used to differentiate, use this parameter to set the real plugin name
 #  options: The options to be passed to the python script
 #  script:  The python script to deploy
-define gen_collectd::python_plugin ($script=false, $plugin=false, $options=[]) {
+define gen_collectd::python_plugin ($script=false, $plugin=false, $options=false) {
   if ! $plugin {
     $real_plugin = $name
   } else {
@@ -113,8 +113,9 @@ define gen_collectd::python_plugin ($script=false, $plugin=false, $options=[]) {
       content => template('gen_collectd/conf/python-plugin.conf'),
       require => File['/etc/collectd/conf'],
       notify  => Exec['reload-collectd'];
-    "/usr/lib/collectd/python-plugins/${real_plugin}":
-      content => $script;
+    "/usr/lib/collectd/python-plugins/${real_plugin}.py":
+      content => $script,
+      mode    => 755;
   }
 }
 
