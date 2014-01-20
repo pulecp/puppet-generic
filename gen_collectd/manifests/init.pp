@@ -42,7 +42,6 @@ class gen_collectd {
   }
 }
 
-#
 # Define: gen_collectd::plugin
 #
 # Actions:
@@ -85,8 +84,37 @@ define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin
     notify  => Exec['reload-collectd'];
   }
 }
-
+# Define: gen_collectd::python_plugin
 #
+# Actions:
+#  Create the config for a Python plugin and deploy the script
+#
+# Parameters:
+#  name:    If the plugin is unique, just make this the name of the plugin
+#  plugin:  If the name is used to differentiate, use this parameter to set the real plugin name
+#  options: The options to be passed to the python script
+#  script:  The python script to deploy
+define gen_collectd::python_plugin ($script=false, $plugin=false, $options=[]) {
+  if ! $plugin {
+    $real_plugin = $name
+  } else {
+    $real_plugin = $plugin
+  }
+
+  if $pluginconf and $content {
+    fail('Please specify either $pluginconf or $content or neither')
+  }
+
+  file {
+    "/etc/collectd/conf/3-${name}":
+      content => template('gen_collectd/conf/python-plugin.conf'),
+      require => File['/etc/collectd/conf'],
+      notify  => Exec['reload-collectd'];
+    "/usr/lib/collectd/python-plugins/${real_plugin}":
+      content => $script;
+  }
+}
+
 # Define: gen_collectd::plugin::exec
 #
 # Actions:
@@ -106,7 +134,6 @@ define gen_collectd::plugin::exec ($script, $as_user='nobody') {
   }
 }
 
-#
 # Define: gen_collectd::plugin::exec::script
 #
 # Actions:
