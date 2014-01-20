@@ -38,6 +38,9 @@ class gen_collectd {
       '/usr/lib/collectd/exec-plugins':
         ensure  => directory,
         require => Package['collectd-core'];
+      '/usr/lib/collectd/python-plugins':
+        ensure  => directory,
+        require => Package['collectd-core'];
     }
   }
 }
