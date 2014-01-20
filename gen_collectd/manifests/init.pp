@@ -1,9 +1,11 @@
 class gen_collectd {
   if $lsbdistcodename != 'lenny' {
     if $lsbdistcodename == 'squeeze' {
-      # Pin to backports
+      # Pin to the kumina repo, these packages contain the patches for
+      # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=735173
       gen_apt::preference { ['collectd','collectd-core','collectd-dbg', 'collectd-dev',
-                            'collectd-utils', 'libcollectdclient-dev', 'libcollectdclient0']:;
+                            'collectd-utils', 'libcollectdclient-dev', 'libcollectdclient0']:
+        repo => 'squeeze-kumina';
       }
     }
     if $lsbdistcodename == 'wheezy' {
