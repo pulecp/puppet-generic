@@ -1107,6 +1107,22 @@ class gen_base::libapache2-mod-perl2 {
   kbp_icinga::debsums { 'libapache2-mod-perl2':; }
 }
 
+# Class: gen_base::libapache2_mod_proxy_html
+#
+# Actions:
+#  Install libapache2-mod-proxy-html
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libapache2_mod_proxy_html {
+  package { "libapache2-mod-proxy-html":
+    ensure => latest;
+  }
+
+  kbp_icinga::debsums { 'libapache2-mod-proxy-html':; }
+}
+
 # Class: gen_base::libapache2-mod-wsgi
 #
 # Actions:
