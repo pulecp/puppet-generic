@@ -40,14 +40,15 @@ class gen_collectd {
       '/usr/lib/collectd/exec-plugins':
         ensure  => directory,
         require => Package['collectd-core'];
-      '/usr/lib/collectd/python-plugins':
-        ensure  => directory,
-        require => Package['collectd-core'];
     }
   }
 }
 
 class gen_collectd::python_plugin_base {
+  package { 'collectd-plugins-kumina':
+    ensure => latest;
+  }
+
   file {  "/etc/collectd/conf/2-python-plugin-base":
     content => template('gen_collectd/conf/python_plugin_base'),
     require => File['/etc/collectd/conf'],
@@ -107,7 +108,7 @@ define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin
 #  plugin:  If the name is used to differentiate, use this parameter to set the real plugin name
 #  options: The options to be passed to the python script
 #  script:  The python script to deploy
-define gen_collectd::python_plugin ($script=false, $plugin=false, $options=false) {
+define gen_collectd::python_plugin ($plugin=false, $options=false) {
   include gen_collectd::python_plugin_base
 
   if ! $plugin {
@@ -116,14 +117,10 @@ define gen_collectd::python_plugin ($script=false, $plugin=false, $options=false
     $real_plugin = $plugin
   }
 
-  file {
-    "/etc/collectd/conf/3-${name}":
-      content => template('gen_collectd/conf/python-plugin.conf'),
-      require => File['/etc/collectd/conf'],
-      notify  => Exec['reload-collectd'];
-    "/usr/lib/collectd/python-plugins/${real_plugin}.py":
-      content => $script,
-      mode    => 755;
+  file { "/etc/collectd/conf/3-${name}":
+    content => template('gen_collectd/conf/python-plugin.conf'),
+    require => File['/etc/collectd/conf'],
+    notify  => Exec['reload-collectd'];
   }
 }
 
