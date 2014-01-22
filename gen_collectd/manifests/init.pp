@@ -19,6 +19,7 @@ class gen_collectd {
 
     kservice { 'collectd':
       package   => 'collectd-core',
+      pensure   => latest,
       hasreload => false,
       srequire  => File['/etc/collectd/collectd.conf'];
     }
