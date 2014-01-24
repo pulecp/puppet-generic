@@ -2544,6 +2544,21 @@ class gen_base::php5_imagick {
   }
 }
 
+
+# Class: gen_base::php5_intl
+#
+# Actions:
+#  Install php5-intl
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::php5_intl {
+  package { "php5-intl":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::php5_ldap
 #
 # Actions:
