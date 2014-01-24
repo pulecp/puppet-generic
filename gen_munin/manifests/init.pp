@@ -109,7 +109,8 @@ class gen_munin::async_client {
   }
 
   package { 'munin-async':
-    ensure => latest;
+    ensure  => latest,
+    require => Package['munin-node'];
   }
 
   $real_ipaddress = $external_ipaddress ? {
