@@ -2835,6 +2835,20 @@ class gen_base::python-carrot {
   }
 }
 
+# Class: gen_base::python_lockfile
+#
+# Actions:
+#  Install python-lockfile
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::python_lockfile {
+  package { "python-lockfile":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::python_cheetah
 #
 # Actions:
