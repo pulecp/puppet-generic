@@ -4,18 +4,17 @@
 # Actions: Set up elasticsearch and configure it.
 #
 # Parameters:
+#  min_nodes: discovery.zen.minimum_master_nodes setting
 #  cluster_name: The name of the cluster
-#  bind_address: The IP address to bind on
-#  node_name: The name of the node in the cluster
 #  path_data: The path to the elasticsearch data
 #  extra_opts: a hash of extra elasticsearch options
-#  es_nodes: an array of IP addresses of the es nodes in this cluster, use this if you don't want to use multicast
-#  min_nodes: discovery.zen.minimum_master_nodes setting
+#  nodes: an array of IP addresses of the es nodes in this cluster, use this if you don't want to use multicast
+#  heapsize: the setting for ES_HEAP_SIZE
 #
 # Depends:
 #  gen_puppet
 #
-class gen_elasticsearch ($cluster_name='elasticsearch', $bind_address='0.0.0.0', $node_name=$hostname, $path_data='/srv/elasticsearch', $extra_opts=false, $es_nodes=false, $min_nodes=false){
+class gen_elasticsearch ($min_nodes, $cluster_name='elasticsearch', $path_data='/srv/elasticsearch', $extra_opts=false, $nodes=false, $heapsize=false, $overwrite_config=true){
   include gen_java::openjdk_7_jre
 
   kservice { 'elasticsearch':; }
@@ -23,6 +22,11 @@ class gen_elasticsearch ($cluster_name='elasticsearch', $bind_address='0.0.0.0',
   file {
     '/etc/elasticsearch/elasticsearch.yml':
       content => template('gen_elasticsearch/elasticsearch.yml'),
+      replace => $overwrite_config,
+      require => Package['elasticsearch'],
+      notify  => Exec['restart-elasticsearch'];
+    '/etc/default/elasticsearch':
+      content => template('gen_elasticsearch/elasticsearch.default'),
       require => Package['elasticsearch'],
       notify  => Exec['restart-elasticsearch'];
     $path_data:
@@ -41,7 +45,7 @@ class gen_elasticsearch ($cluster_name='elasticsearch', $bind_address='0.0.0.0',
 #
 # Parameters:
 #  name: The 'path' to the plugin (used to call plugin) (e.g. mobz/elasticsearch-head for the head plugin)
-#  install_name: The name the plugin will have on-disk
+#  install_name: The name the plugin will have on-disk (i.e. head for the head plugin)
 #
 # Depends:
 #  gen_puppet
