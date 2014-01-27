@@ -924,6 +924,20 @@ class gen_base::libmagickwand5 {
   }
 }
 
+# Class: gen_base::libjpeg8_dev
+#
+# Actions:
+#  Install libjpeg8-dev
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::libjpeg8_dev {
+  package { 'libjpeg8-dev':
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::libjs_jquery
 #
 # Actions:
