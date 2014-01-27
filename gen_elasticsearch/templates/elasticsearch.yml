@@ -326,7 +326,7 @@ discovery.zen.minimum_master_nodes: <%= min_nodes %>
 #
 # discovery.zen.ping.unicast.hosts: ["host1", "host2:port", "host3[portX-portY]"]
 <% if nodes -%>
-discovery.zen.ping.unicast.hosts: ["<% nodes.join(",") %>"]
+discovery.zen.ping.unicast.hosts: ["<% nodes.join('","') %>"]
 <% end -%>
 
 # EC2 discovery allows to use AWS EC2 API in order to perform discovery.
