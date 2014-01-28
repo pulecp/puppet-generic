@@ -96,6 +96,10 @@ class gen_tomcat7($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
   }
 
   file {
+    '/etc/java-7-openjdk/management/jmxremote.password':
+      owner   => 'tomcat7',
+      mode    => 400,
+      require => Package['openjdk-7-jre'];
     $catalina_base:
       ensure  => directory,
       require => Package["tomcat7"];
@@ -121,7 +125,7 @@ class gen_tomcat7($catalina_base="/srv/tomcat", $ajp13_connector_port="8009", $h
       require => Package["tomcat7"];
     "/etc/default/tomcat7":
       content => template("gen_tomcat7/default"),
-      require => Package["tomcat7"],
+      require => [Package["tomcat7"], File['/etc/java-7-openjdk/management/jmxremote.password']],
       notify  => Service["tomcat7"];
     "/etc/tomcat7/server.xml":
       content => template("gen_tomcat7/server.xml"),
