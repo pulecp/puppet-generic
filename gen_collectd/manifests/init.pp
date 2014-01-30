@@ -95,6 +95,7 @@ define gen_collectd::plugin ($plugin = false, $pluginconf = false, $noloadplugin
 
   file { "/etc/collectd/conf/3-${name}":
     content => template('gen_collectd/conf/plugin.conf'),
+    mode    => 440,
     require => File['/etc/collectd/conf'],
     notify  => Exec['reload-collectd'];
   }
@@ -120,47 +121,11 @@ define gen_collectd::python_plugin ($plugin=false, $options=false) {
 
   file { "/etc/collectd/conf/3-${name}":
     content => template('gen_collectd/conf/python-plugin.conf'),
+    mode    => 440,
     require => File['/etc/collectd/conf'],
     notify  => Exec['reload-collectd'];
   }
 }
-
-# Define: gen_collectd::plugin::exec
-#
-# Actions:
-#  Set up the exec plugin config
-#
-# Parameters:
-#  name: The name that the config will have
-#  script: The name of the script installed with gen_collectd::plugin::exec::script
-#  as_user: A string containing the user as whom this script is run
-#
-define gen_collectd::plugin::exec ($script, $as_user='nobody') {
-  gen_collectd::plugin { $name:
-    plugin       => 'exec',
-    noloadplugin => true,
-    pluginconf   => {"Exec" => "${as_user}\" \"/usr/lib/collectd/exec-plugins/${script}"},
-    require      => File["/usr/lib/collectd/exec-plugins/${script}"];
-  }
-}
-
-# Define: gen_collectd::plugin::exec::script
-#
-# Actions:
-#  Install a script for the exec plugin
-#
-# Parameters:
-#  name:    The name of the script
-#  content: The content of the script
-#
-define gen_collectd::plugin::exec::script ($content) {
-  file { "/usr/lib/collectd/exec-plugins/${name}":
-    content => $content,
-    mode    => 755,
-    require => File['/usr/lib/collectd/exec-plugins'];
-  }
-}
-
 
 class gen_collectd::plugin::df {
   file { '/etc/collectd/conf/3-df':
