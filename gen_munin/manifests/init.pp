@@ -9,10 +9,12 @@
 # Depends:
 #  gen_apt
 #
-class gen_munin {
+class gen_munin($ensure='present') {
   if $lsbdistcodename == "squeeze" {
-    gen_apt::preference { ["munin","munin-common","munin-doc","munin-java-plugins","munin-node","munin-plugins-core","munin-plugins-extra","munin-plugins-java",'munin-async']:
-      repo => "squeeze-backports";
+    gen_apt::preference { ["munin", "munin-common", "munin-doc", "munin-java-plugins", "munin-node",
+        "munin-plugins-core", "munin-plugins-extra", "munin-plugins-java", 'munin-async']:
+      ensure => $ensure,
+      repo   => "squeeze-backports";
     }
   }
 }
@@ -43,42 +45,64 @@ class gen_munin::server {
 # Depends:
 #  gen_puppet
 #
-class gen_munin::client ($setup_config=true) {
-  include gen_munin
-  include gen_munin::client::plugin::defaults
+class gen_munin::client($ensure='present', $setup_config=true) {
+  class { 'gen_munin':
+    ensure => $ensure;
+  }
+  class { 'gen_munin::client::plugin::defaults':
+    ensure => $ensure;
+  }
 
   kservice { "munin-node":
+    ensure    => $ensure ? {
+      'present' => 'running',
+      'absent'  => 'stopped',
+    },
     hasreload => false,
-    pensure   => latest;
+    pensure   => $ensure ? {
+      'present' => 'latest',
+      'absent'  => 'absent',
+    };
   }
 
   if $lsbdistcodename == 'lenny' {
     # in lenny we want our own package
     gen_apt::preference { "munin-plugins-extra":
-      repo => "lenny-kumina";
+      ensure => $ensure,
+      repo   => "lenny-kumina";
     }
   } else {
     package {"munin-plugins-core":
-      ensure => latest;
+      ensure => $ensure ? {
+        'present' => 'latest',
+        'absent'  => 'absent',
+      };
     }
   }
 
-  package{ ["munin-plugins-extra","libnet-cidr-perl",'munin-common']:
-    ensure => latest;
+  package { ["munin-plugins-extra","libnet-cidr-perl",'munin-common']:
+    ensure => $ensure ? {
+      'present' => 'latest',
+      'absent'  => 'absent',
+    };
   }
 
   concat { '/etc/munin/munin-node.conf':
+    ensure  => $ensure,
     notify  => Exec['reload-munin-node'],
     require => Package['munin-node'];
   }
 
   concat::add_content { '/etc/munin/munin-node.conf base':
+    ensure  => $ensure,
     target  => '/etc/munin/munin-node.conf',
     content => template('gen_munin/client/munin-node.conf.base');
   }
 
   if $setup_config {
-    Concat::Add_content <<| tag == "munin-node.conf_server_allows_${environment}" |>>
+    if $ensure == 'present' {
+      Concat::Add_content <<| tag == "munin-node.conf_server_allows_${environment}" |>>
+    }
 
     # This is passed through from customer specific implicitly (we don't wanna do proxies anyway)
     if $munin_proxy {
@@ -93,6 +117,7 @@ class gen_munin::client ($setup_config=true) {
     }
 
     @@file { "/etc/munin/conf/${fqdn}":
+      ensure  => $ensure,
       content => template($munin_template),
       require => File["/etc/munin/conf"],
       tag     => "munin_client_${environment}";
@@ -103,13 +128,17 @@ class gen_munin::client ($setup_config=true) {
 # Class: gen_munin::async_client
 #  Action: Setup an asynchronous munin client with default config
 #
-class gen_munin::async_client {
+class gen_munin::async_client($ensure='present') {
   class { 'gen_munin::client':
+    ensure       => $ensure,
     setup_config => false;
   }
 
   package { 'munin-async':
-    ensure  => latest,
+    ensure  => $ensure ? {
+      'present' => 'latest',
+      'absent'  => 'absent',
+    },
     require => Package['munin-node'];
   }
 
@@ -121,6 +150,7 @@ class gen_munin::async_client {
   $munin_template = "gen_munin/server/munin.conf_async-client"
 
   @@file { "/etc/munin/conf/${fqdn}":
+    ensure  => $ensure,
     content => template($munin_template),
     require => File["/etc/munin/conf"],
     tag     => "munin_async_client_${environment}";
@@ -176,50 +206,28 @@ define gen_munin::async::environment {
 # Depends:
 #  gen_munin::client
 #
-class gen_munin::client::plugin::defaults {
-  if $lsbdistcodename == 'lenny' {
-    include "gen_munin::client::plugin::defaults::lenny"
-  } else {
-    include 'gen_munin::client::plugin::defaults::generic'
+class gen_munin::client::plugin::defaults($ensure='present') {
+  if ! $lsbdistcodename == 'lenny' {
+    class { 'gen_munin::client::plugin::defaults::generic':
+      ensure => $ensure;
+    }
   }
 
   $ifs = split($interfaces, ",")
-  gen_munin::client::plugin::interfaces { $ifs:; }
+  gen_munin::client::plugin::interfaces { $ifs:
+    ensure => $ensure;
+  }
 
-  gen_munin::client::plugin {
-    "cpu":;
-    "df":;
-    "df_inode":;
-    "entropy":;
-    "forks":;
-    "interrupts":;
-    "iostat":;
-    "irqstats":;
-    "load":;
-    "memory":;
-    "open_files":;
-    "open_inodes":;
-    "processes":;
-    "swap":;
-    "vmstat":;
+  gen_munin::client::plugin { ["cpu", "df", "df_inode", "entropy", "forks", "interrupts", "iostat", "irqstats",
+      "load", "memory", "open_files", "open_inodes", "processes", "swap", "vmstat"]:
+    ensure => $ensure;
   }
 }
 
-class gen_munin::client::plugin::defaults::lenny {
-  # nothing :D
-}
-
-class gen_munin::client::plugin::defaults::generic {
-  gen_munin::client::plugin {
-    "diskstats":;
-    "fw_conntrack":;
-    "fw_forwarded_local":;
-    "fw_packets":;
-    "iostat_ios":;
-    "proc_pri":;
-    "threads":;
-    "uptime":;
-    "users":;
+class gen_munin::client::plugin::defaults::generic($ensure='present') {
+  gen_munin::client::plugin { ["diskstats", "fw_conntrack", "fw_forwarded_local", "fw_packets", "iostat_ios",
+      "proc_pri", "threads", "uptime", "users"]:
+    ensure => $ensure;
   }
 }
 
@@ -232,12 +240,14 @@ class gen_munin::client::plugin::defaults::generic {
 # Depends:
 #  gen_munin::client
 #
-define gen_munin::client::plugin::interfaces {
+define gen_munin::client::plugin::interfaces($ensure='present') {
   if $name != "lo" {
     gen_munin::client::plugin {
       "if_${name}":
+        ensure => $ensure,
         script => "if_";
       "if_err_${name}":
+        ensure => $ensure,
         script => "if_err_";
     }
   }
@@ -260,7 +270,7 @@ define gen_munin::client::plugin::interfaces {
 # Depends:
 #  gen_munin::client
 #
-define gen_munin::client::plugin ($ensure='present', $script_path='/usr/share/munin/plugins', $script=false) {
+define gen_munin::client::plugin($ensure='present', $script_path='/usr/share/munin/plugins', $script=false) {
   $plugin_path = $script ? {
     false   => "${script_path}/${name}",
     default => "${script_path}/${script}"
