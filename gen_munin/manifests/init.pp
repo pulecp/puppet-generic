@@ -80,7 +80,7 @@ class gen_munin::client($ensure='present', $setup_config=true) {
     }
   }
 
-  package { ["munin-plugins-extra","libnet-cidr-perl",'munin-common']:
+  package { ["munin-plugins-extra",'munin-common']:
     ensure => $ensure ? {
       'present' => 'latest',
       'absent'  => 'absent',
