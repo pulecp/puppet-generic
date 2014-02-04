@@ -2536,10 +2536,7 @@ class gen_base::pigz {
 #
 class gen_base::php5_gd {
   include gen_base::libpng12_0
-
-  package { "php5-gd":
-    ensure => latest;
-  }
+  include gen_php5::gd
 }
 
 # Class: gen_base::php5_imagick
