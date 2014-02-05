@@ -33,7 +33,7 @@ LOG_FILE=$LOG_DIR/$NAME.log
 CONF_DIR=/etc/logstash/conf.d
 
 # Open file limit
-OPEN_FILES=2048
+OPEN_FILES=8192
 
 # Nice level
 NICE=19
