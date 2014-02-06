@@ -286,6 +286,20 @@ class gen_base::curl {
   }
 }
 
+# Class: gen_base::debootstrap
+#
+# Actions:
+#  Install debootstrap
+#
+# Depends:
+#  gen_puppet
+#
+class gen_base::debootstrap {
+  package { "debootstrap":
+    ensure => latest;
+  }
+}
+
 # Class: gen_base::dnsutils
 #
 # Actions:

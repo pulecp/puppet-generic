@@ -43,7 +43,7 @@ class gen_dhcp::server {
 # Depends:
 #  gen_dhcp::server
 #
-define gen_dhcp::server::subnet ($network_subnet, $network_netmask='255.255.255.0', $network_router, $range=false, $name_servers=['8.8.8.8','8.8.4.4'], $name_search=false, $name_domain=false, $ntp_servers=false) {
+define gen_dhcp::server::subnet ($network_subnet, $network_netmask='255.255.255.0', $network_router, $range=false, $name_servers=['8.8.8.8','8.8.4.4'], $name_search=false, $name_domain=false, $ntp_servers=false, $next_server=false, $filename=false) {
   concat::add_content { "Subnet ${name}":
     target  => '/etc/dhcp/dhcpd.conf',
     content => template('gen_dhcp/dhcpd_network.conf');
@@ -64,7 +64,7 @@ define gen_dhcp::server::subnet ($network_subnet, $network_netmask='255.255.255.
 # Depends:
 #  gen_dhcp::server
 #
-define gen_dhcp::server::host ($host_address, $host_macaddress) {
+define gen_dhcp::server::host ($host_address, $host_macaddress, $set_name=false) {
   concat::add_content { "Host ${name}":
     target  => '/etc/dhcp/dhcpd.conf',
     content => template('gen_dhcp/dhcpd_host.conf');
