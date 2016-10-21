@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import simplejson as json, urllib2, ConfigParser, sys, urllib
+import simplejson as json, urllib2, ConfigParser, sys, urllib, subprocess
 from optparse import OptionParser
 
 # Parse the commandline options
@@ -57,15 +57,22 @@ def list_failover_ips():
 		ips.append(i["failover"]["ip"])
 	return ips
 
-def get_failover_ip(ip):
-	url = "https://robot-ws.your-server.de/failover/"+ip
-	try:
-		value = urllib2.urlopen(url)
-	except urllib2.HTTPError, e:
-		print "%s gives HTTP Error code %s, I don't know who has the failover IP %s" % (url,e.code,ip)
-		sys.exit(exit_unknown)
-	data = json.load(value)
-	return data["failover"]["active_server_ip"]
+def is_failover_ip_routed_to_me(ip):
+  #                        robot.your-server.de, hetzner.de, google's public DNS
+  public_servers_to_ping = [ '85.10.212.62', '213.133.107.227', '8.8.4.4', '8.8.8.8' ]
+  for public_server in public_servers_to_ping:
+    fping_cmd = [ '/usr/sbin/fping', '-c1', '-S', ip, public_server ]
+    FNULL = open('/dev/null', 'w')
+    child = subprocess.Popen(fping_cmd, stdout=FNULL, stderr=FNULL)
+    child.communicate()
+    if child.returncode == 0:
+      return True
+    elif child.returncode == 1:
+      continue
+    else:
+	    print "Fping failed. Try to run it manually by `fping -c1 -S <source_ip_address> <target_ip_address>`. Fping must support '-S' option."
+	    sys.exit(exit_unknown)
+  return False
 
 def set_failover_ip(ip):
 	url = "https://robot-ws.your-server.de/failover/"+ip
@@ -89,13 +96,8 @@ elif options.get_action:
 	# Check if the option is set
 	if options.failover_ip == "0":
 		raise ValueError, "Need to set the failover IP."
-	# Check if the failover_ip is actually one we can use
-	if not options.failover_ip in list_failover_ips():
-		raise ValueError, "This failover IP is not assigned to the user in the config file."
-	# Get the active ip for the failover ip
-	active_ip = get_failover_ip(options.failover_ip)
 	# Does the ip point to us?
-	if config.get(section, "local_ip") == active_ip:
+	if is_failover_ip_routed_to_me(options.failover_ip):
 		print "Assigned to us."
 		sys.exit(exit_ok)
 	else:
@@ -109,7 +111,7 @@ elif options.set_action:
 	# Check if the failover_ip is actually one we can use
 	if not options.failover_ip in list_failover_ips():
 		raise ValueError, "This failover IP is not assigned to the user in the config file."
-	if get_failover_ip(options.failover_ip) == config.get(section,"local_ip"):
+	if is_failover_ip_routed_to_me(options.failover_ip):
 		print "Already set."
 		sys.exit(exit_ok)
 	set_failover_ip(options.failover_ip)
